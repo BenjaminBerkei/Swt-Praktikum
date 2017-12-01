@@ -25,6 +25,10 @@ private:
 public slots:
     void print(ButtonMove *button);
     void print(ButtonAction *button);
+    void print(ButtonMap *button);
+    void print(ButtonInformation *button);
+    void print(ButtonChangePhase *button);
+    void print(ButtonMenue *button);
 };
 
 #endif // DISPLAYHEXTEST_H

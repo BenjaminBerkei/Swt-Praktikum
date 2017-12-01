@@ -9,7 +9,7 @@ public:
     Button(QPoint qpoint_center, int int_size, QPoint qpoint_position);
 
     void mousePressEvent(QGraphicsSceneMouseEvent *event) = 0;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) = 0;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 };
 
 
@@ -20,7 +20,6 @@ class ButtonMove : public Button
 public:
     ButtonMove(QPoint qpoint_center, int int_size, QPoint qpoint_position);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
     void printType();
 signals:
@@ -35,11 +34,70 @@ class ButtonAction : public Button
 public:
     ButtonAction(QPoint qpoint_center, int int_size, QPoint qpoint_position);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
     void printType();
 signals:
     void clicked(ButtonAction*);
+
+};
+
+
+/*New Class*/
+class ButtonMap : public Button
+{
+    Q_OBJECT
+public:
+    ButtonMap(QPoint qpoint_center, int int_size, QPoint qpoint_position);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+
+    void printType();
+signals:
+    void clicked(ButtonMap*);
+
+};
+
+
+/*New Class*/
+class ButtonInformation : public Button
+{
+    Q_OBJECT
+public:
+    ButtonInformation(QPoint qpoint_center, int int_size, QPoint qpoint_position);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+
+    void printType();
+signals:
+    void clicked(ButtonInformation*);
+
+};
+
+
+/*New Class*/
+class ButtonChangePhase : public Button
+{
+    Q_OBJECT
+public:
+    ButtonChangePhase(QPoint qpoint_center, int int_size, QPoint qpoint_position);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+
+    void printType();
+signals:
+    void clicked(ButtonChangePhase*);
+
+};
+
+
+/*New Class*/
+class ButtonMenue : public Button
+{
+    Q_OBJECT
+public:
+    ButtonMenue(QPoint qpoint_center, int int_size, QPoint qpoint_position);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+
+    void printType();
+signals:
+    void clicked(ButtonMenue*);
 
 };
 #endif // BUTTON_H
