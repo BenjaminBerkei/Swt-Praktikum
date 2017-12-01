@@ -10,10 +10,13 @@ displayHexTest::displayHexTest(QWidget *parent) :
     /*Testen*/
     testView = new QGraphicsView();
     testScene = new QGraphicsScene(this);
-    ButtonMove *test = new ButtonMove(QPoint(10,10),50,QPoint(0,0));
-    testScene->addItem(test);
+    ButtonMove *testMove = new ButtonMove(QPoint(10,10),30,QPoint(0,0));
+    ButtonAction *testAction = new ButtonAction(QPoint(70,30),30,QPoint(1,0));
+    testScene->addItem(testMove);
+    testScene->addItem(testAction);
     ui->testView->setScene(testScene);
-    QObject::connect(test, SIGNAL(clicked(Button*)), this, SLOT(print(Button*)));
+    QObject::connect(testMove, SIGNAL(clicked(ButtonMove*)), this, SLOT(print(ButtonMove*)));
+    QObject::connect(testAction, SIGNAL(clicked(ButtonAction*)), this, SLOT(print(ButtonAction*)));
 
     /*Testen_Ende*/
 }
@@ -25,7 +28,12 @@ displayHexTest::~displayHexTest()
     delete ui;
 }
 
-void displayHexTest::print(Button *button)
+void displayHexTest::print(ButtonMove *button)
 {
-    qDebug() << button->getShape();
+    button->printType();
+}
+
+void displayHexTest::print(ButtonAction *button)
+{
+    button->printType();
 }

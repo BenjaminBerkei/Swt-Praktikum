@@ -5,7 +5,6 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include "hexagonbase.h"
-#include "buttonmove.h"
 #include "button.h"
 namespace Ui {
 class displayHexTest;
@@ -24,7 +23,8 @@ private:
     QGraphicsView *testView;
     QGraphicsScene *testScene;
 public slots:
-    void print(Button *button);
+    void print(ButtonMove *button);
+    void print(ButtonAction *button);
 };
 
 #endif // DISPLAYHEXTEST_H

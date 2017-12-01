@@ -23,7 +23,6 @@ public:
     /*Müssen in Subclassen ausgeprägt werden*/
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) = 0;
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) = 0;
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget, STATE state) = 0;
 };
 
 #endif // HEXAGONBASE_H

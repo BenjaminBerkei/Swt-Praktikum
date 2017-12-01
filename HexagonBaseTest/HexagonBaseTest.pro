@@ -15,12 +15,10 @@ TEMPLATE = app
 SOURCES += main.cpp\
         displayhextest.cpp \
     hexagonbase.cpp \
-    button.cpp \
-    buttonmove.cpp
+    button.cpp
 
 HEADERS  += displayhextest.h \
     hexagonbase.h \
-    button.h \
-    buttonmove.h
+    button.h
 
 FORMS    += displayhextest.ui
