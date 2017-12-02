@@ -13,8 +13,12 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        startmenuewidget.cpp
+        startmenuewidget.cpp \
+    hexagonbase.cpp \
+    button.cpp
 
-HEADERS  += startmenuewidget.h
+HEADERS  += startmenuewidget.h \
+    hexagonbase.h \
+    button.h
 
 FORMS    += startmenuewidget.ui
