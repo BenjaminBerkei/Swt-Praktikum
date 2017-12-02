@@ -1,7 +1,7 @@
 #include "button.h"
 /*Base Class: Button*/
 Button::Button(QPoint qpoint_center, int int_size, QPoint qpoint_position)
-    : HexagonBase(qpoint_center, int_size, qpoint_position)
+    : HexagonBase(qpoint_center, int_size, qpoint_position), state(DISABLED)
 {
 
 }
@@ -9,10 +9,25 @@ void Button::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
+    QPen pen;
 
-    QPen pen(Qt::black, 3);
+    switch(state)
+    {
+        case ENABLED : pen.setColor(Qt::red);
+            break;
+        case DISABLED : pen.setColor(Qt::black);
+            break;
+    default :   pen.setColor(Qt::green);
+    }
+    pen.setWidth(3);
+
     painter->setPen(pen);
     painter->drawPolygon(hexShape);
+}
+
+void Button::changeState(BUTTONSTATE newState)
+{
+    state = newState;
 }
 
 /*ButtonMove*/
@@ -26,6 +41,7 @@ void ButtonMove::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event);
     emit clicked(this);
+    update();
 }
 
 
@@ -45,6 +61,7 @@ void ButtonAction::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event);
     emit clicked(this);
+    update();
 }
 
 void ButtonAction::printType()
@@ -63,6 +80,7 @@ void ButtonMap::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event);
     emit clicked(this);
+    update();
 }
 
 void ButtonMap::printType()
@@ -81,6 +99,7 @@ void ButtonInformation::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event);
     emit clicked(this);
+    update();
 }
 
 void ButtonInformation::printType()
@@ -99,6 +118,7 @@ void ButtonChangePhase::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event);
     emit clicked(this);
+    update();
 }
 
 void ButtonChangePhase::printType()
@@ -117,6 +137,7 @@ void ButtonMenue::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event);
     emit clicked(this);
+    update();
 }
 
 void ButtonMenue::printType()

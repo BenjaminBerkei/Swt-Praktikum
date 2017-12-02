@@ -2,14 +2,20 @@
 #define BUTTON_H
 #include "hexagonbase.h"
 #include <QDebug>
+
+enum BUTTONSTATE{ENABLED, DISABLED};
+
 class Button : public HexagonBase
 {
     Q_OBJECT
+private:
+    BUTTONSTATE state;
 public:
     Button(QPoint qpoint_center, int int_size, QPoint qpoint_position);
 
     void mousePressEvent(QGraphicsSceneMouseEvent *event) = 0;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    void changeState(BUTTONSTATE newState);
 };
 
 
