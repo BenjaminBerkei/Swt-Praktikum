@@ -13,7 +13,6 @@
 
 #include <QDebug>
 
-enum STATE{ACTIVE, INACTIVE, TARGET, WAITING};
 class HexagonBase : public QGraphicsObject
 {
     Q_OBJECT

@@ -7,10 +7,8 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 #include "hexagonbase.h"
+#include "enumerations.h"
 #include <QDebug>
-
-enum BUTTONSTATE{ENABLED, DISABLED};
-
 class Button : public HexagonBase
 {
     Q_OBJECT

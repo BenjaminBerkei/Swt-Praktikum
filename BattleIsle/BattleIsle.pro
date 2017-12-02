@@ -19,6 +19,7 @@ SOURCES += main.cpp\
 
 HEADERS  += startmenuewidget.h \
     hexagonbase.h \
-    button.h
+    button.h \
+    enumerations.h
 
 FORMS    += startmenuewidget.ui
