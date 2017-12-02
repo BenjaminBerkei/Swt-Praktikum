@@ -13,8 +13,16 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        matchfield.cpp
+        matchfield.cpp \
+    button.cpp \
+    hexagonbase.cpp \
+    hexagonmatchfield.cpp
 
-HEADERS  += matchfield.h
+HEADERS  += matchfield.h \
+    button.h \
+    enumerations.h \
+    hexagonbase.h \
+    hexagonmatchfield.h
 
 FORMS    += matchfield.ui
+CONFIG += c++11
