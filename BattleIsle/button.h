@@ -1,3 +1,9 @@
+/*
+ * Author: Lucas
+ * Version: 0.1
+ * Datum 01.12.2017
+ * */
+
 #ifndef BUTTON_H
 #define BUTTON_H
 #include "hexagonbase.h"

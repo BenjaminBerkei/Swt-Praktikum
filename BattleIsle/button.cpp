@@ -1,3 +1,9 @@
+/*
+ * Author: Lucas
+ * Version: 0.1
+ * Datum 01.12.2017
+ * */
+
 #include "button.h"
 /*Base Class: Button*/
 Button::Button(QPoint qpoint_center, int int_size, QPoint qpoint_position)
