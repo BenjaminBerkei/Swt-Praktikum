@@ -15,11 +15,14 @@ TEMPLATE = app
 SOURCES += main.cpp\
         startmenuewidget.cpp \
     hexagonbase.cpp \
-    button.cpp
+    button.cpp \
+    hexagonmatchfield.cpp
 
 HEADERS  += startmenuewidget.h \
     hexagonbase.h \
     button.h \
-    enumerations.h
+    enumerations.h \
+    hexagonmatchfield.h
 
-FORMS    += startmenuewidget.ui
+FORMS    += startmenuewidget.ui \
+    matchfield.ui
