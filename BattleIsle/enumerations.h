@@ -1,3 +1,8 @@
+/*
+ * Author: Lucas
+ * Version: 0.1
+ * Datum 01.12.2017
+ * */
 #ifndef ENUMERATIONS
 #define ENUMERATIONS
 
