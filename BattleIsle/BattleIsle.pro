@@ -17,14 +17,18 @@ SOURCES += main.cpp\
     hexagonbase.cpp \
     button.cpp \
     hexagonmatchfield.cpp \
-    matchfield.cpp
+    matchfield.cpp \
+    options.cpp \
+    savegame.cpp
 
 HEADERS  += startmenuewidget.h \
     hexagonbase.h \
     button.h \
     enumerations.h \
     hexagonmatchfield.h \
-    matchfield.h
+    matchfield.h \
+    options.h \
+    savegame.h
 
 FORMS    += startmenuewidget.ui \
     matchfield.ui
