@@ -1,10 +1,10 @@
-#include "startmenuewidget.h"
+#include "menuewidget.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    StartMenueWidget w;
+    MenueWidget w;
     w.show();
 
     return a.exec();

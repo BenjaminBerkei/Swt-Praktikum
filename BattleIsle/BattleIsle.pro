@@ -13,22 +13,30 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        startmenuewidget.cpp \
     hexagonbase.cpp \
     button.cpp \
     hexagonmatchfield.cpp \
     matchfield.cpp \
     options.cpp \
-    savegame.cpp
+    savegame.cpp \
+    optionswidget.cpp \
+    menuewidget.cpp \
+    startmenuewidget.cpp
 
-HEADERS  += startmenuewidget.h \
+HEADERS  += \
     hexagonbase.h \
     button.h \
     enumerations.h \
     hexagonmatchfield.h \
     matchfield.h \
     options.h \
-    savegame.h
+    savegame.h \
+    optionswidget.h \
+    menuewidget.h \
+    startmenuewidget.h
 
 FORMS    += startmenuewidget.ui \
-    matchfield.ui
+    matchfield.ui \
+    optionswidget.ui \
+    menuewidget.ui \
+    startmenuewidget.ui
