@@ -8,7 +8,7 @@
 #include "ui_optionswidget.h"
 
 OptionsWidget::OptionsWidget(QWidget *parent) :
-    ptr_optParent(parent),
+    QWidget(parent),
     ui(new Ui::OptionsWidget)
 {
     ui->setupUi(this);
@@ -21,8 +21,7 @@ OptionsWidget::~OptionsWidget()
 
 void OptionsWidget::returnToStartMenue()
 {
-    hide();
-    ptr_optParent->show();
+    emit SIGNAL_optChangeIndexFromStack(0);
 }
 
 void OptionsWidget::on_qbutton_apply_clicked()

@@ -2,7 +2,7 @@
 #include "ui_startmenuewidget.h"
 
 StartMenueWidget::StartMenueWidget(QWidget *parent) :
-    QMainWindow(parent),
+    QWidget(parent),
     ui(new Ui::StartMenueWidget)
 {
     ui->setupUi(this);
@@ -15,9 +15,7 @@ StartMenueWidget::~StartMenueWidget()
 
 void StartMenueWidget::switchToOptions()
 {
-    hide();
-    ptr_smwOptionsWidget = new OptionsWidget(this);
-    ptr_smwOptionsWidget->show();
+    emit SIGNAL_smwChangeIndexFromStack(1);
 }
 
 void StartMenueWidget::switchToLoadGame()

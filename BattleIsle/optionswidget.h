@@ -8,7 +8,10 @@
 #define OPTIONSWIDGET_H
 
 #include <QWidget>
+#include "menuewidget.h"
 #include "startmenuewidget.h"
+
+#include <QDebug>
 
 class StartMenueWidget;
 
@@ -22,9 +25,6 @@ class OptionsWidget : public QWidget
 
 private:
     Ui::OptionsWidget *ui;
-    QWidget *ptr_optParent;
-    StartMenueWidget *ptr_optStartMenueWidget;
-
 
 public:
     explicit OptionsWidget(QWidget *parent = 0);
@@ -37,7 +37,8 @@ private slots:
     void on_qbutton_cancel_clicked();
 
 signals:
-    //SIGNAL_sendOptions(bool bool_KI, bool bool_fogOfWar, string str_map, int int_roundLimit);
+    //void SIGNAL_sendOptions(bool bool_KI, bool bool_fogOfWar, string str_map, int int_roundLimit);
+    void SIGNAL_optChangeIndexFromStack(int);
 };
 
 #endif // OPTIONSWIDGET_H
