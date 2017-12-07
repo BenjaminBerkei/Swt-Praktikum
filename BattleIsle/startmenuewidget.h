@@ -1,7 +1,14 @@
+/*
+ * Author: Manuel
+ * Version: 0.1
+ * Datum 04.12.2017
+ */
+
 #ifndef STARTMENUEWIDGET_H
 #define STARTMENUEWIDGET_H
 
 #include <QWidget>
+#include "options.h"
 
 #include <QDebug>
 
@@ -14,6 +21,7 @@ class StartMenueWidget : public QWidget
     Q_OBJECT
 private:
     Ui::StartMenueWidget *ui;
+    Options *ptr_smwOptions;
 
 public:
     explicit StartMenueWidget(QWidget *parent = 0);

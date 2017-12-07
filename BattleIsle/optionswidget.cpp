@@ -1,14 +1,15 @@
 /*
  * Author: Manuel
- * Version: 0.1
+ * Version: 0.2
  * Datum 04.12.2017
  */
 
 #include "optionswidget.h"
 #include "ui_optionswidget.h"
 
-OptionsWidget::OptionsWidget(QWidget *parent) :
+OptionsWidget::OptionsWidget(QWidget *parent, Options *ptr_Options) :
     QWidget(parent),
+    ptr_optWidOptions(ptr_Options),
     ui(new Ui::OptionsWidget)
 {
     ui->setupUi(this);

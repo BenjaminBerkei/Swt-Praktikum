@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>380</width>
+    <height>450</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,6 +24,32 @@
    </property>
    <property name="text">
     <string>LoadGameWidget</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="qbutton_apply">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>380</y>
+     <width>88</width>
+     <height>34</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>OK</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="qbutton_cancel">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>380</y>
+     <width>88</width>
+     <height>34</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Abbrechen</string>
    </property>
   </widget>
  </widget>

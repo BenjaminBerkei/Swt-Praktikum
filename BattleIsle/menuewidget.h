@@ -1,3 +1,9 @@
+/*
+ * Author: Manuel
+ * Version: 0.2
+ * Datum 04.12.2017
+ */
+
 #ifndef MENUEWIDGET_H
 #define MENUEWIDGET_H
 
@@ -5,6 +11,7 @@
 #include <QStackedLayout>
 #include "optionswidget.h"
 #include "startmenuewidget.h"
+#include "loadgamewidget.h"
 
 #include <QDebug>
 
@@ -21,6 +28,7 @@ private:
     Ui::MenueWidget *ui;
     StartMenueWidget *ptr_mwStartMenueWidget;
     OptionsWidget *ptr_mwOptionsWidget;
+    LoadGameWidget *ptr_mwLoadGameWidget;
 
 public:
     explicit MenueWidget( QWidget *parent = 0 );
