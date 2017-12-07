@@ -1,8 +1,9 @@
 /*
  * Author: Manuel
- * Version: 0.1
- * Datum 04.12.2017
+ * Version: 0.3
+ * Datum 07.12.2017
  */
+
 
 #ifndef STARTMENUEWIDGET_H
 #define STARTMENUEWIDGET_H
@@ -29,6 +30,10 @@ public:
     //void startGame(Options* options_initOptions);
     void switchToOptions();
     void switchToLoadGame();
+    void smwUpdateSettings(); //Updatet die Anzeige der eingestellten Optionen
+
+    //get und set Methoden
+    Options* getPtr_smwOptions() { return ptr_smwOptions; }
 
 private slots:
     void on_qbutton_startGame_clicked();

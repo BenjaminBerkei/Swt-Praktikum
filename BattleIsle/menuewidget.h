@@ -1,7 +1,7 @@
 /*
  * Author: Manuel
- * Version: 0.2
- * Datum 04.12.2017
+ * Version: 0.3
+ * Datum 07.12.2017
  */
 
 #ifndef MENUEWIDGET_H
@@ -33,6 +33,9 @@ private:
 public:
     explicit MenueWidget( QWidget *parent = 0 );
     ~MenueWidget();
+
+    //get und set Methoden
+    StartMenueWidget* getPtr_mwStartMenueWidget() { return ptr_mwStartMenueWidget; }
 };
 
 #endif // STARTMENUEWIDGET_H

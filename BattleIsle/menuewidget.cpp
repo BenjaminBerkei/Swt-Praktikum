@@ -1,8 +1,9 @@
 /*
  * Author: Manuel
- * Version: 0.2
- * Datum 04.12.2017
+ * Version: 0.3
+ * Datum 07.12.2017
  */
+
 
 #include "menuewidget.h"
 #include "ui_menuewidget.h"
@@ -13,7 +14,7 @@ MenueWidget::MenueWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     ptr_mwStartMenueWidget = new StartMenueWidget(this);
-    ptr_mwOptionsWidget = new OptionsWidget(this);
+    ptr_mwOptionsWidget = new OptionsWidget(this, this, ptr_mwStartMenueWidget->getPtr_smwOptions());
     ptr_mwLoadGameWidget = new LoadGameWidget(this);
 
     //Füge die Verschiedenen Fenster dem MenueWidget zu
@@ -24,7 +25,7 @@ MenueWidget::MenueWidget(QWidget *parent) :
 
     connect(ptr_mwStartMenueWidget, SIGNAL(SIGNAL_smwChangeIndexFromStack(int)), ui->stack, SLOT(setCurrentIndex(int)));
     connect(ptr_mwOptionsWidget, SIGNAL(SIGNAL_optChangeIndexFromStack(int)), ui->stack, SLOT(setCurrentIndex(int)));
-    connect(ptr_mwLoadGameWidget, SIGNAL(SIGNAL_loadgChangeIndexFromStack(int)), ui->stack, SLOT(setCurrentIndex(int)));
+    connect(ptr_mwLoadGameWidget, SIGNAL(SIGNAL_loadGChangeIndexFromStack(int)), ui->stack, SLOT(setCurrentIndex(int)));
 }
 
 MenueWidget::~MenueWidget()

@@ -1,8 +1,9 @@
 /*
  * Author: Manuel
- * Version: 0.2
- * Datum 04.12.2017
+ * Version: 0.3
+ * Datum 07.12.2017
  */
+
 
 #ifndef OPTIONSWIDGET_H
 #define OPTIONSWIDGET_H
@@ -14,6 +15,7 @@
 
 #include <QDebug>
 
+class MenueWidget;
 class StartMenueWidget;
 
 namespace Ui {
@@ -26,10 +28,11 @@ class OptionsWidget : public QWidget
 
 private:
     Ui::OptionsWidget *ui;
+    MenueWidget* ptr_optWidMenueWidget;
     Options *ptr_optWidOptions;
 
 public:
-    explicit OptionsWidget(QWidget *parent = 0, Options *ptr_Options = 0);
+    explicit OptionsWidget(QWidget *parent = 0, MenueWidget *parentMenueWidget = 0, Options *ptr_Options = 0);
     ~OptionsWidget();
 
     void returnToStartMenue();
@@ -39,7 +42,6 @@ private slots:
     void on_qbutton_cancel_clicked();
 
 signals:
-    void SIGNAL_sendOptions(bool bool_KI, bool bool_fogOfWar, QString str_map, int int_roundLimit);
     void SIGNAL_optChangeIndexFromStack(int);
 };
 

@@ -1,7 +1,7 @@
 /*
  * Author: Lucas
- * Version: 0.1
- * Datum 05.12.2017
+ * Version: 0.2 Überarbeitet Manuel
+ * Datum 07.12.2017
  * */
 
 #ifndef OPTIONS_H
@@ -20,13 +20,18 @@ private:
 public:
     Options();
     Options(bool bool_KI, bool bool_fog, QString str_m, int int_limit);
+
+    //get und set Methoden
     bool getBool_ki() { return bool_ki; }
     bool getBool_fogOfWar() { return bool_fogOfWar; }
     QString getStr_map() { return str_map; }
     int getInt_roundLimit() { return int_roundLimit; }
+    void setBool_ki( bool b ) { bool_ki = b; }
+    void setBool_fogOfWar( bool b ) { bool_fogOfWar = b; }
+    void setStr_map( QString s ) { str_map = s; }
+    void setInt_roundLimit( int i ) { int_roundLimit = i; }
 
 public slots:
-    void SLOT_setOptions(bool bool_KI, bool bool_fog, QString str_m, int int_limit);
 };
 
 #endif // OPTIONS_H

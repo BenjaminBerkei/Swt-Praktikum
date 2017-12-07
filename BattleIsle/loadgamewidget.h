@@ -31,7 +31,7 @@ private slots:
     void on_qbutton_cancel_clicked();
 
 signals:
-    void SIGNAL_loadGChangeIndexFromStack(int);
+    void SIGNAL_loadGChangeIndexFromStack(int i);
 };
 
 #endif // LOADGAMEWIDGET_H

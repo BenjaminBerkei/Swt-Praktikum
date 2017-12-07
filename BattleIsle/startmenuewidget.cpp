@@ -1,7 +1,7 @@
 /*
  * Author: Manuel
- * Version: 0.2
- * Datum 04.12.2017
+ * Version: 0.3
+ * Datum 07.12.2017
  */
 
 #include "startmenuewidget.h"
@@ -15,7 +15,7 @@ StartMenueWidget::StartMenueWidget( QWidget *parent ) :
     ui->setupUi( this );
     ptr_smwOptions = new Options();
 
-    //Die Eingestellten Optionen anzeigen
+    //Die eingestellten Optionen anzeigen
     if( ptr_smwOptions->getBool_ki() == true )
         ui->label_opponent_indication->setText( "Computer" );
     if( ptr_smwOptions->getBool_fogOfWar() == true )
@@ -44,6 +44,27 @@ void StartMenueWidget::switchToLoadGame()
     //Wechsel zu Widget 1
     emit SIGNAL_smwChangeIndexFromStack(1);
     //Das Signal wird im Konstruktor von MenueWidget verbunden
+}
+
+void StartMenueWidget::smwUpdateSettings()
+{
+    //Die eingestellten Optionen updaten
+    if( ptr_smwOptions->getBool_ki() == true )
+        ui->label_opponent_indication->setText( "Computer" );
+    else
+        ui->label_opponent_indication->setText( "Mensch" );
+
+    if( ptr_smwOptions->getBool_fogOfWar() == true )
+        ui->label_fogOfWar_indication->setText( "Ein" );
+    else
+        ui->label_fogOfWar_indication->setText( "Aus" );
+
+    ui->label_map_indication->setText( ptr_smwOptions->getStr_map() );
+
+    if( ptr_smwOptions->getInt_roundLimit() == 0)
+        ui->label_limit_indication->setText("Kein Limit");
+    else
+        ui->label_limit_indication->setText(QString::number(ptr_smwOptions->getInt_roundLimit()));
 }
 
 void StartMenueWidget::on_qbutton_startGame_clicked()
