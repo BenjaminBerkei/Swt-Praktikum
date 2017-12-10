@@ -10,7 +10,6 @@
 
 #include <QWidget>
 #include "options.h"
-
 #include <QDebug>
 
 namespace Ui {

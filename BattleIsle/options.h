@@ -8,6 +8,8 @@
 #define OPTIONS_H
 #include<QObject>
 #include <string>
+#include <QDebug>
+
 class Options : public QObject
 {
     Q_OBJECT

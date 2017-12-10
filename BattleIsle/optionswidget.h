@@ -12,7 +12,6 @@
 #include "menuewidget.h"
 #include "startmenuewidget.h"
 #include "options.h"
-
 #include <QDebug>
 
 class MenueWidget;
