@@ -42,10 +42,10 @@ public:
     void changePhase(Round*);
 };
 
-class AttackPhase : public Phase
+class ActionPhase : public Phase
 {
 public:
-    void changePlayer(Round*);
+    void changePhase(Round*);
 };
 
 #endif
