@@ -1,9 +1,9 @@
 /////////////////////////////////////////////
-// round.hpp // letzte Änderung: 25.11.2017//
+// round.hpp // letzte Ã„nderung: 25.11.2017//
 // letzte Editirung: Miguel				   //	
-// Version: 0.1							   //	
+// Version: 0.2						   //	
 // -------- Kommentare --------------------//
-/*Miguel: benötige zugriff auf beide player via setPlayer oder so
+/*es gibt wie Ã¼ber whatsapp besprochen nur noch changePhase()
 */
 /////////////////////////////////////////////
 
@@ -24,7 +24,6 @@ public:
 	~Round();
 	void setCurrentRoundPhase(Phase*);
 	void changePhase();
-	void changePlayer();
 	bool checkWinCondition();
 	double getCurrentRoundNumber() const;
 	void setCurrentRoundNumber(const double);
@@ -35,21 +34,18 @@ class Phase
 {
 public:
 	virtual void changePhase(Round*) = 0;
-	virtual void changePlayer(Round*) = 0;
 };
 
 class MovePhase : public Phase
 {
 public:
     void changePhase(Round*);
-    void changePlayer(Round*);
 };
 
 class AttackPhase : public Phase
 {
 public:
     void changePlayer(Round*);
-    void changePhase(Round*);
 };
 
 #endif
