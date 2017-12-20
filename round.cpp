@@ -1,9 +1,9 @@
-/////////////////////////////////////////////
-// round.cpp // letzte Änderung: 25.11.2017//
-// letzte Editirung: Miguel				   //	
-// Version: 0.1							   //	
-// -------- Kommentare --------------------//
-/*Miguel: benötige zugriff auf beide player via setPlayer oder so
+//////////////////////////////////////////////////
+// round.cpp // letzte Änderung: 20.12.2017	//
+// letzte Editirung: Miguel			//	
+// Version: 0.2					//	
+// -------- Kommentare -------------------------//
+/*sieh round.hpp
 */
 /////////////////////////////////////////////
 
@@ -76,13 +76,8 @@ void MovePhase::changePhase(Round* round)
 	return;
 }
 
-void AttackPhase::changePlayer(Round* round)
+void AttackPhase::changePhase(Round* round)
 {
 	round->setCurrentRoundPhase(new MovePhase);
 	round->setCurrentRoundNumber(round->getCurrentRoundNumber() + 0.5);
-	// Spielerwechsel
 }
-
-void MovePhase::changePlayer(Round* round){}
-
-void AttackPhase::changePhase(Round* round){}
