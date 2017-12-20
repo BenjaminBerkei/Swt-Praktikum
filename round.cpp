@@ -38,7 +38,7 @@ void Round::changePhase()
 
 void Round::changePlayer()
 {
-	currentRoundPhase->changePlayer(this);
+	currentRoundPhase->changePhase(this);
 	return;
 }
 
@@ -72,11 +72,11 @@ void Round::setCurrentRoundNumber(const double roundAnz)
 
 void MovePhase::changePhase(Round* round)
 {
-	round->setCurrentRoundPhase(new AttackPhase);
+	round->setCurrentRoundPhase(new ActionPhase);
 	return;
 }
 
-void AttackPhase::changePhase(Round* round)
+void ActionPhase::changePhase(Round* round)
 {
 	round->setCurrentRoundPhase(new MovePhase);
 	round->setCurrentRoundNumber(round->getCurrentRoundNumber() + 0.5);
