@@ -10,7 +10,6 @@
 #include<QGraphicsObject>
 #include<QPainter>
 #include<cmath>
-
 #include <QDebug>
 
 class HexagonBase : public QGraphicsObject

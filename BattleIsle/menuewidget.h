@@ -12,7 +12,6 @@
 #include "optionswidget.h"
 #include "startmenuewidget.h"
 #include "loadgamewidget.h"
-
 #include <QDebug>
 
 class OptionsWidget;

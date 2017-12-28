@@ -55,7 +55,7 @@ Die Klasse wird im Header deklariert und der Header benötigt ein geeigneten Wä
 Die abgeleitete Klassen dürfen, wenn diese nicht zu groß sind, in die Elternklasse.
 
 #### Sprache 
-Die verwendete Sprache für die Bezeichnung ist **Englisch**.
+Die verwendete Sprache für die Bezeichnungen ist **Englisch**.
 
 #### Patterns
 Es sollen geeignete Muster verwendet werden um Probleme zu lösen. Es gibt viele gute und bewährte Lösungsansätzte auf die zugegriffen werden soll.
