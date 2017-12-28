@@ -1,6 +1,6 @@
 /*
- * Author: Lucas
- * Version: 0.1
+ * Author: Lucas, Manuel
+ * Version: 0.2
  * Datum 01.12.2017
  * */
 #ifndef HEXAGONMATCHFIELD_H
