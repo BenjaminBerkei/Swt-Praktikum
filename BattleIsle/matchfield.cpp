@@ -2,7 +2,13 @@
  * Author: Lucas
  * Version: 0.1
  * Datum 01.12.2017
+ *
+ * Author: Manuel
+ * Version: 0.2
+ * Datum 30.12.2017
+ * Kommentar: hexagonMatchfield_gameGrid und button_menueBar raus genommen in der .h Datei
  * */
+
 #include "matchfield.h"
 #include "ui_matchfield.h"
 

@@ -2,6 +2,11 @@
  * Author: Lucas
  * Version: 0.1
  * Datum 01.12.2017
+ *
+ * Author: Manuel
+ * Version: 0.2
+ * Datum 30.12.2017
+ * Kommentar: hexagonMatchfield_gameGrid und button_menueBar raus genommen
  * */
 #ifndef MATCHFIELD_H
 #define MATCHFIELD_H
@@ -29,8 +34,9 @@ private:
     const std::string str_matchfieldName;
     int int_matchfieldSizeX;
     int int_matchfieldSizeY;
-    std::vector< std::vector < HexagonMatchfield* > > hexagonMatchfield_gameGrid;
-    std::vector < Button* > button_menueBar;
+    //Folgendes wurde nach Entwurf 2.1 in die Klasse Game gelegt:
+    //std::vector< std::vector < HexagonMatchfield* > > hexagonMatchfield_gameGrid;
+    //std::vector < Button* > button_menueBar;
 
     QGraphicsView *qview_gameView;
     QGraphicsView *qview_menueBarView;

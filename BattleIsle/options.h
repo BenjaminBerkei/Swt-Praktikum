@@ -1,6 +1,6 @@
 /*
- * Author: Lucas
- * Version: 0.2 Überarbeitet Manuel
+ * Author: Manuel
+ * Version: 0.2
  * Datum 07.12.2017
  * */
 

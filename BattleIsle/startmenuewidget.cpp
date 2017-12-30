@@ -1,7 +1,12 @@
 /*
  * Author: Manuel
  * Version: 0.3
- * Datum 07.12.2017
+ * Datum: 07.12.2017
+ *
+ * Author: Manuel
+ * Version: 0.4
+ * Datum: 30.12.2017
+ * Kommentar: Verbindung zu GameWidget hinzugefuegt
  */
 
 #include "startmenuewidget.h"
@@ -35,9 +40,14 @@ StartMenueWidget::~StartMenueWidget()
 
 void StartMenueWidget::startGame( Options *options_initOptions )
 {
-    Q_UNUSED( options_initOptions );
     ptr_smwMenueWidget->resize( 1200,750 );
     ptr_smwMenueWidget->ui->stack->resize( 1190, 740 );
+
+    //Erstelle ein Objekt vom Typ Game
+    Game game(options_initOptions, ptr_smwMenueWidget->getPtr_mwGameWidget());
+    //Erstelle eine Assoziation von GameWidget zu Game
+    ptr_smwMenueWidget->getPtr_mwGameWidget()->setGameWidGame(&game);
+
     //Wechsel zu Widget 3
     emit SIGNAL_smwChangeIndexFromStack( 3 );
     //Das Signal wird im Konstruktor von MenueWidget verbunden

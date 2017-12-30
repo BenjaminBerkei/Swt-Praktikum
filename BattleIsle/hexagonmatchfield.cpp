@@ -1,8 +1,14 @@
 /*
- * Author: Lucas, Manuel
+ * Author: Lucas
+ * Version: 0.1
+ * Datum 01.12.2017
+ *
+ * Author: Manuel
  * Version: 0.2
- * Datum 08.12.2017
- */
+ * Datum 11.12.2017
+ * Kommentar: Klassen mit Operationen hinzugefuegt
+ * */
+
 #include "hexagonmatchfield.h"
 
 HexagonMatchfield::HexagonMatchfield( QPoint qpoint_center, int int_size, QPoint qpoint_gridPosition) : //Unit noch hinzufügen (siehe hpp)

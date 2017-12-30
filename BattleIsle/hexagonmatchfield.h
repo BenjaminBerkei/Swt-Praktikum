@@ -1,7 +1,12 @@
 /*
- * Author: Lucas, Manuel
- * Version: 0.2
+ * Author: Lucas
+ * Version: 0.1
  * Datum 01.12.2017
+ *
+ * Author: Manuel
+ * Version: 0.2
+ * Datum 11.12.2017
+ * Kommentar: Klassen mit Operationen hinzugefuegt
  * */
 #ifndef HEXAGONMATCHFIELD_H
 #define HEXAGONMATCHFIELD_H

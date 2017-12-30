@@ -1,7 +1,12 @@
 /*
  * Author: Manuel
  * Version: 0.3
- * Datum 07.12.2017
+ * Datum: 07.12.2017
+ *
+ * Author: Manuel
+ * Version: 0.4
+ * Datum: 30.12.2017
+ * Kommentar: Verbindung zu GameWidget hinzugefuegt
  */
 
 
@@ -13,6 +18,7 @@
 #include "menuewidget.h"
 #include "ui_menuewidget.h"
 #include "gamewidget.h"
+#include "game.h"
 #include <QDebug>
 
 namespace Ui {
