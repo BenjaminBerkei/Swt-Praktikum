@@ -28,7 +28,7 @@ class OptionsWidget : public QWidget
 private:
     Ui::OptionsWidget *ui;
     MenueWidget* ptr_optWidMenueWidget;
-    Options *ptr_optWidOptions;
+    Options* ptr_optWidOptions;
 
 public:
     explicit OptionsWidget(QWidget *parent = 0, MenueWidget *parentMenueWidget = 0, Options *ptr_Options = 0);

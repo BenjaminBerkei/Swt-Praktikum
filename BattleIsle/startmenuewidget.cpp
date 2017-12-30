@@ -8,8 +8,9 @@
 #include "ui_startmenuewidget.h"
 
 
-StartMenueWidget::StartMenueWidget( QWidget *parent ) :
+StartMenueWidget::StartMenueWidget(QWidget *parent , MenueWidget *ptr_menueWidget) :
     QWidget( parent ),
+    ptr_smwMenueWidget(ptr_menueWidget),
     ui( new Ui::StartMenueWidget )
 {
     ui->setupUi( this );
@@ -32,17 +33,27 @@ StartMenueWidget::~StartMenueWidget()
     delete ui;
 }
 
+void StartMenueWidget::startGame( Options *options_initOptions )
+{
+    Q_UNUSED( options_initOptions );
+    ptr_smwMenueWidget->resize( 1200,750 );
+    ptr_smwMenueWidget->ui->stack->resize( 1190, 740 );
+    //Wechsel zu Widget 3
+    emit SIGNAL_smwChangeIndexFromStack( 3 );
+    //Das Signal wird im Konstruktor von MenueWidget verbunden
+}
+
 void StartMenueWidget::switchToOptions()
 {
     //Wechsel zu Widget 2
-    emit SIGNAL_smwChangeIndexFromStack(2);
+    emit SIGNAL_smwChangeIndexFromStack( 2 );
     //Das Signal wird im Konstruktor von MenueWidget verbunden
 }
 
 void StartMenueWidget::switchToLoadGame()
 {
     //Wechsel zu Widget 1
-    emit SIGNAL_smwChangeIndexFromStack(1);
+    emit SIGNAL_smwChangeIndexFromStack( 1 );
     //Das Signal wird im Konstruktor von MenueWidget verbunden
 }
 
@@ -61,7 +72,7 @@ void StartMenueWidget::smwUpdateSettings()
 
     ui->label_map_indication->setText( ptr_smwOptions->getStr_map() );
 
-    if( ptr_smwOptions->getInt_roundLimit() == 0)
+    if( ptr_smwOptions->getInt_roundLimit() == 0 )
         ui->label_limit_indication->setText("Kein Limit");
     else
         ui->label_limit_indication->setText(QString::number(ptr_smwOptions->getInt_roundLimit()));
@@ -69,7 +80,7 @@ void StartMenueWidget::smwUpdateSettings()
 
 void StartMenueWidget::on_qbutton_startGame_clicked()
 {
-    //startGame(Options* options_initOptions);
+    startGame( ptr_smwOptions );
 }
 
 void StartMenueWidget::on_qbutton_loadGame_clicked()

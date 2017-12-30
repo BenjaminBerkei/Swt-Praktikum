@@ -10,11 +10,19 @@
 
 #include <QWidget>
 #include "options.h"
+#include "menuewidget.h"
+#include "ui_menuewidget.h"
+#include "gamewidget.h"
 #include <QDebug>
 
 namespace Ui {
 class StartMenueWidget;
+class MenueWidget;
 }
+
+
+class MenueWidget; //Vorwärtsdeklaration
+class GameWidget; //Vorwärtsdeklaration
 
 class StartMenueWidget : public QWidget
 {
@@ -22,11 +30,12 @@ class StartMenueWidget : public QWidget
 private:
     Ui::StartMenueWidget *ui;
     Options *ptr_smwOptions;
+    MenueWidget* ptr_smwMenueWidget;
 
 public:
-    explicit StartMenueWidget(QWidget *parent = 0);
+    explicit StartMenueWidget(QWidget *parent = 0, MenueWidget* ptr_menueWidget = 0);
     ~StartMenueWidget();
-    //void startGame(Options* options_initOptions);
+    void startGame(Options* options_initOptions);
     void switchToOptions();
     void switchToLoadGame();
     void smwUpdateSettings(); //Updatet die Anzeige der eingestellten Optionen
