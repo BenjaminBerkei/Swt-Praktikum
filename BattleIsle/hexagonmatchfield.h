@@ -24,9 +24,8 @@ protected:
     //Unit* unit_stationed;
     MATCHFIELDSTATE state;
 public:
-    HexagonMatchfield(QPoint qpoint_center, int int_size, QPoint qpoint_gridPosition/*, Unit* = 0*/);
+    HexagonMatchfield(QPoint qpoint_gridPosition/*, Unit* = 0*/);
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) = 0;
     void changeState(MATCHFIELDSTATE newState);
 
 signals:
@@ -40,8 +39,7 @@ private:
     DEPTH depth_state;
 
 public:
-    WaterHex(QPoint qpoint_center, int int_size, QPoint qpoint_gridPosition, DEPTH depth_init/*, Unit* = 0*/);
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    WaterHex(QPoint qpoint_gridPosition, DEPTH depth_init/*, Unit* = 0*/);
 };
 
 /*New Class*/
@@ -51,8 +49,7 @@ private:
     std::string str_normalHexTyp;
 
 public:
-    NormalHex(QPoint qpoint_center, int int_size, QPoint qpoint_gridPosition, std::string str_typ/*, Unit* = 0*/);
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    NormalHex(QPoint qpoint_gridPosition, std::string str_typ/*, Unit* = 0*/);
 };
 
 /*New Class*/
@@ -62,8 +59,7 @@ private:
     std::string str_forrestHexTyp;
 
 public:
-    ForrestHex(QPoint qpoint_center, int int_size, QPoint qpoint_gridPosition, std::string str_typ/*, Unit* = 0*/);
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    ForrestHex(QPoint qpoint_gridPosition, std::string str_typ/*, Unit* = 0*/);
 };
 
 /*New Class*/
@@ -73,8 +69,7 @@ private:
     std::string str_mountainHexTyp;
 
 public:
-    MountainHex(QPoint qpoint_center, int int_size, QPoint qpoint_gridPosition, std::string str_typ/*, Unit* = 0*/);
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    MountainHex(QPoint qpoint_gridPosition, std::string str_typ/*, Unit* = 0*/);
 };
 
 /*New Class*/
@@ -84,8 +79,7 @@ private:
     std::string str_streetHexTyp;
 
 public:
-    StreetHex(QPoint qpoint_center, int int_size, QPoint qpoint_gridPosition, std::string str_typ/*, Unit* = 0*/);
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    StreetHex(QPoint qpoint_gridPosition, std::string str_typ/*, Unit* = 0*/);
 };
 
 /*New Class*/
@@ -96,8 +90,7 @@ private:
     int int_boltaniumCurrentCapacity;
 
 public:
-    BoltaniumHex(QPoint qpoint_center, int int_size, QPoint qpoint_gridPosition, int int_cap/*, Unit* = 0*/);
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    BoltaniumHex(QPoint qpoint_gridPosition, int int_cap/*, Unit* = 0*/);
 };
 
 
