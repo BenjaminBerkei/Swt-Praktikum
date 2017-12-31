@@ -48,3 +48,4 @@ FORMS    += startmenuewidget.ui \
     startmenuewidget.ui \
     loadgamewidget.ui \
     gamewidget.ui
+CONFIG += c++11
