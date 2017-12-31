@@ -23,76 +23,25 @@ protected:
     bool bool_hexFogOfWar;
     //Unit* unit_stationed;
     MATCHFIELDSTATE state;
+    std::string HexMatchfieldType; // im Diagramm TYP_type
+    //Mögliche Typen:
+    //"waterDeep"           (Tiefes Meer)
+    //"waterSeashore"       (Küste)
+    //"forrest"             (Wald)
+    //"grassland"           (Wiese)
+    //"streetStraight"      (Straße Gerade)
+    //"streetCurve"         (Straße mit Kurve)
+    //"mountainTop"         (Bergspitze)
+    //"mountainSide"        (Bergseite)
+    //"boltanium"           (Boltanium)
+
 public:
-    HexagonMatchfield(QPoint qpoint_gridPosition/*, Unit* = 0*/);
+    HexagonMatchfield(QPoint qpoint_gridPosition, std::string type/*, Unit* = 0*/);
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
     void changeState(MATCHFIELDSTATE newState);
 
 signals:
     void SIGNAL_clicked(HexagonMatchfield*);
 };
-
-/*New Class*/
-class WaterHex : HexagonMatchfield
-{
-private:
-    DEPTH depth_state;
-
-public:
-    WaterHex(QPoint qpoint_gridPosition, DEPTH depth_init/*, Unit* = 0*/);
-};
-
-/*New Class*/
-class NormalHex : HexagonMatchfield
-{
-private:
-    std::string str_normalHexTyp;
-
-public:
-    NormalHex(QPoint qpoint_gridPosition, std::string str_typ/*, Unit* = 0*/);
-};
-
-/*New Class*/
-class ForrestHex : HexagonMatchfield
-{
-private:
-    std::string str_forrestHexTyp;
-
-public:
-    ForrestHex(QPoint qpoint_gridPosition, std::string str_typ/*, Unit* = 0*/);
-};
-
-/*New Class*/
-class MountainHex : HexagonMatchfield
-{
-private:
-    std::string str_mountainHexTyp;
-
-public:
-    MountainHex(QPoint qpoint_gridPosition, std::string str_typ/*, Unit* = 0*/);
-};
-
-/*New Class*/
-class StreetHex : HexagonMatchfield
-{
-private:
-    std::string str_streetHexTyp;
-
-public:
-    StreetHex(QPoint qpoint_gridPosition, std::string str_typ/*, Unit* = 0*/);
-};
-
-/*New Class*/
-class BoltaniumHex : HexagonMatchfield
-{
-private:
-    int int_boltaniumCapacity;
-    int int_boltaniumCurrentCapacity;
-
-public:
-    BoltaniumHex(QPoint qpoint_gridPosition, int int_cap/*, Unit* = 0*/);
-};
-
-
 
 #endif // HEXAGONMATCHFIELD_H

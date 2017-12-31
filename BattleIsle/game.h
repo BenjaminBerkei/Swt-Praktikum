@@ -7,6 +7,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <vector>
 #include "options.h"
 #include "hexagonmatchfield.h"
 #include "button.h"
@@ -22,13 +23,14 @@ class Game
 private:
     HexagonMatchfield* SelectionCache;
     vector<HexagonMatchfield*> TargetChache;
-    vector<vector<HexagonMatchfield*>> hexagonMatchfield_gameGrid;
     //vector<vector<Unit*>> unit_UnitGrid;
     vector<Button*> button_menueBar;
     Options* gameOptions;
     GameWidget* ptr_gameGameWid;
 
 public:
+    vector<vector<HexagonMatchfield*>> hexagonMatchfield_gameGrid;
+
     Game(Options* init_options, GameWidget* ptr_gameWid);
     //Game(SaveGame* savegame_initSave);
     //void loadGame(SaveGame* savegame_initSave);
@@ -37,6 +39,9 @@ public:
     //int showUnitNumber(Player* player);
     //int showTotalEnergie(Player* player);
     // ...
+
+    // get und set Methoden
+    HexagonMatchfield* getVectorVectorHexagonMatchfield(int x, int y);
 };
 
 #endif // GAME_H
