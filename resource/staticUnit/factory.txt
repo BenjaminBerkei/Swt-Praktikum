@@ -1,0 +1,1 @@
+"Fabrik" 7 600 3 200 0 "FACTORYUNIT" "Hier kannst du Einheiten produzieren." "bildpath"  

@@ -1,0 +1,1 @@
+"Mann u. El" 8 180 0 100 4 20 30 50 35 "HEAVYUNIT" "Dieser fast unzerstörbare Panzer ist ein musthave für jeden Mann und natürlich jede Frau, die eine Schlacht zu gewinnen haben." "bildpath"

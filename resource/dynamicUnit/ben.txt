@@ -1,0 +1,1 @@
+"B.E.N" 4 60 0 30 4 20 0 40 30 "LIGHTUNIT" "Elitesoldaten die das B.E.N-Programm absolviert haben.\n Die Bedeutung von B.E.N ist streng geheim." "bildpath"

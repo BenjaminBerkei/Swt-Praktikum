@@ -1,0 +1,1 @@
+"Lucas" 6 130 0 70 8 50 50 50 25 "MEDIUMUNIT" "Dieses kampffähige Fahrzeug ist ein allround Talent und braucht sich vor keinem Kampf zu fürchten." "bildpath"

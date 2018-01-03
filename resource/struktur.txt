@@ -1,0 +1,4 @@
+staticUnit
+name view hp unitStorageMax energieStorage currentEnergieStorage type details bildpath
+dynamicUnit
+name view hp unitStorageMax costs moveRange airatt wateratt groundatt autorepair type detail bildpath
