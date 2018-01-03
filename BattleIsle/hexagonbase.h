@@ -10,7 +10,6 @@
 #include<QGraphicsObject>
 #include<QPainter>
 #include<cmath>
-
 #include <QDebug>
 
 class HexagonBase : public QGraphicsObject
@@ -25,7 +24,7 @@ public:
     QRectF boundingRect() const;
     QPolygon calculateShape(QPoint qpoint_center, int int_size);    //Berechnung der Ecken des Feldes
 
-    /*Müssen in Subclassen ausgeprägt werden*/
+    /*Müssen in Subklassen ausgeprägt werden*/
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) = 0;
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) = 0;
 };

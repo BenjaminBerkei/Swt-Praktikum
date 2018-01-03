@@ -22,7 +22,9 @@ SOURCES += main.cpp\
     optionswidget.cpp \
     menuewidget.cpp \
     startmenuewidget.cpp \
-    loadgamewidget.cpp
+    loadgamewidget.cpp \
+    gamewidget.cpp \
+    game.cpp
 
 HEADERS  += \
     hexagonbase.h \
@@ -35,11 +37,15 @@ HEADERS  += \
     optionswidget.h \
     menuewidget.h \
     startmenuewidget.h \
-    loadgamewidget.h
+    loadgamewidget.h \
+    gamewidget.h \
+    game.h
 
 FORMS    += startmenuewidget.ui \
     matchfield.ui \
     optionswidget.ui \
     menuewidget.ui \
     startmenuewidget.ui \
-    loadgamewidget.ui
+    loadgamewidget.ui \
+    gamewidget.ui
+CONFIG += c++11

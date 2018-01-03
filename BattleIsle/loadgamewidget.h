@@ -8,6 +8,7 @@
 #define LOADGAMEWIDGET_H
 
 #include <QWidget>
+#include <QDebug>
 
 namespace Ui {
 class LoadGameWidget;

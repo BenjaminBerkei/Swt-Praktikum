@@ -1,7 +1,12 @@
 /*
  * Author: Manuel
  * Version: 0.3
- * Datum 07.12.2017
+ * Datum: 07.12.2017
+ *
+ * Author: Manuel
+ * Version: 0.4
+ * Datum: 30.12.2017
+ * Kommentar: Verbindung zu GameWidget hinzugefuegt
  */
 
 
@@ -10,12 +15,20 @@
 
 #include <QWidget>
 #include "options.h"
-
+#include "menuewidget.h"
+#include "ui_menuewidget.h"
+#include "gamewidget.h"
+#include "game.h"
 #include <QDebug>
 
 namespace Ui {
 class StartMenueWidget;
+class MenueWidget;
 }
+
+
+class MenueWidget; //Vorwärtsdeklaration
+class GameWidget; //Vorwärtsdeklaration
 
 class StartMenueWidget : public QWidget
 {
@@ -23,11 +36,12 @@ class StartMenueWidget : public QWidget
 private:
     Ui::StartMenueWidget *ui;
     Options *ptr_smwOptions;
+    MenueWidget* ptr_smwMenueWidget;
 
 public:
-    explicit StartMenueWidget(QWidget *parent = 0);
+    explicit StartMenueWidget(QWidget *parent = 0, MenueWidget* ptr_menueWidget = 0);
     ~StartMenueWidget();
-    //void startGame(Options* options_initOptions);
+    void startGame(Options* options_initOptions);
     void switchToOptions();
     void switchToLoadGame();
     void smwUpdateSettings(); //Updatet die Anzeige der eingestellten Optionen
