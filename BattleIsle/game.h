@@ -2,11 +2,17 @@
  * Author: Manuel
  * Version: 0.1
  * Datum 30.12.2017
+ *
+ * Author: Manuel
+ * Version: 0.2
+ * Datum: 04.01.2018
  * */
 
 #ifndef GAME_H
 #define GAME_H
 
+#include <vector>
+#include <QTime>
 #include "options.h"
 #include "hexagonmatchfield.h"
 #include "button.h"
@@ -37,6 +43,9 @@ public:
     //int showUnitNumber(Player* player);
     //int showTotalEnergie(Player* player);
     // ...
+
+    // get und set Methoden
+    vector<vector<HexagonMatchfield*>> getVectorVectorHexagonMatchfield();
 };
 
 #endif // GAME_H

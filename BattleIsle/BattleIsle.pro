@@ -48,4 +48,8 @@ FORMS    += startmenuewidget.ui \
     startmenuewidget.ui \
     loadgamewidget.ui \
     gamewidget.ui
+
+RESOURCES += \
+    img/rsc.qrc
+
 CONFIG += c++11

@@ -12,21 +12,16 @@
 #include<cmath>
 #include <QDebug>
 
-class HexagonBase : public QGraphicsObject
+class HexagonBase : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 protected:
     QPoint qpoint_gridPosition; //Position im Grid
-    QPolygon hexShape;     //Form des Feldes
 public:
-    HexagonBase(QPoint qpoint_center, int int_size, QPoint qpoint_position);
-
-    QRectF boundingRect() const;
-    QPolygon calculateShape(QPoint qpoint_center, int int_size);    //Berechnung der Ecken des Feldes
+    HexagonBase(QPoint qpoint_position);
 
     /*Müssen in Subklassen ausgeprägt werden*/
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) = 0;
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) = 0;
 };
 
 #endif // HEXAGONBASE_H
