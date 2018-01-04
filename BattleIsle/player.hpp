@@ -1,15 +1,16 @@
 /////////////////////////////////////////////
 // player.hpp // letzte Änderung: 03.01.18 //
-// Letzte Editirung: Miguel				   //	
-// Version: 0.3							   //	
+// Letzte Editirung: Lucas				   //
+// Version: 0.4             			   //
 // -------- Kommentare --------------------//
 /* Arne: Ich bin mir unsicher bei dem Zeiger von Player*
 			->geändert wie abgesprochen!
+    Lucas : Wächter angepasst
 */
 /////////////////////////////////////////////
 
-#ifndef UNIT_HPP
-#define UNIT_HPP
+#ifndef PLAYER_HPP
+#define PLAYER_HPP
 
 #include "game.h"
 #include <QString> 
