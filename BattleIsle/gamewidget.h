@@ -2,6 +2,10 @@
  * Author: Manuel
  * Version: 0.1
  * Datum 30.12.2017
+ *
+ * Author: Manuel
+ * Version: 0.2
+ * Datum: 04.01.2018
  * */
 #ifndef GAMEWIDGET_H
 #define GAMEWIDGET_H

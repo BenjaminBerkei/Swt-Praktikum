@@ -2,12 +2,17 @@
  * Author: Manuel
  * Version: 0.1
  * Datum 30.12.2017
+ *
+ * Author: Manuel
+ * Version: 0.2
+ * Datum: 04.01.2018
  * */
 
 #ifndef GAME_H
 #define GAME_H
 
 #include <vector>
+#include <QTime>
 #include "options.h"
 #include "hexagonmatchfield.h"
 #include "button.h"
@@ -23,14 +28,13 @@ class Game
 private:
     HexagonMatchfield* SelectionCache;
     vector<HexagonMatchfield*> TargetChache;
+    vector<vector<HexagonMatchfield*>> hexagonMatchfield_gameGrid;
     //vector<vector<Unit*>> unit_UnitGrid;
     vector<Button*> button_menueBar;
     Options* gameOptions;
     GameWidget* ptr_gameGameWid;
 
 public:
-    vector<vector<HexagonMatchfield*>> hexagonMatchfield_gameGrid;
-
     Game(Options* init_options, GameWidget* ptr_gameWid);
     //Game(SaveGame* savegame_initSave);
     //void loadGame(SaveGame* savegame_initSave);
@@ -41,7 +45,7 @@ public:
     // ...
 
     // get und set Methoden
-    HexagonMatchfield* getVectorVectorHexagonMatchfield(int x, int y);
+    vector<vector<HexagonMatchfield*>> getVectorVectorHexagonMatchfield();
 };
 
 #endif // GAME_H

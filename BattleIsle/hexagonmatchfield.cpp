@@ -7,6 +7,11 @@
  * Version: 0.2
  * Datum 11.12.2017
  * Kommentar: Klassen mit Operationen hinzugefuegt
+ *
+ * Author: Manuel
+ * Version: 0.3
+ * Datum: 04.01.2018
+ * Kommentar: Geändert nach dem neuen UML Diagramm
  * */
 
 #include "hexagonmatchfield.h"

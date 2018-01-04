@@ -7,6 +7,11 @@
  * Version: 0.2
  * Datum 11.12.2017
  * Kommentar: Klassen mit Operationen hinzugefuegt
+ *
+ * Author: Manuel
+ * Version: 0.3
+ * Datum: 04.01.2018
+ * Kommentar: Geändert nach dem neuen UML Diagramm
  * */
 #ifndef HEXAGONMATCHFIELD_H
 #define HEXAGONMATCHFIELD_H
@@ -39,6 +44,9 @@ public:
     HexagonMatchfield(QPoint qpoint_gridPosition, std::string type/*, Unit* = 0*/);
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
     void changeState(MATCHFIELDSTATE newState);
+
+    //get und set Methoden
+    std::string getHexMatchfieldType() {return HexMatchfieldType;}
 
 signals:
     void SIGNAL_clicked(HexagonMatchfield*);
