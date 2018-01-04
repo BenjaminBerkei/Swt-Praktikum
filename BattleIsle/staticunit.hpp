@@ -11,7 +11,7 @@
 #define STATICUNIT_HPP
 
 #include "unit.hpp"
-#include "hexagonmatchfield.hpp"
+#include "hexagonmatchfield.h"
 #include "player.hpp"
 #include <map>
 #include <QFile>
@@ -25,7 +25,7 @@ protected:
 	int int_EnergieStorage;
 
 public:
-	StaticUnit(QString, Player* = nullptr);
+    StaticUnit(QString, Player*);
 	~StaticUnit();
 
 	int getEnergieStorage() const;	
@@ -36,7 +36,7 @@ public:
 class HeadquaterUnit : public StaticUnit
 {
 public:
-	HeadquaterUnit(QString, Player* = nullptr);
+    HeadquaterUnit(QString, Player*);
 	~HeadquaterUnit();
 
 	bool action(HexagonMatchfield*);
@@ -46,7 +46,7 @@ public:
 class DepotUnit : public StaticUnit
 {
 public:
-	DepotUnit(QString, Player* = nullptr);
+    DepotUnit(QString, Player*);
 	~DepotUnit();
 
 	bool action(HexagonMatchfield*);
@@ -58,17 +58,17 @@ class FactoryUnit : public StaticUnit
 {
 protected:
 	QString unitToBuild; 
-	std::map<QString, Unit*> production
+    std::map<QString, Unit*> production;
 
 public:
-	FactoryUnit(QString, Player* = nullptr);
+    FactoryUnit(QString, Player*);
 	~FactoryUnit();
 
 	QString getUnitToBuild() const;
 	void setUnitToBuild(const QString);
 
 	bool action(HexagonMatchfield*);
-	void produceUnit(QString);
+	void produceUnit(HexagonMatchfield*);
 	Unit* createUnit();
 };
 

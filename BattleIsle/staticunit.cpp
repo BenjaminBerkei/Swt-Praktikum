@@ -11,11 +11,10 @@
 
 //StaticUnit
 
-StaticUnit::StaticUnit(QString filepath, Player* player) 
-	: UnitFile(filepath), unitPlayer(player)
+StaticUnit::StaticUnit(QString filepath, Player* player = nullptr)
 {
-	QFile file(filepath)
-	QTextStream in(&file)
+    QFile file(filepath);
+    QTextStream in(&file);
 
 	in >> str_unitName;
 	in >> int_unitView;
@@ -25,7 +24,9 @@ StaticUnit::StaticUnit(QString filepath, Player* player)
 	in >> str_unitType;
 	in >> str_unitDetails;
 
-	int_unitCurrentHP(int_unitHP);
+    int_unitCurrentHP = int_unitHP;
+    unitFile = filepath;
+    unitPlayer = player;
 }
 
 StaticUnit::~StaticUnit(){}
@@ -47,7 +48,7 @@ int StaticUnit::moveTo(HexagonMatchfield* hexTarget)
 
 // HQ
 
-HeadquaterUnit::HeadquaterUnit(QString filepath, Player* player)
+HeadquaterUnit::HeadquaterUnit(QString filepath, Player* player = nullptr)
 	: StaticUnit(filepath, player){}
 
 HeadquaterUnit::~HeadquaterUnit(){}
@@ -59,12 +60,12 @@ bool HeadquaterUnit::action(HexagonMatchfield* hexTarget)
 
 Unit* HeadquaterUnit::createUnit()
 {
-	return new HeadquaterUnit(UnitFile);
+	return new HeadquaterUnit(unitFile);
 }
 
 // Depot
 
-DepotUnit::DepotUnit(QString filepath, Player* player)
+DepotUnit::DepotUnit(QString filepath, Player* player = nullptr)
 	: StaticUnit(filepath, player) {}
 
 DepotUnit::~DepotUnit() {}
@@ -74,12 +75,12 @@ bool DepotUnit::action(HexagonMatchfield* hexTarget)
 	return true;
 }
 
-void DepotUnit::repairUnit(HexagonMatchfield* unitTarget)
+void DepotUnit::repairUnit(Unit* unitTarget)
 {	
 	if(unitTarget->getUnitCurrentHP() < unitTarget->getUnitHP())
 	{
 		unitTarget->setUnitCurrentHP(unitTarget->getUnitHP());
-		unitTarget->player->setCurrentEnergieStorage(((unitTarget->getUnitCurrentHP() * 100 / unitTarget->getUnit) * unitTarget->getUnitCost()) / 100);
+        unitPlayer->setCurrentEnergieStorage(((unitTarget->getUnitCurrentHP() * 100 / unitTarget->getUnitHP()) * unitTarget->getUnitCost()) / 100);
 		bool_unitUsed = true;
 	}
 	return;
@@ -87,12 +88,12 @@ void DepotUnit::repairUnit(HexagonMatchfield* unitTarget)
 
 Unit* DepotUnit::createUnit()
 {
-	return new DepotUnit(UnitFile);
+	return new DepotUnit(unitFile);
 }
 
 // Factory
 
-FactoryUnit::FactoryUnit(QString filepath, Player* player)
+FactoryUnit::FactoryUnit(QString filepath, Player* player = nullptr)
 	: StaticUnit(filepath, player), unitToBuild("")
 {
 	production["DerBolten"] = new AirUnit("path");
@@ -139,9 +140,10 @@ void FactoryUnit::produceUnit(HexagonMatchfield* hexTarget)
 	hexTarget->unit_stationed = production[getUnitToBuild()]->createUnit();
 	hexTarget->unit_stationed->setUnitPlayer(this->unitPlayer);
 	hexTarget->unit_stationed->setQpoint_gridPosition(hexTarget->getQpoint_gridPosition());
+	unitPlayer->setCurrentEnergieStorage(unitPlayer->getCurrentEnergieStorage() - hexTarget->getUnitCost());
 }
 
 Unit* FactoryUnit::createUnit()
 {
-	return new FactoryUnit(UnitFile);
+	return new FactoryUnit(unitFile);
 }

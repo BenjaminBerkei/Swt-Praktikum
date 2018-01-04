@@ -24,7 +24,11 @@ SOURCES += main.cpp\
     startmenuewidget.cpp \
     loadgamewidget.cpp \
     gamewidget.cpp \
-    game.cpp
+    game.cpp \
+    player.cpp \
+    round.cpp \
+    staticunit.cpp \
+    unit.cpp
 
 HEADERS  += \
     hexagonbase.h \
@@ -39,7 +43,11 @@ HEADERS  += \
     startmenuewidget.h \
     loadgamewidget.h \
     gamewidget.h \
-    game.h
+    game.h \
+    player.hpp \
+    round.hpp \
+    staticunit.hpp \
+    unit.hpp
 
 FORMS    += startmenuewidget.ui \
     matchfield.ui \
