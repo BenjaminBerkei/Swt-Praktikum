@@ -7,19 +7,48 @@
  * Version: 0.2
  * Datum 11.12.2017
  * Kommentar: Klassen mit Operationen hinzugefuegt
+ *
+ * Author: Manuel
+ * Version: 0.3
+ * Datum: 04.01.2018
+ * Kommentar: Geändert nach dem neuen UML Diagramm
  * */
 
 #include "hexagonmatchfield.h"
 
-HexagonMatchfield::HexagonMatchfield( QPoint qpoint_center, int int_size, QPoint qpoint_gridPosition) : //Unit noch hinzufügen (siehe hpp)
-    HexagonBase( qpoint_center, int_size, qpoint_gridPosition )
+HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, std::string type) : //Unit noch hinzufügen (siehe hpp)
+    HexagonBase( qpoint_gridPosition ),
+    HexMatchfieldType(type)
 {
-    qDebug() << "HexagonMatchfield wurde erstellt";
+    if(HexMatchfieldType == "waterDeep")
+        setPixmap(QPixmap(":/images/Meer.png"));
+    else if(HexMatchfieldType == "waterSeashore")
+        setPixmap(QPixmap(":/images/Kueste.png"));
+    else if(HexMatchfieldType == "forrest")
+        setPixmap(QPixmap(":/images/Wald.png"));
+    else if(HexMatchfieldType == "grassland")
+        setPixmap(QPixmap(":/images/Wiese.png"));
+    else if(HexMatchfieldType == "streetStraight")
+        setPixmap(QPixmap(":/images/Strasse Grade.png"));
+    else if(HexMatchfieldType == "streetCurve")
+        setPixmap(QPixmap(":/images/Strasse Schraehg.png"));
+    else if(HexMatchfieldType == "mountainTop")
+        setPixmap(QPixmap(":/images/BergOben.png"));
+    else if(HexMatchfieldType == "mountainSide")
+        qDebug() << "Warnung: Für Bergseite ist noch kein Bild hinterlegt. (HexagonMatchfield von typ mountainSide erzeugt)";
+    else if(HexMatchfieldType == "boltanium")
+        qDebug() << "Warnung: Für Boltanium ist noch kein Bild hinterlegt. (HexagonMatchfield von typ boltanium erzeugt)";
+    else
+    {
+        setPixmap(QPixmap(":/images/Wiese.png"));
+        qDebug() << "Warnung: Ein HexagonMatchfield ist vom Typ default (siehe switch(HexMatchfieldType) im Konstruktor)";
+    }
 }
 
 void HexagonMatchfield::mousePressEvent( QGraphicsSceneMouseEvent *event )
 {
     Q_UNUSED(event);
+    qDebug() << "Meldung: Maus gedrückt.";
     //Hier muss evetntuell noch was hin.
     //emit SIGNAL_clicked( this );
 }
@@ -27,126 +56,6 @@ void HexagonMatchfield::mousePressEvent( QGraphicsSceneMouseEvent *event )
 void HexagonMatchfield::changeState( MATCHFIELDSTATE newState )
 {
     state = newState;
+    qDebug() << "Meldung: state vom HexagonMatchfield geändert in " << state;
     return;
-}
-
-WaterHex::WaterHex( QPoint qpoint_center, int int_size, QPoint qpoint_gridPosition, DEPTH depth_init ) :
-    HexagonMatchfield( qpoint_center, int_size, qpoint_gridPosition ),
-    depth_state( depth_init )
-{
-
-}
-
-void WaterHex::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-    Q_UNUSED(option)
-    Q_UNUSED(widget)
-
-    QPen pen;
-    pen.setColor(Qt::black);
-    pen.setWidth(2);
-    painter->setPen(pen);
-    painter->drawPolygon(hexShape);
-
-}
-
-NormalHex::NormalHex(QPoint qpoint_center, int int_size, QPoint qpoint_gridPosition, std::string str_typ) :
-    HexagonMatchfield( qpoint_center, int_size, qpoint_gridPosition ),
-    str_normalHexTyp( str_typ )
-{
-
-}
-
-void NormalHex::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-    Q_UNUSED(option)
-    Q_UNUSED(widget)
-
-    QPen pen;
-    pen.setColor(Qt::black);
-    pen.setWidth(2);
-    painter->setPen(pen);
-    painter->drawPolygon(hexShape);
-
-}
-
-ForrestHex::ForrestHex(QPoint qpoint_center, int int_size, QPoint qpoint_gridPosition, std::string str_typ) :
-    HexagonMatchfield( qpoint_center, int_size, qpoint_gridPosition ),
-    str_forrestHexTyp( str_typ )
-{
-
-}
-
-void ForrestHex::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-    Q_UNUSED(option)
-    Q_UNUSED(widget)
-
-    QPen pen;
-    pen.setColor(Qt::black);
-    pen.setWidth(2);
-    painter->setPen(pen);
-    painter->drawPolygon(hexShape);
-
-}
-
-MountainHex::MountainHex(QPoint qpoint_center, int int_size, QPoint qpoint_gridPosition, std::string str_typ) :
-    HexagonMatchfield( qpoint_center, int_size, qpoint_gridPosition ),
-    str_mountainHexTyp( str_typ )
-{
-
-}
-
-void MountainHex::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-    Q_UNUSED(option)
-    Q_UNUSED(widget)
-
-    QPen pen;
-    pen.setColor(Qt::black);
-    pen.setWidth(2);
-    painter->setPen(pen);
-    painter->drawPolygon(hexShape);
-
-}
-
-StreetHex::StreetHex(QPoint qpoint_center, int int_size, QPoint qpoint_gridPosition, std::string str_typ) :
-    HexagonMatchfield( qpoint_center, int_size, qpoint_gridPosition ),
-    str_streetHexTyp( str_typ )
-{
-
-}
-
-void StreetHex::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-    Q_UNUSED(option)
-    Q_UNUSED(widget)
-
-    QPen pen;
-    pen.setColor(Qt::black);
-    pen.setWidth(2);
-    painter->setPen(pen);
-    painter->drawPolygon(hexShape);
-
-}
-
-BoltaniumHex::BoltaniumHex(QPoint qpoint_center, int int_size, QPoint qpoint_gridPosition, int int_cap) :
-    HexagonMatchfield( qpoint_center, int_size, qpoint_gridPosition ),
-    int_boltaniumCapacity( int_cap ),
-    int_boltaniumCurrentCapacity( int_cap )
-{
-
-}
-
-void BoltaniumHex::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-    Q_UNUSED(option)
-    Q_UNUSED(widget)
-
-    QPen pen;
-    pen.setColor(Qt::black);
-    pen.setWidth(2);
-    painter->setPen(pen);
-    painter->drawPolygon(hexShape);
-
 }

@@ -10,7 +10,7 @@
 #include "unit.hpp"
 
 Unit::Unit()
-	: str_unitName(""), unitPlayer(nullptr), int_unitView(0), int_unitHP(0), int_unitCurrentHP(0), str_unitDetails(""), str_unitType(""), int_unitCost(""), int_unitStorageMax(0), bool_unitUsed(false), unitFile("") {}
+    : str_unitName(""), unitPlayer(nullptr), int_unitView(0), int_unitHP(0), int_unitCurrentHP(0), str_unitDetails(""), str_unitType(""), int_unitCost(0), int_unitStorageMax(0), bool_unitUsed(false), unitFile("") {}
 
 Unit::~Unit(){}
 
@@ -59,7 +59,7 @@ bool Unit::getUnitUsed() const
 	return bool_unitUsed;
 }
 
-void Unit::setUnitName(Qstring name)
+void Unit::setUnitName(QString name)
 {
 	str_unitName = name;
 	return;
@@ -89,32 +89,27 @@ void Unit::setUnitUsed(bool used)
 	return;
 }
 
-virtual Unit* Unit::createUnit()
+bool Unit::checkUnitDestroyed()
 {
-	return new Unit();
+    return false;
 }
 
-virtual bool Unit::checkUnitDestroyed()
+int Unit::moveTo(HexagonMatchfield * mf)
 {
-	return int_unitCurrentHP <= 0 ? true : false;
+    return -1;
 }
 
-virtual int Unit::moveTo(HexagonMatchfield* mf) 
+void Unit::autoRepair()
 {
-	return -1;
+    return;
 }
 
-virtual void Unit::autoRepair() 
-{ 
-	return; 
+void Unit::levelUpBonus()
+{
+    return;
 }
 
-virtual void Unit::levelUpBonus()
+void Unit::produceUnit(HexagonMatchfield* mf)
 {
-	return;
-}
-
-virtual void Unit::produceUnit(HexagonMatchfield* mf)
-{
-	return;
+    return;
 }

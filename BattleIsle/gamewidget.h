@@ -2,12 +2,18 @@
  * Author: Manuel
  * Version: 0.1
  * Datum 30.12.2017
+ *
+ * Author: Manuel
+ * Version: 0.2
+ * Datum: 04.01.2018
  * */
 #ifndef GAMEWIDGET_H
 #define GAMEWIDGET_H
 
 #include <QWidget>
+#include <vector>
 #include "game.h"
+#include "hexagonmatchfield.h" //eventuell später entfernen
 
 namespace Ui {
 class GameWidget;
@@ -20,14 +26,17 @@ class GameWidget : public QWidget
     Q_OBJECT
 private:
     Ui::GameWidget *ui;
-    Game* GameWidGame;
+    Game* gameWidGame;
+    QGraphicsScene *gameWidGameScene;
 
 public:
     explicit GameWidget(QWidget *parent = 0);
     ~GameWidget();
+    void gameWidCreateMatchfield();
 
     //get und set Methoden
-    void setGameWidGame(Game* game) { GameWidGame = game; }
+    void setGameWidGame(Game* game) { gameWidGame = game; }
+
 
 signals:
     void SIGNAL_gameWidChangeIndexFromStack(int);

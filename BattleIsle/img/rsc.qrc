@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>Wiese.png</file>
+        <file>Wald.png</file>
+        <file>Strasse Grade.png</file>
+        <file>Strasse Schraehg.png</file>
+        <file>Meer.png</file>
+        <file>Kueste.png</file>
+        <file>BergSeiteSchräg.png</file>
+        <file>BergSeiteGrade.png</file>
+        <file>BergOben.png</file>
+    </qresource>
+</RCC>

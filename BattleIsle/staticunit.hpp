@@ -53,7 +53,7 @@ public:
 	void repairUnit(Unit*);
 	Unit* createUnit();
 };
-
+/*
 class FactoryUnit : public StaticUnit
 {
 protected:
@@ -71,5 +71,5 @@ public:
 	void produceUnit(HexagonMatchfield*);
 	Unit* createUnit();
 };
-
+*/
 #endif

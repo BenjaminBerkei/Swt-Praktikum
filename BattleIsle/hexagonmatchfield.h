@@ -7,6 +7,11 @@
  * Version: 0.2
  * Datum 11.12.2017
  * Kommentar: Klassen mit Operationen hinzugefuegt
+ *
+ * Author: Manuel
+ * Version: 0.3
+ * Datum: 04.01.2018
+ * Kommentar: Geändert nach dem neuen UML Diagramm
  * */
 #ifndef HEXAGONMATCHFIELD_H
 #define HEXAGONMATCHFIELD_H
@@ -23,83 +28,28 @@ protected:
     bool bool_hexFogOfWar;
     //Unit* unit_stationed;
     MATCHFIELDSTATE state;
+    std::string HexMatchfieldType; // im Diagramm TYP_type
+    //Mögliche Typen:
+    //"waterDeep"           (Tiefes Meer)
+    //"waterSeashore"       (Küste)
+    //"forrest"             (Wald)
+    //"grassland"           (Wiese)
+    //"streetStraight"      (Straße Gerade)
+    //"streetCurve"         (Straße mit Kurve)
+    //"mountainTop"         (Bergspitze)
+    //"mountainSide"        (Bergseite)
+    //"boltanium"           (Boltanium)
+
 public:
-    HexagonMatchfield(QPoint qpoint_center, int int_size, QPoint qpoint_gridPosition/*, Unit* = 0*/);
+    HexagonMatchfield(QPoint qpoint_gridPosition, std::string type/*, Unit* = 0*/);
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) = 0;
     void changeState(MATCHFIELDSTATE newState);
+
+    //get und set Methoden
+    std::string getHexMatchfieldType() {return HexMatchfieldType;}
 
 signals:
     void SIGNAL_clicked(HexagonMatchfield*);
 };
-
-/*New Class*/
-class WaterHex : HexagonMatchfield
-{
-private:
-    DEPTH depth_state;
-
-public:
-    WaterHex(QPoint qpoint_center, int int_size, QPoint qpoint_gridPosition, DEPTH depth_init/*, Unit* = 0*/);
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-};
-
-/*New Class*/
-class NormalHex : HexagonMatchfield
-{
-private:
-    std::string str_normalHexTyp;
-
-public:
-    NormalHex(QPoint qpoint_center, int int_size, QPoint qpoint_gridPosition, std::string str_typ/*, Unit* = 0*/);
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-};
-
-/*New Class*/
-class ForrestHex : HexagonMatchfield
-{
-private:
-    std::string str_forrestHexTyp;
-
-public:
-    ForrestHex(QPoint qpoint_center, int int_size, QPoint qpoint_gridPosition, std::string str_typ/*, Unit* = 0*/);
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-};
-
-/*New Class*/
-class MountainHex : HexagonMatchfield
-{
-private:
-    std::string str_mountainHexTyp;
-
-public:
-    MountainHex(QPoint qpoint_center, int int_size, QPoint qpoint_gridPosition, std::string str_typ/*, Unit* = 0*/);
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-};
-
-/*New Class*/
-class StreetHex : HexagonMatchfield
-{
-private:
-    std::string str_streetHexTyp;
-
-public:
-    StreetHex(QPoint qpoint_center, int int_size, QPoint qpoint_gridPosition, std::string str_typ/*, Unit* = 0*/);
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-};
-
-/*New Class*/
-class BoltaniumHex : HexagonMatchfield
-{
-private:
-    int int_boltaniumCapacity;
-    int int_boltaniumCurrentCapacity;
-
-public:
-    BoltaniumHex(QPoint qpoint_center, int int_size, QPoint qpoint_gridPosition, int int_cap/*, Unit* = 0*/);
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-};
-
-
 
 #endif // HEXAGONMATCHFIELD_H

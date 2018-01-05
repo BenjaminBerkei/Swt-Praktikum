@@ -30,7 +30,7 @@ protected:
 	QString str_unitDetails;
 	QString str_unitType;
 	int int_unitCost;
-	std::vector<Unit*> vector_unitStorage;
+    std::vector<Unit*> vector_unitStorage;
 	int int_unitStorageMax;
 	bool bool_unitUsed;
 	QString unitFile;
@@ -55,13 +55,13 @@ public:
 	void setUnitCurrentHP(int);
 	void setUnitUsed(bool);
 
-	virtual Unit* createUnit();
+    virtual Unit* createUnit() = 0;
 	virtual bool checkUnitDestroyed();
 	virtual bool action(HexagonMatchfield*) = 0;
 	virtual int moveTo(HexagonMatchfield*);
-	virtual void autoRepair();
-	virtual void levelUpBonus();
-	virtual void produceUnit(HexagonMatchfield*);
+    virtual void autoRepair();
+    virtual void levelUpBonus();
+    virtual void produceUnit(HexagonMatchfield*);
 };
 
 #endif

@@ -1,11 +1,10 @@
 /////////////////////////////////////////////
 // player.hpp // letzte Änderung: 03.01.18 //
-// Letzte Editirung: Lucas				   //
-// Version: 0.4             			   //
+// Letzte Editirung: Miguel				   //	
+// Version: 0.3							   //	
 // -------- Kommentare --------------------//
 /* Arne: Ich bin mir unsicher bei dem Zeiger von Player*
 			->geändert wie abgesprochen!
-    Lucas : Wächter angepasst
 */
 /////////////////////////////////////////////
 

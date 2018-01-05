@@ -92,7 +92,7 @@ Unit* DepotUnit::createUnit()
 }
 
 // Factory
-
+/*
 FactoryUnit::FactoryUnit(QString filepath, Player* player = nullptr)
 	: StaticUnit(filepath, player), unitToBuild("")
 {
@@ -147,3 +147,4 @@ Unit* FactoryUnit::createUnit()
 {
 	return new FactoryUnit(unitFile);
 }
+*/
