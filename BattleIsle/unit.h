@@ -17,6 +17,7 @@
 #include <QPoint>
 
 class HexagonMatchfield;
+class Player;
 
 class Unit : public QObject, public QGraphicsPixmapItem
 {

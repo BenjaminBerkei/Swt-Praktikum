@@ -20,6 +20,8 @@
 #include "unit.h"
 
 class GameWidget; //Vorwärtsdeklaration
+class HexagonMatchfield;
+class Unit;
 
 class Game
 {

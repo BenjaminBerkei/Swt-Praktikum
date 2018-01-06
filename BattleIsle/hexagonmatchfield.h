@@ -21,6 +21,7 @@
 #include "unit.h"
 #include <QDebug>
 
+class Unit;
 
 class HexagonMatchfield : public HexagonBase
 {
