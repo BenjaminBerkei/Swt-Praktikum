@@ -43,6 +43,7 @@ HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, std::string typ
         setPixmap(QPixmap(":/images/Wiese.png"));
         qDebug() << "Warnung: Ein HexagonMatchfield ist vom Typ default (siehe switch(HexMatchfieldType) im Konstruktor)";
     }
+    setPixmap(pixmap().scaled(64,64));
 }
 
 void HexagonMatchfield::mousePressEvent( QGraphicsSceneMouseEvent *event )

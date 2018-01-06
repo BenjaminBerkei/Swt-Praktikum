@@ -27,15 +27,17 @@ GameWidget::~GameWidget()
 
 void GameWidget::gameWidCreateMatchfield()
 {
-    //Groesse der Bilder
-    int PicSizeX = 32;
-    int PicSizeY = 32;
+
 
     for(unsigned int i = 0; i < gameWidGame->getVectorVectorHexagonMatchfield().size(); i++)
     {
         for(unsigned int j = 0; j < (gameWidGame->getVectorVectorHexagonMatchfield()[i]).size(); j++)
         {
             HexagonMatchfield* hex = gameWidGame->getVectorVectorHexagonMatchfield()[i][j];
+
+            //Groesse der Bilder
+            int PicSizeX = hex->pixmap().size().width();
+            int PicSizeY = hex->pixmap().size().height();
             if(i & 1)
             {
                 hex->setPos( i * 2 * PicSizeX / 3, j * PicSizeY + (PicSizeY / 2) );
