@@ -17,7 +17,7 @@
 #include "hexagonmatchfield.h"
 #include "button.h"
 #include "gamewidget.h"
-//#include "unit.h"
+#include "unit.h"
 
 class GameWidget; //Vorwärtsdeklaration
 
@@ -27,7 +27,7 @@ private:
     HexagonMatchfield* SelectionCache;
     std::vector<HexagonMatchfield*> TargetChache;
     std::vector<std::vector<HexagonMatchfield*>> hexagonMatchfield_gameGrid;
-    //std::svector<vector<Unit*>> unit_UnitGrid;
+    std::vector<std::vector<Unit*>> unit_UnitGrid;
     std::vector<Button*> button_menueBar;
     Options* gameOptions;
     GameWidget* ptr_gameGameWid;
