@@ -12,6 +12,11 @@
  * Version: 0.3
  * Datum: 04.01.2018
  * Kommentar: Geändert nach dem neuen UML Diagramm
+ *
+ * Author: Lucas
+ * Version 0.4
+ * Datum: 06.01.2018
+ * Kommentar: Skalierung eingeführt
  * */
 
 #include "hexagonmatchfield.h"
@@ -43,6 +48,7 @@ HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, std::string typ
         setPixmap(QPixmap(":/images/Wiese.png"));
         qDebug() << "Warnung: Ein HexagonMatchfield ist vom Typ default (siehe switch(HexMatchfieldType) im Konstruktor)";
     }
+    //Skalierung kann hier angepasst werden
     setPixmap(pixmap().scaled(64,64));
 }
 
