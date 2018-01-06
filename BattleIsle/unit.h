@@ -16,7 +16,7 @@
 #include <QString> 
 #include <QPoint>
 
-class Unit
+class Unit : public QObject, public QGraphicsPixmapItem
 {
 protected:
 	QString str_unitName;

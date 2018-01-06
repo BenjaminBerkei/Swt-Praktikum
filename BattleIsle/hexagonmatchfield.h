@@ -18,6 +18,7 @@
 
 #include "enumerations.h"
 #include "hexagonbase.h"
+#include "unit.h"
 #include <QDebug>
 
 class HexagonMatchfield : public HexagonBase
@@ -26,7 +27,7 @@ private:
 
 protected:
     bool bool_hexFogOfWar;
-    //Unit* unit_stationed;
+    Unit* unit_stationed;
     MATCHFIELDSTATE state;
     std::string HexMatchfieldType; // im Diagramm TYP_type
     //Mögliche Typen:
@@ -41,7 +42,7 @@ protected:
     //"boltanium"           (Boltanium)
 
 public:
-    HexagonMatchfield(QPoint qpoint_gridPosition, std::string type/*, Unit* = 0*/);
+    HexagonMatchfield(QPoint qpoint_gridPosition, std::string type, Unit* stationedUnit= 0);
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
     void changeState(MATCHFIELDSTATE newState);
 

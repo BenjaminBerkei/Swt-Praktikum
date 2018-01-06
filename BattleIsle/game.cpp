@@ -58,8 +58,12 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
                     modulo += 6;
                 if(vectorHex[j-1]->getHexMatchfieldType() == "forrest")
                     modulo += 6;
-                if(qrand() % modulo < 8)
-                    vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "grassland"));
+                int randomInt = qrand() % modulo;
+                if(randomInt < 8)
+                    if(randomInt < 1)
+                        vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "mountainTop"));
+                    else
+                        vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "grassland"));
                 else
                     vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "forrest"));
             }

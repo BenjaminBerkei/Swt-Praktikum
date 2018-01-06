@@ -21,8 +21,9 @@
 
 #include "hexagonmatchfield.h"
 
-HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, std::string type) : //Unit noch hinzufügen (siehe hpp)
+HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, std::string type, Unit *stationedUnit) :
     HexagonBase( qpoint_gridPosition ),
+    unit_stationed(stationedUnit),
     HexMatchfieldType(type)
 {
     if(HexMatchfieldType == "waterDeep")
