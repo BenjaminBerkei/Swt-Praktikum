@@ -1,13 +1,10 @@
-//////////////////////////////////////////////////
-// round.cpp // letzte Änderung: 20.12.2017	//
-// letzte Editirung: Miguel			//	
-// Version: 0.3					//	
-// -------- Kommentare -------------------------//
-/*sieh round.hpp
-*/
-/////////////////////////////////////////////
+/*
+ * Author: Miguel
+ * Version: 0.3
+ * Datum 20.12.2017
+ * */
 
-#include "round.hpp"
+#include "round.h"
 
 Round::Round(int maxAnz = 0)
 {

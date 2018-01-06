@@ -1,12 +1,9 @@
-/////////////////////////////////////////////
-// player.hpp // letzte Änderung: 03.01.18 //
-// Letzte Editirung: Miguel				   //	
-// Version: 0.3							   //	
-// -------- Kommentare --------------------//
-/* Arne: Ich bin mir unsicher bei dem Zeiger von Player*
-			->geändert wie abgesprochen!
-*/
-/////////////////////////////////////////////
+/* Author: Miguel
+ * Version: 0.3
+ * Datum 03.01.2018
+ * Kommentare: Arne: Ich bin mir unsicher bei dem Zeiger von Player*
+->geändert wie abgesprochen!
+ * */
 
 #ifndef PLAYER_HPP
 #define PLAYER_HPP

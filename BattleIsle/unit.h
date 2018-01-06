@@ -1,17 +1,14 @@
-/////////////////////////////////////////////
-// unit.hpp // letzte Änderung: 03.01.18 //
-// Letzte Editirung: Miguel				   //	
-// Version: 0.1					   //	
-// -------- Kommentare --------------------//
 /*
-*/
-/////////////////////////////////////////////
+ * Author: Miguel
+ * Version: 0.1
+ * Datum 03.01.2018
+ * */
 
 #ifndef UNIT_HPP
 #define UNIT_HPP
 
 #include "hexagonmatchfield.h"
-#include "player.hpp"
+#include "player.h"
 #include <map>
 #include <vector>
 #include <QFile>

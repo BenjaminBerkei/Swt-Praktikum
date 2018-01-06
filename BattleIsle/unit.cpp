@@ -1,13 +1,10 @@
-/////////////////////////////////////////////
-// unit.hpp // letzte Änderung: 04.01.18	//
-// Letzte Editirung: Miguel				    //	
-// Version: 0.1								//	
-// -------- Kommentare --------------------//
 /*
-*/
-/////////////////////////////////////////////
+ * Author: Miguel
+ * Version: 0.1
+ * Datum 04.01.2018
+ * */
 
-#include "unit.hpp"
+#include "unit.h"
 
 Unit::Unit()
     : str_unitName(""), unitPlayer(nullptr), int_unitView(0), int_unitHP(0), int_unitCurrentHP(0), str_unitDetails(""), str_unitType(""), int_unitCost(0), int_unitStorageMax(0), bool_unitUsed(false), unitFile("") {}

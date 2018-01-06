@@ -1,12 +1,9 @@
-/////////////////////////////////////////////
-// round.hpp // letzte Änderung: 25.11.2017//
-// letzte Editirung: Miguel				   //	
-// Version: 0.3						   //	
-// -------- Kommentare --------------------//
-/*es gibt wie über whatsapp besprochen nur noch changePhase()
-0.3 -> runde in 10er schritten
-*/
-/////////////////////////////////////////////
+/*
+ * Author: Miguel
+ * Version: 0.3
+ * Datum 25.11.2017
+ * Kommentare: es gibt wie über whatsapp besprochen nur noch changePhase() 0.3 -> runde in 10er schritten
+ * */
 
 #ifndef ROUND_HPP
 #define ROUND_HPP

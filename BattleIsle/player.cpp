@@ -1,14 +1,10 @@
-/////////////////////////////////////////////
-// player.cpp // letzte Änderung: 03.01.18 //
-// Letzte Editirung: Miguel				   //	
-// Version: 0.3							   //	
-// -------- Kommentare --------------------//
-/* sie hpp datei
+/*
+ * Author: Miguel
+ * Version: 0.3
+ * Datum 03.01.2018
+ * */
 
-*/
-/////////////////////////////////////////////
-
-#include "player.hpp"
+#include "player.h"
 
 Player::Player(QString playerName = "", int playerScore = 0, int totalEnergie = 0, int currentEnergie = 0, int unitNumber=0)
 	:str_playerName(playerName), int_playerScore(playerScore), int_playerTotalEnergie(totalEnergie), int_currentEnergieStorage(currentEnergie), int_playerUnitNumber(unitNumber) {}
