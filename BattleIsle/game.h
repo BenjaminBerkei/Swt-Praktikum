@@ -19,18 +19,16 @@
 #include "gamewidget.h"
 //#include "unit.h"
 
-using namespace std;
-
 class GameWidget; //Vorwärtsdeklaration
 
 class Game
 {
 private:
     HexagonMatchfield* SelectionCache;
-    vector<HexagonMatchfield*> TargetChache;
-    vector<vector<HexagonMatchfield*>> hexagonMatchfield_gameGrid;
-    //vector<vector<Unit*>> unit_UnitGrid;
-    vector<Button*> button_menueBar;
+    std::vector<HexagonMatchfield*> TargetChache;
+    std::vector<std::vector<HexagonMatchfield*>> hexagonMatchfield_gameGrid;
+    //std::svector<vector<Unit*>> unit_UnitGrid;
+    std::vector<Button*> button_menueBar;
     Options* gameOptions;
     GameWidget* ptr_gameGameWid;
 
@@ -45,7 +43,7 @@ public:
     // ...
 
     // get und set Methoden
-    vector<vector<HexagonMatchfield*>> getVectorVectorHexagonMatchfield();
+    std::vector<std::vector<HexagonMatchfield*>> getVectorVectorHexagonMatchfield();
 };
 
 #endif // GAME_H

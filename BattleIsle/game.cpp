@@ -9,6 +9,7 @@
  * */
 
 #include "game.h"
+using namespace std;
 
 Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     SelectionCache(NULL),

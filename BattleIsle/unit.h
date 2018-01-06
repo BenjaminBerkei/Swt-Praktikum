@@ -16,6 +16,8 @@
 #include <QString> 
 #include <QPoint>
 
+class HexagonMatchfield;
+
 class Unit : public QObject, public QGraphicsPixmapItem
 {
 protected:
