@@ -1,13 +1,31 @@
 <RCC>
     <qresource prefix="/images">
-        <file>Wiese.png</file>
-        <file>Wald.png</file>
-        <file>Strasse Grade.png</file>
-        <file>Strasse Schraehg.png</file>
-        <file>Meer.png</file>
-        <file>Kueste.png</file>
-        <file>BergSeiteSchräg.png</file>
-        <file>BergSeiteGrade.png</file>
-        <file>BergOben.png</file>
+        <file>HexagonBilder/BergOben.png</file>
+        <file>HexagonBilder/Kueste.png</file>
+        <file>HexagonBilder/Meer.png</file>
+        <file>HexagonBilder/Strasse Grade.png</file>
+        <file>HexagonBilder/Strasse Schraehg.png</file>
+        <file>HexagonBilder/Wald.png</file>
+        <file>HexagonBilder/Wiese.png</file>
+        <file>AirUnitsBilder/CAS Firebird_blue.png</file>
+        <file>AirUnitsBilder/CAS Firebird_red.png</file>
+        <file>AirUnitsBilder/G-2 Giant_blue.png</file>
+        <file>AirUnitsBilder/G-2 Giant_red.png</file>
+        <file>AirUnitsBilder/XA-7 Raven_blue.png</file>
+        <file>AirUnitsBilder/XA-7 Raven_red.png</file>
+        <file>AirUnitsBilder/XF-7 Mosquito_blue.png</file>
+        <file>AirUnitsBilder/XF-7 Mosquito_red.png</file>
+        <file>WaterUnitsBilder/CV Amazon_blue.png</file>
+        <file>WaterUnitsBilder/CV Amazon_red.png</file>
+        <file>WaterUnitsBilder/MB-A Buccaneer_blue.png</file>
+        <file>WaterUnitsBilder/MB-A Buccaneer_red.png</file>
+        <file>WaterUnitsBilder/TB-X Marauder_blue.png</file>
+        <file>WaterUnitsBilder/TB-X Marauder_red.png</file>
+        <file>WaterUnitsBilder/U-7C Barracuda_blue.png</file>
+        <file>WaterUnitsBilder/U-7C Barracuda_red.png</file>
+        <file>WaterUnitsBilder/W-1 Fortress_blue.png</file>
+        <file>WaterUnitsBilder/W-1 Fortress_red.png</file>
+        <file>WaterUnitsBilder/Z-1 Pegasus_blue.png</file>
+        <file>WaterUnitsBilder/Z-1 Pegasus_red.png</file>
     </qresource>
 </RCC>
