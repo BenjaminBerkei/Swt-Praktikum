@@ -17,6 +17,10 @@ GameWidget::GameWidget(QWidget *parent) :
     ui(new Ui::GameWidget)
 {
     gameWidGameScene = new QGraphicsScene();
+    gameWidInfoScene = new QGraphicsScene();
+    gameWidOptionsScene = new QGraphicsScene();
+    gameWidButtonScene = new QGraphicsScene();
+
     ui->setupUi(this);
 }
 

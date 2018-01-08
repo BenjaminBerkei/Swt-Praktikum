@@ -13,7 +13,7 @@
 #include "ui_matchfield.h"
 
 /*Ausarbeiten wenn wir uns auf die Art der Speicherung geeinigt haben*/
-Matchfield::Matchfield(std::string name, QWidget *parent) :
+Matchfield::Matchfield(std::string name, Game *game, QWidget *parent) :
     QDialog(parent), str_matchfieldName(name), ui(new Ui::Matchfield)
 {
     ui->setupUi(this);

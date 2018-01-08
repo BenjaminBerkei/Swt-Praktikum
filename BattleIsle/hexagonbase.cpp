@@ -6,8 +6,9 @@
 
 #include "hexagonbase.h"
 
-HexagonBase::HexagonBase(QPoint qpoint_position)
-    :  qpoint_gridPosition(qpoint_position)
+HexagonBase::HexagonBase(QPoint qpoint_position, Game *ptr_game)
+    :  qpoint_gridPosition(qpoint_position),
+      ptr_hexBaseGame(ptr_game)
 {
 
 }

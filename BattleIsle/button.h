@@ -8,7 +8,11 @@
 #define BUTTON_H
 #include "hexagonbase.h"
 #include "enumerations.h"
+#include "game.h"
 #include <QDebug>
+
+class Game;
+
 class Button : public HexagonBase
 {
     Q_OBJECT

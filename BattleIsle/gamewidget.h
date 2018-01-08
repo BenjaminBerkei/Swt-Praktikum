@@ -13,7 +13,6 @@
 #include <QWidget>
 #include <vector>
 #include "game.h"
-#include "hexagonmatchfield.h" //eventuell später entfernen
 
 namespace Ui {
 class GameWidget;
@@ -28,6 +27,9 @@ private:
     Ui::GameWidget *ui;
     Game* gameWidGame;
     QGraphicsScene *gameWidGameScene;
+    QGraphicsScene *gameWidInfoScene;
+    QGraphicsScene *gameWidOptionsScene;
+    QGraphicsScene *gameWidButtonScene;
 
 public:
     explicit GameWidget(QWidget *parent = 0);

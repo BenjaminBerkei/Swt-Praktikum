@@ -13,6 +13,7 @@
 
 #include <vector>
 #include <QTime>
+#include <QObject>
 #include "options.h"
 #include "hexagonmatchfield.h"
 #include "button.h"
@@ -22,9 +23,11 @@
 class GameWidget; //Vorwärtsdeklaration
 class HexagonMatchfield;
 class Unit;
+class Button;
 
-class Game
+class Game : public QObject
 {
+    Q_OBJECT
 private:
     HexagonMatchfield* SelectionCache;
     std::vector<HexagonMatchfield*> TargetChache;
@@ -46,6 +49,9 @@ public:
 
     // get und set Methoden
     std::vector<std::vector<HexagonMatchfield*>> getVectorVectorHexagonMatchfield();
+
+public slots:
+    void SLOT_processSelection(HexagonMatchfield* selection);
 };
 
 #endif // GAME_H

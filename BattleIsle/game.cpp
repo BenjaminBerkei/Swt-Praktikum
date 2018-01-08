@@ -47,9 +47,9 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
         for( int j = 0; j < sizeY; j++ )
         {
             if( i == 0 || i == sizeX-1 || j == 0 || j == sizeY-1 )
-                vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "waterDeep"));
+                vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "waterDeep", 0, this));
             else if( i == 1 || i == sizeX - 2 || j == 1 || j == sizeY - 2 )
-                vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "waterSeashore"));
+                vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "waterSeashore", 0, this));
             else
             {
                 int modulo = 10;
@@ -62,23 +62,30 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
                 int randomInt = qrand() % modulo;
                 if(randomInt < 8)
                     if(randomInt < 1)
-                        vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "mountainTop"));
+                        vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "mountainTop", 0, this));
                     else
-                        vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "grassland"));
+                        vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "grassland", 0, this));
                 else
-                    vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "forrest"));
+                    vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "forrest", 0, this));
             }
         }
         hexagonMatchfield_gameGrid.push_back(vectorHex);
     }
 
-    qDebug() << "Bemerkung: Feld erstellt (in Klasse Game)";
+    qDebug() << "Bemerkung: Zufallsfeld erstellt (in Klasse Game). Nur für Testzwecke.";
 
     ptr_gameGameWid->gameWidCreateMatchfield();
 
     //##################################################################
 }
+
 vector<vector<HexagonMatchfield*> > Game::getVectorVectorHexagonMatchfield()
 {
     return hexagonMatchfield_gameGrid;
+}
+
+void Game::SLOT_processSelection(HexagonMatchfield *selection)
+{
+    SelectionCache = selection;
+    qDebug() << "Meldung: Auf Hexagon vom typ " << QString::fromStdString(selection->getHexMatchfieldType()) << "geklickt";
 }

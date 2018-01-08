@@ -21,8 +21,8 @@
 
 #include "hexagonmatchfield.h"
 
-HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, std::string type, Unit *stationedUnit) :
-    HexagonBase( qpoint_gridPosition ),
+HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, std::string type, Unit *stationedUnit, Game *ptr_game) :
+    HexagonBase( qpoint_gridPosition , ptr_game ),
     unit_stationed(stationedUnit),
     HexMatchfieldType(type)
 {
@@ -51,12 +51,18 @@ HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, std::string typ
     }
     //Skalierung kann hier angepasst werden
     setPixmap(pixmap().scaled(64,64));
+
+    //Eventuell später löschen (muss noch Rückfragen mit Lucas treffen)
+    //connect(this, SIGNAL(SIGNAL_clicked(HexagonMatchfield*)), ptr_hexBaseGame, SLOT(SLOT_processSelection(HexagonMatchfield*)));
 }
 
 void HexagonMatchfield::mousePressEvent( QGraphicsSceneMouseEvent *event )
 {
     Q_UNUSED(event);
     qDebug() << "Meldung: Maus gedrückt.";
+    ptr_hexBaseGame->SLOT_processSelection(this);
+
+
     //Hier muss evetntuell noch was hin.
     //emit SIGNAL_clicked( this );
 }
