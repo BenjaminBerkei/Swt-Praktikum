@@ -47,6 +47,8 @@ public:
     HexagonMatchfield(QPoint qpoint_gridPosition, std::string type, Unit* stationedUnit= 0);
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
     void changeState(MATCHFIELDSTATE newState);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
 
     //get und set Methoden
     std::string getHexMatchfieldType() {return HexMatchfieldType;}

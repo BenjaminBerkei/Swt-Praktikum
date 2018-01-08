@@ -67,3 +67,13 @@ void HexagonMatchfield::changeState( MATCHFIELDSTATE newState )
     qDebug() << "Meldung: state vom HexagonMatchfield geändert in " << state;
     return;
 }
+
+void HexagonMatchfield::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    QGraphicsPixmapItem::paint(painter, option, widget);
+    QPen pen;
+    pen.setColor(Qt::black);
+    pen.setWidth(3);
+    painter->setPen(pen);
+    painter->drawPath(shape());
+}
