@@ -78,21 +78,11 @@ void GameWidget::gameWidCreateMatchfield()
 HexagonDisplayInfo::HexagonDisplayInfo(HexagonMatchfield *ptr_hexMfield)
 :QObject(0), QGraphicsRectItem(QRectF(-50,-50,230,100), 0), hexToDisplay(ptr_hexMfield)
 {
-    qStringHexDispHexType = "Hexagon Typ: " + QString::fromStdString( hexToDisplay->getHexMatchfieldType() );
+    qStringHexDispHexType = "Typ: " + QString::fromStdString( hexToDisplay->getHexMatchfieldType() );
 }
 
 void HexagonDisplayInfo::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-    qDebug() << "Bemerkung: Painter wird ausgefuehrt";
-    QPen pen;
-    QBrush brush;
-    brush.setStyle(Qt::SolidPattern);
-    brush.setColor(Qt::black);
-    painter->setBrush(brush);
-    pen.setWidth(3);
-
-    painter->drawPixmap(0,0, hexToDisplay->pixmap());
-
-    painter->setPen(pen);
-    painter->drawText(QRectF(-50,-50,200,20),qStringHexDispHexType);
+    painter->drawPixmap(-50 ,-50, hexToDisplay->pixmap());
+    painter->drawText(QRectF(20,-50,200,20),qStringHexDispHexType);
 }
