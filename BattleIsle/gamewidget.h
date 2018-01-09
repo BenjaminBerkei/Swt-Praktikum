@@ -11,6 +11,7 @@
 #define GAMEWIDGET_H
 
 #include <QWidget>
+#include <QGraphicsScene>
 #include <vector>
 #include "game.h"
 #include "hexagonmatchfield.h"
@@ -42,7 +43,6 @@ public:
     //get und set Methoden
     void setGameWidGame(Game* game) { gameWidGame = game; }
     void setInfoScene(HexagonDisplayInfo *info);
-
 signals:
     void SIGNAL_gameWidChangeIndexFromStack(int);
 };

@@ -27,17 +27,20 @@ void GameWidget::setInfoScene(HexagonDisplayInfo *info)
     qDebug() << "Bemerkung: update in setInfoScene ausgefuehrt";
 }
 
+
 GameWidget::GameWidget(QWidget *parent) :
     QWidget(parent),
     gameWidGame(NULL),
-    ui(new Ui::GameWidget)
+    ui(new Ui::GameWidget),
+    gameWidGameScene(new QGraphicsScene(this)), gameWidInfoScene(new QGraphicsScene(this)),
+    gameWidOptionsScene(new QGraphicsScene(this)), gameWidButtonScene(new QGraphicsScene(this))
 {
-    gameWidGameScene = new QGraphicsScene(this);
-    gameWidInfoScene = new QGraphicsScene(this);
-    gameWidOptionsScene = new QGraphicsScene(this);
-    gameWidButtonScene = new QGraphicsScene(this);
-
     ui->setupUi(this);
+
+    ui->graphicsView_buttonView->setScene(gameWidButtonScene);
+    ui->graphicsView_gameView->setScene(gameWidGameScene);
+    ui->graphicsView_informationsView->setScene(gameWidInfoScene);
+    ui->graphicsView_optionsView->setScene(gameWidOptionsScene);
 }
 
 GameWidget::~GameWidget()
@@ -88,6 +91,8 @@ void HexagonDisplayInfo::paint(QPainter *painter, const QStyleOptionGraphicsItem
     painter->setBrush(brush);
     pen.setWidth(3);
 
+    painter->drawPixmap(0,0, hexToDisplay->pixmap());
+
     painter->setPen(pen);
-    painter->drawText(QRectF(10,-50,150,20),qStringHexDispHexType);
+    painter->drawText(QRectF(-50,-50,200,20),qStringHexDispHexType);
 }
