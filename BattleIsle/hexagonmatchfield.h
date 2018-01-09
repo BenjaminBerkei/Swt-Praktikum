@@ -24,10 +24,12 @@
 #include "hexagonbase.h"
 #include "unit.h"
 #include "game.h"
+#include "gamewidget.h"
 #include <QDebug>
 
 class Unit;
 class Game;
+class HexagonDisplayInfo;
 
 class HexagonMatchfield : public HexagonBase
 {
@@ -37,6 +39,7 @@ protected:
     bool bool_hexFogOfWar;
     Unit* unit_stationed;
     MATCHFIELDSTATE state;
+    HexagonDisplayInfo* ptr_hexMfieldDisplay;
     std::string HexMatchfieldType;
     //Mögliche Typen:
     //"waterDeep"           (Tiefes Meer)
@@ -56,6 +59,9 @@ public:
 
     //get und set Methoden
     std::string getHexMatchfieldType() {return HexMatchfieldType;}
+    MATCHFIELDSTATE getState() const;
+    HexagonDisplayInfo *getPtr_hexMfieldDisplay() const;
+    void setState(const MATCHFIELDSTATE &value);
 
 signals:
     void SIGNAL_clicked(HexagonMatchfield*);

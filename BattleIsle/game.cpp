@@ -88,4 +88,12 @@ void Game::SLOT_processSelection(HexagonMatchfield *selection)
 {
     SelectionCache = selection;
     qDebug() << "Meldung: Auf Hexagon vom typ " << QString::fromStdString(selection->getHexMatchfieldType()) << "geklickt";
+
+    if(SelectionCache->getState() == INACTIVE)
+        SelectionCache->setState(ACTIVE);
+    else if(SelectionCache->getState() == ACTIVE)
+        SelectionCache->setState(INACTIVE);
+
+    //if(SelectionCache->unit_stationed == NULL) hier spaeter einfuegen
+    ptr_gameGameWid->setInfoScene(SelectionCache->getPtr_hexMfieldDisplay());
 }

@@ -21,10 +21,26 @@
 
 #include "hexagonmatchfield.h"
 
+MATCHFIELDSTATE HexagonMatchfield::getState() const
+{
+    return state;
+}
+
+void HexagonMatchfield::setState(const MATCHFIELDSTATE &value)
+{
+    state = value;
+}
+
+HexagonDisplayInfo *HexagonMatchfield::getPtr_hexMfieldDisplay() const
+{
+    return ptr_hexMfieldDisplay;
+}
+
 HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, std::string type, Unit *stationedUnit, Game *ptr_game) :
     HexagonBase( qpoint_gridPosition , ptr_game ),
     unit_stationed(stationedUnit),
-    HexMatchfieldType(type)
+    HexMatchfieldType(type),
+    state(INACTIVE)
 {
     if(HexMatchfieldType == "waterDeep")
         setPixmap(QPixmap(":/images/HexagonBilder/Meer.png"));
@@ -52,8 +68,7 @@ HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, std::string typ
     //Skalierung kann hier angepasst werden
     setPixmap(pixmap().scaled(64,64));
 
-    //Eventuell später löschen (muss noch Rückfragen mit Lucas treffen)
-    //connect(this, SIGNAL(SIGNAL_clicked(HexagonMatchfield*)), ptr_hexBaseGame, SLOT(SLOT_processSelection(HexagonMatchfield*)));
+    ptr_hexMfieldDisplay = new HexagonDisplayInfo(this);
 }
 
 void HexagonMatchfield::mousePressEvent( QGraphicsSceneMouseEvent *event )
