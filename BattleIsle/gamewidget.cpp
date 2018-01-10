@@ -13,18 +13,13 @@
 
 void GameWidget::setInfoScene(HexagonDisplayInfo *info)
 {
-    qDebug() << "Bemerkung: In Funktion setInfoScene";
-
     for(auto &it : gameWidInfoScene->items())
     {
-        qDebug() << "removeItems";
         gameWidInfoScene->removeItem(it);
     }
-    qDebug() << "Bemerkung: remove in setInfoScene ausgefuehrt";
     gameWidInfoScene->addItem(info);
-    qDebug() << "Bemerkung: addItem mit info in setInfoScene ausgefuehrt";
     gameWidInfoScene->update();
-    qDebug() << "Bemerkung: update in setInfoScene ausgefuehrt";
+    gameWidGameScene->update();
 }
 
 
@@ -63,11 +58,11 @@ void GameWidget::gameWidCreateMatchfield()
             int PicSizeY = hex->pixmap().size().height();
             if(i & 1)
             {
-                hex->setPos( i * 2 * PicSizeX / 3, j * PicSizeY + (PicSizeY / 2) );
+                hex->setPos( i * (2 * PicSizeX + 15) / 3, j * PicSizeY + (PicSizeY / 2));
             }
             else
             {
-                hex->setPos( i * 2 * PicSizeX / 3, j * PicSizeY );
+                hex->setPos( i * (2 * PicSizeX + 15)/ 3, j * PicSizeY);
             }
             gameWidGameScene->addItem(hex);
         }

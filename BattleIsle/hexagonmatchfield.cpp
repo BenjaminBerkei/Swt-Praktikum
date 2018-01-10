@@ -74,7 +74,6 @@ HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, std::string typ
 void HexagonMatchfield::mousePressEvent( QGraphicsSceneMouseEvent *event )
 {
     Q_UNUSED(event);
-    qDebug() << "Meldung: Maus gedrückt.";
     ptr_hexBaseGame->SLOT_processSelection(this);
 
 
@@ -93,8 +92,11 @@ void HexagonMatchfield::paint(QPainter *painter, const QStyleOptionGraphicsItem 
 {
     QGraphicsPixmapItem::paint(painter, option, widget);
     QPen pen;
-    pen.setColor(Qt::black);
-    pen.setWidth(3);
-    painter->setPen(pen);
-    painter->drawPath(shape());
+    if(state == ACTIVE)
+    {
+        pen.setColor(Qt::red);
+        pen.setWidth(3);
+        painter->setPen(pen);
+        painter->drawPath(shape());
+    }
 }

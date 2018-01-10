@@ -87,10 +87,18 @@ vector<vector<HexagonMatchfield*> > Game::getVectorVectorHexagonMatchfield()
 void Game::SLOT_processSelection(HexagonMatchfield *selection)
 {
     SelectionCache = selection;
-    qDebug() << "Meldung: Auf Hexagon vom typ " << QString::fromStdString(selection->getHexMatchfieldType()) << "geklickt";
-
     if(SelectionCache->getState() == INACTIVE)
+    {
+        //Alle Hexagons auf INACIVE setzten
+        for(unsigned int i = 0; i < hexagonMatchfield_gameGrid.size(); i++)
+        {
+            for(unsigned int j = 0; j < hexagonMatchfield_gameGrid[i].size(); j++)
+                hexagonMatchfield_gameGrid[i][j]->setState(INACTIVE);
+        }
+
+        //Angeklicktes auf AKTIVE setzten
         SelectionCache->setState(ACTIVE);
+    }
     else if(SelectionCache->getState() == ACTIVE)
         SelectionCache->setState(INACTIVE);
 
