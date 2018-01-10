@@ -38,7 +38,7 @@ bool StaticUnit::checkUnitDestroyed()
 	return int_unitCurrentHP <= 0 ? true : false;
 }
 
-int StaticUnit::moveTo(HexagonMatchfield* hexTarget)
+int StaticUnit::moveTo(HexagonMatchfield* )
 {
 	return -1;
 }
@@ -50,7 +50,7 @@ HeadquaterUnit::HeadquaterUnit(QString filepath, Player* player = nullptr)
 
 HeadquaterUnit::~HeadquaterUnit(){}
 
-bool HeadquaterUnit::action(HexagonMatchfield* hexTarget)
+bool HeadquaterUnit::action(HexagonMatchfield* )
 {
 	return true;
 }
@@ -67,7 +67,7 @@ DepotUnit::DepotUnit(QString filepath, Player* player = nullptr)
 
 DepotUnit::~DepotUnit() {}
 
-bool DepotUnit::action(HexagonMatchfield* hexTarget) 
+bool DepotUnit::action(HexagonMatchfield* )
 {
 	return true;
 }

@@ -41,8 +41,8 @@ void GameWidget::clearScenes()
 
 GameWidget::GameWidget(QWidget *parent) :
     QWidget(parent),
-    gameWidGame(NULL),
     ui(new Ui::GameWidget),
+    gameWidGame(nullptr),
     gameWidGameScene(new QGraphicsScene(this)), gameWidInfoScene(new QGraphicsScene(this)),
     gameWidOptionsScene(new QGraphicsScene(this)), gameWidButtonScene(new QGraphicsScene(this))
 {

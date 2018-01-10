@@ -6,7 +6,7 @@
 
 #include "savegame.h"
 
-SaveGame::SaveGame(std::string str_path)
+SaveGame::SaveGame(std::string )
 {
     /*Der Rest hängt wieder davon ab wie wir die Informationen speichern wollen*/
 }

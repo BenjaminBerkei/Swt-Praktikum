@@ -10,9 +10,9 @@
 
 OptionsWidget::OptionsWidget( QWidget *parent, MenueWidget *parentMenueWidget, Options *ptr_Options ) :
     QWidget( parent ),
+    ui( new Ui::OptionsWidget ),
     ptr_optWidMenueWidget( parentMenueWidget ),
-    ptr_optWidOptions( ptr_Options ),
-    ui( new Ui::OptionsWidget )
+    ptr_optWidOptions( ptr_Options )
 {
     ui->setupUi(this);
 

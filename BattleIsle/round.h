@@ -32,6 +32,7 @@ class Phase
 {
 public:
 	virtual void changePhase(Round*) = 0;
+    virtual ~Phase() = default;
 };
 
 class MovePhase : public Phase

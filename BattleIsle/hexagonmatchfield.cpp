@@ -55,8 +55,8 @@ void HexagonMatchfield::setUnit_stationed(Unit *value)
 HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, std::string type, Unit *stationedUnit, Game *ptr_game) :
     HexagonBase( qpoint_gridPosition , ptr_game ),
     unit_stationed(stationedUnit),
-    HexMatchfieldType(type),
-    state(INACTIVE)
+    state(INACTIVE),
+    HexMatchfieldType(type)
 {
     if(HexMatchfieldType == "waterDeep")
         setPixmap(QPixmap(":/images/HexagonBilder/Meer.png"));

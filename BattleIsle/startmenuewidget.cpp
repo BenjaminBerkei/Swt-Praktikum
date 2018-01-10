@@ -15,8 +15,8 @@
 
 StartMenueWidget::StartMenueWidget(QWidget *parent , MenueWidget *ptr_menueWidget) :
     QWidget( parent ),
-    ptr_smwMenueWidget(ptr_menueWidget),
-    ui( new Ui::StartMenueWidget )
+    ui( new Ui::StartMenueWidget ),
+    ptr_smwMenueWidget(ptr_menueWidget)
 {
     ui->setupUi( this );
     ptr_smwOptions = new Options();

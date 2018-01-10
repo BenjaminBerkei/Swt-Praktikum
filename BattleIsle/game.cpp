@@ -11,6 +11,11 @@
 #include "game.h"
 using namespace std;
 
+/*Noch fertig schreiben*/
+std::vector<QPoint> Game::vector_evenNeighbors = {QPoint(0,0)};
+std::vector<QPoint> Game::vector_oddNeighbors = {QPoint(0,0)};
+
+
 Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     SelectionCache(NULL),
     gameOptions(init_options),

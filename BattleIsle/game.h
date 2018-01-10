@@ -37,11 +37,13 @@ private:
     Options* gameOptions;
     GameWidget* ptr_gameGameWid;
 
+    static std::vector<QPoint> vector_oddNeighbors;
+    static std::vector<QPoint> vector_evenNeighbors;
 public:
     Game(Options* init_options, GameWidget* ptr_gameWid);
     void processSelection(HexagonMatchfield* selection);
-    //Game(SaveGame* savegame_initSave);
-    //void loadGame(SaveGame* savegame_initSave);
+    //Game(QString pathToSaveFile);
+    //void loadGame(QString pathToSaveFile);
     //void saveGame();
     //void endGame();
     //int showUnitNumber(Player* player);

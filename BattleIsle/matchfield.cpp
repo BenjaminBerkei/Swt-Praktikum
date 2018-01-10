@@ -14,7 +14,7 @@
 
 /*Ausarbeiten wenn wir uns auf die Art der Speicherung geeinigt haben*/
 Matchfield::Matchfield(std::string name, Game *game, QWidget *parent) :
-    QDialog(parent), str_matchfieldName(name), ui(new Ui::Matchfield)
+    QDialog(parent), str_matchfieldName(name), ptr_mfieldGame(game), ui(new Ui::Matchfield)
 {
     ui->setupUi(this);
 
@@ -47,7 +47,7 @@ Matchfield::~Matchfield()
     delete ui;
 }
 /*Ausarbeiten wenn wir uns auf die Art der Speicherung geeinigt haben*/
-bool Matchfield::readMap(const std::string pathToMap)
+bool Matchfield::readMap(const std::string )
 {
     return false;
 }
