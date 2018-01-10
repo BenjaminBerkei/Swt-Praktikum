@@ -56,11 +56,14 @@ class HexagonDisplayInfo : public QObject, public QGraphicsRectItem
 private:
     HexagonMatchfield* hexToDisplay;
     QString qStringHexDispHexType;
-
+    QString qStringUnitDispUnitType;
+    QString qStringUnitDispUnitLife;
+    QString qStringUnitDispMovement;
+    QString qStringUnitDispUnitAttack;
 public:
     HexagonDisplayInfo(HexagonMatchfield* ptr_hexMfield);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *);
-    //void update();
+    void update();
 };
 
 #endif // GAMEWIDGET_H

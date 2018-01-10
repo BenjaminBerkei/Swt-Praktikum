@@ -73,6 +73,9 @@ public:
     HexagonDisplayInfo *getPtr_hexMfieldDisplay() const;
     void setState(const MATCHFIELDSTATE &value);
 
+    Unit *getUnit_stationed() const;
+    void setUnit_stationed(Unit *value);
+
 signals:
     void SIGNAL_clicked(HexagonMatchfield*);
 };

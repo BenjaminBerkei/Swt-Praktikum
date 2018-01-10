@@ -6,6 +6,56 @@
 
 #include "unit.h"
 
+int Unit::getUnitCurrentMoveRange() const
+{
+    return int_unitCurrentMoveRange;
+}
+
+void Unit::setUnitCurrentMoveRange(int value)
+{
+    int_unitCurrentMoveRange = value;
+}
+
+int Unit::getUnitMoveRange() const
+{
+    return int_unitMoveRange;
+}
+
+void Unit::setUnitMoveRange(int value)
+{
+    int_unitMoveRange = value;
+}
+
+int Unit::getUnitWaterAtt() const
+{
+    return int_unitWaterAtt;
+}
+
+void Unit::setUnitWaterAtt(int value)
+{
+    int_unitWaterAtt = value;
+}
+
+int Unit::getUnitGroundAtt() const
+{
+    return int_unitGroundAtt;
+}
+
+void Unit::setUnitGroundAtt(int value)
+{
+    int_unitGroundAtt = value;
+}
+
+int Unit::getUnitAirAtt() const
+{
+    return int_unitAirAtt;
+}
+
+void Unit::setUnitAirAtt(int value)
+{
+    int_unitAirAtt = value;
+}
+
 Unit::Unit()
     : str_unitName(""), unitPlayer(nullptr), int_unitView(0), int_unitHP(0), int_unitCurrentHP(0), str_unitDetails(""), str_unitType(""), int_unitCost(0), int_unitStorageMax(0), bool_unitUsed(false), unitFile("") {}
 
@@ -91,7 +141,7 @@ bool Unit::checkUnitDestroyed()
     return false;
 }
 
-int Unit::moveTo(HexagonMatchfield * mf)
+int Unit::moveTo(HexagonMatchfield *)
 {
     return -1;
 }
@@ -106,7 +156,8 @@ void Unit::levelUpBonus()
     return;
 }
 
-void Unit::produceUnit(HexagonMatchfield* mf)
+void Unit::produceUnit(HexagonMatchfield*)
 {
     return;
 }
+

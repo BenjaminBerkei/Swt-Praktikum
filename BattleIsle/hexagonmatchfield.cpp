@@ -42,6 +42,16 @@ HexagonDisplayInfo *HexagonMatchfield::getPtr_hexMfieldDisplay() const
     return ptr_hexMfieldDisplay;
 }
 
+Unit *HexagonMatchfield::getUnit_stationed() const
+{
+    return unit_stationed;
+}
+
+void HexagonMatchfield::setUnit_stationed(Unit *value)
+{
+    unit_stationed = value;
+}
+
 HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, std::string type, Unit *stationedUnit, Game *ptr_game) :
     HexagonBase( qpoint_gridPosition , ptr_game ),
     unit_stationed(stationedUnit),

@@ -35,6 +35,13 @@ protected:
 	bool bool_unitUsed;
 	QString unitFile;
 
+    int int_unitAirAtt;
+    int int_unitGroundAtt;
+    int int_unitWaterAtt;
+    int int_unitMoveRange;
+    int int_unitCurrentMoveRange;
+    //int int_actionRange;
+
 public:
 	Unit();
 	~Unit();
@@ -49,6 +56,7 @@ public:
 	int getUnitCost() const;
 	bool getUnitUsed() const;
 
+    void setInt_unitCurrentMoveRange(int value);
     void setUnitName(QString);
 	void setUnitPlayer(Player*);
 	void setUnitHP(int);
@@ -62,6 +70,17 @@ public:
     virtual void autoRepair();
     virtual void levelUpBonus();
     virtual void produceUnit(HexagonMatchfield*);
+
+    int getUnitCurrentMoveRange() const;
+    void setUnitCurrentMoveRange(int value);
+    int getUnitMoveRange() const;
+    void setUnitMoveRange(int value);
+    int getUnitWaterAtt() const;
+    void setUnitWaterAtt(int value);
+    int getUnitGroundAtt() const;
+    void setUnitGroundAtt(int value);
+    int getUnitAirAtt() const;
+    void setUnitAirAtt(int value);
 };
 
 #endif
