@@ -22,6 +22,22 @@ void GameWidget::setInfoScene(HexagonDisplayInfo *info)
     gameWidGameScene->update();
 }
 
+void GameWidget::clearScenes()
+{
+    qDebug() << "Bemerkung: clearScenes() ausgeführt";
+    //leere gameWidInfoScene
+    for(auto &it : gameWidInfoScene->items())
+    {
+        gameWidInfoScene->removeItem(it);
+    }
+
+    //leere gameWidOptionsScene
+    for(auto &it : gameWidOptionsScene->items())
+    {
+        gameWidOptionsScene->removeItem(it);
+    }
+}
+
 
 GameWidget::GameWidget(QWidget *parent) :
     QWidget(parent),

@@ -39,19 +39,28 @@ private:
 
 public:
     Game(Options* init_options, GameWidget* ptr_gameWid);
+    void processSelection(HexagonMatchfield* selection);
     //Game(SaveGame* savegame_initSave);
     //void loadGame(SaveGame* savegame_initSave);
     //void saveGame();
     //void endGame();
     //int showUnitNumber(Player* player);
     //int showTotalEnergie(Player* player);
-    // ...
+    //void Dijkstra();
+    //void calculateActionTargets();
+    //void buttonPressedMove();
+    //void buttonPressedAction();
+    //void buttonPressedInformation();
+    //void buttonPressedMap();
+    //void buttonPressedMenue();
+    //void buttonPressedChangePhase();
+    void resetStateHex(); // Nicht im UML-Diagramm, ist nur eine Hilfsfunktion für processSelection
+
 
     // get und set Methoden
     std::vector<std::vector<HexagonMatchfield*>> getVectorVectorHexagonMatchfield();
 
 public slots:
-    void SLOT_processSelection(HexagonMatchfield* selection);
 };
 
 #endif // GAME_H

@@ -84,24 +84,52 @@ vector<vector<HexagonMatchfield*> > Game::getVectorVectorHexagonMatchfield()
     return hexagonMatchfield_gameGrid;
 }
 
-void Game::SLOT_processSelection(HexagonMatchfield *selection)
+void Game::processSelection(HexagonMatchfield *selection)
 {
-    SelectionCache = selection;
-    if(SelectionCache->getState() == INACTIVE)
+    switch(selection->getState())
     {
-        //Alle Hexagons auf INACIVE setzten
-        for(unsigned int i = 0; i < hexagonMatchfield_gameGrid.size(); i++)
-        {
-            for(unsigned int j = 0; j < hexagonMatchfield_gameGrid[i].size(); j++)
-                hexagonMatchfield_gameGrid[i][j]->setState(INACTIVE);
-        }
+        case INACTIVE:
+            resetStateHex();
 
-        //Angeklicktes auf AKTIVE setzten
-        SelectionCache->setState(ACTIVE);
+            //Angeklicktes auf AKTIVE setzten
+            SelectionCache = selection;
+            SelectionCache->setState(ACTIVE);
+            break;
+
+        case ACTIVE:
+            resetStateHex();
+            ptr_gameGameWid->clearScenes();
+            //ptr_gameGameWid->gameWidInfoScene->update();
+            //ptr_gameGameWid->gameWidOptionsScene->update();
+            break;
+
+        case TARGET:
+        /*
+         Pseudocode:
+            if(selectionCache.getStationedUnit != nullptr)
+                if(move)
+                {
+                    moveUnitTo(target;)
+                }
+                if(action)
+                {
+                    selectionCache.getStationedUnt().action(target);
+                }
+                reset()
+        */
+            break;
     }
-    else if(SelectionCache->getState() == ACTIVE)
-        SelectionCache->setState(INACTIVE);
+
 
     //if(SelectionCache->unit_stationed == NULL) hier spaeter einfuegen
     ptr_gameGameWid->setInfoScene(SelectionCache->getPtr_hexMfieldDisplay());
+}
+
+void Game::resetStateHex()
+{
+    for(unsigned int i = 0; i < hexagonMatchfield_gameGrid.size(); i++)
+    {
+        for(unsigned int j = 0; j < hexagonMatchfield_gameGrid[i].size(); j++)
+            hexagonMatchfield_gameGrid[i][j]->setState(INACTIVE);
+    }
 }

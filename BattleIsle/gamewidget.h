@@ -39,10 +39,11 @@ public:
     explicit GameWidget(QWidget *parent = 0);
     ~GameWidget();
     void gameWidCreateMatchfield();
+    void setInfoScene(HexagonDisplayInfo *info);
+    void clearScenes();
 
     //get und set Methoden
     void setGameWidGame(Game* game) { gameWidGame = game; }
-    void setInfoScene(HexagonDisplayInfo *info);
 signals:
     void SIGNAL_gameWidChangeIndexFromStack(int);
 };

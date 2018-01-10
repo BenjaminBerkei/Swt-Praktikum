@@ -80,7 +80,7 @@ HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, std::string typ
 void HexagonMatchfield::mousePressEvent( QGraphicsSceneMouseEvent *event )
 {
     Q_UNUSED(event);
-    ptr_hexBaseGame->SLOT_processSelection(this);
+    ptr_hexBaseGame->processSelection(this);
 
 
     //Hier muss evetntuell noch was hin.
