@@ -29,6 +29,12 @@ MATCHFIELDSTATE HexagonMatchfield::getState() const
 void HexagonMatchfield::setState(const MATCHFIELDSTATE &value)
 {
     state = value;
+    if(state == INACTIVE)
+        setZValue(0);
+    else if(state == TARGET)
+        setZValue(1);
+    else if(state == ACTIVE)
+        setZValue(2);
 }
 
 HexagonDisplayInfo *HexagonMatchfield::getPtr_hexMfieldDisplay() const

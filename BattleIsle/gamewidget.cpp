@@ -58,11 +58,11 @@ void GameWidget::gameWidCreateMatchfield()
             int PicSizeY = hex->pixmap().size().height();
             if(i & 1)
             {
-                hex->setPos( i * (2 * PicSizeX + 15) / 3, j * PicSizeY + (PicSizeY / 2));
+                hex->setPos( i * 2 * PicSizeX / 3, j * PicSizeY + (PicSizeY / 2));
             }
             else
             {
-                hex->setPos( i * (2 * PicSizeX + 15)/ 3, j * PicSizeY);
+                hex->setPos( i * 2 * PicSizeX / 3, j * PicSizeY);
             }
             gameWidGameScene->addItem(hex);
         }
