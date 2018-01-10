@@ -2,7 +2,7 @@
  * Author: Manuel
  * Version: 0.2
  * Datum 07.12.2017
- * */
+ */
 
 #ifndef OPTIONS_H
 #define OPTIONS_H

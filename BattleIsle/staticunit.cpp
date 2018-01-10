@@ -1,13 +1,10 @@
-/////////////////////////////////////////////
-// staticunit.hpp // letzte Änderung: 03.01.18 //
-// Letzte Editirung: Miguel				   //	
-// Version: 0.2						   //	
-// -------- Kommentare --------------------//
 /*
-*/
-/////////////////////////////////////////////
+ * Author: Miguel
+ * Version: 0.2
+ * Datum 03.01.2018
+ */
 
-#include "staticunit.hpp"
+#include "staticunit.h"
 
 //StaticUnit
 
