@@ -73,11 +73,50 @@ void GameWidget::gameWidCreateMatchfield()
 HexagonDisplayInfo::HexagonDisplayInfo(HexagonMatchfield *ptr_hexMfield)
 :QObject(0), QGraphicsRectItem(QRectF(-50,-50,230,100), 0), hexToDisplay(ptr_hexMfield)
 {
-    qStringHexDispHexType = "Typ: " + QString::fromStdString( hexToDisplay->getHexMatchfieldType() );
+    update();
 }
 
 void HexagonDisplayInfo::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     painter->drawPixmap(-50 ,-50, hexToDisplay->pixmap());
     painter->drawText(QRectF(20,-50,200,20),qStringHexDispHexType);
+
+    if(hexToDisplay->getUnit_stationed() != nullptr)
+    {
+        painter->drawPixmap(-50,-50, hexToDisplay->getUnit_stationed()->pixmap());
+        painter->drawText(QRectF(20,-30,200,20),qStringUnitDispUnitType);
+        painter->drawText(QRectF(20,-10,200,20),qStringUnitDispUnitLife);
+        painter->drawText(QRectF(20,10,200,20),qStringUnitDispMovement);
+        painter->drawText(QRectF(20,30,200,20),qStringUnitDispUnitAttack);
+    }
+}
+
+void HexagonDisplayInfo::update()
+{
+    qStringHexDispHexType = "Hex Typ: " + QString::fromStdString( hexToDisplay->getHexMatchfieldType() );
+
+    if(hexToDisplay->getUnit_stationed() != nullptr)
+    {
+        qStringUnitDispUnitType = "Unit Typ: " + hexToDisplay->getUnit_stationed()->getUnitType();
+        qStringUnitDispUnitLife = "HP: " + QString::number(hexToDisplay->getUnit_stationed()->getUnitCurrentHP()) + "/"
+                                            + QString::number(hexToDisplay->getUnit_stationed()->getUnitHP());
+        if(hexToDisplay->getUnit_stationed()->getUnitMoveRange() > 0)
+        {
+            qStringUnitDispMovement = "MoveRange: " + QString::number(hexToDisplay->getUnit_stationed()->getUnitMoveRange()) + "/"
+                    + QString::number(hexToDisplay->getUnit_stationed()->getUnitCurrentMoveRange());
+        }else{
+            qStringUnitDispMovement = "";
+        }
+        if(hexToDisplay->getUnit_stationed()->getUnitAirAtt() == 0
+                && hexToDisplay->getUnit_stationed()->getUnitGroundAtt() == 0
+                && hexToDisplay->getUnit_stationed()->getUnitWaterAtt() == 0)
+        {
+
+            qStringUnitDispUnitAttack = "Attack: " + QString::number(hexToDisplay->getUnit_stationed()->getUnitAirAtt()) + "/"
+                    + QString::number(hexToDisplay->getUnit_stationed()->getUnitGroundAtt()) + "/"
+                    + QString::number(hexToDisplay->getUnit_stationed()->getUnitWaterAtt());
+        }else{
+            qStringUnitDispUnitAttack = "";
+        }
+    }
 }
