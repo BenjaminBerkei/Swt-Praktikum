@@ -6,7 +6,7 @@
 
 #ifndef OPTIONS_H
 #define OPTIONS_H
-#include<QObject>
+#include <QObject>
 #include <string>
 #include <QDebug>
 

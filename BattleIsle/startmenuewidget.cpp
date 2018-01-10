@@ -44,9 +44,9 @@ void StartMenueWidget::startGame( Options *options_initOptions )
     ptr_smwMenueWidget->ui->stack->resize( 1190, 740 );
 
     //Erstelle ein Objekt vom Typ Game
-    Game game(options_initOptions, ptr_smwMenueWidget->getPtr_mwGameWidget());
+    Game* game = new Game(options_initOptions, ptr_smwMenueWidget->getPtr_mwGameWidget());
     //Erstelle eine Assoziation von GameWidget zu Game
-    ptr_smwMenueWidget->getPtr_mwGameWidget()->setGameWidGame(&game);
+    ptr_smwMenueWidget->getPtr_mwGameWidget()->setGameWidGame(game);
 
     //Wechsel zu Widget 3
     emit SIGNAL_smwChangeIndexFromStack( 3 );

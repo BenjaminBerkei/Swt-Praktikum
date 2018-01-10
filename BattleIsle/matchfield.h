@@ -23,6 +23,8 @@
 #include "button.h"
 #include "hexagonbase.h"
 #include "hexagonmatchfield.h"
+#include "game.h"
+
 namespace Ui {
 class Matchfield;
 }
@@ -34,19 +36,15 @@ private:
     const std::string str_matchfieldName;
     int int_matchfieldSizeX;
     int int_matchfieldSizeY;
+    Game* ptr_mfieldGame;
     //Folgendes wurde nach Entwurf 2.1 in die Klasse Game gelegt:
     //std::vector< std::vector < HexagonMatchfield* > > hexagonMatchfield_gameGrid;
     //std::vector < Button* > button_menueBar;
 
-    QGraphicsView *qview_gameView;
-    QGraphicsView *qview_menueBarView;
-    QGraphicsScene *qscene_gameScene;
-    QGraphicsScene *qscene_menueBarScene;
-
     Ui::Matchfield *ui;
 
 public:
-    Matchfield(std::string name, QWidget *parent = 0);
+    Matchfield(std::string name, Game* game, QWidget *parent = 0);
     /*Programmieren wenn savegame geschrieben*/
     //Matchfield(saveInit *Savegame, QWidget *parent = 0);
     ~Matchfield();
