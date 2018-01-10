@@ -36,6 +36,14 @@ class HexagonMatchfield : public HexagonBase
 private:
 
 protected:
+    /* Zum setZValue:
+     * 0: alle inaktiven Hexagons
+     * 1: Targets
+     * 2: Selectet
+     * 3:
+     * 4:
+     * 5: Units
+     */
     bool bool_hexFogOfWar;
     Unit* unit_stationed;
     MATCHFIELDSTATE state;

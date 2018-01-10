@@ -1,18 +1,16 @@
-/////////////////////////////////////////////
-// staticunit.hpp // letzte Änderung: 03.01.18 //
-// Letzte Editirung: Miguel				   //	
-// Version: 0.2						   //	
-// -------- Kommentare --------------------//
-/* 
-*/
-/////////////////////////////////////////////
+/*
+ * Author: Miguel
+ * Version: 0.2
+ * Datum 03.01.2018
+ */
+
 
 #ifndef STATICUNIT_HPP
 #define STATICUNIT_HPP
 
-#include "unit.hpp"
+#include "unit.h"
 #include "hexagonmatchfield.h"
-#include "player.hpp"
+#include "player.h"
 #include <map>
 #include <QFile>
 #include <QTextStream>
