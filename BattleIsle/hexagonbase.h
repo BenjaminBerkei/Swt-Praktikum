@@ -25,6 +25,9 @@ public:
 
     /*Müssen in Subklassen ausgeprägt werden*/
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) = 0;
+
+    //get und set Methoden
+    QPoint getQpoint_gridPosition() const;
 };
 
 #endif // HEXAGONBASE_H

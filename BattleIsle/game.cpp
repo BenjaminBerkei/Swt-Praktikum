@@ -44,7 +44,6 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     //"streetCurve"         (Straße mit Kurve)
     //"mountainTop"         (Bergspitze)
     //"mountainSide"        (Bergseite)
-    //"boltanium"           (Boltanium)
 
     for( int i = 0; i < sizeX; i++ )
     {
@@ -126,6 +125,26 @@ void Game::processSelection(HexagonMatchfield *selection)
 
 
     //if(SelectionCache->unit_stationed == NULL) hier spaeter einfuegen
+}
+
+void Game::buttonPressedMove()
+{
+
+}
+
+void Game::buttonPressedAction()
+{
+
+}
+
+void Game::buttonPressedMenue()
+{
+
+}
+
+void Game::buttonPressedChangePhase()
+{
+
 }
 
 void Game::resetStateHex()

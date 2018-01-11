@@ -27,5 +27,11 @@
         <file>WaterUnitsBilder/W-1 Fortress_red.png</file>
         <file>WaterUnitsBilder/Z-1 Pegasus_blue.png</file>
         <file>WaterUnitsBilder/Z-1 Pegasus_red.png</file>
+        <file>Buttons/hexagonGruen.png</file>
+        <file>Buttons/hexagonGruenAction.png</file>
+        <file>Buttons/hexagonGruenChangePhase.png</file>
+        <file>Buttons/hexagonGruenMenue.png</file>
+        <file>Buttons/hexagonGruenMove.png</file>
+        <file>Buttons/hexagonGruenSafeGame.png</file>
     </qresource>
 </RCC>

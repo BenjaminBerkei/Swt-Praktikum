@@ -50,12 +50,12 @@ public:
     //int showTotalEnergie(Player* player);
     //void Dijkstra();
     //void calculateActionTargets();
-    //void buttonPressedMove();
-    //void buttonPressedAction();
+    void buttonPressedMove();
+    void buttonPressedAction();
     //void buttonPressedInformation();
     //void buttonPressedMap();
-    //void buttonPressedMenue();
-    //void buttonPressedChangePhase();
+    void buttonPressedMenue();
+    void buttonPressedChangePhase();
     void resetStateHex(); // Nicht im UML-Diagramm, ist nur eine Hilfsfunktion für processSelection
 
 

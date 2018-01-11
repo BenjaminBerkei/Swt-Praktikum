@@ -15,6 +15,7 @@
 #include <vector>
 #include "game.h"
 #include "hexagonmatchfield.h"
+#include "button.h"
 
 namespace Ui {
 class GameWidget;

@@ -24,11 +24,9 @@ void GameWidget::setInfoScene(HexagonDisplayInfo *info)
 
 void GameWidget::clearScenes()
 {
-    qDebug() << "Bemerkung: clearScenes() ausgeführt";
     //leere gameWidInfoScene
     for(auto &it : gameWidInfoScene->items())
     {
-        qDebug() << "removeItem ausführen";
         gameWidInfoScene->removeItem(it);
     }
     gameWidInfoScene->update();
@@ -59,6 +57,20 @@ GameWidget::GameWidget(QWidget *parent) :
     ui->graphicsView_gameView->setScene(gameWidGameScene);
     ui->graphicsView_informationsView->setScene(gameWidInfoScene);
     ui->graphicsView_optionsView->setScene(gameWidOptionsScene);
+
+    ButtonMove* movebutton = new ButtonMove(QPoint(0,0));
+    gameWidButtonScene->addItem(movebutton);
+
+    ButtonAction* actionbutton = new ButtonAction(QPoint(70,0));
+    gameWidButtonScene->addItem(actionbutton);
+
+    ButtonChangePhase* changephasebutton = new ButtonChangePhase(QPoint(140,0));
+    gameWidButtonScene->addItem(changephasebutton);
+
+    ButtonMenue* menuebutton = new ButtonMenue(QPoint(210,0));
+    gameWidButtonScene->addItem(menuebutton);
+
+    gameWidButtonScene->update();
 }
 
 GameWidget::~GameWidget()

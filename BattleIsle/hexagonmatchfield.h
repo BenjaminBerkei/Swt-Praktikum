@@ -58,7 +58,6 @@ protected:
     //"streetCurve"         (Straße mit Kurve)
     //"mountainTop"         (Bergspitze)
     //"mountainSide"        (Bergseite)
-    //"boltanium"           (Boltanium)
 
 public:
     HexagonMatchfield(QPoint qpoint_gridPosition, std::string type, Unit* stationedUnit= 0, Game* ptr_game = 0);
