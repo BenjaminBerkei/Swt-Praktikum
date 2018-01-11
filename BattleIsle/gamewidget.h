@@ -44,6 +44,8 @@ public:
 
     //get und set Methoden
     void setGameWidGame(Game* game) { gameWidGame = game; }
+    QGraphicsScene *getGameWidInfoScene() const;
+
 signals:
     void SIGNAL_gameWidChangeIndexFromStack(int);
 };

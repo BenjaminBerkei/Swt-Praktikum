@@ -95,17 +95,16 @@ void Game::processSelection(HexagonMatchfield *selection)
     {
         case INACTIVE:
             resetStateHex();
+            SelectionCache = selection;
+            ptr_gameGameWid->setInfoScene(SelectionCache->getPtr_hexMfieldDisplay());
 
             //Angeklicktes auf AKTIVE setzten
-            SelectionCache = selection;
             SelectionCache->setState(ACTIVE);
             break;
 
         case ACTIVE:
             resetStateHex();
             ptr_gameGameWid->clearScenes();
-            //ptr_gameGameWid->gameWidInfoScene->update();
-            //ptr_gameGameWid->gameWidOptionsScene->update();
             break;
 
         case TARGET:
@@ -127,11 +126,11 @@ void Game::processSelection(HexagonMatchfield *selection)
 
 
     //if(SelectionCache->unit_stationed == NULL) hier spaeter einfuegen
-    ptr_gameGameWid->setInfoScene(SelectionCache->getPtr_hexMfieldDisplay());
 }
 
 void Game::resetStateHex()
 {
+    SelectionCache = nullptr;
     for(unsigned int i = 0; i < hexagonMatchfield_gameGrid.size(); i++)
     {
         for(unsigned int j = 0; j < hexagonMatchfield_gameGrid[i].size(); j++)

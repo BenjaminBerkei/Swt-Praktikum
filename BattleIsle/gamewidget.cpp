@@ -28,8 +28,10 @@ void GameWidget::clearScenes()
     //leere gameWidInfoScene
     for(auto &it : gameWidInfoScene->items())
     {
+        qDebug() << "removeItem ausführen";
         gameWidInfoScene->removeItem(it);
     }
+    gameWidInfoScene->update();
 
     //leere gameWidOptionsScene
     for(auto &it : gameWidOptionsScene->items())
@@ -38,6 +40,11 @@ void GameWidget::clearScenes()
     }
 }
 
+
+QGraphicsScene *GameWidget::getGameWidInfoScene() const
+{
+    return gameWidInfoScene;
+}
 
 GameWidget::GameWidget(QWidget *parent) :
     QWidget(parent),
