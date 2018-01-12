@@ -45,9 +45,10 @@ int DynamicUnit::getUnitAutoRep(){
 int DynamicUnit::getUnitMoveRange(){
 		return int_unitMoveRange;
 }
-int DynamicUnit::getUnitEXP(){
+/*int DynamicUnit::getUnitEXP(){
 		return int_unitEXP;
-}
+}*/
+
 int DynamicUnit::getUnitAirAtt(){
 		return int_unitAirAtt;
 }
