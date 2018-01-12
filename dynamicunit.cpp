@@ -254,6 +254,101 @@ int AirUnit::moveTo(HexagonMatchfield *hex_target){
 	return 1;
 }
 
+bool AirUnit::action(HexagonMatchfield *hex_target) {
+	Unit *target = hex_target->getUnitStationed();
+	
+	if(target == nullptr){
+		return false;
+	}
+
+	int int_target_current_hp = target->getUnitCurrentHP();
+	QString target_type = target->getUNITTYPE();
+
+	/* RNG mit zufälligem Seed für später initalisieren */
+	srand(time(NULL));
+
+	int int_unitSpecificAtt = 0;
+	bool bool_fights_back = false;
+
+	if(target_type == "LIGHTUNIT" || target_type == "MEDIUMUNIT" || target_type == "HEAVYUNIT"){
+		int_unitSpecificAtt = int_unitGroundAtt; bool_fights_back = true;
+	}
+
+	else if(target_type == "WATERUNIT"){
+		int_unitSpecificAtt = int_unitWaterAtt; bool_fights_back = true;
+	}
+
+	else if(target_type == "AIRUNIT"){
+		int_unitSpecificAtt = int_unitAirAtt; bool_fights_back = true;
+	}
+
+	if(bool_fights_back){
+
+		if (int_target_current_hp - int_unitSpecificAtt <= 0) {
+			target->setUnitCurrentHP(0);
+			int_unitEXP +=10;
+			levelUpBonus();
+			return true;
+		}
+
+		else {
+			target->setUnitCurrentHP(int_target_current_hp - int_unitSpecificAtt);
+
+			//zurück angreifen mit 50 - 75% unseres Attk. Wertes
+			int int_generated_number = (rand() % 26) + 50;
+			double db_percentage_value = ((double)int_generated_number) / 100.0;
+
+			int backfire = (int)(target->getUnitAirAtt()*db_percentage_value);
+			if(int_unitCurrentHP - backfire <= 0){
+				int_unitCurrentHP = 0;
+				target->setUnitEXP(target->getUnitEXP() + 10);
+				target->levelUpBonus();
+				return true;
+			}
+
+			else{
+				int_unitCurrentHP -= backfire;
+				return true;
+			}
+
+		}
+	}
+
+	if(!bool_fights_back){
+		if(target_type == "TRANSPORTERAIR"){
+			int_unitSpecificAtt = int_unitAirAtt;
+		}
+
+		else if(target_type == "TRANSPORTERWATER"){
+			int_unitSpecificAtt = int_unitWaterAtt;
+		}
+
+		else if(target_type == "TRANSPORTERGROUND"){
+			int_unitSpecificAtt = int_unitGroundAtt;
+		}
+
+		//Gebäude
+		else{
+			int_unitSpecificAtt = int_unitGroundAtt;
+		}
+
+		if (int_target_current_hp - int_unitSpecificAtt <= 0) {
+			target->setUnitCurrentHP(0);
+			int_unitEXP +=10;
+			levelUpBonus();
+			return true;
+		}
+
+		else {
+			target->setUnitCurrentHP(int_target_current_hp - int_unitSpecificAtt);
+			return true;
+		}
+	}
+
+	return false;
+
+}
+
 
 // GroundUnit
 
@@ -261,6 +356,101 @@ GroundUnit::GroundUnit(QString filepath, Player* player = nullptr)
 	: DynamicUnit(filepath, player){}
 
 GroundUnit::~GroundUnit(){}
+
+bool GroundUnit::action(HexagonMatchfield *hex_target) {
+	Unit *target = hex_target->getUnitStationed();
+	
+	if(target == nullptr){
+		return false;
+	}
+
+	int int_target_current_hp = target->getUnitCurrentHP();
+	QString target_type = target->getUNITTYPE();
+
+	/* RNG mit zufälligem Seed für später initalisieren */
+	srand(time(NULL));
+
+	int int_unitSpecificAtt = 0;
+	bool bool_fights_back = false;
+
+	if(target_type == "LIGHTUNIT" || target_type == "MEDIUMUNIT" || target_type == "HEAVYUNIT"){
+		int_unitSpecificAtt = int_unitGroundAtt; bool_fights_back = true;
+	}
+
+	else if(target_type == "WATERUNIT"){
+		int_unitSpecificAtt = int_unitWaterAtt; bool_fights_back = true;
+	}
+
+	else if(target_type == "AIRUNIT"){
+		int_unitSpecificAtt = int_unitAirAtt; bool_fights_back = true;
+	}
+
+	if(bool_fights_back){
+
+		if (int_target_current_hp - int_unitSpecificAtt <= 0) {
+			target->setUnitCurrentHP(0);
+			int_unitEXP +=10;
+			levelUpBonus();
+			return true;
+		}
+
+		else {
+			target->setUnitCurrentHP(int_target_current_hp - int_unitSpecificAtt);
+
+			//zurück angreifen mit 50 - 75% unseres Attk. Wertes
+			int int_generated_number = (rand() % 26) + 50;
+			double db_percentage_value = ((double)int_generated_number) / 100.0;
+
+			int backfire = (int)(target->getUnitGroundAtt()*db_percentage_value);
+			if(int_unitCurrentHP - backfire <= 0){
+				int_unitCurrentHP = 0;
+				target->setUnitEXP(target->getUnitEXP() + 10);
+				target->levelUpBonus();
+				return true;
+			}
+
+			else{
+				int_unitCurrentHP -= backfire;
+				return true;
+			}
+
+		}
+	}
+
+	if(!bool_fights_back){
+		if(target_type == "TRANSPORTERAIR"){
+			int_unitSpecificAtt = int_unitAirAtt;
+		}
+
+		else if(target_type == "TRANSPORTERWATER"){
+			int_unitSpecificAtt = int_unitWaterAtt;
+		}
+
+		else if(target_type == "TRANSPORTERGROUND"){
+			int_unitSpecificAtt = int_unitGroundAtt;
+		}
+
+		//Gebäude
+		else{
+			int_unitSpecificAtt = int_unitGroundAtt;
+		}
+
+		if (int_target_current_hp - int_unitSpecificAtt <= 0) {
+			target->setUnitCurrentHP(0);
+			int_unitEXP +=10;
+			levelUpBonus();
+			return true;
+		}
+
+		else {
+			target->setUnitCurrentHP(int_target_current_hp - int_unitSpecificAtt);
+			return true;
+		}
+	}
+
+	return false;
+
+}
 
 // LightUnit
 
@@ -381,5 +571,100 @@ int WaterUnit::moveTo(HexagonMatchfield *hex_target){
 	}
 
 	return -1;
+
+}
+
+bool WaterUnit::action(HexagonMatchfield *hex_target) {
+	Unit *target = hex_target->getUnitStationed();
+	
+	if(target == nullptr){
+		return false;
+	}
+
+	int int_target_current_hp = target->getUnitCurrentHP();
+	QString target_type = target->getUNITTYPE();
+
+	/* RNG mit zufälligem Seed für später initalisieren */
+	srand(time(NULL));
+
+	int int_unitSpecificAtt = 0;
+	bool bool_fights_back = false;
+
+	if(target_type == "LIGHTUNIT" || target_type == "MEDIUMUNIT" || target_type == "HEAVYUNIT"){
+		int_unitSpecificAtt = int_unitGroundAtt; bool_fights_back = true;
+	}
+
+	else if(target_type == "WATERUNIT"){
+		int_unitSpecificAtt = int_unitWaterAtt; bool_fights_back = true;
+	}
+
+	else if(target_type == "AIRUNIT"){
+		int_unitSpecificAtt = int_unitAirAtt; bool_fights_back = true;
+	}
+
+	if(bool_fights_back){
+
+		if (int_target_current_hp - int_unitSpecificAtt <= 0) {
+			target->setUnitCurrentHP(0);
+			int_unitEXP +=10;
+			levelUpBonus();
+			return true;
+		}
+
+		else {
+			target->setUnitCurrentHP(int_target_current_hp - int_unitSpecificAtt);
+
+			//zurück angreifen mit 50 - 75% unseres Attk. Wertes
+			int int_generated_number = (rand() % 26) + 50;
+			double db_percentage_value = ((double)int_generated_number) / 100.0;
+
+			int backfire = (int)(target->getUnitWaterAtt()*db_percentage_value);
+			if(int_unitCurrentHP - backfire <= 0){
+				int_unitCurrentHP = 0;
+				target->setUnitEXP(target->getUnitEXP() + 10);
+				target->levelUpBonus();
+				return true;
+			}
+
+			else{
+				int_unitCurrentHP -= backfire;
+				return true;
+			}
+
+		}
+	}
+
+	if(!bool_fights_back){
+		if(target_type == "TRANSPORTERAIR"){
+			int_unitSpecificAtt = int_unitAirAtt;
+		}
+
+		else if(target_type == "TRANSPORTERWATER"){
+			int_unitSpecificAtt = int_unitWaterAtt;
+		}
+
+		else if(target_type == "TRANSPORTERGROUND"){
+			int_unitSpecificAtt = int_unitGroundAtt;
+		}
+
+		//Gebäude
+		else{
+			int_unitSpecificAtt = int_unitGroundAtt;
+		}
+
+		if (int_target_current_hp - int_unitSpecificAtt <= 0) {
+			target->setUnitCurrentHP(0);
+			int_unitEXP +=10;
+			levelUpBonus();
+			return true;
+		}
+
+		else {
+			target->setUnitCurrentHP(int_target_current_hp - int_unitSpecificAtt);
+			return true;
+		}
+	}
+
+	return false;
 
 }
