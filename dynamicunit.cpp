@@ -49,9 +49,9 @@ int DynamicUnit::getUnitMoveRange(){
 		return int_unitEXP;
 }*/
 
-int DynamicUnit::getUnitAirAtt(){
+/*int DynamicUnit::getUnitAirAtt(){
 		return int_unitAirAtt;
-}
+}*/
 /*int DynamicUnit::getUnitAirRange(){
 		return int_unitAirRange;
 }*/
@@ -61,9 +61,9 @@ int DynamicUnit::getUnitGroundAtt(){
 /*int DynamicUnit::getUnitGroundRange(){
 		return int_unitGroundRange;
 }*/
-int DynamicUnit::getUnitWaterAtt(){
+/*int DynamicUnit::getUnitWaterAtt(){
 		return int_unitWaterAtt;
-}
+}*/
 /*int DynamicUnit::getUnitWaterRange(){
 		return int_unitWaterRange;
 }*/
@@ -81,36 +81,37 @@ void DynamicUnit::setUnitMoveRange(const int newUnitMoveRange)
 	int_unitMoveRange = newUnitMoveRange;
 	return;
 }
-void DynamicUnit::setUnitEXP(const int newUnitEXP)
+/*void DynamicUnit::setUnitEXP(const int newUnitEXP)
 {
 	int_unitEXP = newUnitEXP;
 	return;
-}
-void DynamicUnit::setUnitAirAtt(const int newUnitAirAtt)
+}*/
+
+/*void DynamicUnit::setUnitAirAtt(const int newUnitAirAtt)
 {
 	int_unitAirAtt = newUnitAirAtt;
 	return;
-}
+}*/
 /*void DynamicUnit::setUnitAirRange(const int newUnitAirRange)
 {
 	int_unitAirRange = newUnitAirRange;
 	return;
 }*/
-void DynamicUnit::setUnitGroundAtt(const int newUnitGroundAtt)
+/*void DynamicUnit::setUnitGroundAtt(const int newUnitGroundAtt)
 {
 	int_unitGroundAtt = newUnitGroundAtt;
 	return;
-}
+}*/
 /*void DynamicUnit::setUnitGroundRange(const int newUnitGroundRange)
 {
 	int_unitGroundRange = newUnitGroundRange;
 	return;
 }*/
-void DynamicUnit::setUnitWaterAtt(const int newUnitWaterAtt)
+/*void DynamicUnit::setUnitWaterAtt(const int newUnitWaterAtt)
 {
 	int_unitWaterAtt = newUnitWaterAtt;
 	return;
-}
+}*/
 /*void DynamicUnit::setUnitWaterRange(const int newUnitWaterRange)
 {
 	int_unitWaterRange = newUnitWaterRange;
