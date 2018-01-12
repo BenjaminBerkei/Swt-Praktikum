@@ -40,7 +40,6 @@ protected:
     int int_unitGroundAtt;
     int int_unitWaterAtt;
     int int_unitEXP;
-    int int_unitLevel;
     
     int int_unitMoveRange;
     int int_unitCurrentMoveRange;
@@ -86,9 +85,7 @@ public:
     int getUnitAirAtt() const;
     void setUnitAirAtt(int value);
     int getUnitEXP() const;
-    int getUnitLevel() const; 
     void setUnitEXP(const int);
-    void setUnitLevel(const int);
 };
 
 #endif
