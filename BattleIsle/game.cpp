@@ -16,6 +16,16 @@ std::vector<QPoint> Game::vector_evenNeighbors = {QPoint(0,0)};
 std::vector<QPoint> Game::vector_oddNeighbors = {QPoint(0,0)};
 
 
+std::vector<Button *> Game::getButton_menueBar()
+{
+    return button_menueBar;
+}
+
+void Game::setButton_menueBar(const std::vector<Button *> &value)
+{
+    button_menueBar = value;
+}
+
 Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     SelectionCache(NULL),
     gameOptions(init_options),
@@ -23,7 +33,7 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
 {
     ptr_gameGameWid->setGameWidGame(this);
 
-    // Erstelle eine Map
+    // Erstelle eine Mapm
     // Dies ist nur für Testzwecke! Sollte später gelöscht werden:
     //##################################################################
     //Größe
@@ -44,7 +54,6 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     //"streetCurve"         (Straße mit Kurve)
     //"mountainTop"         (Bergspitze)
     //"mountainSide"        (Bergseite)
-    //"boltanium"           (Boltanium)
 
     for( int i = 0; i < sizeX; i++ )
     {
@@ -80,8 +89,20 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     qDebug() << "Bemerkung: Zufallsfeld erstellt (in Klasse Game). Nur für Testzwecke.";
 
     ptr_gameGameWid->gameWidCreateMatchfield();
-
     //##################################################################
+
+    //Buttons Einfuegen
+    ButtonMove* movebutton = new ButtonMove(64,64);
+    ButtonAction* actionbutton = new ButtonAction(64,64);
+    ButtonChangePhase* changephasebutton = new ButtonChangePhase(64,64);
+    ButtonMenue* menuebutton = new ButtonMenue(64,64);
+
+    button_menueBar.push_back(movebutton);
+    button_menueBar.push_back(actionbutton);
+    button_menueBar.push_back(changephasebutton);
+    button_menueBar.push_back(menuebutton);
+
+    ptr_gameGameWid->gameWidcreateButtonBar();
 }
 
 vector<vector<HexagonMatchfield*> > Game::getVectorVectorHexagonMatchfield()
@@ -126,6 +147,31 @@ void Game::processSelection(HexagonMatchfield *selection)
 
 
     //if(SelectionCache->unit_stationed == NULL) hier spaeter einfuegen
+}
+
+void Game::Dijkstra()
+{
+
+}
+
+void Game::buttonPressedMove()
+{
+    Dijkstra();
+}
+
+void Game::buttonPressedAction()
+{
+
+}
+
+void Game::buttonPressedMenue()
+{
+
+}
+
+void Game::buttonPressedChangePhase()
+{
+
 }
 
 void Game::resetStateHex()

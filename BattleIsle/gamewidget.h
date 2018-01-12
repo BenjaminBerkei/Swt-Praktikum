@@ -6,6 +6,11 @@
  * Author: Manuel
  * Version: 0.2
  * Datum: 04.01.2018
+ *
+ * Author: Manuel
+ * Version: 0.3
+ * Datum: 12.01.2018
+ * Kommentar: Buttons hinzugefuegt
  * */
 #ifndef GAMEWIDGET_H
 #define GAMEWIDGET_H
@@ -15,6 +20,7 @@
 #include <vector>
 #include "game.h"
 #include "hexagonmatchfield.h"
+#include "button.h"
 
 namespace Ui {
 class GameWidget;
@@ -39,6 +45,7 @@ public:
     explicit GameWidget(QWidget *parent = 0);
     ~GameWidget();
     void gameWidCreateMatchfield();
+    void gameWidcreateButtonBar();
     void setInfoScene(HexagonDisplayInfo *info);
     void clearScenes();
 

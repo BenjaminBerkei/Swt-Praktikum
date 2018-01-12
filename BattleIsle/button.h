@@ -2,6 +2,11 @@
  * Author: Lucas
  * Version: 0.1
  * Datum 01.12.2017
+ *
+ * Author: Manuel
+ * version: 0.2
+ * Datum: 12.01.2018
+ * Kommentar: Buttons angepasst
  * */
 
 #ifndef BUTTON_H
@@ -19,9 +24,9 @@ class Button : public HexagonBase
 private:
     BUTTONSTATE state;
 public:
-    Button(QPoint qpoint_position);
+    Button();
 
-    void mousePressEvent(QGraphicsSceneMouseEvent *event) = 0;
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) = 0;
     void changeState(BUTTONSTATE newState);
 };
 
@@ -31,7 +36,7 @@ class ButtonMove : public Button
 {
     Q_OBJECT
 public:
-    ButtonMove(QPoint qpoint_position);
+    ButtonMove(int sizeX = 64, int sizeY = 64);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
     void printType();
@@ -45,7 +50,7 @@ class ButtonAction : public Button
 {
     Q_OBJECT
 public:
-    ButtonAction(QPoint qpoint_position);
+    ButtonAction(int sizeX = 64, int sizeY = 64);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
     void printType();
@@ -60,7 +65,7 @@ class ButtonMap : public Button
 {
     Q_OBJECT
 public:
-    ButtonMap(QPoint qpoint_position);
+    ButtonMap(int sizeX = 64, int sizeY = 64);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
     void printType();
@@ -75,7 +80,7 @@ class ButtonInformation : public Button
 {
     Q_OBJECT
 public:
-    ButtonInformation(QPoint qpoint_position);
+    ButtonInformation(int sizeX = 64, int sizeY = 64);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
     void printType();
@@ -90,7 +95,7 @@ class ButtonChangePhase : public Button
 {
     Q_OBJECT
 public:
-    ButtonChangePhase(QPoint qpoint_position);
+    ButtonChangePhase(int sizeX = 64, int sizeY = 64);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
     void printType();
@@ -105,7 +110,7 @@ class ButtonMenue : public Button
 {
     Q_OBJECT
 public:
-    ButtonMenue(QPoint qpoint_position);
+    ButtonMenue(int sizeX = 64, int sizeY = 64);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
     void printType();

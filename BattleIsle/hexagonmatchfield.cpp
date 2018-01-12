@@ -74,8 +74,6 @@ HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, std::string typ
         setPixmap(QPixmap(":/images/HexagonBilder/BergOben.png"));
     else if(HexMatchfieldType == "mountainSide")
         qDebug() << "Warnung: Für Bergseite ist noch kein Bild hinterlegt. (HexagonMatchfield von typ mountainSide erzeugt)";
-    else if(HexMatchfieldType == "boltanium")
-        qDebug() << "Warnung: Für Boltanium ist noch kein Bild hinterlegt. (HexagonMatchfield von typ boltanium erzeugt)";
     else
     {
         setPixmap(QPixmap(":/images/Wiese.png"));

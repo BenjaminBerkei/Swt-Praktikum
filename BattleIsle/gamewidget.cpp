@@ -6,6 +6,11 @@
  * Author: Manuel
  * Version: 0.2
  * Datum: 04.01.2018
+ *
+ * Author: Manuel
+ * Version: 0.3
+ * Datum: 12.01.2018
+ * Kommentar: Buttons hinzugefuegt
  * */
 
 #include "gamewidget.h"
@@ -24,11 +29,9 @@ void GameWidget::setInfoScene(HexagonDisplayInfo *info)
 
 void GameWidget::clearScenes()
 {
-    qDebug() << "Bemerkung: clearScenes() ausgeführt";
     //leere gameWidInfoScene
     for(auto &it : gameWidInfoScene->items())
     {
-        qDebug() << "removeItem ausführen";
         gameWidInfoScene->removeItem(it);
     }
     gameWidInfoScene->update();
@@ -91,6 +94,18 @@ void GameWidget::gameWidCreateMatchfield()
         }
     }
     ui->graphicsView_gameView->setScene( gameWidGameScene );
+}
+
+void GameWidget::gameWidcreateButtonBar()
+{
+    int spacingX = 70;
+
+    for(unsigned int i = 0; i < gameWidGame->getButton_menueBar().size(); i++)
+    {
+        gameWidGame->getButton_menueBar()[i]->setPos(i*spacingX,0);
+        gameWidButtonScene->addItem(gameWidGame->getButton_menueBar()[i]);
+    }
+    gameWidButtonScene->update();
 }
 
 HexagonDisplayInfo::HexagonDisplayInfo(HexagonMatchfield *ptr_hexMfield)

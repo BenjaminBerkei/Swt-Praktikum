@@ -6,6 +6,11 @@
 
 #include "hexagonbase.h"
 
+QPoint HexagonBase::getQpoint_gridPosition() const
+{
+    return qpoint_gridPosition;
+}
+
 HexagonBase::HexagonBase(QPoint qpoint_position, Game *ptr_game)
     :  qpoint_gridPosition(qpoint_position),
       ptr_hexBaseGame(ptr_game)

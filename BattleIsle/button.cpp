@@ -2,14 +2,18 @@
  * Author: Lucas
  * Version: 0.1
  * Datum 01.12.2017
+ *
+ * Author: Manuel
+ * version: 0.2
+ * Datum: 12.01.2018
+ * Kommentar: Buttons angepasst
  * */
 
 #include "button.h"
 /*Base Class: Button*/
-Button::Button(QPoint qpoint_position)
-    : HexagonBase( qpoint_position ), state(DISABLED)
+Button::Button()
+    : HexagonBase( QPoint(0,0) ), state(DISABLED)
 {
-
 }
 
 void Button::changeState(BUTTONSTATE newState)
@@ -18,15 +22,17 @@ void Button::changeState(BUTTONSTATE newState)
 }
 
 /*ButtonMove*/
-ButtonMove::ButtonMove(QPoint qpoint_position)
-    : Button( qpoint_position )
+ButtonMove::ButtonMove(int sizeX, int sizeY)
 {
-
+    setPixmap(QPixmap(":/images/Buttons/hexagonGruenMove.png"));
+    setPixmap(pixmap().scaled(sizeX,sizeY));
 }
 
 void ButtonMove::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event);
+    qDebug() << "Meldung: Move Button gedrückt.";
+    ptr_hexBaseGame->buttonPressedMove();
     emit clicked(this);
 }
 
@@ -37,15 +43,17 @@ void ButtonMove::printType()
 }
 
 /*ButtonAction*/
-ButtonAction::ButtonAction(QPoint qpoint_position)
-    : Button( qpoint_position )
+ButtonAction::ButtonAction(int sizeX, int sizeY)
 {
-
+    setPixmap(QPixmap(":/images/Buttons/hexagonGruenAction.png"));
+    setPixmap(pixmap().scaled(sizeX,sizeY));
 }
 
 void ButtonAction::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event);
+    qDebug() << "Meldung: Action Button gedrückt.";
+    ptr_hexBaseGame->buttonPressedAction();
     emit clicked(this);
 }
 
@@ -55,15 +63,17 @@ void ButtonAction::printType()
 }
 
 /*ButtonMap*/
-ButtonMap::ButtonMap(QPoint qpoint_position)
-    : Button( qpoint_position )
+ButtonMap::ButtonMap(int sizeX, int sizeY)
 {
-
+    //Noch implementieren
+    //setPixmap(QPixmap(""));
+    setPixmap(pixmap().scaled(sizeX,sizeY));
 }
 
 void ButtonMap::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event);
+    qDebug() << "Meldung: Map Button gedrückt.";
     emit clicked(this);
 }
 
@@ -73,15 +83,17 @@ void ButtonMap::printType()
 }
 
 /*ButtonInformation*/
-ButtonInformation::ButtonInformation(QPoint qpoint_position)
-    : Button(qpoint_position)
+ButtonInformation::ButtonInformation(int sizeX, int sizeY)
 {
-
+    //Noch implemetieren
+    //setPixmap(QPixmap(""));
+    setPixmap(pixmap().scaled(sizeX,sizeY));
 }
 
 void ButtonInformation::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event);
+    qDebug() << "Meldung: Information Button gedrückt.";
     emit clicked(this);
 }
 
@@ -91,15 +103,17 @@ void ButtonInformation::printType()
 }
 
 /*ButtonChangePhase*/
-ButtonChangePhase::ButtonChangePhase(QPoint qpoint_position)
-    : Button(qpoint_position)
+ButtonChangePhase::ButtonChangePhase(int sizeX, int sizeY)
 {
-
+    setPixmap(QPixmap(":/images/Buttons/hexagonGruenChangePhase.png"));
+    setPixmap(pixmap().scaled(sizeX,sizeY));
 }
 
 void ButtonChangePhase::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event);
+    qDebug() << "Meldung: Change Phase Button gedrückt.";
+    ptr_hexBaseGame->buttonPressedChangePhase();
     emit clicked(this);
 }
 
@@ -109,15 +123,17 @@ void ButtonChangePhase::printType()
 }
 
 /*ButtonMenue*/
-ButtonMenue::ButtonMenue(QPoint qpoint_position)
-    : Button(qpoint_position)
+ButtonMenue::ButtonMenue(int sizeX, int sizeY)
 {
-
+    setPixmap(QPixmap(":/images/Buttons/hexagonGruenMenue.png"));
+    setPixmap(pixmap().scaled(sizeX,sizeY));
 }
 
 void ButtonMenue::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event);
+    qDebug() << "Meldung: Menue Button gedrückt.";
+    ptr_hexBaseGame->buttonPressedMenue();
     emit clicked(this);
 }
 
