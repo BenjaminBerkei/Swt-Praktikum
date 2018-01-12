@@ -59,6 +59,7 @@ protected:
     //"mountainTop"         (Bergspitze)
     //"mountainSide"        (Bergseite)
     //"boltanium"           (Boltanium)
+    int int_boltaniumCurrent;
 
 public:
     HexagonMatchfield(QPoint qpoint_gridPosition, std::string type, Unit* stationedUnit= 0, Game* ptr_game = 0);
@@ -75,6 +76,9 @@ public:
 
     Unit *getUnit_stationed() const;
     void setUnit_stationed(Unit *value);
+    
+    int getBoltaniumCurrent() const;
+    void setBoltaniumCurrent(int value);
 
 signals:
     void SIGNAL_clicked(HexagonMatchfield*);
