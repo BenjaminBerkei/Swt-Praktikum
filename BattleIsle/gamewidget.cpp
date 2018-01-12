@@ -131,7 +131,7 @@ void HexagonDisplayInfo::paint(QPainter *painter, const QStyleOptionGraphicsItem
 
 void HexagonDisplayInfo::update()
 {
-    qStringHexDispHexType = "Hex Typ: " + QString::fromStdString( hexToDisplay->getHexMatchfieldType() );
+    qStringHexDispHexType = "Hex Typ: " + hexToDisplay->getHexMatchfieldType();
 
     if(hexToDisplay->getUnit_stationed() != nullptr)
     {

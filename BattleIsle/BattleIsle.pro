@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     round.cpp \
     player.cpp \
     unit.cpp \
-    staticunit.cpp
+    staticunit.cpp \
+    dynamicunit.cpp
 
 HEADERS  += \
     hexagonbase.h \
@@ -47,7 +48,8 @@ HEADERS  += \
     unit.h \
     round.h \
     player.h \
-    staticunit.h
+    staticunit.h \
+    dynamicunit.h
 
 FORMS    += startmenuewidget.ui \
     matchfield.ui \
@@ -58,6 +60,7 @@ FORMS    += startmenuewidget.ui \
     gamewidget.ui
 
 RESOURCES += \
-    img/rsc.qrc
+    img/rsc.qrc \
+    UnitRessources/units.qrc
 
 CONFIG += c++11

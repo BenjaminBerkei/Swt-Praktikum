@@ -25,6 +25,9 @@
 #include "unit.h"
 #include "game.h"
 #include "gamewidget.h"
+
+#include <QString>
+
 #include <QDebug>
 
 class Unit;
@@ -48,7 +51,7 @@ protected:
     Unit* unit_stationed;
     MATCHFIELDSTATE state;
     HexagonDisplayInfo* ptr_hexMfieldDisplay;
-    std::string HexMatchfieldType;
+    QString HexMatchfieldType;
     //Mögliche Typen:
     //"waterDeep"           (Tiefes Meer)
     //"waterSeashore"       (Küste)
@@ -62,14 +65,14 @@ protected:
     int int_boltaniumCurrent;
 
 public:
-    HexagonMatchfield(QPoint qpoint_gridPosition, std::string type, Unit* stationedUnit= 0, Game* ptr_game = 0);
+    HexagonMatchfield(QPoint qpoint_gridPosition, QString type, Unit* stationedUnit= 0, Game* ptr_game = 0);
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
     void changeState(MATCHFIELDSTATE newState);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 
     //get und set Methoden
-    std::string getHexMatchfieldType() {return HexMatchfieldType;}
+    QString getHexMatchfieldType() {return HexMatchfieldType;}
     MATCHFIELDSTATE getState() const;
     HexagonDisplayInfo *getPtr_hexMfieldDisplay() const;
     void setState(const MATCHFIELDSTATE &value);

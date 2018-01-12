@@ -52,7 +52,7 @@ void HexagonMatchfield::setUnit_stationed(Unit *value)
     unit_stationed = value;
 }
 
-HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, std::string type, Unit *stationedUnit, Game *ptr_game) :
+HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, QString type, Unit *stationedUnit, Game *ptr_game) :
     HexagonBase( qpoint_gridPosition , ptr_game ),
     unit_stationed(stationedUnit),
     state(INACTIVE),

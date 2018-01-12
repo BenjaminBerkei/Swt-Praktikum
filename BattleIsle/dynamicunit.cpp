@@ -7,7 +7,7 @@
 */
 /////////////////////////////////////////////
 
-#include "dynamicunit.hpp"
+#include "dynamicunit.h"
 #include "staticunit.h"
 #include <stdlib.h>     // srand 
 #include <time.h>       // time 
@@ -39,41 +39,41 @@ DynamicUnit::DynamicUnit(QString filepath, Player* player = nullptr)
 
 DynamicUnit::~DynamicUnit(){}
 
-int DynamicUnit::getUnitAutoRep(){
+int DynamicUnit::getUnitAutoRep() const{
 		return int_unitAutoRep;
 }
-int DynamicUnit::getUnitMoveRange(){
+int DynamicUnit::getUnitMoveRange() const{
 		return int_unitMoveRange;
 }
-/*int DynamicUnit::getUnitEXP(){
+/*int DynamicUnit::getUnitEXP() const{
 		return int_unitEXP;
-}*/
+}
 
-/*int DynamicUnit::getUnitAirAtt(){
+int DynamicUnit::getUnitAirAtt() const{
 		return int_unitAirAtt;
-}*/
-/*int DynamicUnit::getUnitAirRange(){
+}
+int DynamicUnit::getUnitAirRange() const{
 		return int_unitAirRange;
-}*/
-int DynamicUnit::getUnitGroundAtt(){
+}
+int DynamicUnit::getUnitGroundAtt() const{
 		return int_unitGroundAtt;
 }
-/*int DynamicUnit::getUnitGroundRange(){
+int DynamicUnit::getUnitGroundRange() const{
 		return int_unitGroundRange;
-}*/
-/*int DynamicUnit::getUnitWaterAtt(){
+}
+int DynamicUnit::getUnitWaterAtt() const{
 		return int_unitWaterAtt;
-}*/
-/*int DynamicUnit::getUnitWaterRange(){
+}
+int DynamicUnit::getUnitWaterRange() const{
 		return int_unitWaterRange;
 }*/
-int DynamicUnit::getUnitLevel(){
+int DynamicUnit::getUnitLevel() const{
 		return int_unitLevel;
 }
 
 void DynamicUnit::setUnitAutoRep(const int newUnitAutoRep)
 {
-	int_unitAutoRep = newUnitSt;
+    int_unitAutoRep = newUnitAutoRep;
 	return;
 }
 void DynamicUnit::setUnitMoveRange(const int newUnitMoveRange)
@@ -145,10 +145,10 @@ TransporterUnit::TransporterUnit(QString filepath, Player* player = nullptr)
 
 TransporterUnit::~TransporterUnit(){}
 
-int TransporterUnit::getTransporterUnitCapacity(){
+int TransporterUnit::getTransporterUnitCapacity() const{
 		return int_transporterUnitCapacity;
 }
-int TransporterUnit::getTransporterUnitCurrentCapacity(){
+int TransporterUnit::getTransporterUnitCurrentCapacity() const{
 		return int_transporterUnitCurrentCapacity;
 }
 void TransporterUnit::setTransporterUnitCurrentCapacity(const int newCurrentCapacity)
@@ -158,15 +158,15 @@ void TransporterUnit::setTransporterUnitCurrentCapacity(const int newCurrentCapa
 }
 
 
-bool Transporter::action(HexagonMatchfield* hex_target){
-	if(hex_target->getUnitStationed() == nullptr){
+bool TransporterUnit::action(HexagonMatchfield* hex_target){
+    if(hex_target->getUnit_stationed() == nullptr){
 		if(hex_target->getBoltaniumCurrent() > 0 ){
 			farmBoltanium(hex_target);
 			return true;
 		}
 	}
 		   
-	if(hex_target->getUnitStationed() != nullptr){
+    if(hex_target->getUnit_stationed() != nullptr){
 		unload(hex_target);
 		return true;
 	}
@@ -174,7 +174,7 @@ bool Transporter::action(HexagonMatchfield* hex_target){
 	return false;
 }
 
-void Transporter::unload(HexagonMatchfield* hex_target){
+void TransporterUnit::unload(HexagonMatchfield* hex_target){
 	hex_target->setUnit_stationed(unitToUnload);
 	
 	int i = 0;
@@ -187,7 +187,7 @@ void Transporter::unload(HexagonMatchfield* hex_target){
 	}
 }
 
-void Transporter::farmBoltanium(HexagonMatchfield* hex_target){
+void TransporterUnit::farmBoltanium(HexagonMatchfield* hex_target){
 	if(hex_target->getBoltaniumCurrent() > 10){
 		unitPlayer->setCurrentEnergieStorage(unitPlayer->getCurrentEnergieStorage() + 10);
 		hex_target->setBoltaniumCurrent(hex_target->getBoltaniumCurrent() - 10);
@@ -203,11 +203,11 @@ void Transporter::farmBoltanium(HexagonMatchfield* hex_target){
 // TransporterAirUnit
 
 TransporterAirUnit::TransporterAirUnit(QString filepath, Player* player = nullptr)
-	: AirUnit(filepath, player){}
+    : TransporterUnit(filepath, player){}
 
 TransporterAirUnit::~TransporterAirUnit(){}
 
-int TransporterAirUnit::moveTo(HexagonMatchfield *hex_target){
+int TransporterAirUnit::moveTo(HexagonMatchfield *){
 	//Flugzeug hat selbe Kosten für alles.
 	return 1;
 }
@@ -219,13 +219,13 @@ int TransporterAirUnit::moveTo(HexagonMatchfield *hex_target){
 // TransporterGroundUnit
 
 TransporterGroundUnit::TransporterGroundUnit(QString filepath, Player* player = nullptr)
-	: GroundUnit(filepath, player){}
+    : TransporterUnit(filepath, player){}
 
 TransporterGroundUnit::~TransporterGroundUnit(){}
 
 int TransporterGroundUnit::moveTo(HexagonMatchfield *hex_target){
 
-	String hex_type = hex_target->getHEXTYPE();
+    QString hex_type = hex_target->getHexMatchfieldType();
 
 	if(hex_type == "grassland"){
 		return 1;
@@ -248,7 +248,7 @@ int TransporterGroundUnit::moveTo(HexagonMatchfield *hex_target){
 	}
 
 	else if(hex_type == "mountainSide"){
-		retrun 2;
+        return 2;
 	}
 
 	else if(hex_type == "waterDeep"){
@@ -267,13 +267,13 @@ int TransporterGroundUnit::moveTo(HexagonMatchfield *hex_target){
 // TransporterWaterUnit
 
 TransporterWaterUnit::TransporterWaterUnit(QString filepath, Player* player = nullptr)
-	: WaterUnit(filepath, player){}
+    : TransporterUnit(filepath, player){}
 
 TransporterWaterUnit::~TransporterWaterUnit(){}
 
 int TransporterWaterUnit::moveTo(HexagonMatchfield *hex_target){
 
-	String hex_type = hex_target->getHEXTYPE();
+    QString hex_type = hex_target->getHexMatchfieldType();
 
 	if(hex_type == "grassland"){
 		return -1;
@@ -296,7 +296,7 @@ int TransporterWaterUnit::moveTo(HexagonMatchfield *hex_target){
 	}
 
 	else if(hex_type == "mountainSide"){
-		retrun -1;
+        return -1;
 	}
 
 	else if(hex_type == "waterDeep"){
@@ -324,14 +324,14 @@ int AirUnit::moveTo(HexagonMatchfield *hex_target){
 }
 
 bool AirUnit::action(HexagonMatchfield *hex_target) {
-	Unit *target = hex_target->getUnitStationed();
+    Unit *target = hex_target->getUnit_stationed();
 	
 	if(target == nullptr){
 		return false;
 	}
 
 	int int_target_current_hp = target->getUnitCurrentHP();
-	QString target_type = target->getUnitType();
+    QString target_type = target->getUnitType();
 
 	/* RNG mit zufälligem Seed für später initalisieren */
 	srand(time(NULL));
@@ -427,14 +427,14 @@ GroundUnit::GroundUnit(QString filepath, Player* player = nullptr)
 GroundUnit::~GroundUnit(){}
 
 bool GroundUnit::action(HexagonMatchfield *hex_target) {
-	Unit *target = hex_target->getUnitStationed();
+    Unit *target = hex_target->getUnit_stationed();
 	
 	if(target == nullptr){
 		return false;
 	}
 
 	int int_target_current_hp = target->getUnitCurrentHP();
-	QString target_type = target->getUnitType();
+    QString target_type = target->getUnitType();
 
 	/* RNG mit zufälligem Seed für später initalisieren */
 	srand(time(NULL));
@@ -530,7 +530,7 @@ LightUnit::~LightUnit(){}
 
 int LightUnit::moveTo(HexagonMatchfield *hex_target){
 
-	String hex_type = hex_target->getHEXTYPE();
+    QString hex_type = hex_target->getHexMatchfieldType();
 
 	if(hex_type == "grassland"){
 		return 1;
@@ -553,7 +553,7 @@ int LightUnit::moveTo(HexagonMatchfield *hex_target){
 	}
 
 	else if(hex_type == "mountainSide"){
-		retrun 2;
+        return 2;
 	}
 
 	else if(hex_type == "waterDeep"){
@@ -576,7 +576,7 @@ BuildLightUnit::~BuildLightUnit(){}
 bool BuildLightUnit::action(HexagonMatchfield* hex_target){
 	
 	produceUnit(hex_target);
-	if(hex_target->getUnitStationed() != nullptr){
+    if(hex_target->getUnit_stationed() != nullptr){
 		return true;
 	}
 
@@ -587,7 +587,7 @@ bool BuildLightUnit::action(HexagonMatchfield* hex_target){
 void BuildLightUnit::produceUnit(HexagonMatchfield* hex_target){
 	int int_energy = unitPlayer->getCurrentEnergieStorage();
 	if(int_energy >= 50){
-		hex_target->setUnitStationed(new Depot(unitFile));
+        hex_target->setUnit_stationed(new DepotUnit(":/static/staticUnit/depot.txt", unitPlayer));
 		unitPlayer->setCurrentEnergieStorage(int_energy - 50);
 	}
 }
@@ -602,7 +602,7 @@ MediumUnit::~MediumUnit(){}
 
 int MediumUnit::moveTo(HexagonMatchfield *hex_target){
 
-	String hex_type = hex_target->getHEXTYPE();
+    QString hex_type = hex_target->getHexMatchfieldType();
 
 	if(hex_type == "grassland"){
 		return 1;
@@ -625,7 +625,7 @@ int MediumUnit::moveTo(HexagonMatchfield *hex_target){
 	}
 
 	else if(hex_type == "mountainSide"){
-		retrun 2;
+        return 2;
 	}
 
 	else if(hex_type == "waterDeep"){
@@ -646,7 +646,7 @@ HeavyUnit::~HeavyUnit(){}
 
 int HeavyUnit::moveTo(HexagonMatchfield *hex_target){
 
-	String hex_type = hex_target->getHEXTYPE();
+    QString hex_type = hex_target->getHexMatchfieldType();
 
 	if(hex_type == "grassland"){
 		return 2;
@@ -669,7 +669,7 @@ int HeavyUnit::moveTo(HexagonMatchfield *hex_target){
 	}
 
 	else if(hex_type == "mountainSide"){
-		retrun 4;
+        return 4;
 	}
 
 	else if(hex_type == "waterDeep"){
@@ -688,14 +688,11 @@ int HeavyUnit::moveTo(HexagonMatchfield *hex_target){
 WaterUnit::WaterUnit(QString filepath, Player* player = nullptr)
 	: DynamicUnit(filepath, player){}
 
-WaterUnit::WaterUnit(string name, Player* pl, int view, int hp, string details, int cost, bool used, int autoRep, int moveRange, int airAtt, int groundAtt, int waterAtt, int airRange, int groundRange, int waterRange)
-	: DynamicUnit(name, pl, view, hp, details, cost, used, autoRep, moveRange, airAtt, groundAtt, waterAtt, airRange, groundRange, waterRange){}
-
 WaterUnit::~WaterUnit(){}
 
 int WaterUnit::moveTo(HexagonMatchfield *hex_target){
 
-	String hex_type = hex_target->getHEXTYPE();
+    QString hex_type = hex_target->getHexMatchfieldType();
 
 	if(hex_type == "grassland"){
 		return -1;
@@ -718,7 +715,7 @@ int WaterUnit::moveTo(HexagonMatchfield *hex_target){
 	}
 
 	else if(hex_type == "mountainSide"){
-		retrun -1;
+        return -1;
 	}
 
 	else if(hex_type == "waterDeep"){
@@ -732,14 +729,14 @@ int WaterUnit::moveTo(HexagonMatchfield *hex_target){
 }
 
 bool WaterUnit::action(HexagonMatchfield *hex_target) {
-	Unit *target = hex_target->getUnitStationed();
+    Unit *target = hex_target->getUnit_stationed();
 	
 	if(target == nullptr){
 		return false;
 	}
 
 	int int_target_current_hp = target->getUnitCurrentHP();
-	QString target_type = target->getUnitType();
+    QString target_type = target->getUnitType();
 
 	/* RNG mit zufälligem Seed für später initalisieren */
 	srand(time(NULL));

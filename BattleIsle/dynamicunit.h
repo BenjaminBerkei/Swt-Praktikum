@@ -11,8 +11,9 @@
 #define DYNAMICUNIT_HPP
 
 
-#include "unit.hpp"
+#include "unit.h"
 #include "enumerations.h"
+#include "staticunit.h"
 
 
 class DynamicUnit : public Unit
@@ -82,13 +83,16 @@ class TransporterUnit : public DynamicUnit
 protected:
 	int int_transporterUnitCapacity;
 	int int_transporterUnitCurrentCapacity;
-
+    Unit* unitToUnload;
 public:
 	TransporterUnit(QString, Player*);
 	~TransporterUnit();
 	int getTransporterUnitCapacity() const;
   	int getTransporterUnitCurrentCapacity() const;
-  	void setTransporterUnitCurrentCapacity(const int);
+    void setTransporterUnitCurrentCapacity(const int);
+    virtual bool action(HexagonMatchfield *hex_target);
+    void unload(HexagonMatchfield *hex_target);
+    void farmBoltanium(HexagonMatchfield *hex_target);
 };
 
 //TransporterAir
@@ -157,7 +161,8 @@ public:
 	BuildLightUnit(QString, Player*);
 	~BuildLightUnit();
 	
-	bool action(HexagonMatchfield* );
+    bool action(HexagonMatchfield* );
+    void produceUnit(HexagonMatchfield *hex_target);
 };
 
 // Medium
@@ -192,7 +197,7 @@ public:
 	~WaterUnit();
 	
 	int moveTo(HexagonMatchfield* );
-	bool action(HexagonMatchfield* );
+    bool action(HexagonMatchfield* );
 };
 
 #endif

@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/dynamic">
+        <file>dynamicUnit/ben.txt</file>
+        <file>dynamicUnit/derbolten.txt</file>
+        <file>dynamicUnit/kevarn.txt</file>
+        <file>dynamicUnit/lucas.txt</file>
+        <file>dynamicUnit/mannuel.txt</file>
+        <file>dynamicUnit/msmiguel.txt</file>
+    </qresource>
+    <qresource prefix="/static">
+        <file>staticUnit/depot.txt</file>
+        <file>staticUnit/factory.txt</file>
+        <file>staticUnit/headquater.txt</file>
+    </qresource>
+</RCC>
