@@ -71,6 +71,15 @@ Player* Unit::getUnitPlayer() const
 	return unitPlayer;
 }
 
+void Unit::setUnitEXP(int value){
+	int_unitEXP = value;
+}
+
+int Unit::getUnitEXP(){
+	return int_unitEXP;
+}
+
+
 int Unit::getUnitView() const
 {
 	return int_unitView;
