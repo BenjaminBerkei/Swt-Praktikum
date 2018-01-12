@@ -116,3 +116,11 @@ void HexagonMatchfield::paint(QPainter *painter, const QStyleOptionGraphicsItem 
         painter->drawPath(shape());
     }
 }
+
+int HexagonMatchfield::getBoltaniumCurrent(){
+    return int_boltaniumCurrent;
+}
+ 
+void HexagonMatchfield::setBoltaniumCurrent(int value){
+    int_boltaniumCurrent = value;
+}
