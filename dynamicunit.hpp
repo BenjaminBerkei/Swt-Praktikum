@@ -20,12 +20,12 @@ class DynamicUnit : public Unit
 protected:
   int int_unitAutoRep;
   int int_unitMoveRange;
-  int int_unitEXP;
-  int int_unitAirAtt;
+  //int int_unitEXP;
+  //int int_unitAirAtt;
   //int int_unitAirRange;
-  int int_unitGroundAtt;
+  //int int_unitGroundAtt;
   //int int_unitGroundRange;
-  int int_unitWaterAtt;
+  //int int_unitWaterAtt;
   //int int_unitWaterRange;
   int int_unitLevel;
 
@@ -36,23 +36,23 @@ DynamicUnit(QString, Player*);
 
   int getUnitAutoRep() const;
   int getUnitMoveRange() const;
-  int getUnitEXP() const;
-  int getUnitAirAtt() const;
+  //int getUnitEXP() const;
+  //int getUnitAirAtt() const;
   //int getUnitAirRange() const;
-  int getUnitGroundAtt() const;
+  //int getUnitGroundAtt() const;
   //int getUnitGroundRange() const;
-  int getUnitWaterAtt() const;
+  //int getUnitWaterAtt() const;
   //int getUnitWaterRange() const;
   int getUnitLevel() const;
 
   void setUnitAutoRep(const int);
   void setUnitMoveRange(const int);
-  void setUnitEXP(const int);
-  void setUnitAirAtt(const int);
+  //void setUnitEXP(const int);
+  //void setUnitAirAtt(const int);
   //void setUnitAirRange(const int);
-  void setUnitGroundAtt(const int);
+  //void setUnitGroundAtt(const int);
   //void setUnitGroundRange(const int);
-  void setUnitWaterAtt(const int);
+  //void setUnitWaterAtt(const int);
   //void setUnitWaterRange(const int);
   void setUnitLevel(const int);
   
