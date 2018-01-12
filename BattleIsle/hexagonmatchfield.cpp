@@ -115,7 +115,7 @@ void HexagonMatchfield::paint(QPainter *painter, const QStyleOptionGraphicsItem 
     }
 }
 
-int HexagonMatchfield::getBoltaniumCurrent(){
+int HexagonMatchfield::getBoltaniumCurrent() const{
     return int_boltaniumCurrent;
 }
  
