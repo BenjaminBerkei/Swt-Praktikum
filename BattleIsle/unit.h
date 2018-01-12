@@ -34,10 +34,14 @@ protected:
 	int int_unitStorageMax;
 	bool bool_unitUsed;
 	QString unitFile;
-
+	
+     //von dynamic Unit verschobene Variablen [Auf Grund von Zurückangreifen]
     int int_unitAirAtt;
     int int_unitGroundAtt;
     int int_unitWaterAtt;
+    int int_unitEXP;
+    int int_unitLevel;
+    
     int int_unitMoveRange;
     int int_unitCurrentMoveRange;
     //int int_actionRange;
@@ -56,17 +60,17 @@ public:
 	int getUnitCost() const;
 	bool getUnitUsed() const;
 
-    void setInt_unitCurrentMoveRange(int value);
-    void setUnitName(QString);
+        void setInt_unitCurrentMoveRange(int value);
+        void setUnitName(QString);
 	void setUnitPlayer(Player*);
 	void setUnitHP(int);
 	void setUnitCurrentHP(int);
 	void setUnitUsed(bool);
 
     virtual Unit* createUnit() = 0;
-	virtual bool checkUnitDestroyed();
-	virtual bool action(HexagonMatchfield*) = 0;
-	virtual int moveTo(HexagonMatchfield*);
+    virtual bool checkUnitDestroyed();
+    virtual bool action(HexagonMatchfield*) = 0;
+    virtual int moveTo(HexagonMatchfield*);
     virtual void autoRepair();
     virtual void levelUpBonus();
     virtual void produceUnit(HexagonMatchfield*);
@@ -81,6 +85,10 @@ public:
     void setUnitGroundAtt(int value);
     int getUnitAirAtt() const;
     void setUnitAirAtt(int value);
+    int getUnitEXP() const;
+    int getUnitLevel() const; 
+    void setUnitEXP(const int);
+    void setUnitLevel(const int);
 };
 
 #endif
