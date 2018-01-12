@@ -6,6 +6,11 @@
  * Author: Manuel
  * Version: 0.2
  * Datum: 04.01.2018
+ *
+ * Author: Manuel
+ * Version: 0.3
+ * Datum: 12.01.2018
+ * Kommentar: Buttons hinzugefuegt
  * */
 
 #include "gamewidget.h"
@@ -57,20 +62,6 @@ GameWidget::GameWidget(QWidget *parent) :
     ui->graphicsView_gameView->setScene(gameWidGameScene);
     ui->graphicsView_informationsView->setScene(gameWidInfoScene);
     ui->graphicsView_optionsView->setScene(gameWidOptionsScene);
-
-    ButtonMove* movebutton = new ButtonMove(QPoint(0,0));
-    gameWidButtonScene->addItem(movebutton);
-
-    ButtonAction* actionbutton = new ButtonAction(QPoint(70,0));
-    gameWidButtonScene->addItem(actionbutton);
-
-    ButtonChangePhase* changephasebutton = new ButtonChangePhase(QPoint(140,0));
-    gameWidButtonScene->addItem(changephasebutton);
-
-    ButtonMenue* menuebutton = new ButtonMenue(QPoint(210,0));
-    gameWidButtonScene->addItem(menuebutton);
-
-    gameWidButtonScene->update();
 }
 
 GameWidget::~GameWidget()
@@ -103,6 +94,18 @@ void GameWidget::gameWidCreateMatchfield()
         }
     }
     ui->graphicsView_gameView->setScene( gameWidGameScene );
+}
+
+void GameWidget::gameWidcreateButtonBar()
+{
+    int spacingX = 70;
+
+    for(unsigned int i = 0; i < gameWidGame->getButton_menueBar().size(); i++)
+    {
+        gameWidGame->getButton_menueBar()[i]->setPos(i*spacingX,0);
+        gameWidButtonScene->addItem(gameWidGame->getButton_menueBar()[i]);
+    }
+    gameWidButtonScene->update();
 }
 
 HexagonDisplayInfo::HexagonDisplayInfo(HexagonMatchfield *ptr_hexMfield)

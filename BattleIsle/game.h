@@ -6,6 +6,11 @@
  * Author: Manuel
  * Version: 0.2
  * Datum: 04.01.2018
+ *
+ * Author: Manuel
+ * Version: 0.3
+ * Datum: 12.01.2018
+ * Kommentar: Buttons hinzugefuegt
  * */
 
 #ifndef GAME_H
@@ -48,7 +53,7 @@ public:
     //void endGame();
     //int showUnitNumber(Player* player);
     //int showTotalEnergie(Player* player);
-    //void Dijkstra();
+    void Dijkstra();
     //void calculateActionTargets();
     void buttonPressedMove();
     void buttonPressedAction();
@@ -61,6 +66,8 @@ public:
 
     // get und set Methoden
     std::vector<std::vector<HexagonMatchfield*>> getVectorVectorHexagonMatchfield();
+    std::vector<Button *> getButton_menueBar();
+    void setButton_menueBar(const std::vector<Button *> &value);
 
 public slots:
 };
