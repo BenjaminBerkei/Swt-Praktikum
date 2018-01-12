@@ -178,16 +178,23 @@ TransporterGroundUnit::TransporterGroundUnit(QString filepath, Player* player = 
 TransporterGroundUnit::~TransporterGroundUnit(){}
 
 int TransporterGroundUnit::moveTo(HexagonMatchfield *hex_target){
-	switch(hex_target->getHEXTYPE()){
-		case STREET:
-		case NORMAL:
-		case BOLTANIUM: return 1; 
-		case FOREST: return 2;
-		case MOUNTAIN: return 3;
-		case WATER: return -1;
+
+	String hex_type = hex_target->getHEXTYPE();
+
+	if(hex_type == "grassland" || hex_type == "streetStraight" || hex_type == "streetCurve"){
+		return 1;
+	}
+
+	else if(hex_type == "forrest" || hex_type == "mountainTop" || hex_type == "mountainSide"){
+		return 2;
+	}
+
+	else{
+		return -1;
 	}
 
 	return -1;
+
 }
 
 
@@ -206,16 +213,24 @@ TransporterWaterUnit::TransporterWaterUnit(QString filepath, Player* player = nu
 TransporterWaterUnit::~TransporterWaterUnit(){}
 
 int TransporterWaterUnit::moveTo(HexagonMatchfield *hex_target){
-	switch(hex_target->getHEXTYPE()){
-		case STREET:
-		case NORMAL:
-		case BOLTANIUM:
-		case FOREST: 
-		case MOUNTAIN: return -1;
-		case WATER: return 1;
+
+	String hex_type = hex_target->getHEXTYPE();
+
+	if(hex_type == "grassland" || hex_type == "streetStraight" || hex_type == "streetCurve" || hex_type == "forrest" || hex_type == "mountainTop" || hex_type == "mountainSide"){
+		return -1;
+	}
+
+
+	else if(hex_type == "waterDeep") {
+		return 2;
+	}
+
+	else if(hex_type == "waterSeashore"){
+		return 1;
 	}
 
 	return -1;
+
 }
 
 
@@ -255,16 +270,24 @@ LightUnit::LightUnit(QString filepath, Player* player = nullptr)
 LightUnit::~LightUnit(){}
 
 int LightUnit::moveTo(HexagonMatchfield *hex_target){
-	switch(hex_target->getHEXTYPE()){
-		case STREET:
-		case NORMAL:
-		case FOREST:
-		case BOLTANIUM: return 1; 
-		case MOUNTAIN: return 2;
-		case WATER: return -1;
+
+	String hex_type = hex_target->getHEXTYPE();
+
+
+	if(hex_type == "grassland" || hex_type == "streetStraight" || hex_type == "streetCurve" || hex_type == "forrest" || hex_type == "mountainTop"){
+		return 1;
+	}
+
+	else if(hex_type == "mountainSide"){
+		return 2;
+	}
+
+	else{
+		return -1;
 	}
 
 	return -1;
+
 }
 
 // BuildLightUnit
@@ -283,16 +306,23 @@ MediumUnit::MediumUnit(QString filepath, Player* player = nullptr)
 MediumUnit::~MediumUnit(){}
 
 int MediumUnit::moveTo(HexagonMatchfield *hex_target){
-	switch(hex_target->getHEXTYPE()){
-		case STREET:
-		case NORMAL:
-		case BOLTANIUM: return 1; 
-		case FOREST: return 2;
-		case MOUNTAIN: return 3;
-		case WATER: return -1;
+
+	String hex_type = hex_target->getHEXTYPE();
+
+	if(hex_type == "grassland" || hex_type == "streetStraight" || hex_type == "streetCurve"){
+		return 1;
+	}
+
+	else if(hex_type == "mountainSide" || hex_type == "forrest" || hex_type == "mountainTop"){
+		return 2;
+	}
+
+	else{
+		return -1;
 	}
 
 	return -1;
+
 }
 
 // HeavyUnit
@@ -303,16 +333,27 @@ HeavyUnit::HeavyUnit(QString filepath, Player* player = nullptr)
 HeavyUnit::~HeavyUnit(){}
 
 int HeavyUnit::moveTo(HexagonMatchfield *hex_target){
-	switch(hex_target->getHEXTYPE()){
-		case STREET:
-		case BOLTANIUM: return 1; 
-		case NORMAL: return 2;
-		case FOREST: return 3;
-		case MOUNTAIN: return 4;
-		case WATER: return -1;
+
+	String hex_type = hex_target->getHEXTYPE();
+
+	if(hex_type == "grassland" || hex_type == "streetStraight" || hex_type == "streetCurve"){
+		return 2;
+	}
+
+	else if(hex_type == "forrest" || hex_type == "mountainTop"){
+		return 3;
+	}
+
+	else if(hex_type == "mountainSide"){
+		return 4;
+	}
+
+	else{
+		return -1;
 	}
 
 	return -1;
+
 }
 
 
@@ -327,16 +368,18 @@ WaterUnit::WaterUnit(string name, Player* pl, int view, int hp, string details, 
 
 WaterUnit::~WaterUnit(){}
 
-int HeavyUnit::moveTo(HexagonMatchfield *hex_target){
-	switch(hex_target->getHEXTYPE()){
-		case STREET:
-		case BOLTANIUM:
-		case NORMAL: 
-		case FOREST: 
-		case MOUNTAIN: return -1;
-		case WATER: return 1;
+int WaterUnit::moveTo(HexagonMatchfield *hex_target){
+
+	String hex_type = hex_target->getHEXTYPE();
+
+	if(hex_type == "grassland" || hex_type == "streetStraight" || hex_type == "streetCurve" || hex_type == "forrest" || hex_type == "mountainTop" || hex_type == "mountainSide"){
+		return -1;
+	}
+
+	else{
+		return 1;
 	}
 
 	return -1;
-}
 
+}
