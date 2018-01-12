@@ -264,14 +264,7 @@ int TransporterGroundUnit::moveTo(HexagonMatchfield *hex_target){
         return 2;
 	}
 
-	else if(hex_type == "waterDeep"){
-		return -1;
-	}
-
-	else if(hex_type == "waterSeashore"){
-		return -1;
-	}
-
+    return -1;
 }
 
 
@@ -288,38 +281,14 @@ int TransporterWaterUnit::moveTo(HexagonMatchfield *hex_target){
 
     QString hex_type = hex_target->getHexMatchfieldType();
 
-	if(hex_type == "grassland"){
-		return -1;
-	}
-
-	else if(hex_type == "streetStraight"){
-		return -1;
-	}
-
-	else if(hex_type == "streetCurve"){
-		return -1;
-	}
-
-	else if(hex_type == "forrest" ){
-		return -1;
-	}
-
-	else if(hex_type == "mountainTop" ){
-		return -1;
-	}
-
-	else if(hex_type == "mountainSide"){
-        return -1;
-	}
-
-	else if(hex_type == "waterDeep"){
+    if(hex_type == "waterDeep"){
 		return 2;
 	}
 
 	else if(hex_type == "waterSeashore"){
 		return 1;
 	}
-
+    return -1;
 }
 
 
@@ -331,7 +300,7 @@ AirUnit::AirUnit(QString filepath, Player* player = nullptr)
 
 AirUnit::~AirUnit(){}
 
-int AirUnit::moveTo(HexagonMatchfield *hex_target){
+int AirUnit::moveTo(HexagonMatchfield *){
 	//Flugzeug hat selbe Kosten für alles.
 	return 1;
 }
@@ -568,15 +537,7 @@ int LightUnit::moveTo(HexagonMatchfield *hex_target){
 	else if(hex_type == "mountainSide"){
         return 2;
 	}
-
-	else if(hex_type == "waterDeep"){
-		return -1;
-	}
-
-	else if(hex_type == "waterSeashore"){
-		return -1;
-	}
-
+    return -1;
 }
 
 // BuildLightUnit
@@ -634,20 +595,13 @@ int MediumUnit::moveTo(HexagonMatchfield *hex_target){
 	}
 
 	else if(hex_type == "mountainTop" ){
-		return 2;
+        return -1;
 	}
 
 	else if(hex_type == "mountainSide"){
-        return 2;
+        return -1;
 	}
-
-	else if(hex_type == "waterDeep"){
-		return -1;
-	}
-
-	else if(hex_type == "waterSeashore"){
-		return -1;
-	}
+    return -1;
 
 }
 // HeavyUnit
@@ -674,25 +628,18 @@ int HeavyUnit::moveTo(HexagonMatchfield *hex_target){
 	}
 
 	else if(hex_type == "forrest" ){
-		return 3;
+        return -1;
 	}
 
 	else if(hex_type == "mountainTop" ){
-		return 3;
+        return -1;
 	}
 
 	else if(hex_type == "mountainSide"){
-        return 4;
+        return -1;
 	}
 
-	else if(hex_type == "waterDeep"){
-		return -1;
-	}
-
-	else if(hex_type == "waterSeashore"){
-		return -1;
-	}
-
+    return -1;
 }
 
 
@@ -707,37 +654,14 @@ int WaterUnit::moveTo(HexagonMatchfield *hex_target){
 
     QString hex_type = hex_target->getHexMatchfieldType();
 
-	if(hex_type == "grassland"){
-		return -1;
-	}
-
-	else if(hex_type == "streetStraight"){
-		return -1;
-	}
-
-	else if(hex_type == "streetCurve"){
-		return -1;
-	}
-
-	else if(hex_type == "forrest" ){
-		return -1;
-	}
-
-	else if(hex_type == "mountainTop" ){
-		return -1;
-	}
-
-	else if(hex_type == "mountainSide"){
-        return -1;
-	}
-
-	else if(hex_type == "waterDeep"){
+    if(hex_type == "waterDeep"){
 		return 1;
 	}
 
 	else if(hex_type == "waterSeashore"){
 		return 2;
 	}
+    return -1;
 
 }
 

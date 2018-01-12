@@ -49,12 +49,23 @@ QGraphicsScene *GameWidget::getGameWidInfoScene() const
     return gameWidInfoScene;
 }
 
+int GameWidget::getSizeX() const
+{
+    return sizeX;
+}
+
+int GameWidget::getSizeY() const
+{
+    return sizeY;
+}
+
 GameWidget::GameWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::GameWidget),
     gameWidGame(nullptr),
     gameWidGameScene(new QGraphicsScene(this)), gameWidInfoScene(new QGraphicsScene(this)),
-    gameWidOptionsScene(new QGraphicsScene(this)), gameWidButtonScene(new QGraphicsScene(this))
+    gameWidOptionsScene(new QGraphicsScene(this)), gameWidButtonScene(new QGraphicsScene(this)),
+    sizeX(50), sizeY(20)
 {
     ui->setupUi(this);
     ui->graphicsView_buttonView->setScene(gameWidButtonScene);

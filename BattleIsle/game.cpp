@@ -12,8 +12,8 @@
 using namespace std;
 
 /*Noch fertig schreiben*/
-std::vector<QPoint> Game::vector_evenNeighbors = {QPoint(0,0)};
-std::vector<QPoint> Game::vector_oddNeighbors = {QPoint(0,0)};
+std::vector<QPoint> Game::vector_evenNeighbors = {QPoint(1,0),QPoint(1,-1),QPoint(0,-1),QPoint(-1,-1),QPoint(-1,0),QPoint(0,1)};
+std::vector<QPoint> Game::vector_oddNeighbors = {QPoint(1,1),QPoint(1,0),QPoint(0,-1),QPoint(-1,0),QPoint(-1,1),QPoint(0,1)};
 
 
 std::vector<Button *> Game::getButton_menueBar()
@@ -37,8 +37,8 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     // Dies ist nur für Testzwecke! Sollte später gelöscht werden:
     //##################################################################
     //Größe
-    int sizeX = 50;
-    int sizeY = 20;
+    int sizeX = ptr_gameGameWid->getSizeX();
+    int sizeY = ptr_gameGameWid->getSizeY();
 
     //Für eine Zufallszahl
     QTime time = QTime::currentTime();
@@ -86,15 +86,6 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
         hexagonMatchfield_gameGrid.push_back(vectorHex);
     }
 
-    for(int x = 1; x < sizeX - 1; x++)
-    {
-        unit_UnitGrid.push_back(vector<Unit*> ());
-        for(int y = 1; y < sizeY; y++)
-        {
-            int type = qrand() + 6;
-        }
-    }
-
     qDebug() << "Bemerkung: Zufallsfeld erstellt (in Klasse Game). Nur für Testzwecke.";
 
     ptr_gameGameWid->gameWidCreateMatchfield();
@@ -130,6 +121,11 @@ void Game::processSelection(HexagonMatchfield *selection)
 
             //Angeklicktes auf AKTIVE setzten
             SelectionCache->setState(ACTIVE);
+
+            /*Aufruf Hilfsfunktionen*/
+            showNeighbors(selection);
+            /*Aufruf Hilfsfunktionen Ende*/
+
             break;
 
         case ACTIVE:
@@ -160,7 +156,66 @@ void Game::processSelection(HexagonMatchfield *selection)
 
 void Game::Dijkstra()
 {
+    HexagonMatchfield* target = SelectionCache;
 
+    std::priority_queue<std::pair<HexagonMatchfield*, int>, std::vector<std::pair<HexagonMatchfield*, int>>, Compare> frontier;
+
+    frontier.push(std::pair<HexagonMatchfield*, int> (target, 0));
+    came_from[target] = target;
+    current_cost[target] = 0;
+
+    /*Solange es Elemente gibt, die in der Range liegen*/
+    while(!frontier.empty())
+    {
+        /*Erstes Element aus der Schlange entfernen*/
+        HexagonMatchfield* current = frontier.top().first;
+        frontier.pop();
+
+        /*Durchlaufen der Nachbarn des Elements*/
+        vector<QPoint> neighbours;
+        if(target->getQpoint_gridPosition().x() & 1)
+        {
+            //qDebug() << "odd";
+            neighbours = vector_oddNeighbors;
+        }else{
+            //qDebug() << "even";
+            neighbours = vector_evenNeighbors;
+        }
+
+        for(auto &it : neighbours)
+        {
+            int x = current->getQpoint_gridPosition().x() + it.x();
+            int y = current->getQpoint_gridPosition().y() + it.y();
+
+            /*Prüfen ob Nachbarn auf Spielfeld liegen*/
+            if(x >= 0 && x < ptr_gameGameWid->getSizeX() && y >= 0 && y < ptr_gameGameWid->getSizeY() && hexagonMatchfield_gameGrid[x][y]->getState() != ACTIVE)
+            {
+                /*Speichern des zu betrachtenden Nachbarn*/
+                HexagonMatchfield* neighbour = hexagonMatchfield_gameGrid[x][y];
+
+                /*Wenn dieser noch nicht betrachtet wurde, kosten absurd hochlegen, damit diese auf jeden fall gesetzt werden*/
+                if(current_cost.find(neighbour) == current_cost.end())
+                    current_cost[neighbour] = 999;
+
+                /*Berechnen der neuen Kosten, bestehend aus den Kosten um auf das Aktuelle Feld zu kommen + die Kosten um zum  Nachbarn zu kommen*/
+                if(target->getUnit_stationed()->moveTo(neighbour) != -1 && neighbour->getUnit_stationed() == nullptr)
+                {
+                    int new_cost = current_cost[current] + target->getUnit_stationed()->moveTo(neighbour);
+
+                    /*Wenn diese Kosten geringer als die Reichweite der Einheit und besser als die bisherigen Kosten sind, dann..*/
+                    if(new_cost <= target->getUnit_stationed()->getUnitCurrentMoveRange() && new_cost < current_cost[neighbour])
+                    {
+                        current_cost[neighbour] = new_cost; //Kosten aktualisieren
+                        came_from[neighbour] = current;     //Vorgänger auf das Aktuelle Feld setzem
+                        frontier.push(std::pair<HexagonMatchfield*, int> (neighbour, current_cost[neighbour])); //Den Nachbarn der Queue hinzufügen
+
+                        TargetChache.push_back(neighbour);   //und in den Target Cache Stecken
+                        neighbour->setState(TARGET);
+                    }
+                }
+            }
+        }
+    }
 }
 
 void Game::buttonPressedMove()
@@ -191,4 +246,31 @@ void Game::resetStateHex()
         for(unsigned int j = 0; j < hexagonMatchfield_gameGrid[i].size(); j++)
             hexagonMatchfield_gameGrid[i][j]->setState(INACTIVE);
     }
+}
+
+void Game::showNeighbors(HexagonMatchfield * center)
+{
+    qDebug() << "Center: " << "(" << center->getQpoint_gridPosition().x() << ", " << center->getQpoint_gridPosition().y() << ")";
+    if(center->getQpoint_gridPosition().x() & 1)
+    {
+        qDebug() << "odd";
+        for(auto &it: vector_oddNeighbors)
+        {
+            hexagonMatchfield_gameGrid[center->getQpoint_gridPosition().x() + it.x()][center->getQpoint_gridPosition().y() + it.y()]->setState(TARGET);
+            qDebug() << "\t" << "(" << center->getQpoint_gridPosition().x() + it.x() << ", " << center->getQpoint_gridPosition().y() + it.y() << ")";
+        }
+    }else{
+        qDebug() << "even";
+        for(auto &it: vector_evenNeighbors)
+        {
+            hexagonMatchfield_gameGrid[center->getQpoint_gridPosition().x() + it.x()][center->getQpoint_gridPosition().y() + it.y()]->setState(TARGET);
+            qDebug() << "\t" << "(" << center->getQpoint_gridPosition().x() + it.x() << ", " << center->getQpoint_gridPosition().y() + it.y() << ")";
+        }
+    }
+}
+
+
+bool Compare::operator()(std::pair<HexagonMatchfield*, int> a, std::pair<HexagonMatchfield*, int> b)
+{
+    return a.second < b.second;
 }
