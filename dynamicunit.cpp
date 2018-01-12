@@ -1,13 +1,16 @@
 /////////////////////////////////////////////
-// dynamicunit.cpp // letzte Änderung: 16.12.17 //
-// Letzte Editirung: Arne				   //
-// Version: 0.2							   //
+// dynamicunit.cpp // letzte Änderung: 12.01.2018 //
+// Letzte Editirung: Kevin,Benny				   //
+// Version: 0.3							   //
 // -------- Kommentare --------------------//
-/* Action Methoden Fehlen noch bei den einzelnen Transportern
+/* 
 */
 /////////////////////////////////////////////
 
 #include "dynamicunit.hpp"
+#include "staticunit.h"
+#include <stdlib.h>     // srand 
+#include <time.h>       // time 
 
 //DynamicUnit
 
@@ -152,6 +155,49 @@ void TransporterUnit::setTransporterUnitCurrentCapacity(const int newCurrentCapa
 	return;
 }
 
+
+bool Transporter::action(HexagonMatchfield* hex_target){
+	if(hex_target->getUnitStationed() == nullptr){
+		if(hex_target->getBoltaniumCurrent() > 0 ){
+			farmBoltanium(hex_target);
+			return true;
+		}
+	}
+		   
+	if(hex_target->getUnitStationed() != nullptr){
+		unload(hex_target);
+		return true;
+	}
+	
+	return false;
+}
+
+void Transporter::unload(HexagonMatchfield* hex_target){
+	hex_target->setUnitStationed(unitToUnload);
+	
+	int i = 0;
+	for(Unit *x : vector_unitStorage){
+		if(unitToUnload == x){
+			vector_unitStorage.erase(vector_unitStorage.begin() + i);
+			break;
+		}
+		i++;
+	}
+}
+
+void Transporter::farmBoltanium(HexagonMatchfield* hex_target){
+	if(hex_target->getBoltaniumCurrent() > 10){
+		unitPlayer->setCurrentEnergieStorage(unitPlayer->getCurrentEnergieStorage() + 10);
+		hex_target->setBoltaniumCurrent(hex_target->getBoltaniumCurrent() - 10);
+	}
+	
+	else{
+		unitPlayer->setCurrentEnergieStorage(unitPlayer->getCurrentEnergieStorage() + hex_target->getBoltaniumCurrent());
+		hex_target->setBoltaniumCurrent(0);
+	}
+}
+
+
 // TransporterAirUnit
 
 TransporterAirUnit::TransporterAirUnit(QString filepath, Player* player = nullptr)
@@ -165,8 +211,6 @@ int TransporterAirUnit::moveTo(HexagonMatchfield *hex_target){
 }
 
 
-
-// Hier fehlt noch Action-Funktion //
 
 
 
@@ -196,11 +240,6 @@ int TransporterGroundUnit::moveTo(HexagonMatchfield *hex_target){
 	return -1;
 
 }
-
-
-
-
-// Hier fehlt noch Action-Funktion //
 
 
 
@@ -486,6 +525,25 @@ BuildLightUnit::BuildLightUnit(QString filepath, Player* player = nullptr)
 	: LightUnit(filepath, player){}
 
 BuildLightUnit::~BuildLightUnit(){}
+
+bool BuildLightUnit::action(HexagonMatchfield* hex_target){
+	
+	produceUnit(hex_target);
+	if(hex_target->getUnitStationed() != nullptr){
+		return true;
+	}
+
+	return false;
+}
+
+//Den Filepath zu depot konnten wir jetzt noch nicht festlegen
+/*void BuildLightUnit::produceUnit(HexagonMatchfield* hex_target){
+	int int_energy = unitPlayer->getCurrentEnergieStorage();
+	if(int_energy >= 50){
+		hex_target->setUnitStationed(new Depot(filepath zu Depot));
+		unitPlayer->setCurrentEnergieStorage(int_energy - 50);
+	}
+}*/
 
 
 // MediumUnit
