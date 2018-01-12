@@ -175,7 +175,7 @@ bool Transporter::action(HexagonMatchfield* hex_target){
 }
 
 void Transporter::unload(HexagonMatchfield* hex_target){
-	hex_target->setUnitStationed(unitToUnload);
+	hex_target->setUnit_stationed(unitToUnload);
 	
 	int i = 0;
 	for(Unit *x : vector_unitStorage){
@@ -331,7 +331,7 @@ bool AirUnit::action(HexagonMatchfield *hex_target) {
 	}
 
 	int int_target_current_hp = target->getUnitCurrentHP();
-	QString target_type = target->getUNITTYPE();
+	QString target_type = target->getUnitType();
 
 	/* RNG mit zufälligem Seed für später initalisieren */
 	srand(time(NULL));
@@ -434,7 +434,7 @@ bool GroundUnit::action(HexagonMatchfield *hex_target) {
 	}
 
 	int int_target_current_hp = target->getUnitCurrentHP();
-	QString target_type = target->getUNITTYPE();
+	QString target_type = target->getUnitType();
 
 	/* RNG mit zufälligem Seed für später initalisieren */
 	srand(time(NULL));
@@ -739,7 +739,7 @@ bool WaterUnit::action(HexagonMatchfield *hex_target) {
 	}
 
 	int int_target_current_hp = target->getUnitCurrentHP();
-	QString target_type = target->getUNITTYPE();
+	QString target_type = target->getUnitType();
 
 	/* RNG mit zufälligem Seed für später initalisieren */
 	srand(time(NULL));
