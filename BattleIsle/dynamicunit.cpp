@@ -6,7 +6,12 @@
 /* 
 */
 /////////////////////////////////////////////
-
+/*
+ * Author: Lucas
+ * Version: 0.3
+ * Datum: 12.01.17
+ * Kommentar: Fehlerbehebung
+ */
 #include "dynamicunit.h"
 #include "staticunit.h"
 #include <stdlib.h>     // srand 

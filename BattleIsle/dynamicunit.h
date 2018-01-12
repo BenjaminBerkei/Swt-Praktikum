@@ -6,7 +6,12 @@
 /* Wer noch irgendwo Static statt Dynamic findet bekommt n Eis von mir, lg Arne
 */
 /////////////////////////////////////////////
-
+/*
+ * Author: Lucas
+ * Version: 0.3
+ * Datum: 12.01.17
+ * Kommentar: Fehlerbehebung
+ */
 #ifndef DYNAMICUNIT_HPP
 #define DYNAMICUNIT_HPP
 
@@ -21,13 +26,6 @@ class DynamicUnit : public Unit
 protected:
   int int_unitAutoRep;
   int int_unitMoveRange;
-  //int int_unitEXP;
-  //int int_unitAirAtt;
-  //int int_unitAirRange;
-  //int int_unitGroundAtt;
-  //int int_unitGroundRange;
-  //int int_unitWaterAtt;
-  //int int_unitWaterRange;
   int int_unitLevel;
 
 
@@ -37,24 +35,10 @@ DynamicUnit(QString, Player*);
 
   int getUnitAutoRep() const;
   int getUnitMoveRange() const;
-  //int getUnitEXP() const;
-  //int getUnitAirAtt() const;
-  //int getUnitAirRange() const;
-  //int getUnitGroundAtt() const;
-  //int getUnitGroundRange() const;
-  //int getUnitWaterAtt() const;
-  //int getUnitWaterRange() const;
   int getUnitLevel() const;
 
   void setUnitAutoRep(const int);
   void setUnitMoveRange(const int);
-  //void setUnitEXP(const int);
-  //void setUnitAirAtt(const int);
-  //void setUnitAirRange(const int);
-  //void setUnitGroundAtt(const int);
-  //void setUnitGroundRange(const int);
-  //void setUnitWaterAtt(const int);
-  //void setUnitWaterRange(const int);
   void setUnitLevel(const int);
   
   void autoRepair();
@@ -104,7 +88,6 @@ public:
 	~TransporterAirUnit();
   
   int moveTo(HexagonMatchfield* );
-  //bool action(HexagonMatchfield* );
 };
 
 //TransporterGround
@@ -116,7 +99,6 @@ public:
 	~TransporterGroundUnit();
 
   int moveTo(HexagonMatchfield* );
-  //bool action(HexagonMatchfield* );
 };
 
 // TransporterWater
@@ -128,7 +110,6 @@ public:
 	~TransporterWaterUnit();
   
   int moveTo(HexagonMatchfield* );
-  //bool action(HexagonMatchfield* );
 };
 
 //Ground
