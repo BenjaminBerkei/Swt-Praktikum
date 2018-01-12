@@ -47,7 +47,6 @@ void StartMenueWidget::startGame( Options *options_initOptions )
     Game* game = new Game(options_initOptions, ptr_smwMenueWidget->getPtr_mwGameWidget());
     //Erstelle eine Assoziation von GameWidget zu Game
     ptr_smwMenueWidget->getPtr_mwGameWidget()->setGameWidGame(game);
-
     //Wechsel zu Widget 3
     emit SIGNAL_smwChangeIndexFromStack( 3 );
     //Das Signal wird im Konstruktor von MenueWidget verbunden

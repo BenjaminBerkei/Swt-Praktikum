@@ -20,23 +20,31 @@
 //DynamicUnit
 
 DynamicUnit::DynamicUnit(QString filepath, Player* player = nullptr)
+    : Unit()
 {
     QFile file(filepath);
     QTextStream in(&file);
 	
-	in >> str_unitName;
+    str_unitName = in.readLine();
+    qDebug() << str_unitName;
 	in >> int_unitView;
 	in >> int_unitHP;
 	in >> int_unitStorageMax;
+    in >> int_unitCost;
+    in >> int_unitMoveRange;
+    in >> int_unitAirAtt;
+    in >> int_unitWaterAtt;
+    in >> int_unitGroundAtt;
+    in >> int_unitAutoRep;
 	in >> str_unitType;
-	in >> str_unitDetails;
-	
-	in >> int_unitMoveRange;
-	in >> int_unitAirAtt;
-	in >> int_unitGroundAtt;
-	in >> int_unitWaterAtt;
-	in >> int_unitAutoRep;
-	
+    str_unitDetails = in.readLine();
+    qDebug() << str_unitDetails;
+
+    QString pixmapPath;
+    pixmapPath = in.readLine();
+    qDebug() << pixmapPath;
+    setPixmap(QPixmap(pixmapPath));
+
     int_unitCurrentHP = int_unitHP;
     unitFile = filepath;
     unitPlayer = player;

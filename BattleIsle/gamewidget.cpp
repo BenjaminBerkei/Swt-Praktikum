@@ -57,7 +57,6 @@ GameWidget::GameWidget(QWidget *parent) :
     gameWidOptionsScene(new QGraphicsScene(this)), gameWidButtonScene(new QGraphicsScene(this))
 {
     ui->setupUi(this);
-
     ui->graphicsView_buttonView->setScene(gameWidButtonScene);
     ui->graphicsView_gameView->setScene(gameWidGameScene);
     ui->graphicsView_informationsView->setScene(gameWidInfoScene);

@@ -19,7 +19,7 @@
 #include "unit.h"
 #include "enumerations.h"
 #include "staticunit.h"
-
+#include <QDebug>
 
 class DynamicUnit : public Unit
 {

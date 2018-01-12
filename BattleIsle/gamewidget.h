@@ -22,6 +22,8 @@
 #include "hexagonmatchfield.h"
 #include "button.h"
 
+#include <QDesktopWidget>
+
 namespace Ui {
 class GameWidget;
 }

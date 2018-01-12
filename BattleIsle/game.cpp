@@ -86,6 +86,15 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
         hexagonMatchfield_gameGrid.push_back(vectorHex);
     }
 
+    for(int x = 1; x < sizeX - 1; x++)
+    {
+        unit_UnitGrid.push_back(vector<Unit*> ());
+        for(int y = 1; y < sizeY; y++)
+        {
+            int type = qrand() + 6;
+        }
+    }
+
     qDebug() << "Bemerkung: Zufallsfeld erstellt (in Klasse Game). Nur für Testzwecke.";
 
     ptr_gameGameWid->gameWidCreateMatchfield();

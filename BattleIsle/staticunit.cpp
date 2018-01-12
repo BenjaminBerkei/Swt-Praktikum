@@ -9,17 +9,22 @@
 //StaticUnit
 
 StaticUnit::StaticUnit(QString filepath, Player* player = nullptr)
+    : Unit()
 {
     QFile file(filepath);
     QTextStream in(&file);
 
-	in >> str_unitName;
+    str_unitName = in.readLine();
 	in >> int_unitView;
 	in >> int_unitHP;
 	in >> int_unitStorageMax;
 	in >> int_EnergieStorage;
 	in >> str_unitType;
-	in >> str_unitDetails;
+    str_unitDetails = in.readLine();
+
+    QString pixmapPath;
+    pixmapPath = in.readLine();
+    setPixmap(QPixmap(pixmapPath));
 
     int_unitCurrentHP = int_unitHP;
     unitFile = filepath;

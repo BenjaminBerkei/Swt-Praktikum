@@ -3,7 +3,11 @@
  * Version: 0.3
  * Datum 07.12.2017
  */
-
+/*
+ * Author: Lucas
+ * Version: 0.4
+ * Datum: 12.01.18
+ * */
 
 #include "menuewidget.h"
 #include "ui_menuewidget.h"
@@ -13,6 +17,7 @@ MenueWidget::MenueWidget(QWidget *parent) :
     ui(new Ui::MenueWidget)
 {
     ui->setupUi(this);
+    this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
     ptr_mwStartMenueWidget = new StartMenueWidget(this, this);
     ptr_mwOptionsWidget = new OptionsWidget(this, this, ptr_mwStartMenueWidget->getPtr_smwOptions());
     ptr_mwLoadGameWidget = new LoadGameWidget(this);

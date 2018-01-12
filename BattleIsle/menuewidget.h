@@ -13,6 +13,8 @@
 #include "startmenuewidget.h"
 #include "loadgamewidget.h"
 #include "gamewidget.h"
+
+#include <QDesktopWidget>
 #include <QDebug>
 
 class OptionsWidget;

@@ -59,24 +59,24 @@ HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, QString type, U
     HexMatchfieldType(type)
 {
     if(HexMatchfieldType == "waterDeep")
-        setPixmap(QPixmap(":/images/HexagonBilder/Meer.png"));
+        setPixmap(QPixmap(":/img/HexagonBilder/Meer.png"));
     else if(HexMatchfieldType == "waterSeashore")
-        setPixmap(QPixmap(":/images/HexagonBilder/Kueste.png"));
+        setPixmap(QPixmap(":/img/HexagonBilder/Kueste.png"));
     else if(HexMatchfieldType == "forrest")
-        setPixmap(QPixmap(":/images/HexagonBilder/Wald.png"));
+        setPixmap(QPixmap(":/img/HexagonBilder/Forest.png"));
     else if(HexMatchfieldType == "grassland")
-        setPixmap(QPixmap(":/images/HexagonBilder/Wiese.png"));
+        setPixmap(QPixmap(":/img/HexagonBilder/Grass.png"));
     else if(HexMatchfieldType == "streetStraight")
-        setPixmap(QPixmap(":/images/HexagonBilder/Strasse Grade.png"));
+        setPixmap(QPixmap(":/img/HexagonBilder/Street_nordwest.png"));
     else if(HexMatchfieldType == "streetCurve")
-        setPixmap(QPixmap(":/images/HexagonBilder/Strasse Schraehg.png"));
+        setPixmap(QPixmap(":/img/HexagonBilder/Street_nordwest.png"));
     else if(HexMatchfieldType == "mountainTop")
-        setPixmap(QPixmap(":/images/HexagonBilder/BergOben.png"));
+        setPixmap(QPixmap(":/img/HexagonBilder/Mountain.png"));
     else if(HexMatchfieldType == "mountainSide")
         qDebug() << "Warnung: Für Bergseite ist noch kein Bild hinterlegt. (HexagonMatchfield von typ mountainSide erzeugt)";
     else
     {
-        setPixmap(QPixmap(":/images/Wiese.png"));
+        setPixmap(QPixmap(":/img/HexagonBilder/Grass.png"));
         qDebug() << "Warnung: Ein HexagonMatchfield ist vom Typ default (siehe switch(HexMatchfieldType) im Konstruktor)";
     }
     //Skalierung kann hier angepasst werden

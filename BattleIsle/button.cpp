@@ -24,7 +24,7 @@ void Button::changeState(BUTTONSTATE newState)
 /*ButtonMove*/
 ButtonMove::ButtonMove(int sizeX, int sizeY)
 {
-    setPixmap(QPixmap(":/images/Buttons/hexagonGruenMove.png"));
+    setPixmap(QPixmap(":/img/Buttons/hexagonGruenMove.png"));
     setPixmap(pixmap().scaled(sizeX,sizeY));
 }
 
@@ -45,7 +45,7 @@ void ButtonMove::printType()
 /*ButtonAction*/
 ButtonAction::ButtonAction(int sizeX, int sizeY)
 {
-    setPixmap(QPixmap(":/images/Buttons/hexagonGruenAction.png"));
+    setPixmap(QPixmap(":/img/Buttons/hexagonGruenAction.png"));
     setPixmap(pixmap().scaled(sizeX,sizeY));
 }
 
@@ -105,7 +105,7 @@ void ButtonInformation::printType()
 /*ButtonChangePhase*/
 ButtonChangePhase::ButtonChangePhase(int sizeX, int sizeY)
 {
-    setPixmap(QPixmap(":/images/Buttons/hexagonGruenChangePhase.png"));
+    setPixmap(QPixmap(":/img/Buttons/hexagonGruenChangePhase.png"));
     setPixmap(pixmap().scaled(sizeX,sizeY));
 }
 
@@ -125,7 +125,7 @@ void ButtonChangePhase::printType()
 /*ButtonMenue*/
 ButtonMenue::ButtonMenue(int sizeX, int sizeY)
 {
-    setPixmap(QPixmap(":/images/Buttons/hexagonGruenMenue.png"));
+    setPixmap(QPixmap(":/img/Buttons/hexagonGruenMenue.png"));
     setPixmap(pixmap().scaled(sizeX,sizeY));
 }
 

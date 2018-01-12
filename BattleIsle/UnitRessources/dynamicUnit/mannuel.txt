@@ -1,1 +1,4 @@
-"Mann u. El" 8 180 0 100 4 20 30 50 35 "HEAVYUNIT" "Dieser fast unzerstörbare Panzer ist ein musthave für jeden Mann und natürlich jede Frau, die eine Schlacht zu gewinnen haben." "bildpath"
+Mann u. El
+8 180 0 100 4 20 30 50 35 HEAVYUNIT 
+Dieser fast unzerstoerbare Panzer ist ein musthave fuer jeden Mann und natuerlich jede Frau, die eine Schlacht zu gewinnen haben. 
+:/img/GroundOhneRand/T-7_Crusader_blau.png
