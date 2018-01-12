@@ -12,6 +12,7 @@
 
 
 #include "unit.hpp"
+#include" "enumerations.h"
 
 
 class DynamicUnit : public Unit
@@ -27,6 +28,7 @@ protected:
   int int_unitWaterAtt;
   //int int_unitWaterRange;
   int int_unitLevel;
+
 
 public:
 DynamicUnit(QString, Player*);
