@@ -1,1 +1,6 @@
-"Headquater" 8 800 5 1000 100 "HEADQUATERUNIT" "Deine Zentrale.\n Verliere es nicht!" "bildpath"  
+Headquater
+8 800 5 1000 HEADQUATERUNIT
+Deine Zentrale.\n Verliere es nicht!
+:/img/StaticOhneRand/HQ_grau.png
+:/img/StaticOhneRand/HQ_blau.png
+:/img/StaticOhneRand/HQ_rot.png

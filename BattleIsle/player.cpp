@@ -6,8 +6,9 @@
 
 #include "player.h"
 
-Player::Player(QString playerName = "", int playerScore = 0, int totalEnergie = 0, int currentEnergie = 0, int unitNumber=0)
-	:str_playerName(playerName), int_playerScore(playerScore), int_playerTotalEnergie(totalEnergie), int_currentEnergieStorage(currentEnergie), int_playerUnitNumber(unitNumber) {}
+Player::Player(QString playerName,int id, int playerScore, int totalEnergie, int currentEnergie, int unitNumber)
+    :str_playerName(playerName), int_playerID(id), int_playerScore(playerScore), int_playerTotalEnergie(totalEnergie),
+      int_currentEnergieStorage(currentEnergie), int_playerUnitNumber(unitNumber) {}
 
 Player::~Player(){
 	/*
@@ -65,4 +66,9 @@ int Player::getPlayerUnitNumber() const
 int Player::getCurrentEnergieStorage() const
 {
 	return int_currentEnergieStorage;
+}
+
+int Player::getPlayerID() const
+{
+    return int_playerID;
 }

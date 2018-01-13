@@ -34,11 +34,25 @@ void HexagonMatchfield::setState(const MATCHFIELDSTATE &value)
 {
     state = value;
     if(state == INACTIVE)
+    {
         setZValue(0);
+        qcolor_HexColor = Qt::black;
+    }
     else if(state == TARGET)
+    {
         setZValue(1);
+        qcolor_HexColor = Qt::yellow;
+    }
     else if(state == ACTIVE)
+    {
         setZValue(2);
+        qcolor_HexColor = Qt::red;
+    }
+    else if(state == PATH)
+    {
+        setZValue(2);
+        qcolor_HexColor = Qt::green;
+    }
 }
 
 HexagonDisplayInfo *HexagonMatchfield::getPtr_hexMfieldDisplay() const
@@ -60,7 +74,7 @@ HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, QString type, U
     HexagonBase( qpoint_gridPosition ),
     unit_stationed(stationedUnit),
     state(INACTIVE),
-    HexMatchfieldType(type)
+    HexMatchfieldType(type), qcolor_HexColor(Qt::black)
 {
     if(HexMatchfieldType == "waterDeep")
         setPixmap(QPixmap(":/img/HexagonBilder/Meer.png"));
@@ -95,27 +109,14 @@ void HexagonMatchfield::mousePressEvent( QGraphicsSceneMouseEvent *)
     emit SIGNAL_clicked( this );
 }
 
-void HexagonMatchfield::changeState( MATCHFIELDSTATE newState )
-{
-    state = newState;
-    qDebug() << "Meldung: state vom HexagonMatchfield geändert in " << state;
-    return;
-}
-
 void HexagonMatchfield::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     QGraphicsPixmapItem::paint(painter, option, widget);
-    QPen pen;
-    if(state == ACTIVE)
-    {
-        pen.setColor(Qt::red);
-    }else if(state == TARGET)
-    {
-        pen.setColor(Qt::yellow);
-    }
-    pen.setWidth(3);
-    painter->setPen(pen);
-    painter->drawPath(shape());
+        QPen pen;
+        pen.setColor(qcolor_HexColor);
+        pen.setWidth(3);
+        painter->setPen(pen);
+        painter->drawPath(shape());
 }
 
 int HexagonMatchfield::getBoltaniumCurrent() const{

@@ -148,10 +148,18 @@ void HexagonDisplayInfo::paint(QPainter *painter, const QStyleOptionGraphicsItem
     if(hexToDisplay->getUnit_stationed() != nullptr)
     {
         painter->drawPixmap(-50,-50, hexToDisplay->getUnit_stationed()->pixmap());
-        painter->drawText(QRectF(20,-30,200,20),qStringUnitDispUnitType);
-        painter->drawText(QRectF(20,-10,200,20),qStringUnitDispUnitLife);
-        painter->drawText(QRectF(20,10,200,20),qStringUnitDispMovement);
-        painter->drawText(QRectF(20,30,200,20),qStringUnitDispUnitAttack);
+        painter->drawText(QRectF(20,-30,200,20),qStringUnitDispUnitName);
+        painter->drawText(QRectF(20,-10, 200,20),qStringUnitDispUnitType);
+        painter->drawText(QRectF(20,10,200,20),qStringUnitDispUnitLife);
+
+        if(qStringUnitDispMovement != "NONE")
+        {
+            painter->drawText(QRectF(20,30,200,20),qStringUnitDispMovement);
+        }
+        if(qStringUnitDispUnitAttack != "NONE")
+        {
+            painter->drawText(QRectF(20,50,200,20),qStringUnitDispUnitAttack);
+        }
     }
 }
 
@@ -161,6 +169,7 @@ void HexagonDisplayInfo::updateText()
 
     if(hexToDisplay->getUnit_stationed() != nullptr)
     {
+        qStringUnitDispUnitName = "Name: " + hexToDisplay->getUnit_stationed()->getUnitName();
         qStringUnitDispUnitType = "Unit Typ: " + hexToDisplay->getUnit_stationed()->getUnitType();
         qStringUnitDispUnitLife = "HP: " + QString::number(hexToDisplay->getUnit_stationed()->getUnitCurrentHP()) + "/"
                                             + QString::number(hexToDisplay->getUnit_stationed()->getUnitHP());
@@ -169,18 +178,24 @@ void HexagonDisplayInfo::updateText()
             qStringUnitDispMovement = "MoveRange: " + QString::number(hexToDisplay->getUnit_stationed()->getUnitMoveRange()) + "/"
                     + QString::number(hexToDisplay->getUnit_stationed()->getUnitCurrentMoveRange());
         }else{
-            qStringUnitDispMovement = "None";
+            qStringUnitDispMovement = "NONE";
         }
         if(hexToDisplay->getUnit_stationed()->getUnitAirAtt() == 0
                 && hexToDisplay->getUnit_stationed()->getUnitGroundAtt() == 0
                 && hexToDisplay->getUnit_stationed()->getUnitWaterAtt() == 0)
         {
-            qStringUnitDispUnitAttack = "None";
+            qStringUnitDispUnitAttack = "NONE";
         }else{
             qStringUnitDispUnitAttack = "Attack: " + QString::number(hexToDisplay->getUnit_stationed()->getUnitAirAtt()) + "/"
                     + QString::number(hexToDisplay->getUnit_stationed()->getUnitGroundAtt()) + "/"
                     + QString::number(hexToDisplay->getUnit_stationed()->getUnitWaterAtt());
         }
 
+    }else{
+        qStringUnitDispUnitName = "";
+        qStringUnitDispUnitType = "";
+        qStringUnitDispUnitLife = "";
+        qStringUnitDispMovement = "";
+        qStringUnitDispUnitAttack = "";
     }
 }

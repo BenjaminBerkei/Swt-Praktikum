@@ -1,1 +1,6 @@
-"Fabrik" 7 600 3 200 0 "FACTORYUNIT" "Hier kannst du Einheiten produzieren." "bildpath"  
+Fabrik
+7 600 3 200 FACTORYUNIT
+Hier kannst du Einheiten produzieren.
+:/img/StaticOhneRand/Factory_grau.png
+:/img/StaticOhneRand/Factory_blau.png
+:/img/StaticOhneRand/Factory_rot.png

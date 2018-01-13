@@ -64,11 +64,11 @@ protected:
     //"mountainSide"        (Bergseite)
     //"boltanium"           (Boltanium)
     int int_boltaniumCurrent;
+    QColor qcolor_HexColor;
 
 public:
     HexagonMatchfield(QPoint qpoint_gridPosition, QString type, Unit* stationedUnit= 0);
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
-    void changeState(MATCHFIELDSTATE newState);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 

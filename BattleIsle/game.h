@@ -23,8 +23,7 @@
 #include "gamewidget.h"
 #include "staticunit.h"
 #include "dynamicunit.h"
-#include "button.h"
-#include "options.h"
+#include "round.h"
 
 #include <vector>
 #include <QTime>
@@ -43,14 +42,21 @@ class Game : public QObject
 private:
     HexagonMatchfield* SelectionCache;
     std::vector<HexagonMatchfield*> TargetChache;
+
     std::vector<std::vector<HexagonMatchfield*>> hexagonMatchfield_gameGrid;
     std::vector<std::vector<Unit*>> unit_UnitGrid;
     std::vector<Button*> button_menueBar;
+
     Options* gameOptions;
     GameWidget* ptr_gameGameWid;
 
     std::map<HexagonMatchfield*, HexagonMatchfield*> came_from;
     std::map<HexagonMatchfield*, int> current_cost;
+
+    Player* ptr_playerOne;
+    Player* ptr_playerTwo;
+    Player* ptr_playerActive;
+    Round* ptr_roundCurrent;
 
     static std::vector<QPoint> vector_oddNeighbors;
     static std::vector<QPoint> vector_evenNeighbors;
@@ -64,10 +70,11 @@ public:
     //int showTotalEnergie(Player* player);
     void Dijkstra();
     //void calculateActionTargets();
-    void resetStateHex(); // Nicht im UML-Diagramm, ist nur eine Hilfsfunktion für processSelection
+    void resetHexMatchfield(); // Nicht im UML-Diagramm, ist nur eine Hilfsfunktion für processSelection
 
 /*TestFunktionen*/
     void showNeighbors(HexagonMatchfield*);
+    void showPath(HexagonMatchfield *);
 /*TestFunktionen Ende*/
 
     // get und set Methoden

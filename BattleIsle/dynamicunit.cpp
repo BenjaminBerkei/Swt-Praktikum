@@ -19,7 +19,7 @@
 
 //DynamicUnit
 
-DynamicUnit::DynamicUnit(QString filepath, Player* player = nullptr)
+DynamicUnit::DynamicUnit(QString filepath, Player* player)
     : Unit()
 {
     QFile file(filepath);
@@ -45,7 +45,21 @@ DynamicUnit::DynamicUnit(QString filepath, Player* player = nullptr)
     QString buffer; //Aufgrund des Zeilenumbruchs
     buffer = in.readLine();
     str_unitDetails = in.readLine();
-    QPixmap pix(in.readLine());
+
+    QString pixmapPathPlayerOne = in.readLine();
+    QString pixmapPathPlayerTwo = in.readLine();
+
+    QPixmap pix;
+    if(player == nullptr)
+    {
+        pix.load(pixmapPathPlayerOne);
+    }else if(player->getPlayerID() == 1)
+    {
+        pix.load(pixmapPathPlayerOne);
+    }else if(player->getPlayerID() == 2)
+    {
+        pix.load(pixmapPathPlayerTwo);
+    }
 
     setPixmap(pix.scaled(64,64));
 
@@ -94,7 +108,7 @@ void DynamicUnit::levelUpBonus() {
 
 // TransporterUnit
 
-TransporterUnit::TransporterUnit(QString filepath, Player* player = nullptr)
+TransporterUnit::TransporterUnit(QString filepath, Player* player)
 	: DynamicUnit(filepath, player){}
 
 TransporterUnit::~TransporterUnit(){}
@@ -156,7 +170,7 @@ void TransporterUnit::farmBoltanium(HexagonMatchfield* hex_target){
 
 // TransporterAirUnit
 
-TransporterAirUnit::TransporterAirUnit(QString filepath, Player* player = nullptr)
+TransporterAirUnit::TransporterAirUnit(QString filepath, Player* player)
     : TransporterUnit(filepath, player){}
 
 TransporterAirUnit::~TransporterAirUnit(){}
@@ -172,7 +186,7 @@ int TransporterAirUnit::moveTo(HexagonMatchfield *){
 
 // TransporterGroundUnit
 
-TransporterGroundUnit::TransporterGroundUnit(QString filepath, Player* player = nullptr)
+TransporterGroundUnit::TransporterGroundUnit(QString filepath, Player* player)
     : TransporterUnit(filepath, player){}
 
 TransporterGroundUnit::~TransporterGroundUnit(){}
@@ -213,7 +227,7 @@ int TransporterGroundUnit::moveTo(HexagonMatchfield *hex_target){
 
 // TransporterWaterUnit
 
-TransporterWaterUnit::TransporterWaterUnit(QString filepath, Player* player = nullptr)
+TransporterWaterUnit::TransporterWaterUnit(QString filepath, Player* player)
     : TransporterUnit(filepath, player){}
 
 TransporterWaterUnit::~TransporterWaterUnit(){}
@@ -236,7 +250,7 @@ int TransporterWaterUnit::moveTo(HexagonMatchfield *hex_target){
 
 // AirUnit
 
-AirUnit::AirUnit(QString filepath, Player* player = nullptr)
+AirUnit::AirUnit(QString filepath, Player* player)
 	: DynamicUnit(filepath, player){}
 
 AirUnit::~AirUnit(){}
@@ -344,7 +358,7 @@ bool AirUnit::action(HexagonMatchfield *hex_target) {
 
 // GroundUnit
 
-GroundUnit::GroundUnit(QString filepath, Player* player = nullptr)
+GroundUnit::GroundUnit(QString filepath, Player* player)
 	: DynamicUnit(filepath, player){}
 
 GroundUnit::~GroundUnit(){}
@@ -446,7 +460,7 @@ bool GroundUnit::action(HexagonMatchfield *hex_target) {
 
 // LightUnit
 
-LightUnit::LightUnit(QString filepath, Player* player = nullptr)
+LightUnit::LightUnit(QString filepath, Player* player)
 	: GroundUnit(filepath, player){}
 
 LightUnit::~LightUnit(){}
@@ -483,7 +497,7 @@ int LightUnit::moveTo(HexagonMatchfield *hex_target){
 
 // BuildLightUnit
 
-BuildLightUnit::BuildLightUnit(QString filepath, Player* player = nullptr)
+BuildLightUnit::BuildLightUnit(QString filepath, Player* player)
 	: LightUnit(filepath, player){}
 
 BuildLightUnit::~BuildLightUnit(){}
@@ -510,7 +524,7 @@ void BuildLightUnit::produceUnit(HexagonMatchfield* hex_target){
 
 // MediumUnit
 
-MediumUnit::MediumUnit(QString filepath, Player* player = nullptr)
+MediumUnit::MediumUnit(QString filepath, Player* player)
 	: GroundUnit(filepath, player){}
 
 MediumUnit::~MediumUnit(){}
@@ -547,7 +561,7 @@ int MediumUnit::moveTo(HexagonMatchfield *hex_target){
 }
 // HeavyUnit
 
-HeavyUnit::HeavyUnit(QString filepath, Player* player = nullptr)
+HeavyUnit::HeavyUnit(QString filepath, Player* player)
 	: GroundUnit(filepath, player){}
 
 HeavyUnit::~HeavyUnit(){}
@@ -586,7 +600,7 @@ int HeavyUnit::moveTo(HexagonMatchfield *hex_target){
 
 // WaterUnit
 
-WaterUnit::WaterUnit(QString filepath, Player* player = nullptr)
+WaterUnit::WaterUnit(QString filepath, Player* player)
 	: DynamicUnit(filepath, player){}
 
 WaterUnit::~WaterUnit(){}

@@ -1,4 +1,5 @@
- B.E.N 
- 4 60 0 30 4 20 0 40 30  LIGHTUNIT
- Elitesoldaten die das B.E.N-Programm absolviert haben.\n Die Bedeutung von B.E.N ist streng geheim.
- :/img/GroundOhneRand/AD-5_Blitz_blau.png
+B.E.N
+4 60 0 30 4 20 0 40 30  LIGHTUNIT
+Elitesoldaten die das B.E.N-Programm absolviert haben.\n Die Bedeutung von B.E.N ist streng geheim.
+:/img/GroundOhneRand/AD-5_Blitz_blau.png
+:/img/GroundOhneRand/AD-5_Blitz_rot.png

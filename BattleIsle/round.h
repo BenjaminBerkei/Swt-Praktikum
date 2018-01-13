@@ -8,6 +8,8 @@
 #ifndef ROUND_HPP
 #define ROUND_HPP
 
+#include "enumerations.h"
+
 class Phase;
 
 class Round
@@ -26,12 +28,15 @@ public:
 	int getCurrentRoundNumber() const;
 	void setCurrentRoundNumber(const int);
 	int getMaxRoundNumber() const;
+    PHASE getCurrentPhase() const;
 };
 
 class Phase
 {
 public:
 	virtual void changePhase(Round*) = 0;
+    virtual PHASE currentPhase() = 0;
+
     virtual ~Phase() = default;
 };
 
@@ -39,12 +44,14 @@ class MovePhase : public Phase
 {
 public:
     void changePhase(Round*);
+    PHASE currentPhase();
 };
 
 class ActionPhase : public Phase
 {
 public:
     void changePhase(Round*);
+    PHASE currentPhase();
 };
 
 #endif

@@ -52,7 +52,12 @@ int Round::getCurrentRoundNumber() const
 
 int Round::getMaxRoundNumber() const
 {
-	return int_maxRoundNumber;
+    return int_maxRoundNumber;
+}
+
+PHASE Round::getCurrentPhase() const
+{
+    return currentRoundPhase->currentPhase();
 }
 
 void Round::setCurrentRoundNumber(const int roundAnz)
@@ -64,11 +69,21 @@ void Round::setCurrentRoundNumber(const int roundAnz)
 void MovePhase::changePhase(Round* round)
 {
 	round->setCurrentRoundPhase(new ActionPhase);
-	return;
+    return;
+}
+
+PHASE MovePhase::currentPhase()
+{
+    return MOVE;
 }
 
 void ActionPhase::changePhase(Round* round)
 {
 	round->setCurrentRoundPhase(new MovePhase);
-	round->setCurrentRoundNumber(round->getCurrentRoundNumber() + 5);
+    round->setCurrentRoundNumber(round->getCurrentRoundNumber() + 5);
+}
+
+PHASE ActionPhase::currentPhase()
+{
+    return ACTION;
 }

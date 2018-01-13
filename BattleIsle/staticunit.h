@@ -11,6 +11,7 @@
 #include "hexagonmatchfield.h"
 #include "player.h"
 #include "unit.h"
+#include "dynamicunit.h"
 
 #include <map>
 #include <QFile>
@@ -27,7 +28,7 @@ protected:
 	int int_EnergieStorage;
 
 public:
-    StaticUnit(QString, Player*);
+    StaticUnit(QString, Player* = nullptr);
 	~StaticUnit();
 
 	int getEnergieStorage() const;	
@@ -38,7 +39,7 @@ public:
 class HeadquaterUnit : public StaticUnit
 {
 public:
-    HeadquaterUnit(QString, Player*);
+    HeadquaterUnit(QString, Player* = nullptr);
 	~HeadquaterUnit();
 
 	bool action(HexagonMatchfield*);
@@ -48,14 +49,14 @@ public:
 class DepotUnit : public StaticUnit
 {
 public:
-    DepotUnit(QString, Player*);
+    DepotUnit(QString, Player* = nullptr);
 	~DepotUnit();
 
 	bool action(HexagonMatchfield*);
 	void repairUnit(Unit*);
 	Unit* createUnit();
 };
-/*
+
 class FactoryUnit : public StaticUnit
 {
 protected:
@@ -63,7 +64,7 @@ protected:
     std::map<QString, Unit*> production;
 
 public:
-    FactoryUnit(QString, Player*);
+    FactoryUnit(QString, Player* = nullptr);
 	~FactoryUnit();
 
 	QString getUnitToBuild() const;
@@ -73,5 +74,5 @@ public:
 	void produceUnit(HexagonMatchfield*);
 	Unit* createUnit();
 };
-*/
+
 #endif

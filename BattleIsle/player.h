@@ -16,13 +16,14 @@ class Player
 { 
 private: 
     QString str_playerName;
+    const int int_playerID;
     int int_playerScore;
     int int_playerTotalEnergie;
 	int int_currentEnergieStorage;
     int int_playerUnitNumber;
 
 public: 
-    Player(QString, int, int, int, int);
+    Player(QString, int, int = 0, int = 0, int = 0, int = 0);
     ~Player();
 
 	QString getPlayerName() const;	//const correctness, heßt das diese Funktion keinen wert verändern wird, damit umgeht man iA Fehler die aus versehen passieren
@@ -37,6 +38,7 @@ public:
 	void setCurrentEnergieStorage(int);
     void setPlayerUnitNumber(int);
 	
+    int getPlayerID() const;
 };
 
 #endif

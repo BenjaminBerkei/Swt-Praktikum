@@ -8,23 +8,41 @@
 
 //StaticUnit
 
-StaticUnit::StaticUnit(QString filepath, Player* player = nullptr)
+StaticUnit::StaticUnit(QString filepath, Player* player)
     : Unit()
 {
     QFile file(filepath);
     QTextStream in(&file);
-
+    if(!file.open(QFile::ReadOnly | QFile::Text))
+    {
+        qDebug() << "Warnung: File nicht gefunden";
+        return;
+    }
     str_unitName = in.readLine();
 	in >> int_unitView;
 	in >> int_unitHP;
 	in >> int_unitStorageMax;
-	in >> int_EnergieStorage;
-	in >> str_unitType;
+    in >> int_EnergieStorage;
+    str_unitType = in.readLine();
     str_unitDetails = in.readLine();
 
-    QString pixmapPath;
-    pixmapPath = in.readLine();
-    setPixmap(QPixmap(pixmapPath));
+    QString pixmapPathPlayerNeutral = in.readLine();
+    QString pixmapPathPlayerOne = in.readLine();
+    QString pixmapPathPlayerTwo = in.readLine();
+
+    QPixmap pix;
+    if(player == nullptr)
+    {
+        pix.load(pixmapPathPlayerNeutral);
+    }else if(player->getPlayerID() == 1)
+    {
+        pix.load(pixmapPathPlayerOne);
+    }else if(player->getPlayerID() == 2)
+    {
+        pix.load(pixmapPathPlayerTwo);
+    }
+
+    setPixmap(pix.scaled(64,64));
 
     int_unitCurrentHP = int_unitHP;
     unitFile = filepath;
@@ -50,7 +68,7 @@ int StaticUnit::moveTo(HexagonMatchfield* )
 
 // HQ
 
-HeadquaterUnit::HeadquaterUnit(QString filepath, Player* player = nullptr)
+HeadquaterUnit::HeadquaterUnit(QString filepath, Player* player)
 	: StaticUnit(filepath, player){}
 
 HeadquaterUnit::~HeadquaterUnit(){}
@@ -67,7 +85,7 @@ Unit* HeadquaterUnit::createUnit()
 
 // Depot
 
-DepotUnit::DepotUnit(QString filepath, Player* player = nullptr)
+DepotUnit::DepotUnit(QString filepath, Player* player)
 	: StaticUnit(filepath, player) {}
 
 DepotUnit::~DepotUnit() {}
@@ -94,16 +112,16 @@ Unit* DepotUnit::createUnit()
 }
 
 // Factory
-/*
-FactoryUnit::FactoryUnit(QString filepath, Player* player = nullptr)
+
+FactoryUnit::FactoryUnit(QString filepath, Player* player)
 	: StaticUnit(filepath, player), unitToBuild("")
 {
-	production["DerBolten"] = new AirUnit("path");
-	production["BEN"] = new LightUnit("path");
-	production["KevArn"] = new TransporterGroundUnit("path");
-	production["Lucas"] = new MediumUnit("path");
-	production["MannuEl"] = new HeavyUnit("path");
-	production["MSMiguel"] = new WaterUnit("path");
+    production["DerBolten"] = new AirUnit(":/dynamic/dynamicUnit/derbolten.txt");
+    production["BEN"] = new LightUnit(":/dynamic/dynamicUnit/ben.txt");
+    production["KevArn"] = new TransporterGroundUnit(":/dynamic/dynamicUnit/kevarn.txt");
+    production["Lucas"] = new MediumUnit(":/dynamic/dynamicUnit/lucas.txt");
+    production["MannuEl"] = new HeavyUnit(":/dynamic/dynamicUnit/mannuel.txt");
+    production["MSMiguel"] = new WaterUnit(":/dynamic/dynamicUnit/msmiguel.txt");
 }
 
 FactoryUnit::~FactoryUnit() {}
@@ -120,7 +138,7 @@ void FactoryUnit::setUnitToBuild(const QString unitTarget)
 
 bool FactoryUnit::action(HexagonMatchfield* hexTarget)
 {
-	if(hexTarget->unit_stationed == nullptr)
+    if(hexTarget->getUnit_stationed() == nullptr)
 	{
 		if(unitToBuild != "")
 		{
@@ -137,16 +155,19 @@ bool FactoryUnit::action(HexagonMatchfield* hexTarget)
 	return false;
 }
 
-void FactoryUnit::produceUnit(HexagonMatchfield* hexTarget)
+void FactoryUnit::produceUnit(HexagonMatchfield*)
 {
-	hexTarget->unit_stationed = production[getUnitToBuild()]->createUnit();
-	hexTarget->unit_stationed->setUnitPlayer(this->unitPlayer);
-	hexTarget->unit_stationed->setQpoint_gridPosition(hexTarget->getQpoint_gridPosition());
+    /*
+    hexTarget->getUnit_stationed() = production[getUnitToBuild()]->createUnit();
+    hexTarget->getUnit_stationed()->setUnitPlayer(this->unitPlayer);
+    hexTarget->getUnit_stationed()->setQpoint_gridPosition(hexTarget->getQpoint_gridPosition());
 	unitPlayer->setCurrentEnergieStorage(unitPlayer->getCurrentEnergieStorage() - hexTarget->getUnitCost());
+    */
+    qDebug() << "Produce Unit";
 }
 
 Unit* FactoryUnit::createUnit()
 {
 	return new FactoryUnit(unitFile);
 }
-*/
+

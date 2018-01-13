@@ -29,7 +29,8 @@ void Game::setButton_menueBar(const std::vector<Button *> &value)
 Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     SelectionCache(NULL),
     gameOptions(init_options),
-    ptr_gameGameWid(ptr_gameWid)
+    ptr_gameGameWid(ptr_gameWid), ptr_playerOne(new Player("Eins", 1)), ptr_playerTwo(new Player("Zwei", 2)), ptr_playerActive(ptr_playerOne),
+    ptr_roundCurrent(new Round(10))
 {
     // Erstelle eine Map
     // Dies ist nur für Testzwecke! Sollte später gelöscht werden:
@@ -88,16 +89,47 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     qDebug() << "Bemerkung: Zufallsfeld erstellt (in Klasse Game). Nur für Testzwecke.";
 
     //Einheiten belegen
+    int anzHQ = 0;
     for(int i = 0; i < sizeX; i++)
     {
         std::vector<Unit*> vectorUnit;
         for(int j = 0; j < sizeY; j++)
         {
                 int randomInt = qrand() % 100;
-                if(randomInt < 5)
+                if(randomInt < 10)
                 {
-                    vectorUnit.push_back(new AirUnit(QString(":/dynamic/dynamicUnit/derbolten.txt"), nullptr));
+                    Unit* randomUnit = nullptr;
+                    QString hexType = hexagonMatchfield_gameGrid[i][j]->getHexMatchfieldType();
+                    Player* randPlayer = (qrand() % 2) == 0 ? ptr_playerOne : ptr_playerTwo;
+
+                    if(hexType != "waterDeep" && hexType != "waterSeashore")
+                    {
+                        int randomUnitType = qrand() % 8;
+
+                        switch(randomUnitType)
+                        {
+                        case 0 : randomUnit = new AirUnit(":/dynamic/dynamicUnit/derbolten.txt", randPlayer); break;
+                        case 1 : randomUnit = new TransporterGroundUnit(":/dynamic/dynamicUnit/kevarn.txt", randPlayer); break;
+                        case 2 : randomUnit = new LightUnit(":/dynamic/dynamicUnit/ben.txt", randPlayer); break;
+                        case 3 : randomUnit = new MediumUnit(":/dynamic/dynamicUnit/lucas.txt", randPlayer); break;
+                        case 4 : randomUnit = new HeavyUnit(":/dynamic/dynamicUnit/mannuel.txt", randPlayer); break;
+                        case 5 : randomUnit = new DepotUnit(":/static/staticUnit/depot.txt", randPlayer); break;
+                        case 6 : randomUnit = new FactoryUnit(":/static/staticUnit/factory.txt", randPlayer); break;
+                        case 7 :
+                            if(anzHQ < 2)
+                            {
+                                randomUnit = new HeadquaterUnit(":/static/staticUnit/headquater.txt", anzHQ == 0 ? ptr_playerOne : ptr_playerTwo);
+                                anzHQ++;
+                            }
+                            break;
+                        }
+                    }else{
+                        randomUnit = new WaterUnit(":/dynamic/dynamicUnit/msmiguel.txt", randPlayer);
+                    }
+
+                    vectorUnit.push_back(randomUnit);
                     hexagonMatchfield_gameGrid[i][j]->setUnit_stationed(vectorUnit[j]);
+
                 }else{
                     vectorUnit.push_back(nullptr);
                 }
@@ -134,40 +166,45 @@ void Game::processSelection(HexagonMatchfield *selection)
 {
     switch(selection->getState())
     {
-        case INACTIVE:
-            resetStateHex();
-            SelectionCache = selection;
-            ptr_gameGameWid->setInfoScene(SelectionCache->getPtr_hexMfieldDisplay());
+    case INACTIVE:
+        resetHexMatchfield();
+        SelectionCache = selection;
+        ptr_gameGameWid->setInfoScene(SelectionCache->getPtr_hexMfieldDisplay());
 
-            //Angeklicktes auf AKTIVE setzten
-            SelectionCache->setState(ACTIVE);
+        //Angeklicktes auf AKTIVE setzten
+        SelectionCache->setState(ACTIVE);
 
-            /*Aufruf Hilfsfunktionen*/
-            //showNeighbors(selection);
-            /*Aufruf Hilfsfunktionen Ende*/
+        /*Aufruf Hilfsfunktionen*/
+        //showNeighbors(selection);
+        /*Aufruf Hilfsfunktionen Ende*/
 
-            break;
+        break;
 
-        case ACTIVE:
-            resetStateHex();
-            ptr_gameGameWid->clearScenes();
-            break;
+    case ACTIVE:
+        resetHexMatchfield();
+        break;
 
-        case TARGET:
-        /*
-         Pseudocode:
-            if(selectionCache.getStationedUnit != nullptr)
-                if(move)
-                {
-                    moveUnitTo(target;)
-                }
-                if(action)
-                {
-                    selectionCache.getStationedUnt().action(target);
-                }
-                reset()
-        */
-            break;
+    case TARGET:
+        for(auto &it : TargetChache)
+        {
+            it->setState(TARGET);
+        }
+        showPath(selection);
+    /*
+     Pseudocode:
+        if(selectionCache.getStationedUnit != nullptr)
+            if(move)
+            {
+                moveUnitTo(target;)
+            }
+            if(action)
+            {
+                selectionCache.getStationedUnt().action(target);
+            }
+            reset()
+    */
+        break;
+    case PATH : break;
     }
 
 
@@ -180,7 +217,7 @@ void Game::Dijkstra()
 
     std::priority_queue<std::pair<HexagonMatchfield*, int>, std::vector<std::pair<HexagonMatchfield*, int>>, Compare> frontier;
 
-    frontier.push(std::pair<HexagonMatchfield*, int> (target, 0));
+    frontier.push(std::pair<HexagonMatchfield*, int>(target, 0));
     came_from[target] = target;
     current_cost[target] = 0;
 
@@ -193,12 +230,10 @@ void Game::Dijkstra()
 
         /*Durchlaufen der Nachbarn des Elements*/
         vector<QPoint> neighbours;
-        if(target->getQpoint_gridPosition().x() & 1)
+        if(current->getQpoint_gridPosition().x() & 1)
         {
-            //qDebug() << "odd";
             neighbours = vector_oddNeighbors;
         }else{
-            //qDebug() << "even";
             neighbours = vector_evenNeighbors;
         }
 
@@ -213,13 +248,13 @@ void Game::Dijkstra()
                 /*Speichern des zu betrachtenden Nachbarn*/
                 HexagonMatchfield* neighbour = hexagonMatchfield_gameGrid[x][y];
 
-                /*Wenn dieser noch nicht betrachtet wurde, kosten absurd hochlegen, damit diese auf jeden fall gesetzt werden*/
-                if(current_cost.find(neighbour) == current_cost.end())
-                    current_cost[neighbour] = 999;
-
                 /*Berechnen der neuen Kosten, bestehend aus den Kosten um auf das Aktuelle Feld zu kommen + die Kosten um zum  Nachbarn zu kommen*/
                 if(target->getUnit_stationed()->moveTo(neighbour) != -1 && neighbour->getUnit_stationed() == nullptr)
                 {
+                    /*Wenn dieser noch nicht betrachtet wurde, kosten absurd hochlegen, damit diese auf jeden fall gesetzt werden*/
+                    if(current_cost.find(neighbour) == current_cost.end())
+                        current_cost[neighbour] = 999;
+
                     int new_cost = current_cost[current] + target->getUnit_stationed()->moveTo(neighbour);
 
                     /*Wenn diese Kosten geringer als die Reichweite der Einheit und besser als die bisherigen Kosten sind, dann..*/
@@ -238,9 +273,31 @@ void Game::Dijkstra()
     }
 }
 
+void Game::resetHexMatchfield()
+{
+    /*Zurücksetzen der Auswahl*/
+    if(SelectionCache != nullptr)
+    {
+        SelectionCache->setState(INACTIVE);
+        SelectionCache = nullptr;
+    }
+    /*Zurücksetzen der Maps*/
+    for(auto &it : TargetChache)
+    {
+        it->setState(INACTIVE);
+    }
+    TargetChache.clear();
+    came_from.clear();
+    current_cost.clear();
+    ptr_gameGameWid->clearScenes();
+}
+
 void Game::buttonPressedMove()
 {
-    Dijkstra();
+    if(SelectionCache->getUnit_stationed() != nullptr && SelectionCache->getUnit_stationed()->getUnitPlayer() == ptr_playerActive)
+    {
+        Dijkstra();
+    }
 }
 
 void Game::buttonPressedAction()
@@ -255,16 +312,11 @@ void Game::buttonPressedMenue()
 
 void Game::buttonPressedChangePhase()
 {
+    ptr_roundCurrent->changePhase();
 
-}
-
-void Game::resetStateHex()
-{
-    SelectionCache = nullptr;
-    for(unsigned int i = 0; i < hexagonMatchfield_gameGrid.size(); i++)
+    if(ptr_roundCurrent->getCurrentPhase() == MOVE)
     {
-        for(unsigned int j = 0; j < hexagonMatchfield_gameGrid[i].size(); j++)
-            hexagonMatchfield_gameGrid[i][j]->setState(INACTIVE);
+        ptr_playerActive = ptr_playerActive == ptr_playerOne ? ptr_playerTwo : ptr_playerOne;
     }
 }
 
@@ -286,6 +338,14 @@ void Game::showNeighbors(HexagonMatchfield * center)
             hexagonMatchfield_gameGrid[center->getQpoint_gridPosition().x() + it.x()][center->getQpoint_gridPosition().y() + it.y()]->setState(TARGET);
             qDebug() << "\t" << "(" << center->getQpoint_gridPosition().x() + it.x() << ", " << center->getQpoint_gridPosition().y() + it.y() << ")";
         }
+    }
+}
+
+void Game::showPath(HexagonMatchfield* target)
+{
+    for(auto &it = target; it != SelectionCache; it = came_from[it])
+    {
+        it->setState(PATH);
     }
 }
 

@@ -49,7 +49,7 @@ DynamicUnit(QString, Player*);
 class AirUnit : public DynamicUnit
 {
 public:
-	AirUnit(QString, Player*);
+    AirUnit(QString, Player*  = nullptr);
 	~AirUnit();
 	
 	int moveTo(HexagonMatchfield* );
@@ -70,6 +70,7 @@ public:
 	int getTransporterUnitCapacity() const;
   	int getTransporterUnitCurrentCapacity() const;
     void setTransporterUnitCurrentCapacity(const int);
+
     virtual bool action(HexagonMatchfield *hex_target);
     void unload(HexagonMatchfield *hex_target);
     void farmBoltanium(HexagonMatchfield *hex_target);
@@ -80,7 +81,7 @@ public:
 class TransporterAirUnit : public TransporterUnit
 {
 public:
-	TransporterAirUnit(QString, Player*);
+    TransporterAirUnit(QString, Player*  = nullptr);
 	~TransporterAirUnit();
   
   int moveTo(HexagonMatchfield* );
@@ -91,7 +92,7 @@ public:
 class TransporterGroundUnit : public TransporterUnit
 {
 public:
-	TransporterGroundUnit(QString, Player*);
+    TransporterGroundUnit(QString, Player*  = nullptr);
 	~TransporterGroundUnit();
 
   int moveTo(HexagonMatchfield* );
@@ -102,7 +103,7 @@ public:
 class TransporterWaterUnit : public TransporterUnit
 {
 public:
-	TransporterWaterUnit(QString, Player*);
+    TransporterWaterUnit(QString, Player*  = nullptr);
 	~TransporterWaterUnit();
   
   int moveTo(HexagonMatchfield* );
@@ -113,7 +114,7 @@ public:
 class GroundUnit : public DynamicUnit
 {
 public:
-	GroundUnit(QString, Player*);
+    GroundUnit(QString, Player*  = nullptr);
 	~GroundUnit();
 	
 	 bool action(HexagonMatchfield* );
@@ -124,7 +125,7 @@ public:
 class LightUnit : public GroundUnit
 {
 public:
-	LightUnit(QString, Player*);
+    LightUnit(QString, Player*  = nullptr);
 	~LightUnit();
 	
 	int moveTo(HexagonMatchfield* );
@@ -135,7 +136,7 @@ public:
 class BuildLightUnit : public LightUnit
 {
 public:
-	BuildLightUnit(QString, Player*);
+    BuildLightUnit(QString, Player*  = nullptr);
 	~BuildLightUnit();
 	
     bool action(HexagonMatchfield* );
@@ -147,7 +148,7 @@ public:
 class MediumUnit : public GroundUnit
 {
 public:
-	MediumUnit(QString, Player*);
+    MediumUnit(QString, Player*  = nullptr);
 	~MediumUnit();
 	
 	int moveTo(HexagonMatchfield* );
@@ -158,7 +159,7 @@ public:
 class HeavyUnit : public GroundUnit
 {
 public:
-	HeavyUnit(QString, Player*);
+    HeavyUnit(QString, Player*  = nullptr);
 	~HeavyUnit();
 	
 	int moveTo(HexagonMatchfield* );
@@ -170,7 +171,7 @@ public:
 class WaterUnit : public DynamicUnit
 {
 public:
-	WaterUnit(QString, Player*);
+    WaterUnit(QString, Player*  = nullptr);
 	~WaterUnit();
 	
 	int moveTo(HexagonMatchfield* );
