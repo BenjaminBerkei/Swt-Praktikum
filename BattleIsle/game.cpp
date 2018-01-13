@@ -143,7 +143,7 @@ void Game::processSelection(HexagonMatchfield *selection)
             SelectionCache->setState(ACTIVE);
 
             /*Aufruf Hilfsfunktionen*/
-            showNeighbors(selection);
+            //showNeighbors(selection);
             /*Aufruf Hilfsfunktionen Ende*/
 
             break;
