@@ -16,6 +16,10 @@
  * Author: Manuel
  * Version: 0.4
  * Datum: 08.01.2018
+ *
+ * Author: Lucas, Manuel
+ * Version: 0.5
+ * Datum: 13.01.2018
  * */
 #ifndef HEXAGONMATCHFIELD_H
 #define HEXAGONMATCHFIELD_H
@@ -23,11 +27,9 @@
 #include "enumerations.h"
 #include "hexagonbase.h"
 #include "unit.h"
-#include "game.h"
 #include "gamewidget.h"
 
 #include <QString>
-
 #include <QDebug>
 
 class Unit;
@@ -36,8 +38,7 @@ class HexagonDisplayInfo;
 
 class HexagonMatchfield : public HexagonBase
 {
-private:
-
+    Q_OBJECT
 protected:
     /* Zum setZValue:
      * 0: alle inaktiven Hexagons
@@ -65,7 +66,7 @@ protected:
     int int_boltaniumCurrent;
 
 public:
-    HexagonMatchfield(QPoint qpoint_gridPosition, QString type, Unit* stationedUnit= 0, Game* ptr_game = 0);
+    HexagonMatchfield(QPoint qpoint_gridPosition, QString type, Unit* stationedUnit= 0);
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
     void changeState(MATCHFIELDSTATE newState);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);

@@ -31,9 +31,7 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     gameOptions(init_options),
     ptr_gameGameWid(ptr_gameWid)
 {
-    ptr_gameGameWid->setGameWidGame(this);
-
-    // Erstelle eine Mapm
+    // Erstelle eine Map
     // Dies ist nur für Testzwecke! Sollte später gelöscht werden:
     //##################################################################
     //Größe
@@ -61,9 +59,9 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
         for( int j = 0; j < sizeY; j++ )
         {
             if( i == 0 || i == sizeX-1 || j == 0 || j == sizeY-1 )
-                vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "waterDeep", 0, this));
+                vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "waterDeep", 0));
             else if( i == 1 || i == sizeX - 2 || j == 1 || j == sizeY - 2 )
-                vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "waterSeashore", 0, this));
+                vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "waterSeashore", 0));
             else
             {
                 int modulo = 10;
@@ -76,28 +74,37 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
                 int randomInt = qrand() % modulo;
                 if(randomInt < 8)
                     if(randomInt < 1)
-                        vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "mountainTop", 0, this));
+                        vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "mountainTop", 0));
                     else
-                        vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "grassland", 0, this));
+                        vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "grassland", 0));
                 else
-                    vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "forrest", 0, this));
+                    vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "forrest", 0));
             }
+            connect(vectorHex[j],SIGNAL(SIGNAL_clicked(HexagonMatchfield*)),this,SLOT(processSelection(HexagonMatchfield*)));
         }
         hexagonMatchfield_gameGrid.push_back(vectorHex);
     }
 
-    for(int x = 1; x < sizeX - 1; x++)
-    {
-        unit_UnitGrid.push_back(vector<Unit*> ());
-        for(int y = 1; y < sizeY; y++)
-        {
-            int type = qrand() + 6;
-        }
-    }
-
     qDebug() << "Bemerkung: Zufallsfeld erstellt (in Klasse Game). Nur für Testzwecke.";
 
-    ptr_gameGameWid->gameWidCreateMatchfield();
+    //Einheiten belegen
+    for(int i = 0; i < sizeX; i++)
+    {
+        std::vector<Unit*> vectorUnit;
+        for(int j = 0; j < sizeY; j++)
+        {
+                int randomInt = qrand() % 100;
+                if(randomInt < 5)
+                {
+                    vectorUnit.push_back(new AirUnit(QString(":/dynamic/dynamicUnit/derbolten.txt"), nullptr));
+                    hexagonMatchfield_gameGrid[i][j]->setUnit_stationed(vectorUnit[j]);
+                }else{
+                    vectorUnit.push_back(nullptr);
+                }
+        }
+        unit_UnitGrid.push_back(vectorUnit);
+    }
+    ptr_gameGameWid->gameWidCreateMatchfield(hexagonMatchfield_gameGrid);
     //##################################################################
 
     //Buttons Einfuegen
@@ -110,8 +117,12 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     button_menueBar.push_back(actionbutton);
     button_menueBar.push_back(changephasebutton);
     button_menueBar.push_back(menuebutton);
+    connect(movebutton,SIGNAL(clicked()),this,SLOT(buttonPressedMove()));
+    connect(actionbutton,SIGNAL(clicked()),this,SLOT(buttonPressedAction()));
+    connect(changephasebutton,SIGNAL(clicked()),this,SLOT(buttonPressedChangePhase()));
+    connect(menuebutton,SIGNAL(clicked()),this,SLOT(buttonPressedMenue()));
 
-    ptr_gameGameWid->gameWidcreateButtonBar();
+    ptr_gameGameWid->gameWidcreateButtonBar(button_menueBar);
 }
 
 vector<vector<HexagonMatchfield*> > Game::getVectorVectorHexagonMatchfield()

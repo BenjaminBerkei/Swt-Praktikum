@@ -20,15 +20,20 @@
 #include <QTime>
 #include <QObject>
 #include "options.h"
-#include "hexagonmatchfield.h"
 #include "button.h"
+
+#include "hexagonmatchfield.h"
 #include "gamewidget.h"
-#include "unit.h"
+#include "staticunit.h"
+#include "dynamicunit.h"
+#include "button.h"
+#include "options.h"
 
 class GameWidget; //Vorwärtsdeklaration
 class HexagonMatchfield;
 class Unit;
 class Button;
+
 
 class Game : public QObject
 {
@@ -46,7 +51,6 @@ private:
     static std::vector<QPoint> vector_evenNeighbors;
 public:
     Game(Options* init_options, GameWidget* ptr_gameWid);
-    void processSelection(HexagonMatchfield* selection);
     //Game(QString pathToSaveFile);
     //void loadGame(QString pathToSaveFile);
     //void saveGame();
@@ -55,12 +59,6 @@ public:
     //int showTotalEnergie(Player* player);
     void Dijkstra();
     //void calculateActionTargets();
-    void buttonPressedMove();
-    void buttonPressedAction();
-    //void buttonPressedInformation();
-    //void buttonPressedMap();
-    void buttonPressedMenue();
-    void buttonPressedChangePhase();
     void resetStateHex(); // Nicht im UML-Diagramm, ist nur eine Hilfsfunktion für processSelection
 
 
@@ -70,6 +68,13 @@ public:
     void setButton_menueBar(const std::vector<Button *> &value);
 
 public slots:
+    void processSelection(HexagonMatchfield* selection);
+    void buttonPressedMove();
+    void buttonPressedAction();
+    //void buttonPressedInformation();
+    //void buttonPressedMap();
+    void buttonPressedMenue();
+    void buttonPressedChangePhase();
 };
 
 #endif // GAME_H

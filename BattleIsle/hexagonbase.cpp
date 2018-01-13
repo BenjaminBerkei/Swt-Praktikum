@@ -11,9 +11,8 @@ QPoint HexagonBase::getQpoint_gridPosition() const
     return qpoint_gridPosition;
 }
 
-HexagonBase::HexagonBase(QPoint qpoint_position, Game *ptr_game)
-    :  qpoint_gridPosition(qpoint_position),
-      ptr_hexBaseGame(ptr_game)
+HexagonBase::HexagonBase(QPoint qpoint_position)
+    :  qpoint_gridPosition(qpoint_position)
 {
 
 }

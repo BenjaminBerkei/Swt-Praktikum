@@ -17,6 +17,10 @@
  * Version 0.4
  * Datum: 06.01.2018
  * Kommentar: Skalierung eingeführt
+ *
+ * Author: Lucas, Manuel
+ * Version: 0.5
+ * Datum: 13.01.2018
  * */
 
 #include "hexagonmatchfield.h"
@@ -52,8 +56,8 @@ void HexagonMatchfield::setUnit_stationed(Unit *value)
     unit_stationed = value;
 }
 
-HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, QString type, Unit *stationedUnit, Game *ptr_game) :
-    HexagonBase( qpoint_gridPosition , ptr_game ),
+HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, QString type, Unit *stationedUnit) :
+    HexagonBase( qpoint_gridPosition ),
     unit_stationed(stationedUnit),
     state(INACTIVE),
     HexMatchfieldType(type)
@@ -85,14 +89,10 @@ HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, QString type, U
     ptr_hexMfieldDisplay = new HexagonDisplayInfo(this);
 }
 
-void HexagonMatchfield::mousePressEvent( QGraphicsSceneMouseEvent *event )
+void HexagonMatchfield::mousePressEvent( QGraphicsSceneMouseEvent *)
 {
-    Q_UNUSED(event);
-    ptr_hexBaseGame->processSelection(this);
-
-
     //Hier muss evetntuell noch was hin.
-    //emit SIGNAL_clicked( this );
+    emit SIGNAL_clicked( this );
 }
 
 void HexagonMatchfield::changeState( MATCHFIELDSTATE newState )

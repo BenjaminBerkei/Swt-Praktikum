@@ -1,16 +1,16 @@
-/////////////////////////////////////////////
-// dynamicunit.cpp // letzte Änderung: 12.01.2018 //
-// Letzte Editirung: Kevin,Benny				   //
-// Version: 0.3							   //
-// -------- Kommentare --------------------//
-/* 
-*/
-/////////////////////////////////////////////
 /*
+ * Author: Arne
+ * Version: 0.2
+ * Kommentar: Wer noch irgendwo Static statt Dynamic findet bekommt n Eis von mir, lg Arne
+ *
  * Author: Lucas
  * Version: 0.3
  * Datum: 12.01.17
  * Kommentar: Fehlerbehebung
+ *
+ * Author: Lucas, Manuel
+ * Version: 0.4
+ * Datum: 13.01.2018
  */
 #include "dynamicunit.h"
 #include "staticunit.h"
@@ -23,10 +23,14 @@ DynamicUnit::DynamicUnit(QString filepath, Player* player = nullptr)
     : Unit()
 {
     QFile file(filepath);
+    if(!file.open(QFile::ReadOnly | QFile::Text))
+    {
+        qDebug() << "Warnung: File nicht gefunden";
+        return;
+    }
     QTextStream in(&file);
 	
     str_unitName = in.readLine();
-    qDebug() << str_unitName;
 	in >> int_unitView;
 	in >> int_unitHP;
 	in >> int_unitStorageMax;
@@ -37,15 +41,16 @@ DynamicUnit::DynamicUnit(QString filepath, Player* player = nullptr)
     in >> int_unitGroundAtt;
     in >> int_unitAutoRep;
 	in >> str_unitType;
-    str_unitDetails = in.readLine();
-    qDebug() << str_unitDetails;
 
-    QString pixmapPath;
-    pixmapPath = in.readLine();
-    qDebug() << pixmapPath;
-    setPixmap(QPixmap(pixmapPath));
+    QString buffer; //Aufgrund des Zeilenumbruchs
+    buffer = in.readLine();
+    str_unitDetails = in.readLine();
+    QPixmap pix(in.readLine());
+
+    setPixmap(pix.scaled(64,64));
 
     int_unitCurrentHP = int_unitHP;
+    int_unitCurrentMoveRange = int_unitMoveRange;
     unitFile = filepath;
     unitPlayer = player;
 }
@@ -55,31 +60,7 @@ DynamicUnit::~DynamicUnit(){}
 int DynamicUnit::getUnitAutoRep() const{
 		return int_unitAutoRep;
 }
-int DynamicUnit::getUnitMoveRange() const{
-		return int_unitMoveRange;
-}
-/*int DynamicUnit::getUnitEXP() const{
-		return int_unitEXP;
-}
 
-int DynamicUnit::getUnitAirAtt() const{
-		return int_unitAirAtt;
-}
-int DynamicUnit::getUnitAirRange() const{
-		return int_unitAirRange;
-}
-int DynamicUnit::getUnitGroundAtt() const{
-		return int_unitGroundAtt;
-}
-int DynamicUnit::getUnitGroundRange() const{
-		return int_unitGroundRange;
-}
-int DynamicUnit::getUnitWaterAtt() const{
-		return int_unitWaterAtt;
-}
-int DynamicUnit::getUnitWaterRange() const{
-		return int_unitWaterRange;
-}*/
 int DynamicUnit::getUnitLevel() const{
 		return int_unitLevel;
 }
@@ -89,47 +70,7 @@ void DynamicUnit::setUnitAutoRep(const int newUnitAutoRep)
     int_unitAutoRep = newUnitAutoRep;
 	return;
 }
-void DynamicUnit::setUnitMoveRange(const int newUnitMoveRange)
-{
-	int_unitMoveRange = newUnitMoveRange;
-	return;
-}
-/*void DynamicUnit::setUnitEXP(const int newUnitEXP)
-{
-	int_unitEXP = newUnitEXP;
-	return;
-}*/
 
-/*void DynamicUnit::setUnitAirAtt(const int newUnitAirAtt)
-{
-	int_unitAirAtt = newUnitAirAtt;
-	return;
-}*/
-/*void DynamicUnit::setUnitAirRange(const int newUnitAirRange)
-{
-	int_unitAirRange = newUnitAirRange;
-	return;
-}*/
-/*void DynamicUnit::setUnitGroundAtt(const int newUnitGroundAtt)
-{
-	int_unitGroundAtt = newUnitGroundAtt;
-	return;
-}*/
-/*void DynamicUnit::setUnitGroundRange(const int newUnitGroundRange)
-{
-	int_unitGroundRange = newUnitGroundRange;
-	return;
-}*/
-/*void DynamicUnit::setUnitWaterAtt(const int newUnitWaterAtt)
-{
-	int_unitWaterAtt = newUnitWaterAtt;
-	return;
-}*/
-/*void DynamicUnit::setUnitWaterRange(const int newUnitWaterRange)
-{
-	int_unitWaterRange = newUnitWaterRange;
-	return;
-}*/
 void DynamicUnit::autoRepair() {
 	if (int_unitCurrentHP + int_unitAutoRep > int_unitHP) {
 		int_unitCurrentHP = int_unitHP;

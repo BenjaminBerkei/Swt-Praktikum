@@ -28,12 +28,10 @@ ButtonMove::ButtonMove(int sizeX, int sizeY)
     setPixmap(pixmap().scaled(sizeX,sizeY));
 }
 
-void ButtonMove::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void ButtonMove::mousePressEvent(QGraphicsSceneMouseEvent *)
 {
-    Q_UNUSED(event);
     qDebug() << "Meldung: Move Button gedrückt.";
-    ptr_hexBaseGame->buttonPressedMove();
-    emit clicked(this);
+    emit clicked();
 }
 
 
@@ -49,12 +47,10 @@ ButtonAction::ButtonAction(int sizeX, int sizeY)
     setPixmap(pixmap().scaled(sizeX,sizeY));
 }
 
-void ButtonAction::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void ButtonAction::mousePressEvent(QGraphicsSceneMouseEvent *)
 {
-    Q_UNUSED(event);
     qDebug() << "Meldung: Action Button gedrückt.";
-    ptr_hexBaseGame->buttonPressedAction();
-    emit clicked(this);
+    emit clicked();
 }
 
 void ButtonAction::printType()
@@ -70,11 +66,10 @@ ButtonMap::ButtonMap(int sizeX, int sizeY)
     setPixmap(pixmap().scaled(sizeX,sizeY));
 }
 
-void ButtonMap::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void ButtonMap::mousePressEvent(QGraphicsSceneMouseEvent *)
 {
-    Q_UNUSED(event);
     qDebug() << "Meldung: Map Button gedrückt.";
-    emit clicked(this);
+    emit clicked();
 }
 
 void ButtonMap::printType()
@@ -90,11 +85,10 @@ ButtonInformation::ButtonInformation(int sizeX, int sizeY)
     setPixmap(pixmap().scaled(sizeX,sizeY));
 }
 
-void ButtonInformation::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void ButtonInformation::mousePressEvent(QGraphicsSceneMouseEvent *)
 {
-    Q_UNUSED(event);
     qDebug() << "Meldung: Information Button gedrückt.";
-    emit clicked(this);
+    emit clicked();
 }
 
 void ButtonInformation::printType()
@@ -109,12 +103,10 @@ ButtonChangePhase::ButtonChangePhase(int sizeX, int sizeY)
     setPixmap(pixmap().scaled(sizeX,sizeY));
 }
 
-void ButtonChangePhase::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void ButtonChangePhase::mousePressEvent(QGraphicsSceneMouseEvent *)
 {
-    Q_UNUSED(event);
     qDebug() << "Meldung: Change Phase Button gedrückt.";
-    ptr_hexBaseGame->buttonPressedChangePhase();
-    emit clicked(this);
+    emit clicked();
 }
 
 void ButtonChangePhase::printType()
@@ -129,12 +121,10 @@ ButtonMenue::ButtonMenue(int sizeX, int sizeY)
     setPixmap(pixmap().scaled(sizeX,sizeY));
 }
 
-void ButtonMenue::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void ButtonMenue::mousePressEvent(QGraphicsSceneMouseEvent *)
 {
-    Q_UNUSED(event);
     qDebug() << "Meldung: Menue Button gedrückt.";
-    ptr_hexBaseGame->buttonPressedMenue();
-    emit clicked(this);
+    emit clicked();
 }
 
 void ButtonMenue::printType()

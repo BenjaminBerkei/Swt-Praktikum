@@ -13,7 +13,6 @@
 #define BUTTON_H
 #include "hexagonbase.h"
 #include "enumerations.h"
-#include "game.h"
 #include <QDebug>
 
 class Game;
@@ -41,7 +40,7 @@ public:
 
     void printType();
 signals:
-    void clicked(ButtonMove*);
+    void clicked();
 };
 
 
@@ -55,7 +54,7 @@ public:
 
     void printType();
 signals:
-    void clicked(ButtonAction*);
+    void clicked();
 
 };
 
@@ -70,7 +69,7 @@ public:
 
     void printType();
 signals:
-    void clicked(ButtonMap*);
+    void clicked();
 
 };
 
@@ -85,7 +84,7 @@ public:
 
     void printType();
 signals:
-    void clicked(ButtonInformation*);
+    void clicked();
 
 };
 
@@ -100,7 +99,7 @@ public:
 
     void printType();
 signals:
-    void clicked(ButtonChangePhase*);
+    void clicked();
 
 };
 
@@ -115,7 +114,7 @@ public:
 
     void printType();
 signals:
-    void clicked(ButtonMenue*);
+    void clicked();
 
 };
 #endif // BUTTON_H

@@ -8,8 +8,9 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
-#include "game.h"
 #include <QString> 
+
+class Game;
 
 class Player 
 { 

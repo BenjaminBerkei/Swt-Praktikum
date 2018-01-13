@@ -11,6 +11,10 @@
  * Version: 0.3
  * Datum: 12.01.2018
  * Kommentar: Buttons hinzugefuegt
+ *
+ * Author: Lucas, Manuel
+ * Version: 0.4
+ * Datum: 13.01.2018
  * */
 #ifndef GAMEWIDGET_H
 #define GAMEWIDGET_H
@@ -18,7 +22,6 @@
 #include <QWidget>
 #include <QGraphicsScene>
 #include <vector>
-#include "game.h"
 #include "hexagonmatchfield.h"
 #include "button.h"
 
@@ -37,7 +40,6 @@ class GameWidget : public QWidget
     Q_OBJECT
 private:
     Ui::GameWidget *ui;
-    Game* gameWidGame;
     QGraphicsScene *gameWidGameScene;
     QGraphicsScene *gameWidInfoScene;
     QGraphicsScene *gameWidOptionsScene;
@@ -46,13 +48,12 @@ private:
 public:
     explicit GameWidget(QWidget *parent = 0);
     ~GameWidget();
-    void gameWidCreateMatchfield();
-    void gameWidcreateButtonBar();
+    void gameWidCreateMatchfield(std::vector<std::vector<HexagonMatchfield*>> &hexagonGrid);
+    void gameWidcreateButtonBar(std::vector<Button *> buttonVector);
     void setInfoScene(HexagonDisplayInfo *info);
     void clearScenes();
 
     //get und set Methoden
-    void setGameWidGame(Game* game) { gameWidGame = game; }
     QGraphicsScene *getGameWidInfoScene() const;
 
 signals:
@@ -74,7 +75,7 @@ private:
 public:
     HexagonDisplayInfo(HexagonMatchfield* ptr_hexMfield);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *);
-    void update();
+    void updateText();
 };
 
 #endif // GAMEWIDGET_H

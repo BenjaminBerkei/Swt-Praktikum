@@ -8,14 +8,18 @@
 #ifndef STATICUNIT_HPP
 #define STATICUNIT_HPP
 
-#include "unit.h"
 #include "hexagonmatchfield.h"
 #include "player.h"
+#include "unit.h"
+
 #include <map>
 #include <QFile>
 #include <QTextStream>
 #include <QString> 
 #include <QPoint>
+
+class Player;
+class HexagonMatchfield;
 
 class StaticUnit : public Unit
 {

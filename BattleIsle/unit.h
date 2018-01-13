@@ -9,6 +9,7 @@
 
 #include "hexagonmatchfield.h"
 #include "player.h"
+
 #include <map>
 #include <vector>
 #include <QFile>
@@ -66,7 +67,7 @@ public:
 	void setUnitCurrentHP(int);
 	void setUnitUsed(bool);
 
-    virtual Unit* createUnit() = 0;
+    //virtual Unit* createUnit() = 0;
     virtual bool checkUnitDestroyed();
     virtual bool action(HexagonMatchfield*) = 0;
     virtual int moveTo(HexagonMatchfield*);

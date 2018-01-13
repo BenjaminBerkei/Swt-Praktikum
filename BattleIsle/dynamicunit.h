@@ -1,31 +1,29 @@
-/////////////////////////////////////////////
-// dynamicunit.hpp // letzte Änderung: 10.1.17 //
-// Letzte Editirung: Arne				   //
-// Version: 0.2						   //
-// -------- Kommentare --------------------//
-/* Wer noch irgendwo Static statt Dynamic findet bekommt n Eis von mir, lg Arne
-*/
-/////////////////////////////////////////////
 /*
+ * Author: Arne
+ * Version: 0.2
+ * Kommentar: Wer noch irgendwo Static statt Dynamic findet bekommt n Eis von mir, lg Arne
+ *
  * Author: Lucas
  * Version: 0.3
  * Datum: 12.01.17
  * Kommentar: Fehlerbehebung
+ *
+ * Author: Lucas, Manuel
+ * Version: 0.4
+ * Datum: 13.01.2018
  */
 #ifndef DYNAMICUNIT_HPP
 #define DYNAMICUNIT_HPP
 
-
-#include "unit.h"
+#include "hexagonmatchfield.h"
 #include "enumerations.h"
-#include "staticunit.h"
+#include "unit.h"
 #include <QDebug>
 
 class DynamicUnit : public Unit
 {
 protected:
   int int_unitAutoRep;
-  int int_unitMoveRange;
   int int_unitLevel;
 
 
@@ -34,11 +32,9 @@ DynamicUnit(QString, Player*);
 ~DynamicUnit();
 
   int getUnitAutoRep() const;
-  int getUnitMoveRange() const;
   int getUnitLevel() const;
 
   void setUnitAutoRep(const int);
-  void setUnitMoveRange(const int);
   void setUnitLevel(const int);
   
   void autoRepair();

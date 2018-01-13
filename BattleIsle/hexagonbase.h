@@ -12,16 +12,14 @@
 #include <cmath>
 #include <QDebug>
 
-class Game;
 
 class HexagonBase : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 protected:
     QPoint qpoint_gridPosition; //Position im Grid
-    Game* ptr_hexBaseGame;
 public:
-    HexagonBase(QPoint qpoint_position, Game* ptr_game = 0);
+    HexagonBase(QPoint qpoint_position);
 
     /*Müssen in Subklassen ausgeprägt werden*/
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) = 0;
