@@ -109,10 +109,13 @@ void HexagonMatchfield::paint(QPainter *painter, const QStyleOptionGraphicsItem 
     if(state == ACTIVE)
     {
         pen.setColor(Qt::red);
-        pen.setWidth(3);
-        painter->setPen(pen);
-        painter->drawPath(shape());
+    }else if(state == TARGET)
+    {
+        pen.setColor(Qt::yellow);
     }
+    pen.setWidth(3);
+    painter->setPen(pen);
+    painter->drawPath(shape());
 }
 
 int HexagonMatchfield::getBoltaniumCurrent() const{

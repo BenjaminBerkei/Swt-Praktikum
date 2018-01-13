@@ -16,9 +16,6 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <vector>
-#include <QTime>
-#include <QObject>
 #include "options.h"
 #include "button.h"
 
@@ -28,6 +25,11 @@
 #include "dynamicunit.h"
 #include "button.h"
 #include "options.h"
+
+#include <vector>
+#include <QTime>
+#include <QObject>
+#include <queue>
 
 class GameWidget; //Vorwärtsdeklaration
 class HexagonMatchfield;
@@ -47,6 +49,9 @@ private:
     Options* gameOptions;
     GameWidget* ptr_gameGameWid;
 
+    std::map<HexagonMatchfield*, HexagonMatchfield*> came_from;
+    std::map<HexagonMatchfield*, int> current_cost;
+
     static std::vector<QPoint> vector_oddNeighbors;
     static std::vector<QPoint> vector_evenNeighbors;
 public:
@@ -61,6 +66,9 @@ public:
     //void calculateActionTargets();
     void resetStateHex(); // Nicht im UML-Diagramm, ist nur eine Hilfsfunktion für processSelection
 
+/*TestFunktionen*/
+    void showNeighbors(HexagonMatchfield*);
+/*TestFunktionen Ende*/
 
     // get und set Methoden
     std::vector<std::vector<HexagonMatchfield*>> getVectorVectorHexagonMatchfield();
@@ -76,5 +84,9 @@ public slots:
     void buttonPressedMenue();
     void buttonPressedChangePhase();
 };
-
+class Compare
+{
+public:
+    bool operator ()(std::pair<HexagonMatchfield *, int> a, std::pair<HexagonMatchfield *, int> b);
+};
 #endif // GAME_H

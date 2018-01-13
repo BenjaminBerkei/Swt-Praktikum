@@ -25,8 +25,6 @@
 #include "hexagonmatchfield.h"
 #include "button.h"
 
-#include <QDesktopWidget>
-
 namespace Ui {
 class GameWidget;
 }
@@ -44,6 +42,8 @@ private:
     QGraphicsScene *gameWidInfoScene;
     QGraphicsScene *gameWidOptionsScene;
     QGraphicsScene *gameWidButtonScene;
+    int sizeX;
+    int sizeY;
 
 public:
     explicit GameWidget(QWidget *parent = 0);
@@ -55,6 +55,9 @@ public:
 
     //get und set Methoden
     QGraphicsScene *getGameWidInfoScene() const;
+
+    int getSizeX() const;
+    int getSizeY() const;
 
 signals:
     void SIGNAL_gameWidChangeIndexFromStack(int);
