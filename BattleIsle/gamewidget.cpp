@@ -31,6 +31,16 @@ void GameWidget::setInfoScene(HexagonDisplayInfo *info)
     gameWidGameScene->update();
 }
 
+void GameWidget::setPlayerLabel(QString text)
+{
+    ui->labelPlayerCurrent->setText(text);
+}
+
+void GameWidget::setPhaseLabel(QString text)
+{
+    ui->labelPhaseCurrent->setText(text);
+}
+
 void GameWidget::clearScenes()
 {
     //leere gameWidInfoScene

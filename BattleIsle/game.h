@@ -12,6 +12,13 @@
  * Datum: 12.01.2018
  * Kommentar: Buttons hinzugefuegt
  * */
+/*
+ * Author: Lucas
+ * Version: 0.4
+ * Datum 14.01.2018
+ * Kommentare: ProcessSelection bearbeitet, Dijkstra gefixed, showpath() hinzugefügt, Player eingefügt, ChnagePhase & Move Button Implementiert
+ *              cameFrom und current_cost eingefügt, reset funktion geändert
+ * */
 
 #ifndef GAME_H
 #define GAME_H

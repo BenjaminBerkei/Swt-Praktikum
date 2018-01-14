@@ -8,12 +8,6 @@
         <file>AirOhneRand/XA-7_Raven_rot.png</file>
         <file>AirOhneRand/XF-7_Mosquito_blau.png</file>
         <file>AirOhneRand/XF-7_Mosquito_rot.png</file>
-        <file>Buttons/hexagonGruen.png</file>
-        <file>Buttons/hexagonGruenAction.png</file>
-        <file>Buttons/hexagonGruenChangePhase.png</file>
-        <file>Buttons/hexagonGruenMenue.png</file>
-        <file>Buttons/hexagonGruenMove.png</file>
-        <file>Buttons/hexagonGruenSafeGame.png</file>
         <file>GroundOhneRand/AD-5_Blitz_blau.png</file>
         <file>GroundOhneRand/AD-5_Blitz_rot.png</file>
         <file>GroundOhneRand/AD-9_Sphinx_blau.png</file>
@@ -67,5 +61,19 @@
         <file>WaterOhneRand/W-1_Fortress_rot.png</file>
         <file>WaterOhneRand/Z-1_Pegasus_blau.png</file>
         <file>WaterOhneRand/Z-1_Pegasus_rot.png</file>
+    </qresource>
+    <qresource prefix="/buttonRess">
+        <file>Buttons/RepairOhne.png</file>
+        <file>Buttons/RepairMit.png</file>
+        <file>Buttons/PhasenwechselOhne.png</file>
+        <file>Buttons/PhasenwechselMit.png</file>
+        <file>Buttons/MoveOhne.png</file>
+        <file>Buttons/MoveMit.png</file>
+        <file>Buttons/EntladenOhne.png</file>
+        <file>Buttons/EntladenMit.png</file>
+        <file>Buttons/BeladenOhne.png</file>
+        <file>Buttons/BeladenMit.png</file>
+        <file>Buttons/AttackeOhne.png</file>
+        <file>Buttons/AttackeMit.png</file>
     </qresource>
 </RCC>

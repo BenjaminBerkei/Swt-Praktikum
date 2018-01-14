@@ -24,13 +24,12 @@ void Button::changeState(BUTTONSTATE newState)
 /*ButtonMove*/
 ButtonMove::ButtonMove(int sizeX, int sizeY)
 {
-    setPixmap(QPixmap(":/img/Buttons/hexagonGruenMove.png"));
-    setPixmap(pixmap().scaled(sizeX,sizeY));
+    QPixmap pix(":/buttonRess/Buttons/MoveMit.png");
+    setPixmap(pix.scaled(sizeX,sizeY));
 }
 
 void ButtonMove::mousePressEvent(QGraphicsSceneMouseEvent *)
 {
-    qDebug() << "Meldung: Move Button gedrückt.";
     emit clicked();
 }
 
@@ -43,13 +42,12 @@ void ButtonMove::printType()
 /*ButtonAction*/
 ButtonAction::ButtonAction(int sizeX, int sizeY)
 {
-    setPixmap(QPixmap(":/img/Buttons/hexagonGruenAction.png"));
-    setPixmap(pixmap().scaled(sizeX,sizeY));
+    QPixmap pix(":/buttonRess/Buttons/AttackeMit.png");
+    setPixmap(pix.scaled(sizeX,sizeY));
 }
 
 void ButtonAction::mousePressEvent(QGraphicsSceneMouseEvent *)
 {
-    qDebug() << "Meldung: Action Button gedrückt.";
     emit clicked();
 }
 
@@ -59,11 +57,11 @@ void ButtonAction::printType()
 }
 
 /*ButtonMap*/
-ButtonMap::ButtonMap(int sizeX, int sizeY)
+ButtonMap::ButtonMap(int , int )
 {
     //Noch implementieren
-    //setPixmap(QPixmap(""));
-    setPixmap(pixmap().scaled(sizeX,sizeY));
+    //QPixmap(""));
+    //setPixmap(pixmap().scaled(sizeX,sizeY));
 }
 
 void ButtonMap::mousePressEvent(QGraphicsSceneMouseEvent *)
@@ -78,11 +76,11 @@ void ButtonMap::printType()
 }
 
 /*ButtonInformation*/
-ButtonInformation::ButtonInformation(int sizeX, int sizeY)
+ButtonInformation::ButtonInformation(int , int )
 {
     //Noch implemetieren
-    //setPixmap(QPixmap(""));
-    setPixmap(pixmap().scaled(sizeX,sizeY));
+    //QPixmap(""));
+    //setPixmap(pixmap().scaled(sizeX,sizeY));
 }
 
 void ButtonInformation::mousePressEvent(QGraphicsSceneMouseEvent *)
@@ -99,13 +97,12 @@ void ButtonInformation::printType()
 /*ButtonChangePhase*/
 ButtonChangePhase::ButtonChangePhase(int sizeX, int sizeY)
 {
-    setPixmap(QPixmap(":/img/Buttons/hexagonGruenChangePhase.png"));
-    setPixmap(pixmap().scaled(sizeX,sizeY));
+    QPixmap pix(":/buttonRess/Buttons/PhasenwechselMit.png");
+    setPixmap(pix.scaled(sizeX,sizeY));
 }
 
 void ButtonChangePhase::mousePressEvent(QGraphicsSceneMouseEvent *)
 {
-    qDebug() << "Meldung: Change Phase Button gedrückt.";
     emit clicked();
 }
 
@@ -117,8 +114,8 @@ void ButtonChangePhase::printType()
 /*ButtonMenue*/
 ButtonMenue::ButtonMenue(int sizeX, int sizeY)
 {
-    setPixmap(QPixmap(":/img/Buttons/hexagonGruenMenue.png"));
-    setPixmap(pixmap().scaled(sizeX,sizeY));
+    QPixmap pix(":/img/Buttons/hexagonGruenMenue.png");
+    setPixmap(pix.scaled(sizeX,sizeY));
 }
 
 void ButtonMenue::mousePressEvent(QGraphicsSceneMouseEvent *)

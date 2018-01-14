@@ -137,6 +137,8 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
         unit_UnitGrid.push_back(vectorUnit);
     }
     ptr_gameGameWid->gameWidCreateMatchfield(hexagonMatchfield_gameGrid);
+    ptr_gameGameWid->setPlayerLabel(ptr_playerOne->getPlayerName());
+    ptr_gameGameWid->setPhaseLabel("Move");
     //##################################################################
 
     //Buttons Einfuegen
@@ -294,9 +296,12 @@ void Game::resetHexMatchfield()
 
 void Game::buttonPressedMove()
 {
-    if(SelectionCache->getUnit_stationed() != nullptr && SelectionCache->getUnit_stationed()->getUnitPlayer() == ptr_playerActive)
+    if(ptr_roundCurrent->getCurrentPhase() == MOVE)
     {
-        Dijkstra();
+        if(SelectionCache->getUnit_stationed() != nullptr && SelectionCache->getUnit_stationed()->getUnitPlayer() == ptr_playerActive)
+        {
+            Dijkstra();
+        }
     }
 }
 
@@ -318,8 +323,11 @@ void Game::buttonPressedChangePhase()
     {
         ptr_playerActive = ptr_playerActive == ptr_playerOne ? ptr_playerTwo : ptr_playerOne;
     }
+    ptr_gameGameWid->setPlayerLabel(ptr_playerActive->getPlayerName());
+    ptr_gameGameWid->setPhaseLabel(ptr_roundCurrent->getCurrentPhase() == MOVE ? "Move" : "Action");
 }
 
+/*HilfsFunktion*/
 void Game::showNeighbors(HexagonMatchfield * center)
 {
     qDebug() << "Center: " << "(" << center->getQpoint_gridPosition().x() << ", " << center->getQpoint_gridPosition().y() << ")";

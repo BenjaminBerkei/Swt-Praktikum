@@ -51,6 +51,8 @@ public:
     void gameWidCreateMatchfield(std::vector<std::vector<HexagonMatchfield*>> &hexagonGrid);
     void gameWidcreateButtonBar(std::vector<Button *> buttonVector);
     void setInfoScene(HexagonDisplayInfo *info);
+    void setPlayerLabel(QString);
+    void setPhaseLabel(QString);
     void clearScenes();
 
     //get und set Methoden

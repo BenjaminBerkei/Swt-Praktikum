@@ -4,6 +4,12 @@
  * Datum 25.11.2017
  * Kommentare: es gibt wie über whatsapp besprochen nur noch changePhase() 0.3 -> runde in 10er schritten
  * */
+/*
+ * Author: Lucas
+ * Version: 0.4
+ * Datum 14.01.2018
+ * Kommentare: getCurrentPhase() eingefügt
+ * */
 
 #ifndef ROUND_HPP
 #define ROUND_HPP
