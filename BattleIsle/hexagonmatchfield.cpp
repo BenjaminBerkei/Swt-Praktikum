@@ -71,10 +71,8 @@ void HexagonMatchfield::setUnit_stationed(Unit *value)
 }
 
 HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, QString type, Unit *stationedUnit) :
-    HexagonBase( qpoint_gridPosition ),
-    unit_stationed(stationedUnit),
-    state(INACTIVE),
-    HexMatchfieldType(type), qcolor_HexColor(Qt::black)
+    HexagonBase( qpoint_gridPosition ), bool_hexFogOfWar(false), unit_stationed(stationedUnit), state(INACTIVE),
+    HexMatchfieldType(type),int_boltaniumCurrent(), qcolor_HexColor(Qt::black)
 {
     if(HexMatchfieldType == "waterDeep")
         setPixmap(QPixmap(":/img/HexagonBilder/Meer.png"));
@@ -100,6 +98,12 @@ HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, QString type, U
     //Skalierung kann hier angepasst werden
     setPixmap(pixmap().scaled(64,64));
 
+    if(int_boltaniumCurrent > 0)
+    {
+        qpixmap_boltanium.load(":/img/Boltanium/Boltanium_high.png");
+        qpixmap_boltanium = qpixmap_boltanium.scaled(64,64);
+    }
+
     ptr_hexMfieldDisplay = new HexagonDisplayInfo(this);
 }
 
@@ -114,9 +118,13 @@ void HexagonMatchfield::paint(QPainter *painter, const QStyleOptionGraphicsItem 
     QGraphicsPixmapItem::paint(painter, option, widget);
         QPen pen;
         pen.setColor(qcolor_HexColor);
-        pen.setWidth(3);
+        pen.setWidth(2);
         painter->setPen(pen);
         painter->drawPath(shape());
+        if(int_boltaniumCurrent > 0)
+        {
+            painter->drawPixmap(0,0,qpixmap_boltanium);
+        }
 }
 
 int HexagonMatchfield::getBoltaniumCurrent() const{

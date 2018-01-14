@@ -61,6 +61,9 @@
         <file>WaterOhneRand/W-1_Fortress_rot.png</file>
         <file>WaterOhneRand/Z-1_Pegasus_blau.png</file>
         <file>WaterOhneRand/Z-1_Pegasus_rot.png</file>
+        <file>Boltanium/Boltanium_medium.png</file>
+        <file>Boltanium/Boltanium_low.png</file>
+        <file>Boltanium/Boltanium_high.png</file>
     </qresource>
     <qresource prefix="/buttonRess">
         <file>Buttons/RepairOhne.png</file>

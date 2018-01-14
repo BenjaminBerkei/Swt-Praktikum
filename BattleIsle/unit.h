@@ -74,7 +74,7 @@ public:
 	int getUnitCost() const;
 	bool getUnitUsed() const;
 
-    void setInt_unitCurrentMoveRange(int value);
+    void setUnitCurrentMoveRange(int value);
     void setUnitName(QString);
 	void setUnitPlayer(Player*);
 	void setUnitHP(int);
@@ -82,7 +82,6 @@ public:
 	void setUnitUsed(bool);
 
     int getUnitCurrentMoveRange() const;
-    void setUnitCurrentMoveRange(int value);
     int getUnitMoveRange() const;
     void setUnitMoveRange(int value);
     int getUnitWaterAtt() const;

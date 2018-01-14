@@ -182,11 +182,6 @@ void Game::processSelection(HexagonMatchfield *selection)
 
         //Angeklicktes auf AKTIVE setzten
         SelectionCache->setState(ACTIVE);
-
-        /*Aufruf Hilfsfunktionen*/
-        //showNeighbors(selection);
-        /*Aufruf Hilfsfunktionen Ende*/
-
         break;
 
     case ACTIVE:
@@ -223,6 +218,7 @@ void Game::processSelection(HexagonMatchfield *selection)
         break;
     case PATH :
         moveUnitTo(selection);
+        ptr_gameGameWid->setInfoScene(SelectionCache->getPtr_hexMfieldDisplay());
         resetHexMatchfield();
         break;
     }
@@ -292,6 +288,7 @@ void Game::Dijkstra()
     }
 }
 
+
 void Game::resetHexMatchfield()
 {
     /*Zurücksetzen der Auswahl*/
@@ -308,6 +305,7 @@ void Game::resetHexMatchfield()
     TargetChache.clear();
     came_from.clear();
     current_cost.clear();
+
     ptr_gameGameWid->clearScenes();
 }
 
@@ -319,6 +317,8 @@ void Game::moveUnitTo(HexagonMatchfield * target)
 
         if(unitToMove != nullptr && target->getUnit_stationed() == nullptr)
         {
+            unitToMove->setUnitCurrentMoveRange(unitToMove->getUnitCurrentMoveRange() - current_cost[target]);
+
             target->setUnit_stationed(unitToMove);
             SelectionCache->setUnit_stationed(nullptr);
 
@@ -326,6 +326,10 @@ void Game::moveUnitTo(HexagonMatchfield * target)
             unit_UnitGrid[SelectionCache->getQpoint_gridPosition().x()][SelectionCache->getQpoint_gridPosition().y()] = nullptr;
 
             unitToMove->setPos(target->pos());
+            SelectionCache->setState(INACTIVE);
+
+            SelectionCache = target;
+            SelectionCache->setState(ACTIVE);
         }
     }
 }
@@ -364,6 +368,7 @@ void Game::buttonPressedChangePhase()
     if(ptr_roundCurrent->getCurrentPhase() == MOVE)
     {
         ptr_playerActive = ptr_playerActive == ptr_playerOne ? ptr_playerTwo : ptr_playerOne;
+        resetUnitsMoveRange(ptr_playerActive);
     }
     ptr_gameGameWid->setPlayerLabel(ptr_playerActive->getPlayerName());
     ptr_gameGameWid->setPhaseLabel(ptr_roundCurrent->getCurrentPhase() == MOVE ? "Move" : "Action");
@@ -432,6 +437,20 @@ void Game::checkWinCondition()
     if(ptr_playerTwo->getPlayerUnitNumber() == 0 || ptr_playerTwo->getHQDestroyed())
     {
         qDebug() << "Spieler Zwei Verloren";
+    }
+}
+
+void Game::resetUnitsMoveRange(Player * player)
+{
+    for(auto &iteratorX : unit_UnitGrid)
+    {
+        for(auto &unit : iteratorX)
+        {
+            if(unit != nullptr && unit->getUnitPlayer() == player)
+            {
+                unit->setUnitCurrentMoveRange(unit->getUnitMoveRange());
+            }
+        }
     }
 }
 

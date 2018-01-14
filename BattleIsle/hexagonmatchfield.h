@@ -65,6 +65,7 @@ protected:
     //"boltanium"           (Boltanium)
     int int_boltaniumCurrent;
     QColor qcolor_HexColor;
+    QPixmap qpixmap_boltanium;
 
 public:
     HexagonMatchfield(QPoint qpoint_gridPosition, QString type, Unit* stationedUnit= 0);

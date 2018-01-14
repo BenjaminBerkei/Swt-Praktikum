@@ -78,12 +78,13 @@ public:
     //void calculateActionTargets();
 
     /* Nicht im UML-Diagramm, ist nur eine Hilfsfunktionen für processSelection*/
-    void resetHexMatchfield();              //Spielfeld zurücksetzen in neutralen zustand
+    void resetHexMatchfield();
     void moveUnitTo(HexagonMatchfield*);    //Einheit auf anderes Hex verlegen
     void showNeighbors(HexagonMatchfield*); //Nachbarn markieren -> später range markieren
     void showPath(HexagonMatchfield *);     //Weg einer bewegung anzeigen
     void checkUnitGrid();                   //Prüfen ob eine Einheit gestorben ist
     void checkWinCondition();               //Prüfen ob ein spieler gewonnen hat
+    void resetUnitsMoveRange(Player*);
     /*Hilfsfunktionen Ende*/
 
     // get und set Methoden
