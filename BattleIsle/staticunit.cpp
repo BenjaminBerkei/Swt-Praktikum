@@ -3,6 +3,12 @@
  * Version: 0.2
  * Datum 03.01.2018
  */
+/*
+ * Author: Lucas
+ * Version: 0.3
+ * Datum 14.01.2018
+ * Kommentar: Chechunitdestroyed von HQ ausgeprägt
+ */
 
 #include "staticunit.h"
 
@@ -46,19 +52,12 @@ StaticUnit::StaticUnit(QString filepath, Player* player)
 
     int_unitCurrentHP = int_unitHP;
     unitFile = filepath;
-    unitPlayer = player;
+    setUnitPlayer(player);
 }
-
-StaticUnit::~StaticUnit(){}
 
 int StaticUnit::getEnergieStorage() const
 {
 	return int_EnergieStorage;
-}
-
-bool StaticUnit::checkUnitDestroyed() 
-{
-	return int_unitCurrentHP <= 0 ? true : false;
 }
 
 int StaticUnit::moveTo(HexagonMatchfield* )
@@ -75,7 +74,17 @@ HeadquaterUnit::~HeadquaterUnit(){}
 
 bool HeadquaterUnit::action(HexagonMatchfield* )
 {
-	return true;
+    return true;
+}
+
+bool HeadquaterUnit::checkUnitDestroyed()
+{
+    if(int_unitCurrentHP <= 0)
+    {
+        unitPlayer->setHQDestroyed(true);
+        return true;
+    }
+    return false;
 }
 
 Unit* HeadquaterUnit::createUnit()

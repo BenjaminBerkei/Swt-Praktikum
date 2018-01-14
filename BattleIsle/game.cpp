@@ -6,8 +6,13 @@
  * Author: Manuel
  * Version: 0.2
  * Datum: 04.01.2018
+ *
+ * Author: Lucas
+ * Version: 0.4
+ * Datum 14.01.2018
+ * Kommentare: ProcessSelection bearbeitet, Dijkstra gefixed, reset funktion geändert, Player cameFrom und current_cost eingefügt,
+ *              ChangePhase & Move Button Implementiert, Hilfsfunktionen  eingefügt
  * */
-
 #include "game.h"
 using namespace std;
 
@@ -139,22 +144,24 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     ptr_gameGameWid->gameWidCreateMatchfield(hexagonMatchfield_gameGrid);
     ptr_gameGameWid->setPlayerLabel(ptr_playerOne->getPlayerName());
     ptr_gameGameWid->setPhaseLabel("Move");
+    ptr_gameGameWid->setPlayerOneUnitsLabel(ptr_playerOne->getPlayerUnitNumber());
+    ptr_gameGameWid->setPlayerTwoUnitsLabel(ptr_playerTwo->getPlayerUnitNumber());
     //##################################################################
 
     //Buttons Einfuegen
     ButtonMove* movebutton = new ButtonMove(64,64);
     ButtonAction* actionbutton = new ButtonAction(64,64);
     ButtonChangePhase* changephasebutton = new ButtonChangePhase(64,64);
-    ButtonMenue* menuebutton = new ButtonMenue(64,64);
+    //ButtonMenue* menuebutton = new ButtonMenue(64,64);
 
     button_menueBar.push_back(movebutton);
     button_menueBar.push_back(actionbutton);
     button_menueBar.push_back(changephasebutton);
-    button_menueBar.push_back(menuebutton);
+    //button_menueBar.push_back(menuebutton);
     connect(movebutton,SIGNAL(clicked()),this,SLOT(buttonPressedMove()));
     connect(actionbutton,SIGNAL(clicked()),this,SLOT(buttonPressedAction()));
     connect(changephasebutton,SIGNAL(clicked()),this,SLOT(buttonPressedChangePhase()));
-    connect(menuebutton,SIGNAL(clicked()),this,SLOT(buttonPressedMenue()));
+    //connect(menuebutton,SIGNAL(clicked()),this,SLOT(buttonPressedMenue()));
 
     ptr_gameGameWid->gameWidcreateButtonBar(button_menueBar);
 }
@@ -187,17 +194,25 @@ void Game::processSelection(HexagonMatchfield *selection)
         break;
 
     case TARGET:
-        for(auto &it : TargetChache)
+        if(ptr_roundCurrent->getCurrentPhase() == MOVE)
         {
-            it->setState(TARGET);
+            for(auto &it : TargetChache)
+            {
+                it->setState(TARGET);
+            }
+            showPath(selection);
+        }else if(ptr_roundCurrent->getCurrentPhase() == ACTION)
+        {
+            SelectionCache->getUnit_stationed()->action(selection);
+            resetHexMatchfield();
         }
-        showPath(selection);
+
     /*
      Pseudocode:
         if(selectionCache.getStationedUnit != nullptr)
             if(move)
             {
-                moveUnitTo(target;)
+                showPath(target);
             }
             if(action)
             {
@@ -206,11 +221,13 @@ void Game::processSelection(HexagonMatchfield *selection)
             reset()
     */
         break;
-    case PATH : break;
+    case PATH :
+        moveUnitTo(selection);
+        resetHexMatchfield();
+        break;
     }
-
-
-    //if(SelectionCache->unit_stationed == NULL) hier spaeter einfuegen
+    checkUnitGrid();
+    checkWinCondition();
 }
 
 void Game::Dijkstra()
@@ -294,6 +311,25 @@ void Game::resetHexMatchfield()
     ptr_gameGameWid->clearScenes();
 }
 
+void Game::moveUnitTo(HexagonMatchfield * target)
+{
+    if(SelectionCache != nullptr)
+    {
+        Unit* unitToMove = SelectionCache->getUnit_stationed();
+
+        if(unitToMove != nullptr && target->getUnit_stationed() == nullptr)
+        {
+            target->setUnit_stationed(unitToMove);
+            SelectionCache->setUnit_stationed(nullptr);
+
+            unit_UnitGrid[target->getQpoint_gridPosition().x()][target->getQpoint_gridPosition().y()] = unitToMove;
+            unit_UnitGrid[SelectionCache->getQpoint_gridPosition().x()][SelectionCache->getQpoint_gridPosition().y()] = nullptr;
+
+            unitToMove->setPos(target->pos());
+        }
+    }
+}
+
 void Game::buttonPressedMove()
 {
     if(ptr_roundCurrent->getCurrentPhase() == MOVE)
@@ -307,7 +343,13 @@ void Game::buttonPressedMove()
 
 void Game::buttonPressedAction()
 {
-
+    if(ptr_roundCurrent->getCurrentPhase() == ACTION)
+    {
+        if(SelectionCache->getUnit_stationed() != nullptr && SelectionCache->getUnit_stationed()->getUnitPlayer() == ptr_playerActive)
+        {
+            showNeighbors(SelectionCache);
+        }
+    }
 }
 
 void Game::buttonPressedMenue()
@@ -330,21 +372,27 @@ void Game::buttonPressedChangePhase()
 /*HilfsFunktion*/
 void Game::showNeighbors(HexagonMatchfield * center)
 {
-    qDebug() << "Center: " << "(" << center->getQpoint_gridPosition().x() << ", " << center->getQpoint_gridPosition().y() << ")";
     if(center->getQpoint_gridPosition().x() & 1)
     {
-        qDebug() << "odd";
         for(auto &it: vector_oddNeighbors)
         {
-            hexagonMatchfield_gameGrid[center->getQpoint_gridPosition().x() + it.x()][center->getQpoint_gridPosition().y() + it.y()]->setState(TARGET);
-            qDebug() << "\t" << "(" << center->getQpoint_gridPosition().x() + it.x() << ", " << center->getQpoint_gridPosition().y() + it.y() << ")";
+            int x = center->getQpoint_gridPosition().x() + it.x();
+            int y = center->getQpoint_gridPosition().y() + it.y();
+            if(x >= 0 && x < ptr_gameGameWid->getSizeX() && y >= 0 && ptr_gameGameWid->getSizeY())
+            {
+                hexagonMatchfield_gameGrid[x][y]->setState(TARGET);
+                TargetChache.push_back(hexagonMatchfield_gameGrid[x][y]);
+            }
         }
     }else{
-        qDebug() << "even";
         for(auto &it: vector_evenNeighbors)
         {
-            hexagonMatchfield_gameGrid[center->getQpoint_gridPosition().x() + it.x()][center->getQpoint_gridPosition().y() + it.y()]->setState(TARGET);
-            qDebug() << "\t" << "(" << center->getQpoint_gridPosition().x() + it.x() << ", " << center->getQpoint_gridPosition().y() + it.y() << ")";
+            int x = center->getQpoint_gridPosition().x() + it.x();
+            int y = center->getQpoint_gridPosition().y() + it.y();
+            {
+                hexagonMatchfield_gameGrid[x][y]->setState(TARGET);
+                TargetChache.push_back(hexagonMatchfield_gameGrid[x][y]);
+            }
         }
     }
 }
@@ -354,6 +402,36 @@ void Game::showPath(HexagonMatchfield* target)
     for(auto &it = target; it != SelectionCache; it = came_from[it])
     {
         it->setState(PATH);
+    }
+}
+
+void Game::checkUnitGrid()
+{
+    for(int x = 0; x < ptr_gameGameWid->getSizeX(); x++)
+    {
+        for(int y = 0; y < ptr_gameGameWid->getSizeY(); y++)
+        {
+            if(unit_UnitGrid[x][y] != nullptr && unit_UnitGrid[x][y]->checkUnitDestroyed())
+            {
+                hexagonMatchfield_gameGrid[x][y]->setUnit_stationed(nullptr);
+                delete unit_UnitGrid[x][y];
+                unit_UnitGrid[x][y] = nullptr;
+            }
+        }
+    }
+    ptr_gameGameWid->setPlayerOneUnitsLabel(ptr_playerOne->getPlayerUnitNumber());
+    ptr_gameGameWid->setPlayerTwoUnitsLabel(ptr_playerTwo->getPlayerUnitNumber());
+}
+
+void Game::checkWinCondition()
+{
+    if(ptr_playerOne->getPlayerUnitNumber() == 0 || ptr_playerOne->getHQDestroyed())
+    {
+        qDebug() << "Spieler Eins Verloren";
+    }
+    if(ptr_playerTwo->getPlayerUnitNumber() == 0 || ptr_playerTwo->getHQDestroyed())
+    {
+        qDebug() << "Spieler Zwei Verloren";
     }
 }
 

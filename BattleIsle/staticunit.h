@@ -3,6 +3,12 @@
  * Version: 0.2
  * Datum 03.01.2018
  */
+/*
+ * Author: Lucas
+ * Version: 0.3
+ * Datum 14.01.2018
+ * Kommentar: Chechunitdestroyed von HQ ausgeprägt
+ */
 
 
 #ifndef STATICUNIT_HPP
@@ -29,10 +35,8 @@ protected:
 
 public:
     StaticUnit(QString, Player* = nullptr);
-	~StaticUnit();
 
 	int getEnergieStorage() const;	
-	bool checkUnitDestroyed();
 	int moveTo(HexagonMatchfield*);
 };
 
@@ -40,9 +44,10 @@ class HeadquaterUnit : public StaticUnit
 {
 public:
     HeadquaterUnit(QString, Player* = nullptr);
-	~HeadquaterUnit();
+    ~HeadquaterUnit();
 
 	bool action(HexagonMatchfield*);
+    virtual bool checkUnitDestroyed();
 	Unit* createUnit();
 };
 
@@ -50,7 +55,7 @@ class DepotUnit : public StaticUnit
 {
 public:
     DepotUnit(QString, Player* = nullptr);
-	~DepotUnit();
+    ~DepotUnit();
 
 	bool action(HexagonMatchfield*);
 	void repairUnit(Unit*);

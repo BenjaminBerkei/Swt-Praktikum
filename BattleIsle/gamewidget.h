@@ -15,6 +15,11 @@
  * Author: Lucas, Manuel
  * Version: 0.4
  * Datum: 13.01.2018
+ *
+ * Author: Lucas
+ * Version: 0.5
+ * Datum: 14.01.2018
+ * Kommentar: Label für den zustand des spiels eingefügt: player & playerUnitNumber
  * */
 #ifndef GAMEWIDGET_H
 #define GAMEWIDGET_H
@@ -53,6 +58,8 @@ public:
     void setInfoScene(HexagonDisplayInfo *info);
     void setPlayerLabel(QString);
     void setPhaseLabel(QString);
+    void setPlayerOneUnitsLabel(int value);
+    void setPlayerTwoUnitsLabel(int value);
     void clearScenes();
 
     //get und set Methoden

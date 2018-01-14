@@ -50,8 +50,8 @@ class AirUnit : public DynamicUnit
 {
 public:
     AirUnit(QString, Player*  = nullptr);
-	~AirUnit();
-	
+    ~AirUnit();
+
 	int moveTo(HexagonMatchfield* );
 	bool action(HexagonMatchfield* );
 };
@@ -66,8 +66,8 @@ protected:
     Unit* unitToUnload;
 public:
 	TransporterUnit(QString, Player*);
-	~TransporterUnit();
-	int getTransporterUnitCapacity() const;
+    ~TransporterUnit();
+    int getTransporterUnitCapacity() const;
   	int getTransporterUnitCurrentCapacity() const;
     void setTransporterUnitCurrentCapacity(const int);
 
@@ -82,8 +82,8 @@ class TransporterAirUnit : public TransporterUnit
 {
 public:
     TransporterAirUnit(QString, Player*  = nullptr);
-	~TransporterAirUnit();
-  
+    ~TransporterAirUnit();
+
   int moveTo(HexagonMatchfield* );
 };
 
@@ -93,7 +93,7 @@ class TransporterGroundUnit : public TransporterUnit
 {
 public:
     TransporterGroundUnit(QString, Player*  = nullptr);
-	~TransporterGroundUnit();
+    ~TransporterGroundUnit();
 
   int moveTo(HexagonMatchfield* );
 };
@@ -104,8 +104,8 @@ class TransporterWaterUnit : public TransporterUnit
 {
 public:
     TransporterWaterUnit(QString, Player*  = nullptr);
-	~TransporterWaterUnit();
-  
+    ~TransporterWaterUnit();
+
   int moveTo(HexagonMatchfield* );
 };
 
@@ -115,8 +115,8 @@ class GroundUnit : public DynamicUnit
 {
 public:
     GroundUnit(QString, Player*  = nullptr);
-	~GroundUnit();
-	
+    ~GroundUnit();
+
 	 bool action(HexagonMatchfield* );
 };
 
@@ -126,8 +126,8 @@ class LightUnit : public GroundUnit
 {
 public:
     LightUnit(QString, Player*  = nullptr);
-	~LightUnit();
-	
+    ~LightUnit();
+
 	int moveTo(HexagonMatchfield* );
 };
 
@@ -137,8 +137,8 @@ class BuildLightUnit : public LightUnit
 {
 public:
     BuildLightUnit(QString, Player*  = nullptr);
-	~BuildLightUnit();
-	
+    ~BuildLightUnit();
+
     bool action(HexagonMatchfield* );
     void produceUnit(HexagonMatchfield *hex_target);
 };
@@ -149,8 +149,8 @@ class MediumUnit : public GroundUnit
 {
 public:
     MediumUnit(QString, Player*  = nullptr);
-	~MediumUnit();
-	
+    ~MediumUnit();
+
 	int moveTo(HexagonMatchfield* );
 };
 
@@ -160,8 +160,8 @@ class HeavyUnit : public GroundUnit
 {
 public:
     HeavyUnit(QString, Player*  = nullptr);
-	~HeavyUnit();
-	
+    ~HeavyUnit();
+
 	int moveTo(HexagonMatchfield* );
 };
 
@@ -172,8 +172,8 @@ class WaterUnit : public DynamicUnit
 {
 public:
     WaterUnit(QString, Player*  = nullptr);
-	~WaterUnit();
-	
+    ~WaterUnit();
+
 	int moveTo(HexagonMatchfield* );
     bool action(HexagonMatchfield* );
 };

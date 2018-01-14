@@ -3,18 +3,33 @@
  * Version: 0.3
  * Datum 03.01.2018
  * */
-
+/* Author: Lucas
+ * Version: 0.4
+ * Datum 14.01.20118
+ * Kommentare: bool für HQ destroyed eingefügt, increase-/decreaseUnitNumber() Hilfsfunktionen geschrieben
+ * */
 #include "player.h"
+
 
 Player::Player(QString playerName,int id, int playerScore, int totalEnergie, int currentEnergie, int unitNumber)
     :str_playerName(playerName), int_playerID(id), int_playerScore(playerScore), int_playerTotalEnergie(totalEnergie),
-      int_currentEnergieStorage(currentEnergie), int_playerUnitNumber(unitNumber) {}
+      int_currentEnergieStorage(currentEnergie), int_playerUnitNumber(unitNumber), bool_HQDestroyed(false) {}
 
 Player::~Player(){
 	/*
 	 * Delete nur wenn du mit new speicher allociert hast
 	 */
-	return;
+    return;
+}
+
+void Player::increaseUnitNumber()
+{
+    int_playerUnitNumber++;
+}
+
+void Player::decreaseUnitNumber()
+{
+    int_playerUnitNumber--;
 }
 
 void Player::setPlayerName(QString name){ 
@@ -71,4 +86,14 @@ int Player::getCurrentEnergieStorage() const
 int Player::getPlayerID() const
 {
     return int_playerID;
+}
+
+bool Player::getHQDestroyed() const
+{
+    return bool_HQDestroyed;
+}
+
+void Player::setHQDestroyed(bool value)
+{
+    bool_HQDestroyed = value;
 }

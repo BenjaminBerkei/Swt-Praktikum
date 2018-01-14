@@ -3,6 +3,12 @@
  * Version: 0.3
  * Datum 20.12.2017
  * */
+/*
+ * Author: Lucas
+ * Version: 0.4
+ * Datum 14.01.2018
+ * Kommentare: getCurrentPhase() eingefügt
+ * */
 
 #include "round.h"
 

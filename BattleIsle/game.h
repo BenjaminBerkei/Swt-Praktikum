@@ -11,13 +11,12 @@
  * Version: 0.3
  * Datum: 12.01.2018
  * Kommentar: Buttons hinzugefuegt
- * */
-/*
+ *
  * Author: Lucas
  * Version: 0.4
  * Datum 14.01.2018
- * Kommentare: ProcessSelection bearbeitet, Dijkstra gefixed, showpath() hinzugefügt, Player eingefügt, ChnagePhase & Move Button Implementiert
- *              cameFrom und current_cost eingefügt, reset funktion geändert
+ * Kommentare: ProcessSelection bearbeitet, Dijkstra gefixed, reset funktion geändert, Player cameFrom und current_cost eingefügt,
+ *              ChangePhase & Move Button Implementiert, Hilfsfunktionen  eingefügt
  * */
 
 #ifndef GAME_H
@@ -77,12 +76,15 @@ public:
     //int showTotalEnergie(Player* player);
     void Dijkstra();
     //void calculateActionTargets();
-    void resetHexMatchfield(); // Nicht im UML-Diagramm, ist nur eine Hilfsfunktion für processSelection
 
-/*TestFunktionen*/
-    void showNeighbors(HexagonMatchfield*);
-    void showPath(HexagonMatchfield *);
-/*TestFunktionen Ende*/
+    /* Nicht im UML-Diagramm, ist nur eine Hilfsfunktionen für processSelection*/
+    void resetHexMatchfield();              //Spielfeld zurücksetzen in neutralen zustand
+    void moveUnitTo(HexagonMatchfield*);    //Einheit auf anderes Hex verlegen
+    void showNeighbors(HexagonMatchfield*); //Nachbarn markieren -> später range markieren
+    void showPath(HexagonMatchfield *);     //Weg einer bewegung anzeigen
+    void checkUnitGrid();                   //Prüfen ob eine Einheit gestorben ist
+    void checkWinCondition();               //Prüfen ob ein spieler gewonnen hat
+    /*Hilfsfunktionen Ende*/
 
     // get und set Methoden
     std::vector<std::vector<HexagonMatchfield*>> getVectorVectorHexagonMatchfield();

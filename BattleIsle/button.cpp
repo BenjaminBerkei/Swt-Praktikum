@@ -7,6 +7,11 @@
  * version: 0.2
  * Datum: 12.01.2018
  * Kommentar: Buttons angepasst
+ *
+ * Author: Lucas
+ * version: 0.3
+ * Datum: 14.01.2018
+ * Kommentar: Buttons angepasst
  * */
 
 #include "button.h"

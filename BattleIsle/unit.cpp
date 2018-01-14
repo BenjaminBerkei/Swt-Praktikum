@@ -2,8 +2,12 @@
  * Author: Miguel
  * Version: 0.1
  * Datum 04.01.2018
+ *
+ * Author: Lucas
+ * Version: 0.2
+ * Datum 14.01.2018
+ * Kommentar: Unit destruktor geschrieben, setUnitPlayer() bearbeitet -> erhöht den Unit Count bei dem Spieler der gesetzt wird
  * */
-
 #include "unit.h"
 
 int Unit::getUnitCurrentMoveRange() const
@@ -65,7 +69,17 @@ Unit::Unit()
     setZValue(5);
 }
 
-Unit::~Unit(){}
+Unit::~Unit()
+{
+    for(auto &it : vector_unitStorage)
+    {
+        delete it;
+    }
+    if(unitPlayer != nullptr)
+    {
+        unitPlayer->decreaseUnitNumber();
+    }
+}
 
 QString Unit::getUnitName() const
 {
@@ -129,7 +143,19 @@ void Unit::setUnitName(QString name)
 
 void Unit::setUnitPlayer(Player* player)
 {
-	unitPlayer = player;
+    if(unitPlayer != player)        //Keine Selbstzuweisung
+    {
+        if(unitPlayer != nullptr)
+        {
+            unitPlayer->decreaseUnitNumber();   //Alter Besitzer UnitCount um einen verringert
+        }
+        if(player != nullptr)
+        {
+            player->increaseUnitNumber();       //Neuer Besitzer unitCount um einen Erhöht
+        }
+
+        unitPlayer = player;
+    }
 	return;
 }
 
@@ -153,7 +179,7 @@ void Unit::setUnitUsed(bool used)
 
 bool Unit::checkUnitDestroyed()
 {
-    return false;
+    return int_unitCurrentHP <= 0 ? true : false;
 }
 
 int Unit::moveTo(HexagonMatchfield *)

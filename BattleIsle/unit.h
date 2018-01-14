@@ -2,6 +2,11 @@
  * Author: Miguel
  * Version: 0.1
  * Datum 03.01.2018
+ *
+ * Author: Lucas
+ * Version: 0.2
+ * Datum 14.01.2018
+ * Kommentar: Unit destruktor geschrieben, setUnitPlayer() bearbeitet -> erhöht den Unit Count bei dem Spieler der gesetzt wird
  * */
 
 #ifndef UNIT_HPP
@@ -48,7 +53,16 @@ protected:
 
 public:
 	Unit();
-	~Unit();
+    ~Unit();
+
+
+    //virtual Unit* createUnit() = 0;
+    virtual bool checkUnitDestroyed();
+    virtual bool action(HexagonMatchfield*) = 0;
+    virtual int moveTo(HexagonMatchfield*);
+    virtual void autoRepair();
+    virtual void levelUpBonus();
+    virtual void produceUnit(HexagonMatchfield*);
 
 	QString getUnitName() const;
 	Player* getUnitPlayer() const;
@@ -60,20 +74,12 @@ public:
 	int getUnitCost() const;
 	bool getUnitUsed() const;
 
-        void setInt_unitCurrentMoveRange(int value);
-        void setUnitName(QString);
+    void setInt_unitCurrentMoveRange(int value);
+    void setUnitName(QString);
 	void setUnitPlayer(Player*);
 	void setUnitHP(int);
 	void setUnitCurrentHP(int);
 	void setUnitUsed(bool);
-
-    //virtual Unit* createUnit() = 0;
-    virtual bool checkUnitDestroyed();
-    virtual bool action(HexagonMatchfield*) = 0;
-    virtual int moveTo(HexagonMatchfield*);
-    virtual void autoRepair();
-    virtual void levelUpBonus();
-    virtual void produceUnit(HexagonMatchfield*);
 
     int getUnitCurrentMoveRange() const;
     void setUnitCurrentMoveRange(int value);

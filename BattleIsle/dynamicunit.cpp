@@ -66,7 +66,8 @@ DynamicUnit::DynamicUnit(QString filepath, Player* player)
     int_unitCurrentHP = int_unitHP;
     int_unitCurrentMoveRange = int_unitMoveRange;
     unitFile = filepath;
-    unitPlayer = player;
+
+    setUnitPlayer(player);
 }
 
 DynamicUnit::~DynamicUnit(){}
@@ -100,7 +101,7 @@ void DynamicUnit::levelUpBonus() {
 	int_unitGroundAtt = int_unitGroundAtt*(1 + percentage);
 	int_unitWaterAtt = int_unitWaterAtt*(1 + percentage);
 	//setze Level alle 3 Kills eins höher
-	if (int_unitEXP % 30 == 0) {
+    if (int_unitEXP == 30) {
 		int_unitLevel += 1;
 	}
 }
@@ -133,12 +134,12 @@ bool TransporterUnit::action(HexagonMatchfield* hex_target){
 			return true;
 		}
 	}
-		   
+/*
     if(hex_target->getUnit_stationed() != nullptr){
 		unload(hex_target);
 		return true;
 	}
-	
+*/
 	return false;
 }
 

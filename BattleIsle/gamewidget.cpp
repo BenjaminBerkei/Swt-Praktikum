@@ -15,8 +15,12 @@
  * Author: Lucas, Manuel
  * Version: 0.4
  * Datum: 13.01.2018
+ *
+ * Author: Lucas
+ * Version: 0.5
+ * Datum: 14.01.2018
+ * Kommentar: Label für den zustand des spiels eingefügt: player & playerUnitNumber
  * */
-
 #include "gamewidget.h"
 #include "ui_gamewidget.h"
 
@@ -39,6 +43,16 @@ void GameWidget::setPlayerLabel(QString text)
 void GameWidget::setPhaseLabel(QString text)
 {
     ui->labelPhaseCurrent->setText(text);
+}
+
+void GameWidget::setPlayerOneUnitsLabel(int value)
+{
+    ui->labelPlayerOneUnitsCurrent->setText(QString::number(value));
+}
+
+void GameWidget::setPlayerTwoUnitsLabel(int value)
+{
+    ui->labelPlayerTwoUnitsCurrent->setText(QString::number(value));
 }
 
 void GameWidget::clearScenes()
@@ -78,7 +92,7 @@ GameWidget::GameWidget(QWidget *parent) :
     ui(new Ui::GameWidget),
     gameWidGameScene(new QGraphicsScene(this)), gameWidInfoScene(new QGraphicsScene(this)),
     gameWidOptionsScene(new QGraphicsScene(this)), gameWidButtonScene(new QGraphicsScene(this)),
-    sizeX(50), sizeY(20)
+    sizeX(15), sizeY(15)
 {
     ui->setupUi(this);
     ui->graphicsView_buttonView->setScene(gameWidButtonScene);
@@ -196,9 +210,9 @@ void HexagonDisplayInfo::updateText()
         {
             qStringUnitDispUnitAttack = "NONE";
         }else{
-            qStringUnitDispUnitAttack = "Attack: " + QString::number(hexToDisplay->getUnit_stationed()->getUnitAirAtt()) + "/"
-                    + QString::number(hexToDisplay->getUnit_stationed()->getUnitGroundAtt()) + "/"
-                    + QString::number(hexToDisplay->getUnit_stationed()->getUnitWaterAtt());
+            qStringUnitDispUnitAttack = "Attack: A" + QString::number(hexToDisplay->getUnit_stationed()->getUnitAirAtt()) + "/"
+                    + "G" + QString::number(hexToDisplay->getUnit_stationed()->getUnitGroundAtt()) + "/"
+                    + "W" + QString::number(hexToDisplay->getUnit_stationed()->getUnitWaterAtt());
         }
 
     }else{
