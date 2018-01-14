@@ -79,6 +79,7 @@ public:
 
     /* Nicht im UML-Diagramm, ist nur eine Hilfsfunktionen für processSelection*/
     void resetHexMatchfield();
+    void resetTargetChache();
     void moveUnitTo(HexagonMatchfield*);    //Einheit auf anderes Hex verlegen
     void showNeighbors(HexagonMatchfield*); //Nachbarn markieren -> später range markieren
     void showPath(HexagonMatchfield *);     //Weg einer bewegung anzeigen

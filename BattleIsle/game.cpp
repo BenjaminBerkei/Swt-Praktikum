@@ -258,7 +258,8 @@ void Game::Dijkstra()
             int y = current->getQpoint_gridPosition().y() + it.y();
 
             /*Prüfen ob Nachbarn auf Spielfeld liegen*/
-            if(x >= 0 && x < ptr_gameGameWid->getSizeX() && y >= 0 && y < ptr_gameGameWid->getSizeY() && hexagonMatchfield_gameGrid[x][y]->getState() != ACTIVE)
+            if(x >= 0 && x < ptr_gameGameWid->getSizeX() && y >= 0 && y < ptr_gameGameWid->getSizeY()
+                    && hexagonMatchfield_gameGrid[x][y]->getState() != ACTIVE)
             {
                 /*Speichern des zu betrachtenden Nachbarn*/
                 HexagonMatchfield* neighbour = hexagonMatchfield_gameGrid[x][y];
@@ -289,25 +290,7 @@ void Game::Dijkstra()
 }
 
 
-void Game::resetHexMatchfield()
-{
-    /*Zurücksetzen der Auswahl*/
-    if(SelectionCache != nullptr)
-    {
-        SelectionCache->setState(INACTIVE);
-        SelectionCache = nullptr;
-    }
-    /*Zurücksetzen der Maps*/
-    for(auto &it : TargetChache)
-    {
-        it->setState(INACTIVE);
-    }
-    TargetChache.clear();
-    came_from.clear();
-    current_cost.clear();
 
-    ptr_gameGameWid->clearScenes();
-}
 
 void Game::moveUnitTo(HexagonMatchfield * target)
 {
@@ -333,14 +316,16 @@ void Game::moveUnitTo(HexagonMatchfield * target)
         }
     }
 }
-
+/*Move Button ausgewählt*/
 void Game::buttonPressedMove()
 {
-    if(ptr_roundCurrent->getCurrentPhase() == MOVE)
+    if(ptr_roundCurrent->getCurrentPhase() == MOVE)     //Phase prüfen
     {
-        if(SelectionCache->getUnit_stationed() != nullptr && SelectionCache->getUnit_stationed()->getUnitPlayer() == ptr_playerActive)
+        /*Wenn ein Feld ausgewählt wurde auf dem eine Einheit steht, welche dem aktiven Spieler gehört*/
+        if(SelectionCache != nullptr && SelectionCache->getUnit_stationed() != nullptr
+                && SelectionCache->getUnit_stationed()->getUnitPlayer() == ptr_playerActive)
         {
-            Dijkstra();
+            Dijkstra();     //Berechnen aller möglichen Ziele
         }
     }
 }
@@ -369,7 +354,9 @@ void Game::buttonPressedChangePhase()
     {
         ptr_playerActive = ptr_playerActive == ptr_playerOne ? ptr_playerTwo : ptr_playerOne;
         resetUnitsMoveRange(ptr_playerActive);
+        resetHexMatchfield();
     }
+    resetTargetChache();
     ptr_gameGameWid->setPlayerLabel(ptr_playerActive->getPlayerName());
     ptr_gameGameWid->setPhaseLabel(ptr_roundCurrent->getCurrentPhase() == MOVE ? "Move" : "Action");
 }
@@ -453,7 +440,28 @@ void Game::resetUnitsMoveRange(Player * player)
         }
     }
 }
+void Game::resetHexMatchfield()
+{
+    /*Zurücksetzen der Auswahl*/
+    if(SelectionCache != nullptr)
+    {
+        SelectionCache->setState(INACTIVE);
+        SelectionCache = nullptr;
+    }
+    resetTargetChache();
+    ptr_gameGameWid->clearScenes();
+}
 
+void Game::resetTargetChache()
+{
+    for(auto &it : TargetChache)
+    {
+        it->setState(INACTIVE);
+    }
+    TargetChache.clear();
+    came_from.clear();
+    current_cost.clear();
+}
 
 bool Compare::operator()(std::pair<HexagonMatchfield*, int> a, std::pair<HexagonMatchfield*, int> b)
 {
