@@ -205,20 +205,25 @@ void Game::processSelection(HexagonMatchfield *selection)
 
         }else if(ptr_roundCurrent->getCurrentPhase() == ACTION )    //Action Phase
         {
-            if(SelectionCache->getUnit_stationed()->getUnitUsed() == false)     //Einheit nutzbar
+            if(SelectionCache->getUnit_stationed()->action(selection))
             {
-                SelectionCache->getUnit_stationed()->action(selection);     //Action ausführen
-                resetTargetChache();                                        //Ziele zurücksetzen
-                SelectionCache->getUnit_stationed()->getUnitDisplay()->updateText();    //Display Text Updaten
+                if(selection->getUnit_stationed() != nullptr
+                        && unit_UnitGrid[selection->getQpoint_gridPosition().x()][selection->getQpoint_gridPosition().y()] == nullptr)
+                {
+                    unit_UnitGrid[selection->getQpoint_gridPosition().x()][selection->getQpoint_gridPosition().y()] = selection->getUnit_stationed();
+                    selection->getUnit_stationed()->setPos(selection->pos());
+                    ptr_gameGameWid->getGameWidGameScene()->addItem(selection->getUnit_stationed());
+                }
             }
+            resetTargetChache();
         }
         break;
     case PATH :
-        moveUnitTo(selection);      //Einheit bewegen
+        moveUnitTo(selection);
         SelectionCache = selection;
         SelectionCache->setState(ACTIVE);
-        ptr_gameGameWid->setInfoScene(SelectionCache->getPtr_hexMfieldDisplay());   //Display Text Updaten
-        resetTargetChache();       //Spielfeld zurücksetzen
+        ptr_gameGameWid->setInfoScene(SelectionCache->getPtr_hexMfieldDisplay());
+        resetTargetChache();
         break;
     }
     checkUnitGrid();
