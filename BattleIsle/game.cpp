@@ -315,9 +315,10 @@ void Game::buttonPressedMove()
 
 void Game::buttonPressedAction()
 {
-    if(ptr_roundCurrent->getCurrentPhase() == ACTION)
+    if(ptr_roundCurrent->getCurrentPhase() == ACTION )
     {
-        if(SelectionCache->getUnit_stationed() != nullptr && SelectionCache->getUnit_stationed()->getUnitPlayer() == ptr_playerActive
+        if(SelectionCache != nullptr && SelectionCache->getUnit_stationed() != nullptr
+                && SelectionCache->getUnit_stationed()->getUnitPlayer() == ptr_playerActive
                 && SelectionCache->getUnit_stationed()->getUnitUsed() == false)
         {
             showNeighbors(SelectionCache);
