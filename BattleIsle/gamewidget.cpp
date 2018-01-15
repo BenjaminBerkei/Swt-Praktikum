@@ -24,6 +24,11 @@
 #include "gamewidget.h"
 #include "ui_gamewidget.h"
 
+QGraphicsScene *GameWidget::getGameWidOptionsScene() const
+{
+    return gameWidOptionsScene;
+}
+
 GameWidget::GameWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::GameWidget),
@@ -112,6 +117,17 @@ void GameWidget::clearScenes()
         gameWidOptionsScene->removeItem(it);
     }
     gameWidOptionsScene->update();
+}
+
+void GameWidget::updateInfoOptScenes()
+{
+    gameWidInfoScene->update();
+    gameWidOptionsScene->update();
+}
+
+void GameWidget::updateMatchfieldScene()
+{
+    gameWidGameScene->update();
 }
 
 void GameWidget::setInfoScene(HexagonDisplayInfo *info)

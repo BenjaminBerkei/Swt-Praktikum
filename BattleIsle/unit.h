@@ -67,7 +67,9 @@ public:
     virtual void levelUpBonus();
     virtual void produceUnit(HexagonMatchfield*);
 
-    void resetMoveRange();
+    /*Hilfsfunktionen*/
+    virtual void resetUnit();
+    /*Hilfsfunktionen Ende*/
 
 	QString getUnitName() const;
 	Player* getUnitPlayer() const;

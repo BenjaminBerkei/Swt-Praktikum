@@ -277,6 +277,11 @@ int AirUnit::moveTo(HexagonMatchfield *){
 }
 
 bool AirUnit::action(HexagonMatchfield *hex_target) {
+    if(bool_unitUsed)
+    {
+        return false;
+    }
+
     Unit *target = hex_target->getUnit_stationed();
 	
 	if(target == nullptr){
@@ -310,6 +315,7 @@ bool AirUnit::action(HexagonMatchfield *hex_target) {
 			target->setUnitCurrentHP(0);
 			int_unitEXP +=10;
 			levelUpBonus();
+            bool_unitUsed = true;
 			return true;
 		}
 
@@ -325,11 +331,13 @@ bool AirUnit::action(HexagonMatchfield *hex_target) {
 				int_unitCurrentHP = 0;
 				target->setUnitEXP(target->getUnitEXP() + 10);
 				target->levelUpBonus();
+                bool_unitUsed = true;
 				return true;
 			}
 
 			else{
 				int_unitCurrentHP -= backfire;
+                bool_unitUsed = true;
 				return true;
 			}
 
@@ -358,15 +366,16 @@ bool AirUnit::action(HexagonMatchfield *hex_target) {
 			target->setUnitCurrentHP(0);
 			int_unitEXP +=10;
 			levelUpBonus();
+            bool_unitUsed = true;
 			return true;
 		}
 
 		else {
 			target->setUnitCurrentHP(int_target_current_hp - int_unitSpecificAtt);
+            bool_unitUsed = true;
 			return true;
 		}
 	}
-
 	return false;
 
 }
@@ -384,6 +393,11 @@ GroundUnit::GroundUnit(QString filepath, Player* player)
 GroundUnit::~GroundUnit(){}
 
 bool GroundUnit::action(HexagonMatchfield *hex_target) {
+    if(bool_unitUsed)
+    {
+        return false;
+    }
+
     Unit *target = hex_target->getUnit_stationed();
 	
 	if(target == nullptr){
@@ -417,6 +431,7 @@ bool GroundUnit::action(HexagonMatchfield *hex_target) {
 			target->setUnitCurrentHP(0);
 			int_unitEXP +=10;
 			levelUpBonus();
+            bool_unitUsed = true;
 			return true;
 		}
 
@@ -432,11 +447,13 @@ bool GroundUnit::action(HexagonMatchfield *hex_target) {
 				int_unitCurrentHP = 0;
 				target->setUnitEXP(target->getUnitEXP() + 10);
 				target->levelUpBonus();
+                bool_unitUsed = true;
 				return true;
 			}
 
 			else{
 				int_unitCurrentHP -= backfire;
+                bool_unitUsed = true;
 				return true;
 			}
 
@@ -465,15 +482,16 @@ bool GroundUnit::action(HexagonMatchfield *hex_target) {
 			target->setUnitCurrentHP(0);
 			int_unitEXP +=10;
 			levelUpBonus();
+            bool_unitUsed = true;
 			return true;
 		}
 
 		else {
 			target->setUnitCurrentHP(int_target_current_hp - int_unitSpecificAtt);
+            bool_unitUsed = true;
 			return true;
 		}
 	}
-
 	return false;
 
 }
@@ -661,6 +679,11 @@ int WaterUnit::moveTo(HexagonMatchfield *hex_target){
 }
 
 bool WaterUnit::action(HexagonMatchfield *hex_target) {
+    if(bool_unitUsed)
+    {
+        return false;
+    }
+
     Unit *target = hex_target->getUnit_stationed();
 	
 	if(target == nullptr){
@@ -694,6 +717,7 @@ bool WaterUnit::action(HexagonMatchfield *hex_target) {
 			target->setUnitCurrentHP(0);
 			int_unitEXP +=10;
 			levelUpBonus();
+            bool_unitUsed = true;
 			return true;
 		}
 
@@ -709,11 +733,13 @@ bool WaterUnit::action(HexagonMatchfield *hex_target) {
 				int_unitCurrentHP = 0;
 				target->setUnitEXP(target->getUnitEXP() + 10);
 				target->levelUpBonus();
+                bool_unitUsed = true;
 				return true;
 			}
 
 			else{
 				int_unitCurrentHP -= backfire;
+                bool_unitUsed = true;
 				return true;
 			}
 
@@ -742,15 +768,16 @@ bool WaterUnit::action(HexagonMatchfield *hex_target) {
 			target->setUnitCurrentHP(0);
 			int_unitEXP +=10;
 			levelUpBonus();
+            bool_unitUsed = true;
 			return true;
 		}
 
 		else {
 			target->setUnitCurrentHP(int_target_current_hp - int_unitSpecificAtt);
+            bool_unitUsed = true;
 			return true;
 		}
 	}
-
 	return false;
 
 }

@@ -42,8 +42,6 @@ DynamicUnit(QString, Player*);
 
 };
 
-
-
 // Air
 
 class AirUnit : public DynamicUnit

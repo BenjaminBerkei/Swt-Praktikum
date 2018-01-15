@@ -200,7 +200,8 @@ void Unit::produceUnit(HexagonMatchfield*)
     return;
 }
 
-void Unit::resetMoveRange()
+void Unit::resetUnit()
 {
     int_unitCurrentMoveRange = int_unitMoveRange;
+    bool_unitUsed = false;
 }

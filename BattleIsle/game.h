@@ -85,7 +85,7 @@ public:
     void showPath(HexagonMatchfield *);     //Weg einer bewegung anzeigen
     void checkUnitGrid();                   //Prüfen ob eine Einheit gestorben ist
     void checkWinCondition();               //Prüfen ob ein spieler gewonnen hat
-    void resetUnitsMoveRange(Player*);
+    void resetUnits(Player*);
     void countUnits();
     /*Hilfsfunktionen Ende*/
 

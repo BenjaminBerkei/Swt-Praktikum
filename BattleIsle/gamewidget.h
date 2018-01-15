@@ -59,6 +59,8 @@ public:
     void gameWidCreateMatchfield(std::vector<std::vector<HexagonMatchfield*>> &hexagonGrid);
     void gameWidCreateButtonBar(std::vector<Button *> buttonVector);
     void clearScenes();
+    void updateInfoOptScenes();
+    void updateMatchfieldScene();
 
     //get und set Methoden
     void setInfoScene(HexagonDisplayInfo *info);
@@ -70,6 +72,7 @@ public:
     int getSizeX() const;
     int getSizeY() const;
     QGraphicsScene *getGameWidInfoScene() const;
+    QGraphicsScene *getGameWidOptionsScene() const;
 
 signals:
     void SIGNAL_gameWidChangeIndexFromStack(int);

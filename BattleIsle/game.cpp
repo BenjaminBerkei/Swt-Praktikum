@@ -195,28 +195,35 @@ void Game::processSelection(HexagonMatchfield *selection)
         break;
 
     case TARGET:
-        if(ptr_roundCurrent->getCurrentPhase() == MOVE)
+        if(ptr_roundCurrent->getCurrentPhase() == MOVE)     //Move Phase
         {
-            for(auto &it : TargetChache)
+            for(auto &it : TargetChache)        //Ziele zurücksetzen
             {
                 it->setState(TARGET);
             }
-            showPath(selection);
-        }else if(ptr_roundCurrent->getCurrentPhase() == ACTION)
+            showPath(selection);            //Weg von Ziel zu auswahl anzeigen
+
+        }else if(ptr_roundCurrent->getCurrentPhase() == ACTION )    //Action Phase
         {
-            SelectionCache->getUnit_stationed()->action(selection);
-            resetHexMatchfield();
+            if(SelectionCache->getUnit_stationed()->getUnitUsed() == false)     //Einheit nutzbar
+            {
+                SelectionCache->getUnit_stationed()->action(selection);     //Action ausführen
+                resetTargetChache();                                        //Ziele zurücksetzen
+                SelectionCache->getUnit_stationed()->getUnitDisplay()->updateText();    //Display Text Updaten
+            }
         }
         break;
     case PATH :
-        moveUnitTo(selection);
-        ptr_gameGameWid->setInfoScene(SelectionCache->getPtr_hexMfieldDisplay());
-        resetHexMatchfield();
+        moveUnitTo(selection);      //Einheit bewegen
+        ptr_gameGameWid->setInfoScene(SelectionCache->getPtr_hexMfieldDisplay());   //Display Text Updaten
+        resetTargetChache();       //Spielfeld zurücksetzen
+        SelectionCache->setState(ACTIVE);
         break;
     }
     checkUnitGrid();
     checkWinCondition();
     countUnits();
+    ptr_gameGameWid->updateInfoOptScenes();
 }
 
 void Game::Dijkstra()
@@ -304,7 +311,8 @@ void Game::buttonPressedAction()
 {
     if(ptr_roundCurrent->getCurrentPhase() == ACTION)
     {
-        if(SelectionCache->getUnit_stationed() != nullptr && SelectionCache->getUnit_stationed()->getUnitPlayer() == ptr_playerActive)
+        if(SelectionCache->getUnit_stationed() != nullptr && SelectionCache->getUnit_stationed()->getUnitPlayer() == ptr_playerActive
+                && SelectionCache->getUnit_stationed()->getUnitUsed() == false)
         {
             showNeighbors(SelectionCache);
         }
@@ -323,7 +331,7 @@ void Game::buttonPressedChangePhase()
     if(ptr_roundCurrent->getCurrentPhase() == MOVE)
     {
         ptr_playerActive = ptr_playerActive == ptr_playerOne ? ptr_playerTwo : ptr_playerOne;
-        resetUnitsMoveRange(ptr_playerActive);
+        resetUnits(ptr_playerActive);
         resetHexMatchfield();
     }
     resetTargetChache();
@@ -356,25 +364,24 @@ void Game::resetTargetChache()
 }
 void Game::moveUnitTo(HexagonMatchfield * target)
 {
-    if(SelectionCache != nullptr)
+    if(SelectionCache != nullptr)   //Wenn eine auswahl getroffen wurde
     {
         Unit* unitToMove = SelectionCache->getUnit_stationed();
 
-        if(unitToMove != nullptr && target->getUnit_stationed() == nullptr)
+        if(unitToMove != nullptr && target->getUnit_stationed() == nullptr) //wenn eine Einheit stationiert ist und auf dem Ziel keine ist
         {
             unitToMove->setUnitCurrentMoveRange(unitToMove->getUnitCurrentMoveRange() - current_cost[target]);
 
-            target->setUnit_stationed(unitToMove);
-            SelectionCache->setUnit_stationed(nullptr);
+            target->setUnit_stationed(unitToMove);      //Einheit verlegen auf das Ziel
+            SelectionCache->setUnit_stationed(nullptr);     //Einheit vom alten feld entfernen
 
-            unit_UnitGrid[target->getQpoint_gridPosition().x()][target->getQpoint_gridPosition().y()] = unitToMove;
+            unit_UnitGrid[target->getQpoint_gridPosition().x()][target->getQpoint_gridPosition().y()] = unitToMove; //Einheit im Grid verlegt
             unit_UnitGrid[SelectionCache->getQpoint_gridPosition().x()][SelectionCache->getQpoint_gridPosition().y()] = nullptr;
 
-            unitToMove->setPos(target->pos());
-            SelectionCache->setState(INACTIVE);
+            unitToMove->setPos(target->pos());  //Visuell verlegen
+            SelectionCache->setState(INACTIVE);     //Auswahl auf inactiv setzen
 
-            SelectionCache = target;
-            SelectionCache->setState(ACTIVE);
+            SelectionCache = target;            //auswahl auf ziel legen
         }
     }
 }
@@ -443,7 +450,7 @@ void Game::checkWinCondition()
     }
 }
 
-void Game::resetUnitsMoveRange(Player * player)
+void Game::resetUnits(Player * player)
 {
     for(auto &iteratorX : unit_UnitGrid)    //Durchlaufen des Grids
     {
@@ -451,7 +458,7 @@ void Game::resetUnitsMoveRange(Player * player)
         {
             if(unit != nullptr && unit->getUnitPlayer() == player)
             {
-                unit->resetMoveRange();     //Untis Move range zurücksetzen
+                unit->resetUnit();     //Untis Move range zurücksetzen
             }
         }
     }
