@@ -178,7 +178,12 @@ TransporterAirUnit::~TransporterAirUnit(){}
 
 int TransporterAirUnit::moveTo(HexagonMatchfield *){
 	//Flugzeug hat selbe Kosten für alles.
-	return 1;
+    return 1;
+}
+
+TransporterAirUnit *TransporterAirUnit::createUnit()
+{
+    return new TransporterAirUnit(unitFile);
 }
 
 
@@ -223,6 +228,11 @@ int TransporterGroundUnit::moveTo(HexagonMatchfield *hex_target){
     return -1;
 }
 
+TransporterGroundUnit *TransporterGroundUnit::createUnit()
+{
+    return new TransporterGroundUnit(unitFile);
+}
+
 
 
 
@@ -245,6 +255,11 @@ int TransporterWaterUnit::moveTo(HexagonMatchfield *hex_target){
 		return 1;
 	}
     return -1;
+}
+
+TransporterWaterUnit *TransporterWaterUnit::createUnit()
+{
+    return new TransporterWaterUnit(unitFile);
 }
 
 
@@ -356,6 +371,10 @@ bool AirUnit::action(HexagonMatchfield *hex_target) {
 
 }
 
+AirUnit *AirUnit::createUnit()
+{
+    return new AirUnit(unitFile);
+}
 
 // GroundUnit
 
@@ -496,6 +515,11 @@ int LightUnit::moveTo(HexagonMatchfield *hex_target){
     return -1;
 }
 
+LightUnit *LightUnit::createUnit()
+{
+    return new LightUnit(unitFile);
+}
+
 // BuildLightUnit
 
 BuildLightUnit::BuildLightUnit(QString filepath, Player* player)
@@ -519,7 +543,12 @@ void BuildLightUnit::produceUnit(HexagonMatchfield* hex_target){
 	if(int_energy >= 50){
         hex_target->setUnit_stationed(new DepotUnit(":/static/staticUnit/depot.txt", unitPlayer));
 		unitPlayer->setCurrentEnergieStorage(int_energy - 50);
-	}
+    }
+}
+
+BuildLightUnit *BuildLightUnit::createUnit()
+{
+    return new BuildLightUnit(unitFile);
 }
 
 
@@ -560,6 +589,11 @@ int MediumUnit::moveTo(HexagonMatchfield *hex_target){
     return -1;
 
 }
+
+MediumUnit *MediumUnit::createUnit()
+{
+    return new MediumUnit(unitFile);
+}
 // HeavyUnit
 
 HeavyUnit::HeavyUnit(QString filepath, Player* player)
@@ -596,6 +630,11 @@ int HeavyUnit::moveTo(HexagonMatchfield *hex_target){
 	}
 
     return -1;
+}
+
+HeavyUnit *HeavyUnit::createUnit()
+{
+    return new HeavyUnit(unitFile);
 }
 
 
@@ -714,4 +753,9 @@ bool WaterUnit::action(HexagonMatchfield *hex_target) {
 
 	return false;
 
+}
+
+WaterUnit *WaterUnit::createUnit()
+{
+    return new WaterUnit(unitFile);
 }

@@ -28,7 +28,10 @@
 #include <QGraphicsScene>
 #include <vector>
 #include "hexagonmatchfield.h"
+#include "unit.h"
 #include "button.h"
+
+class Unit;
 
 namespace Ui {
 class GameWidget;
@@ -54,11 +57,12 @@ public:
     explicit GameWidget(QWidget *parent = 0);
     ~GameWidget();
     void gameWidCreateMatchfield(std::vector<std::vector<HexagonMatchfield*>> &hexagonGrid);
-    void gameWidcreateButtonBar(std::vector<Button *> buttonVector);
+    void gameWidCreateButtonBar(std::vector<Button *> buttonVector);
     void clearScenes();
 
     //get und set Methoden
     void setInfoScene(HexagonDisplayInfo *info);
+    void setOptScene(std::vector<Unit*>);
     void setPlayerLabel(QString);
     void setPhaseLabel(QString);
     void setPlayerOneUnitsLabel(int value);
@@ -86,6 +90,24 @@ private:
     QString qStringUnitDispUnitAttack;
 public:
     HexagonDisplayInfo(HexagonMatchfield* ptr_hexMfield);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *);
+    void updateText();
+};
+
+//Klasse um die Hexagons in der Infobox anzeigen zu lassen
+class UnitDisplayInfo : public QObject, public QGraphicsRectItem
+{
+    Q_OBJECT
+
+private:
+    Unit* ptr_UnitToDisplay;
+    QString qStringUnitDispUnitName;
+    QString qStringUnitDispUnitType;
+    QString qStringUnitDispUnitLife;
+    QString qStringUnitDispMovement;
+    QString qStringUnitDispUnitAttack;
+public:
+    UnitDisplayInfo(Unit* ptr_Unit);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *);
     void updateText();
 };

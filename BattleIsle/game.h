@@ -86,6 +86,7 @@ public:
     void checkUnitGrid();                   //Prüfen ob eine Einheit gestorben ist
     void checkWinCondition();               //Prüfen ob ein spieler gewonnen hat
     void resetUnitsMoveRange(Player*);
+    void countUnits();
     /*Hilfsfunktionen Ende*/
 
     // get und set Methoden

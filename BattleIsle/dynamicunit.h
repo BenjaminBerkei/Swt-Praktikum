@@ -54,6 +54,7 @@ public:
 
 	int moveTo(HexagonMatchfield* );
 	bool action(HexagonMatchfield* );
+    virtual AirUnit* createUnit();
 };
 
 // Transporter
@@ -67,6 +68,7 @@ protected:
 public:
 	TransporterUnit(QString, Player*);
     ~TransporterUnit();
+
     int getTransporterUnitCapacity() const;
   	int getTransporterUnitCurrentCapacity() const;
     void setTransporterUnitCurrentCapacity(const int);
@@ -85,6 +87,7 @@ public:
     ~TransporterAirUnit();
 
   int moveTo(HexagonMatchfield* );
+  virtual TransporterAirUnit* createUnit();
 };
 
 //TransporterGround
@@ -96,6 +99,7 @@ public:
     ~TransporterGroundUnit();
 
   int moveTo(HexagonMatchfield* );
+  virtual TransporterGroundUnit* createUnit();
 };
 
 // TransporterWater
@@ -107,6 +111,7 @@ public:
     ~TransporterWaterUnit();
 
   int moveTo(HexagonMatchfield* );
+  virtual TransporterWaterUnit* createUnit();
 };
 
 //Ground
@@ -117,7 +122,7 @@ public:
     GroundUnit(QString, Player*  = nullptr);
     ~GroundUnit();
 
-	 bool action(HexagonMatchfield* );
+	 bool action(HexagonMatchfield* );     
 };
 
 // Light
@@ -129,6 +134,7 @@ public:
     ~LightUnit();
 
 	int moveTo(HexagonMatchfield* );
+    virtual LightUnit* createUnit();
 };
 
 // BuilderLight
@@ -141,6 +147,7 @@ public:
 
     bool action(HexagonMatchfield* );
     void produceUnit(HexagonMatchfield *hex_target);
+    virtual BuildLightUnit* createUnit();
 };
 
 // Medium
@@ -152,6 +159,7 @@ public:
     ~MediumUnit();
 
 	int moveTo(HexagonMatchfield* );
+    virtual MediumUnit* createUnit();
 };
 
 // Heavy
@@ -162,7 +170,8 @@ public:
     HeavyUnit(QString, Player*  = nullptr);
     ~HeavyUnit();
 
-	int moveTo(HexagonMatchfield* );
+    int moveTo(HexagonMatchfield* );
+    virtual HeavyUnit* createUnit();
 };
 
 
@@ -176,6 +185,7 @@ public:
 
 	int moveTo(HexagonMatchfield* );
     bool action(HexagonMatchfield* );
+    virtual WaterUnit* createUnit();
 };
 
 #endif

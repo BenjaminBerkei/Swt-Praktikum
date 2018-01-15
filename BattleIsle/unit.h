@@ -14,6 +14,7 @@
 
 #include "hexagonmatchfield.h"
 #include "player.h"
+#include "gamewidget.h"
 
 #include <map>
 #include <vector>
@@ -23,6 +24,7 @@
 #include <QPoint>
 
 class HexagonMatchfield;
+class UnitDisplayInfo;
 class Player;
 
 class Unit : public QObject, public QGraphicsPixmapItem
@@ -51,18 +53,21 @@ protected:
     int int_unitCurrentMoveRange;
     //int int_actionRange;
 
+    UnitDisplayInfo* ptr_UnitDisplay;
+
 public:
 	Unit();
     ~Unit();
 
-
-    //virtual Unit* createUnit() = 0;
+    virtual Unit* createUnit() = 0;
     virtual bool checkUnitDestroyed();
     virtual bool action(HexagonMatchfield*) = 0;
     virtual int moveTo(HexagonMatchfield*);
     virtual void autoRepair();
     virtual void levelUpBonus();
     virtual void produceUnit(HexagonMatchfield*);
+
+    void resetMoveRange();
 
 	QString getUnitName() const;
 	Player* getUnitPlayer() const;
@@ -73,6 +78,14 @@ public:
 	QString getUnitType() const;
 	int getUnitCost() const;
 	bool getUnitUsed() const;
+    UnitDisplayInfo *getUnitDisplay() const;
+    int getUnitEXP() const;
+    int getUnitAirAtt() const;
+    int getUnitGroundAtt() const;
+    int getUnitWaterAtt() const;
+    int getUnitMoveRange() const;
+    int getUnitCurrentMoveRange() const;
+    std::vector<Unit *> getVector_unitStorage() const;
 
     void setUnitCurrentMoveRange(int value);
     void setUnitName(QString);
@@ -80,18 +93,12 @@ public:
 	void setUnitHP(int);
 	void setUnitCurrentHP(int);
 	void setUnitUsed(bool);
-
-    int getUnitCurrentMoveRange() const;
-    int getUnitMoveRange() const;
     void setUnitMoveRange(int value);
-    int getUnitWaterAtt() const;
     void setUnitWaterAtt(int value);
-    int getUnitGroundAtt() const;
     void setUnitGroundAtt(int value);
-    int getUnitAirAtt() const;
     void setUnitAirAtt(int value);
-    int getUnitEXP() const;
     void setUnitEXP(const int);
+    void setVector_unitStorage(const std::vector<Unit *> &value);
 };
 
 #endif

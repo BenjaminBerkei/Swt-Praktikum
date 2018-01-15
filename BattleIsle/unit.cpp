@@ -60,11 +60,26 @@ void Unit::setUnitAirAtt(int value)
     int_unitAirAtt = value;
 }
 
+UnitDisplayInfo *Unit::getUnitDisplay() const
+{
+    return ptr_UnitDisplay;
+}
+
+std::vector<Unit *> Unit::getVector_unitStorage() const
+{
+    return vector_unitStorage;
+}
+
+void Unit::setVector_unitStorage(const std::vector<Unit *> &value)
+{
+    vector_unitStorage = value;
+}
+
 Unit::Unit()
     : str_unitName(""), unitPlayer(nullptr), int_unitView(0), int_unitHP(0), int_unitCurrentHP(0),
       str_unitDetails(""), str_unitType(""), int_unitCost(0), int_unitStorageMax(0), bool_unitUsed(false),
       unitFile(""), int_unitAirAtt(0), int_unitGroundAtt(0), int_unitWaterAtt(0), int_unitEXP(0),
-      int_unitMoveRange(0), int_unitCurrentMoveRange(0)
+      int_unitMoveRange(0), int_unitCurrentMoveRange(0), ptr_UnitDisplay(new UnitDisplayInfo(this))
 {
     setZValue(5);
 }
@@ -74,10 +89,6 @@ Unit::~Unit()
     for(auto &it : vector_unitStorage)
     {
         delete it;
-    }
-    if(unitPlayer != nullptr)
-    {
-        unitPlayer->decreaseUnitNumber();
     }
 }
 
@@ -143,20 +154,7 @@ void Unit::setUnitName(QString name)
 
 void Unit::setUnitPlayer(Player* player)
 {
-    if(unitPlayer != player)        //Keine Selbstzuweisung
-    {
-        if(unitPlayer != nullptr)
-        {
-            unitPlayer->decreaseUnitNumber();   //Alter Besitzer UnitCount um einen verringert
-        }
-        if(player != nullptr)
-        {
-            player->increaseUnitNumber();       //Neuer Besitzer unitCount um einen Erhöht
-        }
-
-        unitPlayer = player;
-    }
-	return;
+    unitPlayer = player;
 }
 
 void Unit::setUnitHP(int hp)
@@ -202,3 +200,7 @@ void Unit::produceUnit(HexagonMatchfield*)
     return;
 }
 
+void Unit::resetMoveRange()
+{
+    int_unitCurrentMoveRange = int_unitMoveRange;
+}

@@ -24,81 +24,21 @@
 #include "gamewidget.h"
 #include "ui_gamewidget.h"
 
-void GameWidget::setInfoScene(HexagonDisplayInfo *info)
-{
-    for(auto &it : gameWidInfoScene->items())
-    {
-        gameWidInfoScene->removeItem(it);
-    }
-    gameWidInfoScene->addItem(info);
-    gameWidInfoScene->update();
-    gameWidGameScene->update();
-}
-
-void GameWidget::setPlayerLabel(QString text)
-{
-    ui->labelPlayerCurrent->setText(text);
-}
-
-void GameWidget::setPhaseLabel(QString text)
-{
-    ui->labelPhaseCurrent->setText(text);
-}
-
-void GameWidget::setPlayerOneUnitsLabel(int value)
-{
-    ui->labelPlayerOneUnitsCurrent->setText(QString::number(value));
-}
-
-void GameWidget::setPlayerTwoUnitsLabel(int value)
-{
-    ui->labelPlayerTwoUnitsCurrent->setText(QString::number(value));
-}
-
-void GameWidget::clearScenes()
-{
-    //leere gameWidInfoScene
-    for(auto &it : gameWidInfoScene->items())
-    {
-        gameWidInfoScene->removeItem(it);
-    }
-    gameWidInfoScene->update();
-
-    //leere gameWidOptionsScene
-    for(auto &it : gameWidOptionsScene->items())
-    {
-        gameWidOptionsScene->removeItem(it);
-    }
-}
-
-
-QGraphicsScene *GameWidget::getGameWidInfoScene() const
-{
-    return gameWidInfoScene;
-}
-
-int GameWidget::getSizeX() const
-{
-    return sizeX;
-}
-
-int GameWidget::getSizeY() const
-{
-    return sizeY;
-}
-
 GameWidget::GameWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::GameWidget),
     gameWidGameScene(new QGraphicsScene(this)), gameWidInfoScene(new QGraphicsScene(this)),
     gameWidOptionsScene(new QGraphicsScene(this)), gameWidButtonScene(new QGraphicsScene(this)),
-    sizeX(15), sizeY(15)
+    sizeX(30), sizeY(20)
 {
     ui->setupUi(this);
     ui->graphicsView_buttonView->setScene(gameWidButtonScene);
     ui->graphicsView_gameView->setScene(gameWidGameScene);
     ui->graphicsView_informationsView->setScene(gameWidInfoScene);
     ui->graphicsView_optionsView->setScene(gameWidOptionsScene);
+
+    ui->graphicsView_optionsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->graphicsView_optionsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
 GameWidget::~GameWidget()
@@ -145,7 +85,7 @@ void GameWidget::gameWidCreateMatchfield(std::vector<std::vector<HexagonMatchfie
     ui->graphicsView_gameView->setScene( gameWidGameScene );
 }
 
-void GameWidget::gameWidcreateButtonBar(std::vector<Button*> buttonVector)
+void GameWidget::gameWidCreateButtonBar(std::vector<Button*> buttonVector)
 {
     int spacingX = 70;
 
@@ -157,6 +97,88 @@ void GameWidget::gameWidcreateButtonBar(std::vector<Button*> buttonVector)
     gameWidButtonScene->update();
 }
 
+void GameWidget::clearScenes()
+{
+    //leere gameWidInfoScene
+    for(auto &it : gameWidInfoScene->items())
+    {
+        gameWidInfoScene->removeItem(it);
+    }
+    gameWidInfoScene->update();
+
+    //leere gameWidOptionsScene
+    for(auto &it : gameWidOptionsScene->items())
+    {
+        gameWidOptionsScene->removeItem(it);
+    }
+    gameWidOptionsScene->update();
+}
+
+void GameWidget::setInfoScene(HexagonDisplayInfo *info)
+{
+    for(auto &it : gameWidInfoScene->items())
+    {
+        gameWidInfoScene->removeItem(it);
+    }
+    gameWidInfoScene->addItem(info);
+    gameWidInfoScene->update();
+    gameWidGameScene->update();
+}
+
+void GameWidget::setOptScene(std::vector<Unit *> vector_Unit)
+{
+    for(auto &it : gameWidOptionsScene->items())
+    {
+        gameWidOptionsScene->removeItem(it);
+    }
+
+    if(vector_Unit.size() > 0)
+    {
+        gameWidOptionsScene->setSceneRect(0,0, vector_Unit[0]->getUnitDisplay()->rect().width(),
+                                            vector_Unit[0]->getUnitDisplay()->rect().height() * vector_Unit.size() + 20);
+        for(unsigned i = 0; i < vector_Unit.size(); i++)
+        {
+            gameWidOptionsScene->addItem(vector_Unit[i]->getUnitDisplay());
+            vector_Unit[i]->getUnitDisplay()->setPos(50, i * vector_Unit[i]->getUnitDisplay()->rect().height() + 60);
+            qDebug() << "\t" << vector_Unit[i]->getUnitDisplay()->pos();
+        }
+    }
+    gameWidOptionsScene->update();
+}
+
+void GameWidget::setPlayerLabel(QString text)
+{
+    ui->labelPlayerCurrent->setText(text);
+}
+
+void GameWidget::setPhaseLabel(QString text)
+{
+    ui->labelPhaseCurrent->setText(text);
+}
+
+void GameWidget::setPlayerOneUnitsLabel(int value)
+{
+    ui->labelPlayerOneUnitsCurrent->setText(QString::number(value));
+}
+
+void GameWidget::setPlayerTwoUnitsLabel(int value)
+{
+    ui->labelPlayerTwoUnitsCurrent->setText(QString::number(value));
+}
+QGraphicsScene *GameWidget::getGameWidInfoScene() const
+{
+    return gameWidInfoScene;
+}
+
+int GameWidget::getSizeX() const
+{
+    return sizeX;
+}
+
+int GameWidget::getSizeY() const
+{
+    return sizeY;
+}
 HexagonDisplayInfo::HexagonDisplayInfo(HexagonMatchfield *ptr_hexMfield)
 :QObject(0), QGraphicsRectItem(QRectF(-50,-50,230,100), 0), hexToDisplay(ptr_hexMfield)
 {
@@ -222,4 +244,36 @@ void HexagonDisplayInfo::updateText()
         qStringUnitDispMovement = "";
         qStringUnitDispUnitAttack = "";
     }
+}
+
+UnitDisplayInfo::UnitDisplayInfo(Unit *ptr_Unit)
+    : QGraphicsRectItem(QRectF(-50,-50,230,100), 0), ptr_UnitToDisplay(ptr_Unit)
+{
+    updateText();
+}
+
+void UnitDisplayInfo::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+{
+    updateText();
+    painter->drawRect(rect());
+    painter->drawPixmap(-50,-50, ptr_UnitToDisplay->pixmap());
+    painter->drawText(QRectF(20,-50,200,20),qStringUnitDispUnitName);
+    painter->drawText(QRectF(20,-30, 200,20),qStringUnitDispUnitType);
+    painter->drawText(QRectF(20,-10,200,20),qStringUnitDispUnitLife);
+    painter->drawText(QRectF(20,10,200,20),qStringUnitDispMovement);
+    painter->drawText(QRectF(20,30,200,20),qStringUnitDispUnitAttack);
+
+}
+
+void UnitDisplayInfo::updateText()
+{
+    qStringUnitDispUnitName = "Name: " + ptr_UnitToDisplay->getUnitName();
+    qStringUnitDispUnitType = "Unit Typ: " + ptr_UnitToDisplay->getUnitType();
+    qStringUnitDispUnitLife = "HP: " + QString::number(ptr_UnitToDisplay->getUnitCurrentHP()) + "/"
+                                        + QString::number(ptr_UnitToDisplay->getUnitHP());
+    qStringUnitDispMovement = "MoveRange: " + QString::number(ptr_UnitToDisplay->getUnitMoveRange()) + "/"
+            + QString::number(ptr_UnitToDisplay->getUnitCurrentMoveRange());
+    qStringUnitDispUnitAttack = "Attack: A" + QString::number(ptr_UnitToDisplay->getUnitAirAtt()) + "/"
+            + "G" + QString::number(ptr_UnitToDisplay->getUnitGroundAtt()) + "/"
+            + "W" + QString::number(ptr_UnitToDisplay->getUnitWaterAtt());
 }

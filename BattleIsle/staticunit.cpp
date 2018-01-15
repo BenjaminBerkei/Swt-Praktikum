@@ -125,12 +125,17 @@ Unit* DepotUnit::createUnit()
 FactoryUnit::FactoryUnit(QString filepath, Player* player)
 	: StaticUnit(filepath, player), unitToBuild("")
 {
-    production["DerBolten"] = new AirUnit(":/dynamic/dynamicUnit/derbolten.txt");
-    production["BEN"] = new LightUnit(":/dynamic/dynamicUnit/ben.txt");
-    production["KevArn"] = new TransporterGroundUnit(":/dynamic/dynamicUnit/kevarn.txt");
-    production["Lucas"] = new MediumUnit(":/dynamic/dynamicUnit/lucas.txt");
-    production["MannuEl"] = new HeavyUnit(":/dynamic/dynamicUnit/mannuel.txt");
-    production["MSMiguel"] = new WaterUnit(":/dynamic/dynamicUnit/msmiguel.txt");
+    production["DerBolten"] = new AirUnit(":/dynamic/dynamicUnit/derbolten.txt", unitPlayer);
+    production["BEN"] = new LightUnit(":/dynamic/dynamicUnit/ben.txt", unitPlayer);
+    production["KevArn"] = new TransporterGroundUnit(":/dynamic/dynamicUnit/kevarn.txt", unitPlayer);
+    production["Lucas"] = new MediumUnit(":/dynamic/dynamicUnit/lucas.txt", unitPlayer);
+    production["MannuEl"] = new HeavyUnit(":/dynamic/dynamicUnit/mannuel.txt", unitPlayer);
+    production["MSMiguel"] = new WaterUnit(":/dynamic/dynamicUnit/msmiguel.txt", unitPlayer);
+
+    for(auto &it : production)
+    {
+        vector_unitStorage.push_back(it.second);
+    }
 }
 
 FactoryUnit::~FactoryUnit() {}
