@@ -156,7 +156,6 @@ void GameWidget::setOptScene(std::vector<Unit *> vector_Unit)
         {
             gameWidOptionsScene->addItem(vector_Unit[i]->getUnitDisplay());
             vector_Unit[i]->getUnitDisplay()->setPos(50, i * vector_Unit[i]->getUnitDisplay()->rect().height() + 60);
-            qDebug() << "\t" << vector_Unit[i]->getUnitDisplay()->pos();
         }
     }
     gameWidOptionsScene->update();
@@ -284,7 +283,7 @@ void UnitDisplayInfo::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
 void UnitDisplayInfo::updateText()
 {
     qStringUnitDispUnitName = "Name: " + ptr_UnitToDisplay->getUnitName();
-    qStringUnitDispUnitType = "Unit Typ: " + ptr_UnitToDisplay->getUnitType();
+    qStringUnitDispUnitType = "Typ: " + ptr_UnitToDisplay->getUnitType();
     qStringUnitDispUnitLife = "HP: " + QString::number(ptr_UnitToDisplay->getUnitCurrentHP()) + "/"
                                         + QString::number(ptr_UnitToDisplay->getUnitHP());
     qStringUnitDispMovement = "MoveRange: " + QString::number(ptr_UnitToDisplay->getUnitMoveRange()) + "/"

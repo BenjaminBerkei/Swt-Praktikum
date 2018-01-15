@@ -215,9 +215,10 @@ void Game::processSelection(HexagonMatchfield *selection)
         break;
     case PATH :
         moveUnitTo(selection);      //Einheit bewegen
+        SelectionCache = selection;
+        SelectionCache->setState(ACTIVE);
         ptr_gameGameWid->setInfoScene(SelectionCache->getPtr_hexMfieldDisplay());   //Display Text Updaten
         resetTargetChache();       //Spielfeld zurücksetzen
-        SelectionCache->setState(ACTIVE);
         break;
     }
     checkUnitGrid();
@@ -380,8 +381,7 @@ void Game::moveUnitTo(HexagonMatchfield * target)
 
             unitToMove->setPos(target->pos());  //Visuell verlegen
             SelectionCache->setState(INACTIVE);     //Auswahl auf inactiv setzen
-
-            SelectionCache = target;            //auswahl auf ziel legen
+            SelectionCache = nullptr;
         }
     }
 }
