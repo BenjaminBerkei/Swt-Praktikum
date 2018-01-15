@@ -125,15 +125,16 @@ Unit* DepotUnit::createUnit()
 FactoryUnit::FactoryUnit(QString filepath, Player* player)
 	: StaticUnit(filepath, player), unitToBuild("")
 {
-    production["DerBolten"] = new AirUnit(":/dynamic/dynamicUnit/derbolten.txt", unitPlayer);
-    production["BEN"] = new LightUnit(":/dynamic/dynamicUnit/ben.txt", unitPlayer);
-    production["KevArn"] = new TransporterGroundUnit(":/dynamic/dynamicUnit/kevarn.txt", unitPlayer);
+    production["Der Bolten"] = new AirUnit(":/dynamic/dynamicUnit/derbolten.txt", unitPlayer);
+    production["B.E.N"] = new LightUnit(":/dynamic/dynamicUnit/ben.txt", unitPlayer);
+    production["Kevarn"] = new TransporterGroundUnit(":/dynamic/dynamicUnit/kevarn.txt", unitPlayer);
     production["Lucas"] = new MediumUnit(":/dynamic/dynamicUnit/lucas.txt", unitPlayer);
-    production["MannuEl"] = new HeavyUnit(":/dynamic/dynamicUnit/mannuel.txt", unitPlayer);
-    production["MSMiguel"] = new WaterUnit(":/dynamic/dynamicUnit/msmiguel.txt", unitPlayer);
+    production["Mann u. El"] = new HeavyUnit(":/dynamic/dynamicUnit/mannuel.txt", unitPlayer);
+    production["M.S Miguel"] = new WaterUnit(":/dynamic/dynamicUnit/msmiguel.txt", unitPlayer);
 
     for(auto &it : production)
     {
+        connect(it.second->getUnitDisplay(), SIGNAL(unitDispl_clicked(QString)), this, SLOT(SLOT_setUnitToBuild(QString)));
         vector_unitStorage.push_back(it.second);
     }
 }
@@ -152,36 +153,32 @@ void FactoryUnit::setUnitToBuild(const QString unitTarget)
 
 bool FactoryUnit::action(HexagonMatchfield* hexTarget)
 {
-    if(hexTarget->getUnit_stationed() == nullptr)
-	{
-		if(unitToBuild != "")
-		{
-			if (production[unitToBuild]->moveTo(hexTarget) != -1)
-			{
-				produceUnit(hexTarget);
-				bool_unitUsed = true;
-				unitToBuild = "";
-				return true;
-			}
-		}
-	}
-	unitToBuild = "";
-	return false;
+    qDebug() << unitPlayer->getCurrentEnergieStorage() - production[unitToBuild]->getUnitCost();
+    if(unitToBuild != "" && unitPlayer->getCurrentEnergieStorage() - production[unitToBuild]->getUnitCost() >= 0
+            && hexTarget->getUnit_stationed() == nullptr && production[unitToBuild]->moveTo(hexTarget) != -1)
+    {
+        produceUnit(hexTarget);
+        unitToBuild = "";
+        return true;
+    }
+    unitToBuild = "";
+    return false;
 }
 
-void FactoryUnit::produceUnit(HexagonMatchfield*)
+void FactoryUnit::produceUnit(HexagonMatchfield* hexTarget)
 {
-    /*
-    hexTarget->getUnit_stationed() = production[getUnitToBuild()]->createUnit();
-    hexTarget->getUnit_stationed()->setUnitPlayer(this->unitPlayer);
-    hexTarget->getUnit_stationed()->setQpoint_gridPosition(hexTarget->getQpoint_gridPosition());
-	unitPlayer->setCurrentEnergieStorage(unitPlayer->getCurrentEnergieStorage() - hexTarget->getUnitCost());
-    */
-    qDebug() << "Produce Unit";
+    hexTarget->setUnit_stationed(production[unitToBuild]->createUnit());
+    unitPlayer->setCurrentEnergieStorage(unitPlayer->getCurrentEnergieStorage() - hexTarget->getUnit_stationed()->getUnitCost());
 }
 
 Unit* FactoryUnit::createUnit()
 {
-	return new FactoryUnit(unitFile);
+    return new FactoryUnit(unitFile);
+}
+
+void FactoryUnit::SLOT_setUnitToBuild(QString value)
+{
+    unitToBuild = value;
+    qDebug() << unitToBuild;
 }
 

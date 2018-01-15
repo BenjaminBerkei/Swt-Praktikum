@@ -12,8 +12,8 @@
 
 
 Player::Player(QString playerName,int id, int playerScore, int totalEnergie, int currentEnergie, int unitNumber)
-    :str_playerName(playerName), int_playerID(id), int_playerScore(playerScore), int_playerTotalEnergie(totalEnergie),
-      int_currentEnergieStorage(currentEnergie), int_playerUnitNumber(unitNumber), bool_HQDestroyed(false) {}
+    :str_playerName(playerName), int_playerID(id), int_playerScore(playerScore), int_playerTotalEnergie(1000000),
+      int_currentEnergieStorage(1000000), int_playerUnitNumber(unitNumber), bool_HQDestroyed(false) {}
 
 Player::~Player(){
 	/*

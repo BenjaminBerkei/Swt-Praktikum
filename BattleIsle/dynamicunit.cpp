@@ -183,7 +183,7 @@ int TransporterAirUnit::moveTo(HexagonMatchfield *){
 
 TransporterAirUnit *TransporterAirUnit::createUnit()
 {
-    return new TransporterAirUnit(unitFile);
+    return new TransporterAirUnit(unitFile, unitPlayer);
 }
 
 
@@ -230,7 +230,7 @@ int TransporterGroundUnit::moveTo(HexagonMatchfield *hex_target){
 
 TransporterGroundUnit *TransporterGroundUnit::createUnit()
 {
-    return new TransporterGroundUnit(unitFile);
+    return new TransporterGroundUnit(unitFile, unitPlayer);
 }
 
 
@@ -259,7 +259,7 @@ int TransporterWaterUnit::moveTo(HexagonMatchfield *hex_target){
 
 TransporterWaterUnit *TransporterWaterUnit::createUnit()
 {
-    return new TransporterWaterUnit(unitFile);
+    return new TransporterWaterUnit(unitFile, unitPlayer);
 }
 
 
@@ -373,7 +373,7 @@ bool AirUnit::action(HexagonMatchfield *hex_target) {
 
 AirUnit *AirUnit::createUnit()
 {
-    return new AirUnit(unitFile);
+    return new AirUnit(unitFile, unitPlayer);
 }
 
 // GroundUnit
@@ -517,7 +517,7 @@ int LightUnit::moveTo(HexagonMatchfield *hex_target){
 
 LightUnit *LightUnit::createUnit()
 {
-    return new LightUnit(unitFile);
+    return new LightUnit(unitFile, unitPlayer);
 }
 
 // BuildLightUnit
@@ -548,7 +548,7 @@ void BuildLightUnit::produceUnit(HexagonMatchfield* hex_target){
 
 BuildLightUnit *BuildLightUnit::createUnit()
 {
-    return new BuildLightUnit(unitFile);
+    return new BuildLightUnit(unitFile, unitPlayer);
 }
 
 
@@ -592,7 +592,7 @@ int MediumUnit::moveTo(HexagonMatchfield *hex_target){
 
 MediumUnit *MediumUnit::createUnit()
 {
-    return new MediumUnit(unitFile);
+    return new MediumUnit(unitFile, unitPlayer);
 }
 // HeavyUnit
 
@@ -634,7 +634,7 @@ int HeavyUnit::moveTo(HexagonMatchfield *hex_target){
 
 HeavyUnit *HeavyUnit::createUnit()
 {
-    return new HeavyUnit(unitFile);
+    return new HeavyUnit(unitFile, unitPlayer);
 }
 
 
@@ -757,5 +757,5 @@ bool WaterUnit::action(HexagonMatchfield *hex_target) {
 
 WaterUnit *WaterUnit::createUnit()
 {
-    return new WaterUnit(unitFile);
+    return new WaterUnit(unitFile, unitPlayer);
 }

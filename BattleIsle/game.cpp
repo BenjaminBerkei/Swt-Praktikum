@@ -204,14 +204,25 @@ void Game::processSelection(HexagonMatchfield *selection)
             showPath(selection);
         }else if(ptr_roundCurrent->getCurrentPhase() == ACTION)
         {
-            SelectionCache->getUnit_stationed()->action(selection);
-            resetHexMatchfield();
+            if(SelectionCache->getUnit_stationed()->action(selection))
+            {
+                if(selection->getUnit_stationed() != nullptr
+                        && unit_UnitGrid[selection->getQpoint_gridPosition().x()][selection->getQpoint_gridPosition().y()] == nullptr)
+                {
+                    unit_UnitGrid[selection->getQpoint_gridPosition().x()][selection->getQpoint_gridPosition().y()] = selection->getUnit_stationed();
+                    selection->getUnit_stationed()->setPos(selection->pos());
+                    ptr_gameGameWid->getGameWidGameScene()->addItem(selection->getUnit_stationed());
+                }
+            }
+            resetTargetChache();
         }
         break;
     case PATH :
         moveUnitTo(selection);
+        SelectionCache = selection;
+        SelectionCache->setState(ACTIVE);
         ptr_gameGameWid->setInfoScene(SelectionCache->getPtr_hexMfieldDisplay());
-        resetHexMatchfield();
+        resetTargetChache();
         break;
     }
     checkUnitGrid();
@@ -372,9 +383,6 @@ void Game::moveUnitTo(HexagonMatchfield * target)
 
             unitToMove->setPos(target->pos());
             SelectionCache->setState(INACTIVE);
-
-            SelectionCache = target;
-            SelectionCache->setState(ACTIVE);
         }
     }
 }

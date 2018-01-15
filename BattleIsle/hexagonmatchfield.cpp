@@ -72,7 +72,7 @@ void HexagonMatchfield::setUnit_stationed(Unit *value)
 
 HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, QString type, Unit *stationedUnit) :
     HexagonBase( qpoint_gridPosition ), bool_hexFogOfWar(false), unit_stationed(stationedUnit), state(INACTIVE),
-    HexMatchfieldType(type),int_boltaniumCurrent(), qcolor_HexColor(Qt::black)
+    HexMatchfieldType(type),int_boltaniumCurrent(0), qcolor_HexColor(Qt::black)
 {
     if(HexMatchfieldType == "waterDeep")
         setPixmap(QPixmap(":/img/HexagonBilder/Meer.png"));

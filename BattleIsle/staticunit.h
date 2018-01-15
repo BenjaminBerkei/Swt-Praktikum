@@ -64,6 +64,7 @@ public:
 
 class FactoryUnit : public StaticUnit
 {
+    Q_OBJECT
 protected:
 	QString unitToBuild; 
     std::map<QString, Unit*> production;
@@ -78,6 +79,8 @@ public:
 	bool action(HexagonMatchfield*);
 	void produceUnit(HexagonMatchfield*);
 	Unit* createUnit();
+private slots:
+    void SLOT_setUnitToBuild(QString);
 };
 
 #endif

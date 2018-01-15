@@ -24,6 +24,11 @@
 #include "gamewidget.h"
 #include "ui_gamewidget.h"
 
+QGraphicsScene *GameWidget::getGameWidGameScene() const
+{
+    return gameWidGameScene;
+}
+
 GameWidget::GameWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::GameWidget),
@@ -262,7 +267,6 @@ void UnitDisplayInfo::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
     painter->drawText(QRectF(20,-10,200,20),qStringUnitDispUnitLife);
     painter->drawText(QRectF(20,10,200,20),qStringUnitDispMovement);
     painter->drawText(QRectF(20,30,200,20),qStringUnitDispUnitAttack);
-
 }
 
 void UnitDisplayInfo::updateText()
@@ -276,4 +280,10 @@ void UnitDisplayInfo::updateText()
     qStringUnitDispUnitAttack = "Attack: A" + QString::number(ptr_UnitToDisplay->getUnitAirAtt()) + "/"
             + "G" + QString::number(ptr_UnitToDisplay->getUnitGroundAtt()) + "/"
             + "W" + QString::number(ptr_UnitToDisplay->getUnitWaterAtt());
+}
+
+void UnitDisplayInfo::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    qDebug() << "DisplInfoClicked";
+    emit unitDispl_clicked(ptr_UnitToDisplay->getUnitName());
 }

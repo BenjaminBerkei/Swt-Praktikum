@@ -70,6 +70,7 @@ public:
     int getSizeX() const;
     int getSizeY() const;
     QGraphicsScene *getGameWidInfoScene() const;
+    QGraphicsScene *getGameWidGameScene() const;
 
 signals:
     void SIGNAL_gameWidChangeIndexFromStack(int);
@@ -110,6 +111,9 @@ public:
     UnitDisplayInfo(Unit* ptr_Unit);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *);
     void updateText();
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+signals:
+    void unitDispl_clicked(QString);
 };
 
 #endif // GAMEWIDGET_H
