@@ -41,6 +41,7 @@ class HexagonMatchfield : public HexagonBase
     Q_OBJECT
 protected:
     /* Zum setZValue:
+     * -1 : Units wenn in Fog of War
      * 0: alle inaktiven Hexagons
      * 1: Targets
      * 2: Selectet
@@ -84,6 +85,8 @@ public:
     
     int getBoltaniumCurrent() const;
     void setBoltaniumCurrent(int value);
+
+    QColor getQcolor_HexColor() const;
 
 signals:
     void SIGNAL_clicked(HexagonMatchfield*);

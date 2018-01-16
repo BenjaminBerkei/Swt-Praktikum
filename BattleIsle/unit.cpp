@@ -10,70 +10,6 @@
  * */
 #include "unit.h"
 
-int Unit::getUnitCurrentMoveRange() const
-{
-    return int_unitCurrentMoveRange;
-}
-
-void Unit::setUnitCurrentMoveRange(int value)
-{
-    int_unitCurrentMoveRange = value;
-}
-
-int Unit::getUnitMoveRange() const
-{
-    return int_unitMoveRange;
-}
-
-void Unit::setUnitMoveRange(int value)
-{
-    int_unitMoveRange = value;
-}
-
-int Unit::getUnitWaterAtt() const
-{
-    return int_unitWaterAtt;
-}
-
-void Unit::setUnitWaterAtt(int value)
-{
-    int_unitWaterAtt = value;
-}
-
-int Unit::getUnitGroundAtt() const
-{
-    return int_unitGroundAtt;
-}
-
-void Unit::setUnitGroundAtt(int value)
-{
-    int_unitGroundAtt = value;
-}
-
-int Unit::getUnitAirAtt() const
-{
-    return int_unitAirAtt;
-}
-
-void Unit::setUnitAirAtt(int value)
-{
-    int_unitAirAtt = value;
-}
-
-UnitDisplayInfo *Unit::getUnitDisplay() const
-{
-    return ptr_UnitDisplay;
-}
-
-std::vector<Unit *> Unit::getVector_unitStorage() const
-{
-    return vector_unitStorage;
-}
-
-void Unit::setVector_unitStorage(const std::vector<Unit *> &value)
-{
-    vector_unitStorage = value;
-}
 
 Unit::Unit()
     : str_unitName(""), unitPlayer(nullptr), int_unitView(0), int_unitHP(0), int_unitCurrentHP(0),
@@ -90,89 +26,6 @@ Unit::~Unit()
     {
         delete it;
     }
-}
-
-QString Unit::getUnitName() const
-{
-	return str_unitName;
-}
-
-Player* Unit::getUnitPlayer() const
-{
-	return unitPlayer;
-}
-
-void Unit::setUnitEXP(int value){
-	int_unitEXP = value;
-}
-
-int Unit::getUnitEXP() const {
-	return int_unitEXP;
-}
-
-
-int Unit::getUnitView() const
-{
-	return int_unitView;
-}
-
-int Unit::getUnitHP() const
-{
-	return int_unitHP;
-}
-
-int Unit::getUnitCurrentHP() const
-{
-	return int_unitCurrentHP;
-}
-
-QString Unit::getUnitDetails() const
-{
-	return str_unitDetails;
-}
-
-QString Unit::getUnitType() const
-{
-	return str_unitType;
-}
-
-int Unit::getUnitCost() const
-{
-	return int_unitCost;
-}
-
-bool Unit::getUnitUsed() const
-{
-	return bool_unitUsed;
-}
-
-void Unit::setUnitName(QString name)
-{
-	str_unitName = name;
-	return;
-}
-
-void Unit::setUnitPlayer(Player* player)
-{
-    unitPlayer = player;
-}
-
-void Unit::setUnitHP(int hp)
-{
-	int_unitHP = hp;
-	return;
-}
-
-void Unit::setUnitCurrentHP(int hp)
-{
-	int_unitCurrentHP = hp;
-	return;
-}
-
-void Unit::setUnitUsed(bool used)
-{
-	bool_unitUsed = used;
-	return;
 }
 
 bool Unit::checkUnitDestroyed()
@@ -206,11 +59,161 @@ void Unit::resetUnit()
     bool_unitUsed = false;
 }
 
-void Unit::addUnitToStorage(Unit *unit)
+void Unit::addUnitToStorage(Unit *)
 {
+    return;
 }
 
 void Unit::resetBuildUnloadParameter()
 {
     return;
+}
+
+
+/*GET METHODEN #############################*/
+
+int Unit::getUnitCurrentMoveRange() const
+{
+    return int_unitCurrentMoveRange;
+}
+int Unit::getUnitMoveRange() const
+{
+    return int_unitMoveRange;
+}
+int Unit::getUnitWaterAtt() const
+{
+    return int_unitWaterAtt;
+}
+int Unit::getActionRange() const
+{
+    return int_actionRange;
+}
+int Unit::getUnitGroundAtt() const
+{
+    return int_unitGroundAtt;
+}
+int Unit::getUnitAirAtt() const
+{
+    return int_unitAirAtt;
+}
+UnitDisplayInfo *Unit::getUnitDisplay() const
+{
+    return ptr_UnitDisplay;
+}
+
+std::vector<Unit *> Unit::getVector_unitStorage() const
+{
+    return vector_unitStorage;
+}
+QString Unit::getUnitName() const
+{
+    return str_unitName;
+}
+
+Player* Unit::getUnitPlayer() const
+{
+    return unitPlayer;
+}
+
+int Unit::getUnitEXP() const {
+    return int_unitEXP;
+}
+
+
+int Unit::getUnitView() const
+{
+    return int_unitView;
+}
+
+int Unit::getUnitHP() const
+{
+    return int_unitHP;
+}
+
+int Unit::getUnitCurrentHP() const
+{
+    return int_unitCurrentHP;
+}
+
+QString Unit::getUnitDetails() const
+{
+    return str_unitDetails;
+}
+
+QString Unit::getUnitType() const
+{
+    return str_unitType;
+}
+
+int Unit::getUnitCost() const
+{
+    return int_unitCost;
+}
+
+bool Unit::getUnitUsed() const
+{
+    return bool_unitUsed;
+}
+/*SET METHODEN #############################*/
+void Unit::setUnitCurrentMoveRange(int value)
+{
+    int_unitCurrentMoveRange = value;
+}
+
+void Unit::setUnitMoveRange(int value)
+{
+    int_unitMoveRange = value;
+}
+void Unit::setUnitWaterAtt(int value)
+{
+    int_unitWaterAtt = value;
+}
+
+void Unit::setUnitGroundAtt(int value)
+{
+    int_unitGroundAtt = value;
+}
+
+void Unit::setUnitAirAtt(int value)
+{
+    int_unitAirAtt = value;
+}
+
+
+void Unit::setVector_unitStorage(const std::vector<Unit *> &value)
+{
+    vector_unitStorage = value;
+}
+
+void Unit::setUnitEXP(int value){
+	int_unitEXP = value;
+}
+
+void Unit::setUnitName(QString name)
+{
+	str_unitName = name;
+	return;
+}
+
+void Unit::setUnitPlayer(Player* player)
+{
+    unitPlayer = player;
+}
+
+void Unit::setUnitHP(int hp)
+{
+	int_unitHP = hp;
+	return;
+}
+
+void Unit::setUnitCurrentHP(int hp)
+{
+	int_unitCurrentHP = hp;
+	return;
+}
+
+void Unit::setUnitUsed(bool used)
+{
+	bool_unitUsed = used;
+	return;
 }

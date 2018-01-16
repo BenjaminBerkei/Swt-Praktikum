@@ -35,6 +35,7 @@
 #include <QTime>
 #include <QObject>
 #include <queue>
+#include <QVector3D>
 
 class GameWidget; //Vorwärtsdeklaration
 class HexagonMatchfield;
@@ -82,11 +83,17 @@ public:
     void resetTargetChache();
     void moveUnitTo(HexagonMatchfield*);    //Einheit auf anderes Hex verlegen
     void showNeighbors(HexagonMatchfield*); //Nachbarn markieren -> später range markieren
+    void calculateTargets(int);
     void showPath(HexagonMatchfield *);     //Weg einer bewegung anzeigen
     void checkUnitGrid();                   //Prüfen ob eine Einheit gestorben ist
     void checkWinCondition();               //Prüfen ob ein spieler gewonnen hat
     void resetUnits(Player*);
     void countUnits();
+
+    QVector3D oddqToCube(QPoint);   //Für Referenzen betrachte https://www.redblobgames.com/grids/hexagons/#distances , Kapitel: Distance
+    QPoint cubeToOddq(QVector3D);
+    int offset_distance(QPoint, QPoint);
+    int cube_distance(QVector3D, QVector3D);
     /*Hilfsfunktionen Ende*/
 
     // get und set Methoden

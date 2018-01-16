@@ -243,9 +243,13 @@ void Game::processSelection(HexagonMatchfield *selection)
         SelectionCache = selection;
         SelectionCache->setState(ACTIVE);
 
+        qDebug() << "SelectionCache State:" << SelectionCache->getState() << "\n"
+                 << "\t" << SelectionCache->getQcolor_HexColor();
+
         /*Darstellungen setzen*/
         ptr_gameGameWid->setInfoScene(SelectionCache->getPtr_hexMfieldDisplay());
         ptr_gameGameWid->setOptScene(SelectionCache->getUnit_stationed()->getVector_unitStorage());
+
         resetTargetChache();
         break;
     }
@@ -348,7 +352,7 @@ void Game::buttonPressedAction()
                 && SelectionCache->getUnit_stationed()->getUnitPlayer() == ptr_playerActive
                 && SelectionCache->getUnit_stationed()->getUnitUsed() == false)
         {
-            showNeighbors(SelectionCache);
+            calculateTargets(SelectionCache->getUnit_stationed()->getActionRange());
         }
     }
 }
@@ -452,6 +456,47 @@ void Game::showNeighbors(HexagonMatchfield * center)
     }
 }
 
+void Game::calculateTargets(int range)
+{
+    std::queue<HexagonMatchfield*> frontier;
+    frontier.push(SelectionCache);
+
+    while(!frontier.empty())    //Solange zulässige Ziele gefunden werdenn
+    {
+        HexagonMatchfield* current = frontier.front();
+        frontier.pop();
+
+        /*Durchlaufen der Nachbarn des Elements*/
+        vector<QPoint> neighbours;
+        if(current->getQpoint_gridPosition().x() & 1)
+        {
+            neighbours = vector_oddNeighbors;
+        }else{
+            neighbours = vector_evenNeighbors;
+        }
+
+        for(auto &it : neighbours)    //Durchlaufen der Nachbarn
+        {
+            int x = current->getQpoint_gridPosition().x() + it.x();    //Koordinaten des neuen Ziels
+            int y = current->getQpoint_gridPosition().y() + it.y();
+
+            if(x >= 0 && x < ptr_gameGameWid->getSizeX() && y >= 0 && y < ptr_gameGameWid->getSizeY()         //Wenn das ziel auf dem Spielfeld liegt
+                    && hexagonMatchfield_gameGrid[x][y]->getState() != TARGET && hexagonMatchfield_gameGrid[x][y]->getState() != ACTIVE)  //Wenn das Ziel nicht bereits als TARGET markiert wurde
+            {
+                HexagonMatchfield* neighbour = hexagonMatchfield_gameGrid[x][y];         //Zwischenspeichern für lesbarkeite
+
+                if(offset_distance(SelectionCache->getQpoint_gridPosition(), neighbour->getQpoint_gridPosition()) <= range)          //Wenn das ziel in der Reichweite der Einheite liegt
+                {
+                    neighbour->setState(TARGET);
+                    TargetChache.push_back(neighbour);
+                    frontier.push(neighbour);
+                }
+            }
+        }
+    }
+    ptr_gameGameWid->getGameWidGameScene()->update();
+}
+
 void Game::showPath(HexagonMatchfield* target)
 {
     for(auto &it = target; it != SelectionCache; it = came_from[it])
@@ -529,6 +574,34 @@ void Game::countUnits()
         }
     }
 }
+/*Für Referenzen betrachte https://www.redblobgames.com/grids/hexagons/#distances , Kapitel: Distance*/
+QVector3D Game::oddqToCube(QPoint oddqCoord)
+{
+    int x = oddqCoord.x();
+    int z = oddqCoord.y() - (oddqCoord.x() - ((int)oddqCoord.x() & 1)) / 2;
+    int y = (-1) * x - z;
+    return QVector3D(x,y,z);
+}
+
+QPoint Game::cubeToOddq(QVector3D cubeCoord)
+{
+    int x = cubeCoord.x();
+    int y = cubeCoord.z() + (cubeCoord.x() - ((int)cubeCoord.x() & 1)) / 2;
+    return QPoint(x,y);
+}
+
+int Game::cube_distance(QVector3D a, QVector3D b)
+{
+    return (abs(a.x() - b.x()) + abs(a.y() - b.y()) + abs(a.z() - b.z())) / 2;
+}
+
+int Game::offset_distance(QPoint a, QPoint b)
+{
+    QVector3D ac = oddqToCube(a);
+    QVector3D bc = oddqToCube(b);
+    return cube_distance(ac, bc);
+}
+
 
 /*HilfsFunktionen Ende#######################################################################*/
 

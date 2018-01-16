@@ -26,6 +26,7 @@ StaticUnit::StaticUnit(QString filepath, Player* player)
     }
     str_unitName = in.readLine();
 	in >> int_unitView;
+    in >> int_actionRange;
 	in >> int_unitHP;
 	in >> int_unitStorageMax;
     in >> int_EnergieStorage;
@@ -153,14 +154,18 @@ void FactoryUnit::setUnitToBuild(const QString unitTarget)
 
 bool FactoryUnit::action(HexagonMatchfield* hexTarget)
 {
+    if(bool_unitUsed == true)
+    {
+        return false;
+    }
     qDebug() << "Factory Action:";
     qDebug() << "\t" << unitToBuild;
-
     if(unitToBuild != "" && unitPlayer->getCurrentEnergieStorage() - production[unitToBuild]->getUnitCost() >= 0
             && hexTarget->getUnit_stationed() == nullptr && production[unitToBuild]->moveTo(hexTarget) != -1)
     {
         produceUnit(hexTarget);
         unitToBuild = "";
+        bool_unitUsed = true;
         return true;
     }
     unitToBuild = "";

@@ -45,6 +45,7 @@ void HexagonMatchfield::setState(const MATCHFIELDSTATE &value)
     }
     else if(state == ACTIVE)
     {
+        qDebug() << "\t Active set";
         setZValue(2);
         qcolor_HexColor = Qt::red;
     }
@@ -68,6 +69,11 @@ Unit *HexagonMatchfield::getUnit_stationed() const
 void HexagonMatchfield::setUnit_stationed(Unit *value)
 {
     unit_stationed = value;
+}
+
+QColor HexagonMatchfield::getQcolor_HexColor() const
+{
+    return qcolor_HexColor;
 }
 
 HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, QString type, Unit *stationedUnit) :
@@ -115,16 +121,22 @@ void HexagonMatchfield::mousePressEvent( QGraphicsSceneMouseEvent *)
 
 void HexagonMatchfield::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    if(state == ACTIVE)
+    {
+        qDebug() << "Active hex redraw";
+    }
     QGraphicsPixmapItem::paint(painter, option, widget);
-        QPen pen;
-        pen.setColor(qcolor_HexColor);
-        pen.setWidth(2);
-        painter->setPen(pen);
-        painter->drawPath(shape());
-        if(int_boltaniumCurrent > 0)
-        {
-            painter->drawPixmap(0,0,qpixmap_boltanium);
-        }
+    QPen pen;
+    pen.setColor(qcolor_HexColor);
+    pen.setWidth(2);
+    painter->setPen(pen);
+
+    painter->drawPath(shape());
+
+    if(int_boltaniumCurrent > 0)
+    {
+        painter->drawPixmap(0,0,qpixmap_boltanium);
+    }
 }
 
 int HexagonMatchfield::getBoltaniumCurrent() const{

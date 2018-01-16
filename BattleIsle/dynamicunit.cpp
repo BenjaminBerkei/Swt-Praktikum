@@ -32,6 +32,7 @@ DynamicUnit::DynamicUnit(QString filepath, Player* player)
 	
     str_unitName = in.readLine();
 	in >> int_unitView;
+    in >> int_actionRange;
 	in >> int_unitHP;
 	in >> int_unitStorageMax;
     in >> int_unitCost;
@@ -341,12 +342,17 @@ bool AirUnit::action(HexagonMatchfield *hex_target) {
     {
         return false;
     }
-
     Unit *target = hex_target->getUnit_stationed();
 	
-	if(target == nullptr){
+    if(target == nullptr)
+    {
 		return false;
-	}
+    }
+
+    if(target->getUnitPlayer() == this->getUnitPlayer())
+    {
+        return false;
+    }
 
 	int int_target_current_hp = target->getUnitCurrentHP();
     QString target_type = target->getUnitType();
@@ -463,6 +469,11 @@ bool GroundUnit::action(HexagonMatchfield *hex_target) {
 	if(target == nullptr){
 		return false;
 	}
+
+    if(target->getUnitPlayer() == this->getUnitPlayer())
+    {
+        return false;
+    }
 
 	int int_target_current_hp = target->getUnitCurrentHP();
     QString target_type = target->getUnitType();
@@ -786,6 +797,11 @@ bool WaterUnit::action(HexagonMatchfield *hex_target) {
 	if(target == nullptr){
 		return false;
 	}
+
+    if(target->getUnitPlayer() == this->getUnitPlayer())
+    {
+        return false;
+    }
 
 	int int_target_current_hp = target->getUnitCurrentHP();
     QString target_type = target->getUnitType();

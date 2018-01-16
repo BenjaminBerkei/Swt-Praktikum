@@ -51,7 +51,7 @@ protected:
     
     int int_unitMoveRange;
     int int_unitCurrentMoveRange;
-    //int int_actionRange;
+    int int_actionRange;
 
     UnitDisplayInfo* ptr_UnitDisplay;
 
@@ -90,6 +90,7 @@ public:
     int getUnitMoveRange() const;
     int getUnitCurrentMoveRange() const;
     std::vector<Unit *> getVector_unitStorage() const;
+    int getActionRange() const;
 
     void setUnitCurrentMoveRange(int value);
     void setUnitName(QString);
