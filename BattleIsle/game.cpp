@@ -16,23 +16,12 @@
 #include "game.h"
 using namespace std;
 
-/*Noch fertig schreiben*/
 std::vector<QPoint> Game::vector_evenNeighbors = {QPoint(1,0),QPoint(1,-1),QPoint(0,-1),QPoint(-1,-1),QPoint(-1,0),QPoint(0,1)};
 std::vector<QPoint> Game::vector_oddNeighbors = {QPoint(1,1),QPoint(1,0),QPoint(0,-1),QPoint(-1,0),QPoint(-1,1),QPoint(0,1)};
 
 
-std::vector<Button *> Game::getButton_menueBar()
-{
-    return button_menueBar;
-}
-
-void Game::setButton_menueBar(const std::vector<Button *> &value)
-{
-    button_menueBar = value;
-}
-
 Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
-    SelectionCache(NULL),
+    selectionCache(NULL),
     gameOptions(init_options),
     ptr_gameGameWid(ptr_gameWid), ptr_playerOne(new Player("Eins", 1)), ptr_playerTwo(new Player("Zwei", 2)), ptr_playerActive(ptr_playerOne),
     ptr_roundCurrent(new Round(10))
@@ -170,11 +159,6 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     ptr_gameGameWid->gameWidCreateButtonBar(button_menueBar);
 }
 
-vector<vector<HexagonMatchfield*> > Game::getVectorVectorHexagonMatchfield()
-{
-    return hexagonMatchfield_gameGrid;
-}
-
 void Game::processSelection(HexagonMatchfield *selection)
 {
     switch(selection->getState())
@@ -183,30 +167,30 @@ void Game::processSelection(HexagonMatchfield *selection)
         qDebug() << "case INACTIVE";
 
         /*Wenn vorher eine auswahl da war, welche ein transporter oder factory war, müssen die zurückgesetzt werden*/
-        if(SelectionCache != nullptr && SelectionCache->getUnit_stationed() != nullptr)
+        if(selectionCache != nullptr && selectionCache->getUnit_stationed() != nullptr)
         {
-            SelectionCache->getUnit_stationed()->resetBuildUnloadParameter();
+            selectionCache->getUnit_stationed()->resetBuildUnloadParameter();
         }
 
         resetHexMatchfield();
-        SelectionCache = selection;
-        ptr_gameGameWid->setInfoScene(SelectionCache->getPtr_hexMfieldDisplay());
+        selectionCache = selection;
+        ptr_gameGameWid->setInfoScene(selectionCache->getPtr_hexMfieldDisplay());
 
-        if(SelectionCache->getUnit_stationed() != nullptr && SelectionCache->getUnit_stationed()->getUnitPlayer() == ptr_playerActive)
+        if(selectionCache->getUnit_stationed() != nullptr && selectionCache->getUnit_stationed()->getUnitPlayer() == ptr_playerActive)
         {
-            ptr_gameGameWid->setOptScene(SelectionCache->getUnit_stationed()->getVector_unitStorage());
+            ptr_gameGameWid->setOptScene(selectionCache->getUnit_stationed()->getVector_unitStorage());
         }
         //Angeklicktes auf AKTIVE setzten
-        SelectionCache->setState(ACTIVE);
+        selectionCache->setState(ACTIVE);
         break;
 
     case ACTIVE:
         qDebug() << "case ACTIVE";
 
         /*Wenn vorher eine auswahl da war, welche ein transporter oder factory war, müssen die zurückgesetzt werden*/
-        if(SelectionCache != nullptr && SelectionCache->getUnit_stationed() != nullptr)
+        if(selectionCache != nullptr && selectionCache->getUnit_stationed() != nullptr)
         {
-            SelectionCache->getUnit_stationed()->resetBuildUnloadParameter();
+            selectionCache->getUnit_stationed()->resetBuildUnloadParameter();
         }
         resetHexMatchfield();
         break;
@@ -215,7 +199,7 @@ void Game::processSelection(HexagonMatchfield *selection)
         qDebug() << "case TARGET";
         if(ptr_roundCurrent->getCurrentPhase() == MOVE)     //Move Phase
         {
-            for(auto &it : TargetChache)        //Ziele auf zustand TARGET zurücksetzen
+            for(auto &it : targetCache)        //Ziele auf zustand TARGET zurücksetzen
             {
                 it->setState(TARGET);
             }
@@ -223,7 +207,7 @@ void Game::processSelection(HexagonMatchfield *selection)
 
         }else if(ptr_roundCurrent->getCurrentPhase() == ACTION )    //Action Phase
         {
-            if(SelectionCache->getUnit_stationed()->action(selection))  //Wenn die Action geglückt ist
+            if(selectionCache->getUnit_stationed()->action(selection))  //Wenn die Action geglückt ist
             {
                 /*Prüfen ob eine neue Einheit auf dem Grid ist*/
                 if(selection->getUnit_stationed() != nullptr
@@ -233,14 +217,14 @@ void Game::processSelection(HexagonMatchfield *selection)
                     selection->getUnit_stationed()->setPos(selection->pos());   //Position in der Scene setzen
                     ptr_gameGameWid->getGameWidGameScene()->addItem(selection->getUnit_stationed());    //in die Scene einfügen
                 }
-                ptr_gameGameWid->setOptScene(SelectionCache->getUnit_stationed()->getVector_unitStorage());
+                ptr_gameGameWid->setOptScene(selectionCache->getUnit_stationed()->getVector_unitStorage());
 
                 ptr_gameGameWid->setUnitsLabel(ptr_playerActive->getPlayerUnitNumber());    //Label updaten
                 ptr_gameGameWid->setEnergieLabel(ptr_playerActive->getCurrentEnergieStorage(), ptr_playerActive->getPlayerTotalEnergie());
 
                 setFogOfWar();
             }
-            resetTargetChache();
+            resetTargetCache();
         }
         break;
     case PATH :
@@ -249,17 +233,17 @@ void Game::processSelection(HexagonMatchfield *selection)
         qDebug() << "nach moveUnitTo";
 
         /*Neuen Selection Cache nach Bewegung*/
-        SelectionCache = selection;
-        SelectionCache->setState(ACTIVE);
+        selectionCache = selection;
+        selectionCache->setState(ACTIVE);
 
-        qDebug() << "SelectionCache State:" << SelectionCache->getState() << "\n"
-                 << "\t" << SelectionCache->getQcolor_HexColor();
+        qDebug() << "selectionCache State:" << selectionCache->getState() << "\n"
+                 << "\t" << selectionCache->getQcolor_HexColor();
 
         /*Darstellungen setzen*/
-        ptr_gameGameWid->setInfoScene(SelectionCache->getPtr_hexMfieldDisplay());
-        ptr_gameGameWid->setOptScene(SelectionCache->getUnit_stationed()->getVector_unitStorage());
+        ptr_gameGameWid->setInfoScene(selectionCache->getPtr_hexMfieldDisplay());
+        ptr_gameGameWid->setOptScene(selectionCache->getUnit_stationed()->getVector_unitStorage());
 
-        resetTargetChache();
+        resetTargetCache();
         setFogOfWar();
         break;
     }
@@ -274,7 +258,7 @@ void Game::processSelection(HexagonMatchfield *selection)
 
 void Game::Dijkstra()
 {
-    HexagonMatchfield* target = SelectionCache;
+    HexagonMatchfield* target = selectionCache;
 
     std::priority_queue<std::pair<HexagonMatchfield*, int>, std::vector<std::pair<HexagonMatchfield*, int>>, Compare> frontier;
 
@@ -327,7 +311,7 @@ void Game::Dijkstra()
                             came_from[neighbour] = current;     //Vorgänger auf das Aktuelle Feld setzem
                             frontier.push(std::pair<HexagonMatchfield*, int> (neighbour, current_cost[neighbour])); //Den Nachbarn der Queue hinzufügen
 
-                            TargetChache.push_back(neighbour);   //und in den Target Cache Stecken
+                            targetCache.push_back(neighbour);   //und in den Target Cache Stecken
                             neighbour->setState(TARGET);
                         }
 
@@ -347,8 +331,8 @@ void Game::buttonPressedMove()
     if(ptr_roundCurrent->getCurrentPhase() == MOVE)     //Phase prüfen
     {
         /*Wenn ein Feld ausgewählt wurde auf dem eine Einheit steht, welche dem aktiven Spieler gehört*/
-        if(SelectionCache != nullptr && SelectionCache->getUnit_stationed() != nullptr
-                && SelectionCache->getUnit_stationed()->getUnitPlayer() == ptr_playerActive)
+        if(selectionCache != nullptr && selectionCache->getUnit_stationed() != nullptr
+                && selectionCache->getUnit_stationed()->getUnitPlayer() == ptr_playerActive)
         {
             Dijkstra();     //Berechnen aller möglichen Ziele
         }
@@ -359,11 +343,11 @@ void Game::buttonPressedAction()
 {
     if(ptr_roundCurrent->getCurrentPhase() == ACTION )
     {
-        if(SelectionCache != nullptr && SelectionCache->getUnit_stationed() != nullptr
-                && SelectionCache->getUnit_stationed()->getUnitPlayer() == ptr_playerActive
-                && SelectionCache->getUnit_stationed()->getUnitUsed() == false)
+        if(selectionCache != nullptr && selectionCache->getUnit_stationed() != nullptr
+                && selectionCache->getUnit_stationed()->getUnitPlayer() == ptr_playerActive
+                && selectionCache->getUnit_stationed()->getUnitUsed() == false)
         {
-            calculateTargets(SelectionCache, SelectionCache->getUnit_stationed()->getActionRange());
+            calculateTargets(selectionCache, selectionCache->getUnit_stationed()->getActionRange());
         }
     }
 }
@@ -384,15 +368,15 @@ void Game::buttonPressedChangePhase()
         resetHexMatchfield();
         setFogOfWar();
     }
-    resetTargetChache();
+    resetTargetCache();
 
     ptr_gameGameWid->setPlayerLabel(ptr_playerActive->getPlayerName());
     ptr_gameGameWid->setPhaseLabel(ptr_roundCurrent->getCurrentPhase() == MOVE ? "Move" : "Action");
     ptr_gameGameWid->setUnitsLabel(ptr_playerActive->getPlayerUnitNumber());
     ptr_gameGameWid->setEnergieLabel(ptr_playerActive->getCurrentEnergieStorage(), ptr_playerActive->getPlayerTotalEnergie());
-    if(SelectionCache != nullptr && SelectionCache->getUnit_stationed() != nullptr)
+    if(selectionCache != nullptr && selectionCache->getUnit_stationed() != nullptr)
     {
-        SelectionCache->getUnit_stationed()->resetBuildUnloadParameter();
+        selectionCache->getUnit_stationed()->resetBuildUnloadParameter();
     }
 }
 
@@ -400,28 +384,28 @@ void Game::buttonPressedChangePhase()
 void Game::resetHexMatchfield()
 {
     /*Zurücksetzen der Auswahl*/
-    if(SelectionCache != nullptr)
+    if(selectionCache != nullptr)
     {
-        SelectionCache->setState(INACTIVE);
-        SelectionCache = nullptr;
+        selectionCache->setState(INACTIVE);
+        selectionCache = nullptr;
     }
-    resetTargetChache();
+    resetTargetCache();
     ptr_gameGameWid->clearScenes();
 }
 
-void Game::resetTargetChache()
+void Game::resetTargetCache()
 {
-    for(auto &it : TargetChache)
+    for(auto &it : targetCache)
     {
         it->setState(INACTIVE);
     }
-    TargetChache.clear();
+    targetCache.clear();
     came_from.clear();
     current_cost.clear();
 }
 void Game::moveUnitTo(HexagonMatchfield * target)
 {
-    Unit* unitToMove = SelectionCache->getUnit_stationed();
+    Unit* unitToMove = selectionCache->getUnit_stationed();
     unitToMove->setUnitCurrentMoveRange(unitToMove->getUnitCurrentMoveRange() - current_cost[target]);
 
     if(target->getUnit_stationed() != nullptr &&
@@ -439,16 +423,16 @@ void Game::moveUnitTo(HexagonMatchfield * target)
 
         /*Animation*/
         vector<QPointF> path;
-        for(auto& iterator = target; iterator != SelectionCache; iterator = came_from[iterator])
+        for(auto& iterator = target; iterator != selectionCache; iterator = came_from[iterator])
         {
             path.push_back(iterator->pos());
         }
         ptr_gameGameWid->animateUnit(unitToMove, path);
     }
-    unit_UnitGrid[SelectionCache->getQpoint_gridPosition().x()][SelectionCache->getQpoint_gridPosition().y()] = nullptr; //Einheit aus dem UnitGrid löschen
-    SelectionCache->setUnit_stationed(nullptr);     //Einheit vom alten feld entfernen
-    SelectionCache->setState(INACTIVE);     //Auswahl auf inactiv setzen
-    SelectionCache = nullptr;
+    unit_UnitGrid[selectionCache->getQpoint_gridPosition().x()][selectionCache->getQpoint_gridPosition().y()] = nullptr; //Einheit aus dem UnitGrid löschen
+    selectionCache->setUnit_stationed(nullptr);     //Einheit vom alten feld entfernen
+    selectionCache->setState(INACTIVE);     //Auswahl auf inactiv setzen
+    selectionCache = nullptr;
 }
 void Game::showNeighbors(HexagonMatchfield * center)
 {
@@ -461,7 +445,7 @@ void Game::showNeighbors(HexagonMatchfield * center)
             if(x >= 0 && x < ptr_gameGameWid->getSizeX() && y >= 0 && ptr_gameGameWid->getSizeY())
             {
                 hexagonMatchfield_gameGrid[x][y]->setState(TARGET);
-                TargetChache.push_back(hexagonMatchfield_gameGrid[x][y]);
+                targetCache.push_back(hexagonMatchfield_gameGrid[x][y]);
             }
         }
     }else{
@@ -471,7 +455,7 @@ void Game::showNeighbors(HexagonMatchfield * center)
             int y = center->getQpoint_gridPosition().y() + it.y();
             {
                 hexagonMatchfield_gameGrid[x][y]->setState(TARGET);
-                TargetChache.push_back(hexagonMatchfield_gameGrid[x][y]);
+                targetCache.push_back(hexagonMatchfield_gameGrid[x][y]);
             }
         }
     }
@@ -508,7 +492,7 @@ void Game::calculateTargets(HexagonMatchfield * center, int range)
                 if(offset_distance(center->getQpoint_gridPosition(), neighbour->getQpoint_gridPosition()) <= range)          //Wenn das ziel in der Reichweite der Einheite liegt
                 {
                     neighbour->setState(TARGET);
-                    TargetChache.push_back(neighbour);
+                    targetCache.push_back(neighbour);
                     frontier.push(neighbour);
                 }
             }
@@ -541,12 +525,12 @@ void Game::setFogOfWar()
             }
         }
     }
-    resetTargetChache();
+    resetTargetCache();
 }
 
 void Game::showPath(HexagonMatchfield* target)
 {
-    for(auto &it = target; it != SelectionCache; it = came_from[it])
+    for(auto &it = target; it != selectionCache; it = came_from[it])
     {
         it->setState(PATH);
     }

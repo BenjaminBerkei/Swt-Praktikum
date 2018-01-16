@@ -48,7 +48,7 @@ protected:
     int int_unitGroundAtt;
     int int_unitWaterAtt;
     int int_unitEXP;
-    
+
     int int_unitMoveRange;
     int int_unitCurrentMoveRange;
     int int_actionRange;

@@ -70,7 +70,6 @@ public:
     void clearScenes();
     void updateInfoOptScenes();
     void updateMatchfieldScene();
-    void updateGameView();
     void animateUnit(Unit*, std::vector<QPointF>);
 
 
@@ -129,6 +128,8 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *);
     void updateText();
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void setColor(const QColor &value);
+
 signals:
     void unitDispl_clicked(Unit* unit);
 };

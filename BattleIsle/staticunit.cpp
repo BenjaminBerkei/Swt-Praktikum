@@ -203,8 +203,8 @@ void FactoryUnit::resetBuildUnloadParameter()
 {
     if(unitToBuild != "")
     {
-        production[unitToBuild]->setColor(Qt::black);
-        production[unitToBuild]->setZValue(0);
+        production[unitToBuild]->getUnitDisplay()->setColor(Qt::black);
+        production[unitToBuild]->getUnitDisplay()->setZValue(0);
         unitToBuild = "";
     }
 }

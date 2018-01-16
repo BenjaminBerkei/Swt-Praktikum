@@ -39,16 +39,13 @@ void Round::changePhase()
 	return;
 }
 
-bool Round::checkWinCondition()
+bool Round::checkGameOver()
 {
 	if(int_currentRoundNumber >= int_maxRoundNumber && int_maxRoundNumber != 0)
 	{
 		return true;
 	}
-	else
-	{
 	return false;
-	}
 }
 
 int Round::getCurrentRoundNumber() const

@@ -181,11 +181,6 @@ void GameWidget::updateMatchfieldScene()
     gameWidGameScene->update(gameWidGameScene->sceneRect());
 }
 
-void GameWidget::updateGameView()
-{
-    ui->graphicsView_gameView->viewport()->repaint();
-}
-
 void GameWidget::animateUnit(Unit * unitToAnimate, std::vector<QPointF> points)
 {
     QTimeLine *timer = new QTimeLine(2000);
@@ -330,6 +325,11 @@ void HexagonDisplayInfo::updateText()
         qStringUnitDispMovement = "";
         qStringUnitDispUnitAttack = "";
     }
+}
+
+void UnitDisplayInfo::setColor(const QColor &value)
+{
+    color = value;
 }
 
 UnitDisplayInfo::UnitDisplayInfo(Unit *ptr_Unit)
