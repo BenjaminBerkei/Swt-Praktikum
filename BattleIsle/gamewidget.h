@@ -30,6 +30,8 @@
 #include "hexagonmatchfield.h"
 #include "unit.h"
 #include "button.h"
+#include <QTimeLine>
+#include <QGraphicsItemAnimation>
 
 class Unit;
 
@@ -50,18 +52,28 @@ private:
     QGraphicsScene *gameWidInfoScene;
     QGraphicsScene *gameWidOptionsScene;
     QGraphicsScene *gameWidButtonScene;
+
+    QGraphicsTextItem *textItem_currentPlayer;
+    QGraphicsTextItem *textItem_currentEnergie;
+    QGraphicsTextItem *textItem_currentUnits;
+    QGraphicsTextItem *textItem_currentPhase;
+
     int sizeX;
     int sizeY;
 
 public:
     explicit GameWidget(QWidget *parent = 0);
     ~GameWidget();
+    void resizeEvent(QResizeEvent*, int mainHeight, int mainWdith);
     void gameWidCreateMatchfield(std::vector<std::vector<HexagonMatchfield*>> &hexagonGrid);
     void gameWidCreateButtonBar(std::vector<Button *> buttonVector);
     void clearScenes();
     void updateInfoOptScenes();
     void updateMatchfieldScene();
     void updateGameView();
+    void animateUnit(Unit*, std::vector<QPointF>);
+
+
     //get und set Methoden
     void setInfoScene(HexagonDisplayInfo *info);
     void setOptScene(std::vector<Unit*>);

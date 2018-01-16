@@ -141,14 +141,16 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
         }
         unit_UnitGrid.push_back(vectorUnit);
     }
+    ptr_gameGameWid->gameWidCreateMatchfield(hexagonMatchfield_gameGrid);
     countUnits();
     setFogOfWar();
-    ptr_gameGameWid->gameWidCreateMatchfield(hexagonMatchfield_gameGrid);
+
+
     ptr_gameGameWid->setPlayerLabel(ptr_playerActive->getPlayerName());
     ptr_gameGameWid->setPhaseLabel("Move");
     ptr_gameGameWid->setUnitsLabel(ptr_playerActive->getPlayerUnitNumber());
     ptr_gameGameWid->setEnergieLabel(ptr_playerActive->getCurrentEnergieStorage(), ptr_playerActive->getPlayerTotalEnergie());
-    //##################################################################
+       //##################################################################
 
     //Buttons Einfuegen
     ButtonMove* movebutton = new ButtonMove(64,64);
@@ -232,8 +234,10 @@ void Game::processSelection(HexagonMatchfield *selection)
                     ptr_gameGameWid->getGameWidGameScene()->addItem(selection->getUnit_stationed());    //in die Scene einfügen
                 }
                 ptr_gameGameWid->setOptScene(SelectionCache->getUnit_stationed()->getVector_unitStorage());
+
                 ptr_gameGameWid->setUnitsLabel(ptr_playerActive->getPlayerUnitNumber());    //Label updaten
                 ptr_gameGameWid->setEnergieLabel(ptr_playerActive->getCurrentEnergieStorage(), ptr_playerActive->getPlayerTotalEnergie());
+
                 setFogOfWar();
             }
             resetTargetChache();
@@ -381,6 +385,7 @@ void Game::buttonPressedChangePhase()
         setFogOfWar();
     }
     resetTargetChache();
+
     ptr_gameGameWid->setPlayerLabel(ptr_playerActive->getPlayerName());
     ptr_gameGameWid->setPhaseLabel(ptr_roundCurrent->getCurrentPhase() == MOVE ? "Move" : "Action");
     ptr_gameGameWid->setUnitsLabel(ptr_playerActive->getPlayerUnitNumber());
@@ -431,7 +436,14 @@ void Game::moveUnitTo(HexagonMatchfield * target)
     {
         target->setUnit_stationed(unitToMove);      //Einheit verlegen auf das Ziel
         unit_UnitGrid[target->getQpoint_gridPosition().x()][target->getQpoint_gridPosition().y()] = unitToMove; //Einheit im Grid verlegt
-        unitToMove->setPos(target->pos());  //Visuell verlegen
+
+        /*Animation*/
+        vector<QPointF> path;
+        for(auto& iterator = target; iterator != SelectionCache; iterator = came_from[iterator])
+        {
+            path.push_back(iterator->pos());
+        }
+        ptr_gameGameWid->animateUnit(unitToMove, path);
     }
     unit_UnitGrid[SelectionCache->getQpoint_gridPosition().x()][SelectionCache->getQpoint_gridPosition().y()] = nullptr; //Einheit aus dem UnitGrid löschen
     SelectionCache->setUnit_stationed(nullptr);     //Einheit vom alten feld entfernen

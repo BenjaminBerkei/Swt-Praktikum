@@ -46,6 +46,41 @@ GameWidget::GameWidget(QWidget *parent) :
     ui->graphicsView_informationsView->setScene(gameWidInfoScene);
     ui->graphicsView_optionsView->setScene(gameWidOptionsScene);
 
+    gameWidButtonScene->setSceneRect(ui->graphicsView_buttonView->rect());
+    QGraphicsTextItem* playerTag = new QGraphicsTextItem("Player: ");
+    QGraphicsTextItem* energieTag = new QGraphicsTextItem("Energie: ");
+    QGraphicsTextItem* unitsTag = new QGraphicsTextItem("Units: ");
+    QGraphicsTextItem* phaseTag = new QGraphicsTextItem("Phase: ");
+
+    textItem_currentPlayer = new QGraphicsTextItem("");
+    textItem_currentEnergie= new QGraphicsTextItem("");
+    textItem_currentUnits= new QGraphicsTextItem("");
+    textItem_currentPhase= new QGraphicsTextItem("");
+
+    int x = 0;
+    int y = 10;
+    int xChange = 70;
+
+    playerTag->setPos(x, y);
+    phaseTag->setPos(x, 3 * y);
+    unitsTag->setPos(x, 5 * y);
+    energieTag->setPos(x, 7 * y);
+
+    textItem_currentPlayer->setPos(x + xChange, y);
+    textItem_currentPhase->setPos(x + xChange, 3 * y);
+    textItem_currentUnits->setPos(x + xChange, 5 * y);
+    textItem_currentEnergie->setPos(x + xChange, 7 * y);
+
+    gameWidButtonScene->addItem(playerTag);
+    gameWidButtonScene->addItem(energieTag);
+    gameWidButtonScene->addItem(unitsTag);
+    gameWidButtonScene->addItem(phaseTag);
+
+    gameWidButtonScene->addItem(textItem_currentPlayer);
+    gameWidButtonScene->addItem(textItem_currentPhase);
+    gameWidButtonScene->addItem(textItem_currentEnergie);
+    gameWidButtonScene->addItem(textItem_currentUnits);
+
     ui->graphicsView_optionsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->graphicsView_optionsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
@@ -53,6 +88,17 @@ GameWidget::GameWidget(QWidget *parent) :
 GameWidget::~GameWidget()
 {
     delete ui;
+}
+
+void GameWidget::resizeEvent(QResizeEvent *,int mainHeight, int mainWidth)
+{
+    int xLeftTop = ui->graphicsView_gameView->x();
+    int yLeftTop = ui->graphicsView_gameView->y();
+
+    ui->graphicsView_gameView->setGeometry(xLeftTop, yLeftTop, mainWidth - xLeftTop - 265, mainHeight - yLeftTop - 165);
+    ui->graphicsView_informationsView->setGeometry(xLeftTop + ui->graphicsView_gameView->width() + 5, yLeftTop, 240, 160);
+    ui->graphicsView_optionsView->setGeometry(xLeftTop + ui->graphicsView_gameView->width() + 5, yLeftTop + ui->graphicsView_informationsView->height() + 5, ui->graphicsView_informationsView->width(), this->height() - 100);
+    ui->graphicsView_buttonView->setGeometry(xLeftTop, yLeftTop + ui->graphicsView_gameView->height() + 10, ui->graphicsView_gameView->width(), 110);
 }
 
 void GameWidget::gameWidCreateMatchfield(std::vector<std::vector<HexagonMatchfield*>> &hexagonGrid)
@@ -96,11 +142,10 @@ void GameWidget::gameWidCreateMatchfield(std::vector<std::vector<HexagonMatchfie
 
 void GameWidget::gameWidCreateButtonBar(std::vector<Button*> buttonVector)
 {
-    int spacingX = 70;
-
+    double startPos = gameWidButtonScene->width() / double(buttonVector.size());
     for(unsigned int i = 0; i < buttonVector.size(); i++)
     {
-        buttonVector[i]->setPos(i*spacingX,0);
+        buttonVector[i]->setPos( startPos + (i+1) * buttonVector[i]->pixmap().size().width() ,25);
         gameWidButtonScene->addItem(buttonVector[i]);
     }
     gameWidButtonScene->update();
@@ -139,6 +184,20 @@ void GameWidget::updateGameView()
     ui->graphicsView_gameView->viewport()->repaint();
 }
 
+void GameWidget::animateUnit(Unit * unitToAnimate, std::vector<QPointF> points)
+{
+    QTimeLine *timer = new QTimeLine(2000);
+    QGraphicsItemAnimation *animation = new QGraphicsItemAnimation;
+
+    animation->setItem(unitToAnimate);
+    animation->setTimeLine(timer);
+    for(unsigned i = 1; i <= points.size(); i++)
+    {
+        animation->setPosAt(i/(double)points.size(), points[points.size() - i]);
+    }
+    timer->start();
+}
+
 void GameWidget::setInfoScene(HexagonDisplayInfo *info)
 {
     for(auto &it : gameWidInfoScene->items())
@@ -172,23 +231,24 @@ void GameWidget::setOptScene(std::vector<Unit *> vector_Unit)
 
 void GameWidget::setPlayerLabel(QString text)
 {
-    ui->labelPlayerCurrent->setText(text);
+    textItem_currentPlayer->setPlainText(text);
 }
 
 void GameWidget::setPhaseLabel(QString text)
 {
-    ui->labelPhaseCurrent->setText(text);
+    textItem_currentPhase->setPlainText(text);
 }
 
 void GameWidget::setUnitsLabel(int value)
 {
-    ui->labelUnitsCurrent->setText(QString::number(value));
+    textItem_currentUnits->setPlainText(QString::number(value));
 }
 
 void GameWidget::setEnergieLabel(int current, int max)
 {
-   ui->labelEnergieCurrent->setText(QString::number(current) + "/" + QString::number(max));
+  textItem_currentEnergie->setPlainText(QString::number(current) + "/" + QString::number(max));
 }
+
 QGraphicsScene *GameWidget::getGameWidInfoScene() const
 {
     return gameWidInfoScene;

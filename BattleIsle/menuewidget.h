@@ -37,7 +37,7 @@ public:
 
     explicit MenueWidget( QWidget *parent = 0 );
     ~MenueWidget();
-
+    void resizeEvent(QResizeEvent*);
     //get und set Methoden
     StartMenueWidget* getPtr_mwStartMenueWidget() { return ptr_mwStartMenueWidget; }
     GameWidget* getPtr_mwGameWidget() { return ptr_mwGameWidget; }

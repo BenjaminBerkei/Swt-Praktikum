@@ -42,6 +42,7 @@ void StartMenueWidget::startGame( Options *options_initOptions )
 {
     ptr_smwMenueWidget->resize( 1200,750 );
     ptr_smwMenueWidget->ui->stack->resize( 1190, 740 );
+    ptr_smwMenueWidget->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
 
     //Erstelle ein Objekt vom Typ Game
     Game* game = new Game(options_initOptions, ptr_smwMenueWidget->getPtr_mwGameWidget());

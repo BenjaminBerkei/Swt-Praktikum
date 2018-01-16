@@ -143,19 +143,7 @@ void HexagonMatchfield::mousePressEvent( QGraphicsSceneMouseEvent *)
 void HexagonMatchfield::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     QGraphicsPixmapItem::paint(painter, option, widget);
-    if(bool_hexFogOfWar)
-    {
-        QBrush brush;
-        brush.setStyle(Qt::SolidPattern);
-        brush.setColor(Qt::black);
 
-        painter->setOpacity(.5);
-        painter->setBrush(brush);
-
-        painter->drawPath(shape());
-
-        painter->setBrush(QBrush());
-    }
     QPen pen;
     pen.setColor(qcolor_HexColor);
     pen.setWidth(2);
@@ -166,6 +154,17 @@ void HexagonMatchfield::paint(QPainter *painter, const QStyleOptionGraphicsItem 
     if(int_boltaniumCurrent > 0)
     {
         painter->drawPixmap(0,0,qpixmap_boltanium);
+    }
+    if(bool_hexFogOfWar)
+    {
+        QBrush brush;
+        brush.setStyle(Qt::SolidPattern);
+        brush.setColor(Qt::black);
+
+        painter->setOpacity(.5);
+        painter->setBrush(brush);
+
+        painter->drawPath(shape());
     }
 }
 

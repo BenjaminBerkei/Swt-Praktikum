@@ -40,3 +40,11 @@ MenueWidget::~MenueWidget()
 {
     delete ui;
 }
+
+void MenueWidget::resizeEvent(QResizeEvent *event)
+{
+    if(ui->stack->currentIndex() == 3)
+    {
+        ptr_mwGameWidget->resizeEvent(event, this->height(), this->width());
+    }
+}
