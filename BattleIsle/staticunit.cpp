@@ -201,8 +201,12 @@ Unit* FactoryUnit::createUnit()
 
 void FactoryUnit::resetBuildUnloadParameter()
 {
-    qDebug() << "ResetBuidlLoadParamter";
-    unitToBuild = "";
+    if(unitToBuild != "")
+    {
+        production[unitToBuild]->setColor(Qt::black);
+        production[unitToBuild]->setZValue(0);
+        unitToBuild = "";
+    }
 }
 
 void FactoryUnit::SLOT_setUnitToBuild(Unit *unit)

@@ -99,6 +99,8 @@ void GameWidget::resizeEvent(QResizeEvent *,int mainHeight, int mainWidth)
     ui->graphicsView_informationsView->setGeometry(xLeftTop + ui->graphicsView_gameView->width() + 5, yLeftTop, 240, 160);
     ui->graphicsView_optionsView->setGeometry(xLeftTop + ui->graphicsView_gameView->width() + 5, yLeftTop + ui->graphicsView_informationsView->height() + 5, ui->graphicsView_informationsView->width(), this->height() - 100);
     ui->graphicsView_buttonView->setGeometry(xLeftTop, yLeftTop + ui->graphicsView_gameView->height() + 10, ui->graphicsView_gameView->width(), 110);
+
+    gameWidOptionsScene->setSceneRect(0,0, ui->graphicsView_optionsView->width() + 10,120 * gameWidOptionsScene->items().size() + 20);
 }
 
 void GameWidget::gameWidCreateMatchfield(std::vector<std::vector<HexagonMatchfield*>> &hexagonGrid)
@@ -219,7 +221,7 @@ void GameWidget::setOptScene(std::vector<Unit *> vector_Unit)
     if(vector_Unit.size() > 0)
     {
         gameWidOptionsScene->setSceneRect(0,0, vector_Unit[0]->getUnitDisplay()->rect().width(),
-                                            vector_Unit[0]->getUnitDisplay()->rect().height() * vector_Unit.size() + 20);
+                                            120 * vector_Unit.size() + 20);
         for(unsigned i = 0; i < vector_Unit.size(); i++)
         {
             gameWidOptionsScene->addItem(vector_Unit[i]->getUnitDisplay());
@@ -264,7 +266,7 @@ int GameWidget::getSizeY() const
     return sizeY;
 }
 HexagonDisplayInfo::HexagonDisplayInfo(HexagonMatchfield *ptr_hexMfield)
-:QObject(0), QGraphicsRectItem(QRectF(-50,-50,230,100), 0), hexToDisplay(ptr_hexMfield)
+    :QObject(0), QGraphicsRectItem(QRectF(-50,-50,230,100), 0), hexToDisplay(ptr_hexMfield)
 {
     updateText();
 }
@@ -331,7 +333,7 @@ void HexagonDisplayInfo::updateText()
 }
 
 UnitDisplayInfo::UnitDisplayInfo(Unit *ptr_Unit)
-    : QGraphicsRectItem(QRectF(-50,-50,230,100), 0), ptr_UnitToDisplay(ptr_Unit)
+    : QGraphicsRectItem(QRectF(-50,-50,230,100), 0), ptr_UnitToDisplay(ptr_Unit), color(Qt::black)
 {
     updateText();
 }
@@ -339,13 +341,16 @@ UnitDisplayInfo::UnitDisplayInfo(Unit *ptr_Unit)
 void UnitDisplayInfo::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     updateText();
-    painter->drawRect(rect());
     painter->drawPixmap(-50,-50, ptr_UnitToDisplay->pixmap());
     painter->drawText(QRectF(20,-50,200,20),qStringUnitDispUnitName);
     painter->drawText(QRectF(20,-30, 200,20),qStringUnitDispUnitType);
     painter->drawText(QRectF(20,-10,200,20),qStringUnitDispUnitLife);
     painter->drawText(QRectF(20,10,200,20),qStringUnitDispMovement);
     painter->drawText(QRectF(20,30,200,20),qStringUnitDispUnitAttack);
+
+    painter->setPen(QPen(color));
+    painter->drawRect(rect());
+
 }
 
 void UnitDisplayInfo::updateText()
@@ -363,5 +368,7 @@ void UnitDisplayInfo::updateText()
 
 void UnitDisplayInfo::mousePressEvent(QGraphicsSceneMouseEvent*)
 {
+    color = Qt::red;
+    setZValue(1);
     emit unitDispl_clicked(ptr_UnitToDisplay);
 }

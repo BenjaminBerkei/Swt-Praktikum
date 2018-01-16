@@ -184,7 +184,15 @@ void TransporterUnit::addUnitToStorage(Unit *unit)
 void TransporterUnit::resetBuildUnloadParameter()
 {
     qDebug() << "ResetBuidlLoadParamter";
-    unitToUnload = nullptr;
+    if(unitToUnload != nullptr)
+    {
+        for(auto &it : vector_unitStorage)
+        {
+            it->getUnitDisplay()->setColor(Qt::black);
+            it->getUnitDisplay()->setZValue(0);
+            unitToUnload = nullptr;
+        }
+    }
 }
 
 void TransporterUnit::SLOT_setUnitToUnload(Unit *unit)

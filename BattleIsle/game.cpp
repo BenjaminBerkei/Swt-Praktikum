@@ -192,7 +192,7 @@ void Game::processSelection(HexagonMatchfield *selection)
         SelectionCache = selection;
         ptr_gameGameWid->setInfoScene(SelectionCache->getPtr_hexMfieldDisplay());
 
-        if(SelectionCache->getUnit_stationed() != nullptr)
+        if(SelectionCache->getUnit_stationed() != nullptr && SelectionCache->getUnit_stationed()->getUnitPlayer() == ptr_playerActive)
         {
             ptr_gameGameWid->setOptScene(SelectionCache->getUnit_stationed()->getVector_unitStorage());
         }

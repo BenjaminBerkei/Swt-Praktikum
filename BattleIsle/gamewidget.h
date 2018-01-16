@@ -122,6 +122,8 @@ private:
     QString qStringUnitDispUnitLife;
     QString qStringUnitDispMovement;
     QString qStringUnitDispUnitAttack;
+    QColor color;
+
 public:
     UnitDisplayInfo(Unit* ptr_Unit);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *);
