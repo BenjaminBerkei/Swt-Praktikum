@@ -532,10 +532,12 @@ void Game::setFogOfWar()
                 {
                     it->setHexFogOfWar(false);
                 }
+                hex->setHexFogOfWar(false);
                 resetTargetCache();
             }
         }
     }
+    ptr_gameGameWid->repaintGameView();
 }
 
 void Game::showPath(HexagonMatchfield* target)
