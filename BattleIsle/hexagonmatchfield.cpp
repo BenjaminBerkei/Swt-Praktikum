@@ -83,17 +83,20 @@ bool HexagonMatchfield::getHexFogOfWar() const
 
 void HexagonMatchfield::setHexFogOfWar(bool value)
 {
-    bool_hexFogOfWar = value;
-    if(unit_stationed != nullptr)
+    if(bool_hexFogOfWar != value)
     {
-        qreal zValue = 0;
-        if(bool_hexFogOfWar == true)
+        bool_hexFogOfWar = value;
+        if(unit_stationed != nullptr)
         {
-            zValue = -1;
-        }else{
-            zValue = 5;
+            qreal zValue = 0;
+            if(bool_hexFogOfWar == true)
+            {
+                zValue = -1;
+            }else{
+                zValue = 5;
+            }
+            unit_stationed->setZValue(zValue);
         }
-        unit_stationed->setZValue(zValue);
     }
 }
 

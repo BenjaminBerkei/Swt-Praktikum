@@ -139,6 +139,7 @@ bool TransporterUnit::action(HexagonMatchfield* hex_target){
         if(unitToUnload != nullptr && unitToUnload->moveTo(hex_target) != -1)
         {
             unload(hex_target);
+            resetBuildUnloadParameter();
             return true;
         }
         else if(hex_target->getBoltaniumCurrent() > 0 ){
@@ -146,6 +147,7 @@ bool TransporterUnit::action(HexagonMatchfield* hex_target){
 			return true;
 		}
     }
+    resetBuildUnloadParameter();
 	return false;
 }
 
@@ -197,6 +199,7 @@ void TransporterUnit::resetBuildUnloadParameter()
 
 void TransporterUnit::SLOT_setUnitToUnload(Unit *unit)
 {
+    resetBuildUnloadParameter();
     unitToUnload = unit;
 }
 

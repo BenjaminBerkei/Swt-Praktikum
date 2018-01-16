@@ -178,6 +178,7 @@ void Game::processSelection(HexagonMatchfield *selection)
 
         if(selectionCache->getUnit_stationed() != nullptr && selectionCache->getUnit_stationed()->getUnitPlayer() == ptr_playerActive)
         {
+            selectionCache->getUnit_stationed()->resetBuildUnloadParameter();
             ptr_gameGameWid->setOptScene(selectionCache->getUnit_stationed()->getVector_unitStorage());
         }
         //Angeklicktes auf AKTIVE setzten
@@ -502,14 +503,12 @@ void Game::calculateTargets(HexagonMatchfield * center, int range)
 
 void Game::setFogOfWar()
 {
+
     for(auto &iterator : hexagonMatchfield_gameGrid)
     {
         for(auto &hex : iterator)
         {
-            if(hex->getUnit_stationed() != nullptr && hex->getUnit_stationed()->getUnitPlayer() == ptr_playerActive)
-            {
-                calculateTargets(hex, hex->getUnit_stationed()->getUnitView());
-            }
+            hex->setHexFogOfWar(true);
         }
     }
 
@@ -517,15 +516,17 @@ void Game::setFogOfWar()
     {
         for(auto &hex : iterator)
         {
-            if(hex->getState() == INACTIVE)
+            if(hex->getUnit_stationed() != nullptr && hex->getUnit_stationed()->getUnitPlayer() == ptr_playerActive)
             {
-                hex->setHexFogOfWar(true);
-            }else{
-                hex->setHexFogOfWar(false);
+                calculateTargets(hex, hex->getUnit_stationed()->getUnitView());
+                for(auto &it : targetCache)
+                {
+                    it->setHexFogOfWar(false);
+                }
+                resetTargetCache();
             }
         }
     }
-    resetTargetCache();
 }
 
 void Game::showPath(HexagonMatchfield* target)

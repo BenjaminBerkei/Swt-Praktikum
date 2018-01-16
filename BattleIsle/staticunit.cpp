@@ -180,11 +180,11 @@ bool FactoryUnit::action(HexagonMatchfield* hexTarget)
             && hexTarget->getUnit_stationed() == nullptr && production[unitToBuild]->moveTo(hexTarget) != -1)
     {
         produceUnit(hexTarget);
-        unitToBuild = "";
+        resetBuildUnloadParameter();
         bool_unitUsed = true;
         return true;
     }
-    unitToBuild = "";
+    resetBuildUnloadParameter();
     return false;
 }
 
@@ -211,7 +211,7 @@ void FactoryUnit::resetBuildUnloadParameter()
 
 void FactoryUnit::SLOT_setUnitToBuild(Unit *unit)
 {
+    resetBuildUnloadParameter();
     unitToBuild = unit->getUnitName();
-    qDebug() << unitToBuild;
 }
 
