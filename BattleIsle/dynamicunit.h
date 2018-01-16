@@ -77,6 +77,7 @@ public:
     void farmBoltanium(HexagonMatchfield *hex_target);
     void addUnitToStorage(Unit* unit);
 
+    void resetBuildUnloadParameter();
 public slots:
     void SLOT_setUnitToUnload(Unit* unit);
 };

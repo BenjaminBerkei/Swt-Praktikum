@@ -79,6 +79,8 @@ public:
 	bool action(HexagonMatchfield*);
 	void produceUnit(HexagonMatchfield*);
 	Unit* createUnit();
+
+    void resetBuildUnloadParameter();
 private slots:
     void SLOT_setUnitToBuild(Unit* unit);
 };

@@ -174,6 +174,12 @@ void TransporterUnit::addUnitToStorage(Unit *unit)
     connect(unit->getUnitDisplay(),SIGNAL(unitDispl_clicked(Unit*)),this, SLOT(SLOT_setUnitToUnload(Unit*)));
 }
 
+void TransporterUnit::resetBuildUnloadParameter()
+{
+    qDebug() << "ResetBuidlLoadParamter";
+    unitToUnload = nullptr;
+}
+
 void TransporterUnit::SLOT_setUnitToUnload(Unit *unit)
 {
     unitToUnload = unit;

@@ -153,7 +153,9 @@ void FactoryUnit::setUnitToBuild(const QString unitTarget)
 
 bool FactoryUnit::action(HexagonMatchfield* hexTarget)
 {
-    qDebug() << unitPlayer->getCurrentEnergieStorage() - production[unitToBuild]->getUnitCost();
+    qDebug() << "Factory Action:";
+    qDebug() << "\t" << unitToBuild;
+
     if(unitToBuild != "" && unitPlayer->getCurrentEnergieStorage() - production[unitToBuild]->getUnitCost() >= 0
             && hexTarget->getUnit_stationed() == nullptr && production[unitToBuild]->moveTo(hexTarget) != -1)
     {
@@ -174,6 +176,12 @@ void FactoryUnit::produceUnit(HexagonMatchfield* hexTarget)
 Unit* FactoryUnit::createUnit()
 {
     return new FactoryUnit(unitFile);
+}
+
+void FactoryUnit::resetBuildUnloadParameter()
+{
+    qDebug() << "ResetBuidlLoadParamter";
+    unitToBuild = "";
 }
 
 void FactoryUnit::SLOT_setUnitToBuild(Unit *unit)

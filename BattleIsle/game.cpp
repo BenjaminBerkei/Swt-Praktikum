@@ -178,6 +178,13 @@ void Game::processSelection(HexagonMatchfield *selection)
     {
     case INACTIVE:
         qDebug() << "case INACTIVE";
+
+        /*Wenn vorher eine auswahl da war, welche ein transporter oder factory war, müssen die zurückgesetzt werden*/
+        if(SelectionCache != nullptr && SelectionCache->getUnit_stationed() != nullptr)
+        {
+            SelectionCache->getUnit_stationed()->resetBuildUnloadParameter();
+        }
+
         resetHexMatchfield();
         SelectionCache = selection;
         ptr_gameGameWid->setInfoScene(SelectionCache->getPtr_hexMfieldDisplay());
@@ -185,7 +192,6 @@ void Game::processSelection(HexagonMatchfield *selection)
         if(SelectionCache->getUnit_stationed() != nullptr)
         {
             ptr_gameGameWid->setOptScene(SelectionCache->getUnit_stationed()->getVector_unitStorage());
-
         }
         //Angeklicktes auf AKTIVE setzten
         SelectionCache->setState(ACTIVE);
@@ -193,6 +199,12 @@ void Game::processSelection(HexagonMatchfield *selection)
 
     case ACTIVE:
         qDebug() << "case ACTIVE";
+
+        /*Wenn vorher eine auswahl da war, welche ein transporter oder factory war, müssen die zurückgesetzt werden*/
+        if(SelectionCache != nullptr && SelectionCache->getUnit_stationed() != nullptr)
+        {
+            SelectionCache->getUnit_stationed()->resetBuildUnloadParameter();
+        }
         resetHexMatchfield();
         break;
 
@@ -200,7 +212,7 @@ void Game::processSelection(HexagonMatchfield *selection)
         qDebug() << "case TARGET";
         if(ptr_roundCurrent->getCurrentPhase() == MOVE)     //Move Phase
         {
-            for(auto &it : TargetChache)        //Ziele zurücksetzen
+            for(auto &it : TargetChache)        //Ziele auf zustand TARGET zurücksetzen
             {
                 it->setState(TARGET);
             }
@@ -208,14 +220,15 @@ void Game::processSelection(HexagonMatchfield *selection)
 
         }else if(ptr_roundCurrent->getCurrentPhase() == ACTION )    //Action Phase
         {
-            if(SelectionCache->getUnit_stationed()->action(selection))
+            if(SelectionCache->getUnit_stationed()->action(selection))  //Wenn die Action geglückt ist
             {
+                /*Prüfen ob eine neue Einheit auf dem Grid ist*/
                 if(selection->getUnit_stationed() != nullptr
                         && unit_UnitGrid[selection->getQpoint_gridPosition().x()][selection->getQpoint_gridPosition().y()] == nullptr)
                 {
-                    unit_UnitGrid[selection->getQpoint_gridPosition().x()][selection->getQpoint_gridPosition().y()] = selection->getUnit_stationed();
-                    selection->getUnit_stationed()->setPos(selection->pos());
-                    ptr_gameGameWid->getGameWidGameScene()->addItem(selection->getUnit_stationed());
+                    unit_UnitGrid[selection->getQpoint_gridPosition().x()][selection->getQpoint_gridPosition().y()] = selection->getUnit_stationed(); // in das Grid einfügen
+                    selection->getUnit_stationed()->setPos(selection->pos());   //Position in der Scene setzen
+                    ptr_gameGameWid->getGameWidGameScene()->addItem(selection->getUnit_stationed());    //in die Scene einfügen
                 }
             }
             resetTargetChache();
@@ -225,8 +238,12 @@ void Game::processSelection(HexagonMatchfield *selection)
         qDebug() << "case PATH";
         moveUnitTo(selection);
         qDebug() << "nach moveUnitTo";
+
+        /*Neuen Selection Cache nach Bewegung*/
         SelectionCache = selection;
         SelectionCache->setState(ACTIVE);
+
+        /*Darstellungen setzen*/
         ptr_gameGameWid->setInfoScene(SelectionCache->getPtr_hexMfieldDisplay());
         ptr_gameGameWid->setOptScene(SelectionCache->getUnit_stationed()->getVector_unitStorage());
         resetTargetChache();
@@ -354,6 +371,11 @@ void Game::buttonPressedChangePhase()
     resetTargetChache();
     ptr_gameGameWid->setPlayerLabel(ptr_playerActive->getPlayerName());
     ptr_gameGameWid->setPhaseLabel(ptr_roundCurrent->getCurrentPhase() == MOVE ? "Move" : "Action");
+
+    if(SelectionCache != nullptr && SelectionCache->getUnit_stationed() != nullptr)
+    {
+        SelectionCache->getUnit_stationed()->resetBuildUnloadParameter();
+    }
 }
 
 /*HilfsFunktionen Start#######################################################################*/

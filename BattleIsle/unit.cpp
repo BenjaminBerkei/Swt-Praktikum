@@ -209,3 +209,8 @@ void Unit::resetUnit()
 void Unit::addUnitToStorage(Unit *unit)
 {
 }
+
+void Unit::resetBuildUnloadParameter()
+{
+    return;
+}

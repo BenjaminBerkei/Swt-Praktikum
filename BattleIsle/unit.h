@@ -70,6 +70,7 @@ public:
     /*Hilfsfunktionen*/
     virtual void resetUnit();
     virtual void addUnitToStorage(Unit* unit);
+    virtual void resetBuildUnloadParameter();
     /*Hilfsfunktionen Ende*/
 
 	QString getUnitName() const;
