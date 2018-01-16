@@ -116,7 +116,7 @@ public:
     void updateText();
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
 signals:
-    void unitDispl_clicked(QString);
+    void unitDispl_clicked(Unit* unit);
 };
 
 #endif // GAMEWIDGET_H

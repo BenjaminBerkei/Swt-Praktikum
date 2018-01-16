@@ -205,3 +205,7 @@ void Unit::resetUnit()
     int_unitCurrentMoveRange = int_unitMoveRange;
     bool_unitUsed = false;
 }
+
+void Unit::addUnitToStorage(Unit *unit)
+{
+}

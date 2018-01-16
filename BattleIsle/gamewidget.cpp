@@ -299,5 +299,5 @@ void UnitDisplayInfo::updateText()
 void UnitDisplayInfo::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     qDebug() << "DisplInfoClicked";
-    emit unitDispl_clicked(ptr_UnitToDisplay->getUnitName());
+    emit unitDispl_clicked(ptr_UnitToDisplay);
 }

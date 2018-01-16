@@ -59,6 +59,7 @@ public:
 
 class TransporterUnit : public DynamicUnit
 {
+    Q_OBJECT
 protected:
 	int int_transporterUnitCapacity;
 	int int_transporterUnitCurrentCapacity;
@@ -74,6 +75,10 @@ public:
     virtual bool action(HexagonMatchfield *hex_target);
     void unload(HexagonMatchfield *hex_target);
     void farmBoltanium(HexagonMatchfield *hex_target);
+    void addUnitToStorage(Unit* unit);
+
+public slots:
+    void SLOT_setUnitToUnload(Unit* unit);
 };
 
 //TransporterAir
@@ -84,7 +89,7 @@ public:
     TransporterAirUnit(QString, Player*  = nullptr);
     ~TransporterAirUnit();
 
-  int moveTo(HexagonMatchfield* );
+  int moveTo(HexagonMatchfield* hex_target);
   virtual TransporterAirUnit* createUnit();
 };
 

@@ -177,6 +177,7 @@ void Game::processSelection(HexagonMatchfield *selection)
     switch(selection->getState())
     {
     case INACTIVE:
+        qDebug() << "case INACTIVE";
         resetHexMatchfield();
         SelectionCache = selection;
         ptr_gameGameWid->setInfoScene(SelectionCache->getPtr_hexMfieldDisplay());
@@ -191,10 +192,12 @@ void Game::processSelection(HexagonMatchfield *selection)
         break;
 
     case ACTIVE:
+        qDebug() << "case ACTIVE";
         resetHexMatchfield();
         break;
 
     case TARGET:
+        qDebug() << "case TARGET";
         if(ptr_roundCurrent->getCurrentPhase() == MOVE)     //Move Phase
         {
             for(auto &it : TargetChache)        //Ziele zurücksetzen
@@ -219,17 +222,22 @@ void Game::processSelection(HexagonMatchfield *selection)
         }
         break;
     case PATH :
+        qDebug() << "case PATH";
         moveUnitTo(selection);
+        qDebug() << "nach moveUnitTo";
         SelectionCache = selection;
         SelectionCache->setState(ACTIVE);
         ptr_gameGameWid->setInfoScene(SelectionCache->getPtr_hexMfieldDisplay());
+        ptr_gameGameWid->setOptScene(SelectionCache->getUnit_stationed()->getVector_unitStorage());
         resetTargetChache();
         break;
     }
+    qDebug() << "Switch ende";
     checkUnitGrid();
     checkWinCondition();
     countUnits();
     ptr_gameGameWid->updateInfoOptScenes();
+    qDebug() << "ProcessSelection ende";
 }
 
 void Game::Dijkstra()
@@ -271,24 +279,26 @@ void Game::Dijkstra()
                 HexagonMatchfield* neighbour = hexagonMatchfield_gameGrid[x][y];
 
                 /*Berechnen der neuen Kosten, bestehend aus den Kosten um auf das Aktuelle Feld zu kommen + die Kosten um zum  Nachbarn zu kommen*/
-                if(target->getUnit_stationed()->moveTo(neighbour) != -1 && neighbour->getUnit_stationed() == nullptr)
+                if(target->getUnit_stationed()->moveTo(neighbour) != -1)
                 {
-                    /*Wenn dieser noch nicht betrachtet wurde, kosten absurd hochlegen, damit diese auf jeden fall gesetzt werden*/
-                    if(current_cost.find(neighbour) == current_cost.end())
-                        current_cost[neighbour] = 999;
 
-                    int new_cost = current_cost[current] + target->getUnit_stationed()->moveTo(neighbour);
+                        /*Wenn dieser noch nicht betrachtet wurde, kosten absurd hochlegen, damit diese auf jeden fall gesetzt werden*/
+                        if(current_cost.find(neighbour) == current_cost.end())
+                            current_cost[neighbour] = 999;
 
-                    /*Wenn diese Kosten geringer als die Reichweite der Einheit und besser als die bisherigen Kosten sind, dann..*/
-                    if(new_cost <= target->getUnit_stationed()->getUnitCurrentMoveRange() && new_cost < current_cost[neighbour])
-                    {
-                        current_cost[neighbour] = new_cost; //Kosten aktualisieren
-                        came_from[neighbour] = current;     //Vorgänger auf das Aktuelle Feld setzem
-                        frontier.push(std::pair<HexagonMatchfield*, int> (neighbour, current_cost[neighbour])); //Den Nachbarn der Queue hinzufügen
+                        int new_cost = current_cost[current] + target->getUnit_stationed()->moveTo(neighbour);
 
-                        TargetChache.push_back(neighbour);   //und in den Target Cache Stecken
-                        neighbour->setState(TARGET);
-                    }
+                        /*Wenn diese Kosten geringer als die Reichweite der Einheit und besser als die bisherigen Kosten sind, dann..*/
+                        if(new_cost <= target->getUnit_stationed()->getUnitCurrentMoveRange() && new_cost < current_cost[neighbour])
+                        {
+                            current_cost[neighbour] = new_cost; //Kosten aktualisieren
+                            came_from[neighbour] = current;     //Vorgänger auf das Aktuelle Feld setzem
+                            frontier.push(std::pair<HexagonMatchfield*, int> (neighbour, current_cost[neighbour])); //Den Nachbarn der Queue hinzufügen
+
+                            TargetChache.push_back(neighbour);   //und in den Target Cache Stecken
+                            neighbour->setState(TARGET);
+                        }
+
                 }
             }
         }
@@ -371,25 +381,27 @@ void Game::resetTargetChache()
 }
 void Game::moveUnitTo(HexagonMatchfield * target)
 {
-    if(SelectionCache != nullptr)   //Wenn eine auswahl getroffen wurde
+    Unit* unitToMove = SelectionCache->getUnit_stationed();
+    unitToMove->setUnitCurrentMoveRange(unitToMove->getUnitCurrentMoveRange() - current_cost[target]);
+
+    if(target->getUnit_stationed() != nullptr &&
+            (target->getUnit_stationed()->getUnitType() == "TRANSPORTERAIR"
+            || target->getUnit_stationed()->getUnitType() == "TRANSPORTERGROUND"
+            || target->getUnit_stationed()->getUnitType() == "TRANSPORTERWATER"))
     {
-        Unit* unitToMove = SelectionCache->getUnit_stationed();
-
-        if(unitToMove != nullptr && target->getUnit_stationed() == nullptr) //wenn eine Einheit stationiert ist und auf dem Ziel keine ist
-        {
-            unitToMove->setUnitCurrentMoveRange(unitToMove->getUnitCurrentMoveRange() - current_cost[target]);
-
-            target->setUnit_stationed(unitToMove);      //Einheit verlegen auf das Ziel
-            SelectionCache->setUnit_stationed(nullptr);     //Einheit vom alten feld entfernen
-
-            unit_UnitGrid[target->getQpoint_gridPosition().x()][target->getQpoint_gridPosition().y()] = unitToMove; //Einheit im Grid verlegt
-            unit_UnitGrid[SelectionCache->getQpoint_gridPosition().x()][SelectionCache->getQpoint_gridPosition().y()] = nullptr;
-
-            unitToMove->setPos(target->pos());  //Visuell verlegen
-            SelectionCache->setState(INACTIVE);     //Auswahl auf inactiv setzen
-            SelectionCache = nullptr;
-        }
+        target->getUnit_stationed()->addUnitToStorage(unitToMove); // Einheit in den Vektor der Transportereinheit verlegt
+        ptr_gameGameWid->getGameWidGameScene()->removeItem(unitToMove); // Einheit aus der Scene gelöscht
     }
+    else
+    {
+        target->setUnit_stationed(unitToMove);      //Einheit verlegen auf das Ziel
+        unit_UnitGrid[target->getQpoint_gridPosition().x()][target->getQpoint_gridPosition().y()] = unitToMove; //Einheit im Grid verlegt
+        unitToMove->setPos(target->pos());  //Visuell verlegen
+    }
+    unit_UnitGrid[SelectionCache->getQpoint_gridPosition().x()][SelectionCache->getQpoint_gridPosition().y()] = nullptr; //Einheit aus dem UnitGrid löschen
+    SelectionCache->setUnit_stationed(nullptr);     //Einheit vom alten feld entfernen
+    SelectionCache->setState(INACTIVE);     //Auswahl auf inactiv setzen
+    SelectionCache = nullptr;
 }
 void Game::showNeighbors(HexagonMatchfield * center)
 {

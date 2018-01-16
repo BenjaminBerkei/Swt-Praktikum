@@ -80,7 +80,7 @@ public:
 	void produceUnit(HexagonMatchfield*);
 	Unit* createUnit();
 private slots:
-    void SLOT_setUnitToBuild(QString);
+    void SLOT_setUnitToBuild(Unit* unit);
 };
 
 #endif

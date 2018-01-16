@@ -134,7 +134,7 @@ FactoryUnit::FactoryUnit(QString filepath, Player* player)
 
     for(auto &it : production)
     {
-        connect(it.second->getUnitDisplay(), SIGNAL(unitDispl_clicked(QString)), this, SLOT(SLOT_setUnitToBuild(QString)));
+        connect(it.second->getUnitDisplay(), SIGNAL(unitDispl_clicked(Unit*)), this, SLOT(SLOT_setUnitToBuild(Unit*)));
         vector_unitStorage.push_back(it.second);
     }
 }
@@ -176,9 +176,9 @@ Unit* FactoryUnit::createUnit()
     return new FactoryUnit(unitFile);
 }
 
-void FactoryUnit::SLOT_setUnitToBuild(QString value)
+void FactoryUnit::SLOT_setUnitToBuild(Unit *unit)
 {
-    unitToBuild = value;
+    unitToBuild = unit->getUnitName();
     qDebug() << unitToBuild;
 }
 

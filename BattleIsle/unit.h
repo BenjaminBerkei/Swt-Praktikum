@@ -69,6 +69,7 @@ public:
 
     /*Hilfsfunktionen*/
     virtual void resetUnit();
+    virtual void addUnitToStorage(Unit* unit);
     /*Hilfsfunktionen Ende*/
 
 	QString getUnitName() const;
