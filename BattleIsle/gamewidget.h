@@ -61,14 +61,14 @@ public:
     void clearScenes();
     void updateInfoOptScenes();
     void updateMatchfieldScene();
-
+    void updateGameView();
     //get und set Methoden
     void setInfoScene(HexagonDisplayInfo *info);
     void setOptScene(std::vector<Unit*>);
     void setPlayerLabel(QString);
     void setPhaseLabel(QString);
-    void setPlayerOneUnitsLabel(int value);
-    void setPlayerTwoUnitsLabel(int value);
+    void setUnitsLabel(int value);
+    void setEnergieLabel(int current, int max);
     int getSizeX() const;
     int getSizeY() const;
     QGraphicsScene *getGameWidInfoScene() const;

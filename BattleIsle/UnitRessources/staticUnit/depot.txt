@@ -1,5 +1,5 @@
 Depot
-7 0 500 5 500 DEPOUNIT
+3 0 500 5 500 DEPOUNIT
 Hier kannst du deine Einheiten reparieren und Boltanium lagern.
 :/img/StaticOhneRand/Lager_grau.png
 :/img/StaticOhneRand/Lager_blau.png

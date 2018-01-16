@@ -76,14 +76,14 @@ public:
     //int showUnitNumber(Player* player);
     //int showTotalEnergie(Player* player);
     void Dijkstra();
-    //void calculateActionTargets();
 
     /* Nicht im UML-Diagramm, ist nur eine Hilfsfunktionen für processSelection*/
     void resetHexMatchfield();
     void resetTargetChache();
     void moveUnitTo(HexagonMatchfield*);    //Einheit auf anderes Hex verlegen
     void showNeighbors(HexagonMatchfield*); //Nachbarn markieren -> später range markieren
-    void calculateTargets(int);
+    void calculateTargets(HexagonMatchfield*, int);
+    void setFogOfWar();
     void showPath(HexagonMatchfield *);     //Weg einer bewegung anzeigen
     void checkUnitGrid();                   //Prüfen ob eine Einheit gestorben ist
     void checkWinCondition();               //Prüfen ob ein spieler gewonnen hat

@@ -76,6 +76,27 @@ QColor HexagonMatchfield::getQcolor_HexColor() const
     return qcolor_HexColor;
 }
 
+bool HexagonMatchfield::getHexFogOfWar() const
+{
+    return bool_hexFogOfWar;
+}
+
+void HexagonMatchfield::setHexFogOfWar(bool value)
+{
+    bool_hexFogOfWar = value;
+    if(unit_stationed != nullptr)
+    {
+        qreal zValue = 0;
+        if(bool_hexFogOfWar == true)
+        {
+            zValue = -1;
+        }else{
+            zValue = 5;
+        }
+        unit_stationed->setZValue(zValue);
+    }
+}
+
 HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, QString type, Unit *stationedUnit) :
     HexagonBase( qpoint_gridPosition ), bool_hexFogOfWar(false), unit_stationed(stationedUnit), state(INACTIVE),
     HexMatchfieldType(type),int_boltaniumCurrent(0), qcolor_HexColor(Qt::black)
@@ -121,11 +142,20 @@ void HexagonMatchfield::mousePressEvent( QGraphicsSceneMouseEvent *)
 
 void HexagonMatchfield::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    if(state == ACTIVE)
-    {
-        qDebug() << "Active hex redraw";
-    }
     QGraphicsPixmapItem::paint(painter, option, widget);
+    if(bool_hexFogOfWar)
+    {
+        QBrush brush;
+        brush.setStyle(Qt::SolidPattern);
+        brush.setColor(Qt::black);
+
+        painter->setOpacity(.5);
+        painter->setBrush(brush);
+
+        painter->drawPath(shape());
+
+        painter->setBrush(QBrush());
+    }
     QPen pen;
     pen.setColor(qcolor_HexColor);
     pen.setWidth(2);

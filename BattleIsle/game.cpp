@@ -101,7 +101,7 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
         for(int j = 0; j < sizeY; j++)
         {
                 int randomInt = qrand() % 100;
-                if(randomInt < 10)
+                if(randomInt < 5)
                 {
                     Unit* randomUnit = nullptr;
                     QString hexType = hexagonMatchfield_gameGrid[i][j]->getHexMatchfieldType();
@@ -142,11 +142,12 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
         unit_UnitGrid.push_back(vectorUnit);
     }
     countUnits();
+    setFogOfWar();
     ptr_gameGameWid->gameWidCreateMatchfield(hexagonMatchfield_gameGrid);
-    ptr_gameGameWid->setPlayerLabel(ptr_playerOne->getPlayerName());
+    ptr_gameGameWid->setPlayerLabel(ptr_playerActive->getPlayerName());
     ptr_gameGameWid->setPhaseLabel("Move");
-    ptr_gameGameWid->setPlayerOneUnitsLabel(ptr_playerOne->getPlayerUnitNumber());
-    ptr_gameGameWid->setPlayerTwoUnitsLabel(ptr_playerTwo->getPlayerUnitNumber());
+    ptr_gameGameWid->setUnitsLabel(ptr_playerActive->getPlayerUnitNumber());
+    ptr_gameGameWid->setEnergieLabel(ptr_playerActive->getCurrentEnergieStorage(), ptr_playerActive->getPlayerTotalEnergie());
     //##################################################################
 
     //Buttons Einfuegen
@@ -230,6 +231,10 @@ void Game::processSelection(HexagonMatchfield *selection)
                     selection->getUnit_stationed()->setPos(selection->pos());   //Position in der Scene setzen
                     ptr_gameGameWid->getGameWidGameScene()->addItem(selection->getUnit_stationed());    //in die Scene einfügen
                 }
+                ptr_gameGameWid->setOptScene(SelectionCache->getUnit_stationed()->getVector_unitStorage());
+                ptr_gameGameWid->setUnitsLabel(ptr_playerActive->getPlayerUnitNumber());    //Label updaten
+                ptr_gameGameWid->setEnergieLabel(ptr_playerActive->getCurrentEnergieStorage(), ptr_playerActive->getPlayerTotalEnergie());
+                setFogOfWar();
             }
             resetTargetChache();
         }
@@ -251,6 +256,7 @@ void Game::processSelection(HexagonMatchfield *selection)
         ptr_gameGameWid->setOptScene(SelectionCache->getUnit_stationed()->getVector_unitStorage());
 
         resetTargetChache();
+        setFogOfWar();
         break;
     }
     qDebug() << "Switch ende";
@@ -258,6 +264,7 @@ void Game::processSelection(HexagonMatchfield *selection)
     checkWinCondition();
     countUnits();
     ptr_gameGameWid->updateInfoOptScenes();
+    ptr_gameGameWid->updateMatchfieldScene();
     qDebug() << "ProcessSelection ende";
 }
 
@@ -352,7 +359,7 @@ void Game::buttonPressedAction()
                 && SelectionCache->getUnit_stationed()->getUnitPlayer() == ptr_playerActive
                 && SelectionCache->getUnit_stationed()->getUnitUsed() == false)
         {
-            calculateTargets(SelectionCache->getUnit_stationed()->getActionRange());
+            calculateTargets(SelectionCache, SelectionCache->getUnit_stationed()->getActionRange());
         }
     }
 }
@@ -371,11 +378,13 @@ void Game::buttonPressedChangePhase()
         ptr_playerActive = ptr_playerActive == ptr_playerOne ? ptr_playerTwo : ptr_playerOne;
         resetUnits(ptr_playerActive);
         resetHexMatchfield();
+        setFogOfWar();
     }
     resetTargetChache();
     ptr_gameGameWid->setPlayerLabel(ptr_playerActive->getPlayerName());
     ptr_gameGameWid->setPhaseLabel(ptr_roundCurrent->getCurrentPhase() == MOVE ? "Move" : "Action");
-
+    ptr_gameGameWid->setUnitsLabel(ptr_playerActive->getPlayerUnitNumber());
+    ptr_gameGameWid->setEnergieLabel(ptr_playerActive->getCurrentEnergieStorage(), ptr_playerActive->getPlayerTotalEnergie());
     if(SelectionCache != nullptr && SelectionCache->getUnit_stationed() != nullptr)
     {
         SelectionCache->getUnit_stationed()->resetBuildUnloadParameter();
@@ -456,10 +465,10 @@ void Game::showNeighbors(HexagonMatchfield * center)
     }
 }
 
-void Game::calculateTargets(int range)
+void Game::calculateTargets(HexagonMatchfield * center, int range)
 {
     std::queue<HexagonMatchfield*> frontier;
-    frontier.push(SelectionCache);
+    frontier.push(center);
 
     while(!frontier.empty())    //Solange zulässige Ziele gefunden werdenn
     {
@@ -484,8 +493,7 @@ void Game::calculateTargets(int range)
                     && hexagonMatchfield_gameGrid[x][y]->getState() != TARGET && hexagonMatchfield_gameGrid[x][y]->getState() != ACTIVE)  //Wenn das Ziel nicht bereits als TARGET markiert wurde
             {
                 HexagonMatchfield* neighbour = hexagonMatchfield_gameGrid[x][y];         //Zwischenspeichern für lesbarkeite
-
-                if(offset_distance(SelectionCache->getQpoint_gridPosition(), neighbour->getQpoint_gridPosition()) <= range)          //Wenn das ziel in der Reichweite der Einheite liegt
+                if(offset_distance(center->getQpoint_gridPosition(), neighbour->getQpoint_gridPosition()) <= range)          //Wenn das ziel in der Reichweite der Einheite liegt
                 {
                     neighbour->setState(TARGET);
                     TargetChache.push_back(neighbour);
@@ -494,7 +502,34 @@ void Game::calculateTargets(int range)
             }
         }
     }
-    ptr_gameGameWid->getGameWidGameScene()->update();
+}
+
+void Game::setFogOfWar()
+{
+    for(auto &iterator : hexagonMatchfield_gameGrid)
+    {
+        for(auto &hex : iterator)
+        {
+            if(hex->getUnit_stationed() != nullptr && hex->getUnit_stationed()->getUnitPlayer() == ptr_playerActive)
+            {
+                calculateTargets(hex, hex->getUnit_stationed()->getUnitView());
+            }
+        }
+    }
+
+    for(auto &iterator : hexagonMatchfield_gameGrid)
+    {
+        for(auto &hex : iterator)
+        {
+            if(hex->getState() == INACTIVE)
+            {
+                hex->setHexFogOfWar(true);
+            }else{
+                hex->setHexFogOfWar(false);
+            }
+        }
+    }
+    resetTargetChache();
 }
 
 void Game::showPath(HexagonMatchfield* target)
@@ -519,8 +554,7 @@ void Game::checkUnitGrid()
             }
         }
     }
-    ptr_gameGameWid->setPlayerOneUnitsLabel(ptr_playerOne->getPlayerUnitNumber());
-    ptr_gameGameWid->setPlayerTwoUnitsLabel(ptr_playerTwo->getPlayerUnitNumber());
+    ptr_gameGameWid->setUnitsLabel(ptr_playerActive->getPlayerUnitNumber());
 }
 
 void Game::checkWinCondition()

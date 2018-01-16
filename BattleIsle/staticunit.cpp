@@ -54,6 +54,11 @@ StaticUnit::StaticUnit(QString filepath, Player* player)
     int_unitCurrentHP = int_unitHP;
     unitFile = filepath;
     setUnitPlayer(player);
+
+    if(int_unitView < int_unitMoveRange)
+    {
+        int_unitView = int_unitMoveRange;
+    }
 }
 
 int StaticUnit::getEnergieStorage() const
@@ -63,7 +68,7 @@ int StaticUnit::getEnergieStorage() const
 
 int StaticUnit::moveTo(HexagonMatchfield* )
 {
-	return -1;
+    return 1;
 }
 
 // HQ
@@ -96,9 +101,20 @@ Unit* HeadquaterUnit::createUnit()
 // Depot
 
 DepotUnit::DepotUnit(QString filepath, Player* player)
-	: StaticUnit(filepath, player) {}
+    : StaticUnit(filepath, player)
+{
+    if(player != nullptr)
+    {
+        player->setPlayerTotalEnergie(player->getPlayerTotalEnergie() + int_EnergieStorage);
+    }
+}
 
-DepotUnit::~DepotUnit() {}
+DepotUnit::~DepotUnit()
+{
+    for(auto &it : vector_unitStorage)
+        delete it;
+    unitPlayer->setPlayerTotalEnergie(unitPlayer->getPlayerTotalEnergie() - int_EnergieStorage);
+}
 
 bool DepotUnit::action(HexagonMatchfield* )
 {

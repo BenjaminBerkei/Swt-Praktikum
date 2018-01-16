@@ -11,9 +11,9 @@
 #include "player.h"
 
 
-Player::Player(QString playerName,int id, int playerScore, int totalEnergie, int currentEnergie, int unitNumber)
-    :str_playerName(playerName), int_playerID(id), int_playerScore(playerScore), int_playerTotalEnergie(1000000),
-      int_currentEnergieStorage(1000000), int_playerUnitNumber(unitNumber), bool_HQDestroyed(false) {}
+Player::Player(QString playerName,int id,  int totalEnergie, int currentEnergie, int unitNumber, int playerScore)
+    :str_playerName(playerName), int_playerID(id), int_playerScore(playerScore), int_playerTotalEnergie(totalEnergie),
+      int_currentEnergieStorage(currentEnergie), int_playerUnitNumber(unitNumber), bool_HQDestroyed(false) {}
 
 Player::~Player(){
 	/*
@@ -44,6 +44,10 @@ void Player::setPlayerScore(int score){
 
 void Player::setPlayerTotalEnergie(int energie){	
 	int_playerTotalEnergie = energie;
+    if(int_playerTotalEnergie < int_currentEnergieStorage)
+    {
+        int_playerTotalEnergie = int_currentEnergieStorage;
+    }
 	return;
 }
 
@@ -70,7 +74,7 @@ int Player::getPlayerScore() const
 
 int Player::getPlayerTotalEnergie() const
 {
-	return int_playerScore;
+    return int_playerTotalEnergie;
 }
 
 int Player::getPlayerUnitNumber() const

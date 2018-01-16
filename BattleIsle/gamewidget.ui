@@ -56,9 +56,9 @@
   <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>611</y>
-     <width>151</width>
+     <x>21</x>
+     <y>612</y>
+     <width>141</width>
      <height>96</height>
     </rect>
    </property>
@@ -102,14 +102,14 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
-       <widget class="QLabel" name="labelPlayerOneUnits">
+       <widget class="QLabel" name="labeUnits">
         <property name="text">
-         <string>PlayerOne Units</string>
+         <string>Units: </string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="labelPlayerOneUnitsCurrent">
+       <widget class="QLabel" name="labelUnitsCurrent">
         <property name="text">
          <string/>
         </property>
@@ -120,14 +120,14 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_4">
       <item>
-       <widget class="QLabel" name="labelPlayerTwoUnits">
+       <widget class="QLabel" name="labelEnergie">
         <property name="text">
-         <string>PlayerTwo Units</string>
+         <string>Energie:</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="labelPlayerTwoUnitsCurrent">
+       <widget class="QLabel" name="labelEnergieCurrent">
         <property name="text">
          <string/>
         </property>

@@ -38,7 +38,7 @@ GameWidget::GameWidget(QWidget *parent) :
     ui(new Ui::GameWidget),
     gameWidGameScene(new QGraphicsScene(this)), gameWidInfoScene(new QGraphicsScene(this)),
     gameWidOptionsScene(new QGraphicsScene(this)), gameWidButtonScene(new QGraphicsScene(this)),
-    sizeX(30), sizeY(20)
+    sizeX(50), sizeY(50)
 {
     ui->setupUi(this);
     ui->graphicsView_buttonView->setScene(gameWidButtonScene);
@@ -125,13 +125,18 @@ void GameWidget::clearScenes()
 
 void GameWidget::updateInfoOptScenes()
 {
-    gameWidInfoScene->update();
-    gameWidOptionsScene->update();
+    gameWidInfoScene->update(gameWidInfoScene->sceneRect());
+    gameWidOptionsScene->update(gameWidOptionsScene->sceneRect());
 }
 
 void GameWidget::updateMatchfieldScene()
 {
-    gameWidGameScene->update();
+    gameWidGameScene->update(gameWidGameScene->sceneRect());
+}
+
+void GameWidget::updateGameView()
+{
+    ui->graphicsView_gameView->viewport()->repaint();
 }
 
 void GameWidget::setInfoScene(HexagonDisplayInfo *info)
@@ -175,14 +180,14 @@ void GameWidget::setPhaseLabel(QString text)
     ui->labelPhaseCurrent->setText(text);
 }
 
-void GameWidget::setPlayerOneUnitsLabel(int value)
+void GameWidget::setUnitsLabel(int value)
 {
-    ui->labelPlayerOneUnitsCurrent->setText(QString::number(value));
+    ui->labelUnitsCurrent->setText(QString::number(value));
 }
 
-void GameWidget::setPlayerTwoUnitsLabel(int value)
+void GameWidget::setEnergieLabel(int current, int max)
 {
-    ui->labelPlayerTwoUnitsCurrent->setText(QString::number(value));
+   ui->labelEnergieCurrent->setText(QString::number(current) + "/" + QString::number(max));
 }
 QGraphicsScene *GameWidget::getGameWidInfoScene() const
 {
@@ -210,7 +215,7 @@ void HexagonDisplayInfo::paint(QPainter *painter, const QStyleOptionGraphicsItem
     painter->drawPixmap(-50 ,-50, hexToDisplay->pixmap());
     painter->drawText(QRectF(20,-50,1000,200),qStringHexDispHexType);
 
-    if(hexToDisplay->getUnit_stationed() != nullptr)
+    if(hexToDisplay->getHexFogOfWar() != true && hexToDisplay->getUnit_stationed() != nullptr)
     {
         painter->drawPixmap(-50,-50, hexToDisplay->getUnit_stationed()->pixmap());
         painter->drawText(QRectF(20,-30,200,20),qStringUnitDispUnitName);
@@ -296,8 +301,7 @@ void UnitDisplayInfo::updateText()
             + "W" + QString::number(ptr_UnitToDisplay->getUnitWaterAtt());
 }
 
-void UnitDisplayInfo::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void UnitDisplayInfo::mousePressEvent(QGraphicsSceneMouseEvent*)
 {
-    qDebug() << "DisplInfoClicked";
     emit unitDispl_clicked(ptr_UnitToDisplay);
 }

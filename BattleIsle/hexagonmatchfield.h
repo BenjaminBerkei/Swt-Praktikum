@@ -44,7 +44,7 @@ protected:
      * -1 : Units wenn in Fog of War
      * 0: alle inaktiven Hexagons
      * 1: Targets
-     * 2: Selectet
+     * 2: Active
      * 3:
      * 4:
      * 5: Units
@@ -87,6 +87,9 @@ public:
     void setBoltaniumCurrent(int value);
 
     QColor getQcolor_HexColor() const;
+
+    bool getHexFogOfWar() const;
+    void setHexFogOfWar(bool value);
 
 signals:
     void SIGNAL_clicked(HexagonMatchfield*);

@@ -69,6 +69,12 @@ DynamicUnit::DynamicUnit(QString filepath, Player* player)
     unitFile = filepath;
 
     setUnitPlayer(player);
+
+    if(int_unitView < int_unitMoveRange)
+    {
+        int_unitView = int_unitMoveRange;
+    }
+    qDebug() << int_unitView;
 }
 
 DynamicUnit::~DynamicUnit(){}
