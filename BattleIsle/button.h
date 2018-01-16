@@ -25,11 +25,15 @@ class Game;
 class Button : public HexagonBase
 {
     Q_OBJECT
-private:
+private:    
+    bool bool_ButtonShowActivation; //sagt an ob ein Button nicht "geschwaertzt werden soll
 public:
     Button();
-
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) = 0;
+
+    //get und set Methoden
+    void setBool_ButtonShowActivation(bool value);
+    bool getBool_ButtonShowActivation() const;
 };
 
 
@@ -40,6 +44,7 @@ class ButtonMove : public Button
 public:
     ButtonMove(int sizeX = 64, int sizeY = 64);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
     void printType();
 signals:
@@ -54,6 +59,7 @@ class ButtonAction : public Button
 public:
     ButtonAction(int sizeX = 64, int sizeY = 64);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
     void printType();
 signals:

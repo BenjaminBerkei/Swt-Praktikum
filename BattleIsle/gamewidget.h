@@ -85,6 +85,7 @@ public:
     QGraphicsScene *getGameWidInfoScene() const;
     QGraphicsScene *getGameWidOptionsScene() const;
     QGraphicsScene *getGameWidGameScene() const;
+    QGraphicsScene *getGameWidButtonScene() const;
 
 signals:
     void SIGNAL_gameWidChangeIndexFromStack(int);

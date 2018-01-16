@@ -368,6 +368,13 @@ void Game::buttonPressedChangePhase()
         resetUnits(ptr_playerActive);
         resetHexMatchfield();
         setFogOfWar();
+        button_menueBar[0]->setBool_ButtonShowActivation(true); // Setze das der Movebutton nicht "geschwaertzt" werden soll
+        button_menueBar[1]->setBool_ButtonShowActivation(false);// Setze das der Actionbutton "geschwaertzt" werden soll
+    }
+    else
+    {
+        button_menueBar[0]->setBool_ButtonShowActivation(false); // Setze das der Movebutton "geschwaertzt" werden soll
+        button_menueBar[1]->setBool_ButtonShowActivation(true); // Setze das der Actionbutton nicht "geschwaertzt" werden soll
     }
     resetTargetCache();
 
@@ -379,6 +386,8 @@ void Game::buttonPressedChangePhase()
     {
         selectionCache->getUnit_stationed()->resetBuildUnloadParameter();
     }
+
+    ptr_gameGameWid->getGameWidButtonScene()->update();
 }
 
 /*HilfsFunktionen Start#######################################################################*/

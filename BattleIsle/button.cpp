@@ -16,8 +16,19 @@
 
 #include "button.h"
 /*Base Class: Button*/
+void Button::setBool_ButtonShowActivation(bool value)
+{
+    bool_ButtonShowActivation = value;
+}
+
+bool Button::getBool_ButtonShowActivation() const
+{
+    return bool_ButtonShowActivation;
+}
+
 Button::Button()
-    : HexagonBase( QPoint(0,0) )
+    : HexagonBase( QPoint(0,0) ),
+      bool_ButtonShowActivation(true)
 {
 }
 
@@ -33,6 +44,22 @@ void ButtonMove::mousePressEvent(QGraphicsSceneMouseEvent *)
     emit clicked();
 }
 
+void ButtonMove::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    QGraphicsPixmapItem::paint(painter, option, widget);
+    if(!getBool_ButtonShowActivation())
+    {
+        QBrush brush;
+        brush.setStyle(Qt::SolidPattern);
+        brush.setColor(Qt::black);
+
+        painter->setOpacity(.5);
+        painter->setBrush(brush);
+
+        painter->drawPath(shape());
+    }
+}
+
 
 void ButtonMove::printType()
 {
@@ -42,6 +69,7 @@ void ButtonMove::printType()
 /*ButtonAction*/
 ButtonAction::ButtonAction(int sizeX, int sizeY)
 {
+    setBool_ButtonShowActivation(false);
     QPixmap pix(":/buttonRess/Buttons/AttackeMit.png");
     setPixmap(pix.scaled(sizeX,sizeY));
 }
@@ -49,6 +77,22 @@ ButtonAction::ButtonAction(int sizeX, int sizeY)
 void ButtonAction::mousePressEvent(QGraphicsSceneMouseEvent *)
 {
     emit clicked();
+}
+
+void ButtonAction::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    QGraphicsPixmapItem::paint(painter, option, widget);
+    if(!getBool_ButtonShowActivation())
+    {
+        QBrush brush;
+        brush.setStyle(Qt::SolidPattern);
+        brush.setColor(Qt::black);
+
+        painter->setOpacity(.5);
+        painter->setBrush(brush);
+
+        painter->drawPath(shape());
+    }
 }
 
 void ButtonAction::printType()

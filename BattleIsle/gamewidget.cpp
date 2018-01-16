@@ -33,6 +33,11 @@ QGraphicsScene *GameWidget::getGameWidGameScene() const
     return gameWidGameScene;
 }
 
+QGraphicsScene *GameWidget::getGameWidButtonScene() const
+{
+    return gameWidButtonScene;
+}
+
 GameWidget::GameWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::GameWidget),

@@ -7,6 +7,7 @@
 #ifndef HEXAGONBASE_H
 #define HEXAGONBASE_H
 
+#include "enumerations.h"
 #include <QGraphicsObject>
 #include <QPainter>
 #include <cmath>
