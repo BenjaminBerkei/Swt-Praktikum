@@ -17,13 +17,8 @@
 #include "button.h"
 /*Base Class: Button*/
 Button::Button()
-    : HexagonBase( QPoint(0,0) ), state(DISABLED)
+    : HexagonBase( QPoint(0,0) )
 {
-}
-
-void Button::changeState(BUTTONSTATE newState)
-{
-    state = newState;
 }
 
 /*ButtonMove*/

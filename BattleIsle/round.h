@@ -30,7 +30,7 @@ public:
 	~Round();
 	void setCurrentRoundPhase(Phase*);
 	void changePhase();
-	bool checkWinCondition();
+    bool checkGameOver();
 	int getCurrentRoundNumber() const;
 	void setCurrentRoundNumber(const int);
 	int getMaxRoundNumber() const;

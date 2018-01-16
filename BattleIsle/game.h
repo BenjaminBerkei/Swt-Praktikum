@@ -47,8 +47,8 @@ class Game : public QObject
 {
     Q_OBJECT
 private:
-    HexagonMatchfield* SelectionCache;
-    std::vector<HexagonMatchfield*> TargetChache;
+    HexagonMatchfield* selectionCache;
+    std::vector<HexagonMatchfield*> targetCache;
 
     std::vector<std::vector<HexagonMatchfield*>> hexagonMatchfield_gameGrid;
     std::vector<std::vector<Unit*>> unit_UnitGrid;
@@ -73,13 +73,11 @@ public:
     //void loadGame(QString pathToSaveFile);
     //void saveGame();
     //void endGame();
-    //int showUnitNumber(Player* player);
-    //int showTotalEnergie(Player* player);
     void Dijkstra();
 
-    /* Nicht im UML-Diagramm, ist nur eine Hilfsfunktionen für processSelection*/
+    /* Nicht im UML-Diagramm, sind nur eine Hilfsfunktionen für processSelection*/
     void resetHexMatchfield();
-    void resetTargetChache();
+    void resetTargetCache();
     void moveUnitTo(HexagonMatchfield*);    //Einheit auf anderes Hex verlegen
     void showNeighbors(HexagonMatchfield*); //Nachbarn markieren -> später range markieren
     void calculateTargets(HexagonMatchfield*, int);
@@ -89,17 +87,13 @@ public:
     void checkWinCondition();               //Prüfen ob ein spieler gewonnen hat
     void resetUnits(Player*);
     void countUnits();
+    int offset_distance(QPoint, QPoint);
 
+private:
     QVector3D oddqToCube(QPoint);   //Für Referenzen betrachte https://www.redblobgames.com/grids/hexagons/#distances , Kapitel: Distance
     QPoint cubeToOddq(QVector3D);
-    int offset_distance(QPoint, QPoint);
     int cube_distance(QVector3D, QVector3D);
     /*Hilfsfunktionen Ende*/
-
-    // get und set Methoden
-    std::vector<std::vector<HexagonMatchfield*>> getVectorVectorHexagonMatchfield();
-    std::vector<Button *> getButton_menueBar();
-    void setButton_menueBar(const std::vector<Button *> &value);
 
 public slots:
     void processSelection(HexagonMatchfield* selection);

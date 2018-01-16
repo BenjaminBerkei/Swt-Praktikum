@@ -26,12 +26,10 @@ class Button : public HexagonBase
 {
     Q_OBJECT
 private:
-    BUTTONSTATE state;
 public:
     Button();
 
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) = 0;
-    void changeState(BUTTONSTATE newState);
 };
 
 

@@ -179,11 +179,6 @@ void GameWidget::updateMatchfieldScene()
     gameWidGameScene->update(gameWidGameScene->sceneRect());
 }
 
-void GameWidget::updateGameView()
-{
-    ui->graphicsView_gameView->viewport()->repaint();
-}
-
 void GameWidget::animateUnit(Unit * unitToAnimate, std::vector<QPointF> points)
 {
     QTimeLine *timer = new QTimeLine(2000);

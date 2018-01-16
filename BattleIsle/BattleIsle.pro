@@ -16,9 +16,7 @@ SOURCES += main.cpp\
     hexagonbase.cpp \
     button.cpp \
     hexagonmatchfield.cpp \
-    matchfield.cpp \
     options.cpp \
-    savegame.cpp \
     optionswidget.cpp \
     menuewidget.cpp \
     startmenuewidget.cpp \
@@ -36,9 +34,7 @@ HEADERS  += \
     button.h \
     enumerations.h \
     hexagonmatchfield.h \
-    matchfield.h \
     options.h \
-    savegame.h \
     optionswidget.h \
     menuewidget.h \
     startmenuewidget.h \
