@@ -70,6 +70,7 @@ public:
     void clearScenes();
     void updateInfoOptScenes();
     void updateMatchfieldScene();
+    void repaintGameView();
     void animateUnit(Unit*, std::vector<QPointF>);
 
 
