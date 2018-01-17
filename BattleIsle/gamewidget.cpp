@@ -283,7 +283,7 @@ void GameWidget::gameWidCreateMap(std::vector<std::vector<HexagonMatchfield *> >
             gameWidGameScene->addItem(pixel);
         }
     }
-    button_menueBar[3]->setPos(0,0);
+    button_menueBar[3]->setPos(ui->graphicsView_buttonView->width() / 2.0, 20);
     gameWidButtonScene->addItem(button_menueBar[3]);
     gameWidButtonScene->update();
 }
@@ -474,7 +474,7 @@ MapPixel::MapPixel(int x, int y, Qt::GlobalColor color) :
 {
 }
 
-void MapPixel::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void MapPixel::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     QPen pen;
     QBrush brush;
