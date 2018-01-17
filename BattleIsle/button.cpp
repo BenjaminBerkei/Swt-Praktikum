@@ -101,16 +101,15 @@ void ButtonAction::printType()
 }
 
 /*ButtonMap*/
-ButtonMap::ButtonMap(int , int )
+ButtonMap::ButtonMap(int sizeX, int sizeY)
 {
     //Noch implementieren
-    //QPixmap(""));
-    //setPixmap(pixmap().scaled(sizeX,sizeY));
+    QPixmap pix(":/buttonRess/Buttons/BeladenMit.png"); //Eventuell noch aendern
+    setPixmap(pix.scaled(sizeX,sizeY));
 }
 
 void ButtonMap::mousePressEvent(QGraphicsSceneMouseEvent *)
 {
-    qDebug() << "Meldung: Map Button gedrückt.";
     emit clicked();
 }
 

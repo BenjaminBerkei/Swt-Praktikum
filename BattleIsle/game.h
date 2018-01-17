@@ -67,6 +67,8 @@ private:
 
     static std::vector<QPoint> vector_oddNeighbors;
     static std::vector<QPoint> vector_evenNeighbors;
+
+    bool MapView; //Sagt an ob man sich in der Map Uebersicht befindet
 public:
     Game(Options* init_options, GameWidget* ptr_gameWid);
     //Game(QString pathToSaveFile);
@@ -100,7 +102,7 @@ public slots:
     void buttonPressedMove();
     void buttonPressedAction();
     //void buttonPressedInformation();
-    //void buttonPressedMap();
+    void buttonPressedMap();
     void buttonPressedMenue();
     void buttonPressedChangePhase();
 };
@@ -109,4 +111,5 @@ class Compare
 public:
     bool operator ()(std::pair<HexagonMatchfield *, int> a, std::pair<HexagonMatchfield *, int> b);
 };
+
 #endif // GAME_H

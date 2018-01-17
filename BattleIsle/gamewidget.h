@@ -26,14 +26,17 @@
 
 #include <QWidget>
 #include <QGraphicsScene>
+#include <QGraphicsRectItem>
 #include <vector>
 #include "hexagonmatchfield.h"
 #include "unit.h"
 #include "button.h"
+#include "player.h"
 #include <QTimeLine>
 #include <QGraphicsItemAnimation>
 
 class Unit;
+class Player;
 
 namespace Ui {
 class GameWidget;
@@ -42,6 +45,7 @@ class GameWidget;
 class Game; //Vorwärtsdeklaration
 class HexagonMatchfield;
 class HexagonDisplayInfo;
+class MapPixel;
 
 class GameWidget : public QWidget
 {
@@ -67,11 +71,13 @@ public:
     void resizeEvent(QResizeEvent*, int mainHeight, int mainWdith);
     void gameWidCreateMatchfield(std::vector<std::vector<HexagonMatchfield*>> &hexagonGrid);
     void gameWidCreateButtonBar(std::vector<Button *> buttonVector);
-    void clearScenes();
+    void clearScenes(); //Loschet die Info- und Optionsscene
+    void clearAllScenes(); //Loescht alle Scenen
     void updateInfoOptScenes();
     void updateMatchfieldScene();
     void repaintGameView();
     void animateUnit(Unit*, std::vector<QPointF>);
+    void gameWidCreateMap(std::vector<std::vector<HexagonMatchfield*>> &hexagonGrid, std::vector<Button*> button_menueBar, Player* playerOne); //Erstellt die Map Uebersicht
 
 
     //get und set Methoden
@@ -136,4 +142,15 @@ signals:
     void unitDispl_clicked(Unit* unit);
 };
 
+
+class MapPixel : public QGraphicsRectItem
+{
+private:
+    Qt::GlobalColor colorRect;
+public:
+    MapPixel(int x, int y, Qt::GlobalColor color);
+
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR);
+    QRectF boundingRect();
+};
 #endif // GAMEWIDGET_H

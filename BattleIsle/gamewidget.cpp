@@ -52,39 +52,12 @@ GameWidget::GameWidget(QWidget *parent) :
     ui->graphicsView_optionsView->setScene(gameWidOptionsScene);
 
     gameWidButtonScene->setSceneRect(ui->graphicsView_buttonView->rect());
-    QGraphicsTextItem* playerTag = new QGraphicsTextItem("Player: ");
-    QGraphicsTextItem* energieTag = new QGraphicsTextItem("Energie: ");
-    QGraphicsTextItem* unitsTag = new QGraphicsTextItem("Units: ");
-    QGraphicsTextItem* phaseTag = new QGraphicsTextItem("Phase: ");
 
     textItem_currentPlayer = new QGraphicsTextItem("");
     textItem_currentEnergie= new QGraphicsTextItem("");
     textItem_currentUnits= new QGraphicsTextItem("");
     textItem_currentPhase= new QGraphicsTextItem("");
 
-    int x = 0;
-    int y = 10;
-    int xChange = 70;
-
-    playerTag->setPos(x, y);
-    phaseTag->setPos(x, 3 * y);
-    unitsTag->setPos(x, 5 * y);
-    energieTag->setPos(x, 7 * y);
-
-    textItem_currentPlayer->setPos(x + xChange, y);
-    textItem_currentPhase->setPos(x + xChange, 3 * y);
-    textItem_currentUnits->setPos(x + xChange, 5 * y);
-    textItem_currentEnergie->setPos(x + xChange, 7 * y);
-
-    gameWidButtonScene->addItem(playerTag);
-    gameWidButtonScene->addItem(energieTag);
-    gameWidButtonScene->addItem(unitsTag);
-    gameWidButtonScene->addItem(phaseTag);
-
-    gameWidButtonScene->addItem(textItem_currentPlayer);
-    gameWidButtonScene->addItem(textItem_currentPhase);
-    gameWidButtonScene->addItem(textItem_currentEnergie);
-    gameWidButtonScene->addItem(textItem_currentUnits);
 
     ui->graphicsView_optionsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->graphicsView_optionsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -110,8 +83,6 @@ void GameWidget::resizeEvent(QResizeEvent *,int mainHeight, int mainWidth)
 
 void GameWidget::gameWidCreateMatchfield(std::vector<std::vector<HexagonMatchfield*>> &hexagonGrid)
 {
-
-
     for(unsigned int i = 0; i < hexagonGrid.size(); i++)
     {
         for(unsigned int j = 0; j < hexagonGrid[i].size(); j++)
@@ -149,6 +120,36 @@ void GameWidget::gameWidCreateMatchfield(std::vector<std::vector<HexagonMatchfie
 
 void GameWidget::gameWidCreateButtonBar(std::vector<Button*> buttonVector)
 {
+
+    QGraphicsTextItem* playerTag = new QGraphicsTextItem("Player: ");
+    QGraphicsTextItem* energieTag = new QGraphicsTextItem("Energie: ");
+    QGraphicsTextItem* unitsTag = new QGraphicsTextItem("Units: ");
+    QGraphicsTextItem* phaseTag = new QGraphicsTextItem("Phase: ");
+
+    int x = 0;
+    int y = 10;
+    int xChange = 70;
+
+    playerTag->setPos(x, y);
+    phaseTag->setPos(x, 3 * y);
+    unitsTag->setPos(x, 5 * y);
+    energieTag->setPos(x, 7 * y);
+
+    textItem_currentPlayer->setPos(x + xChange, y);
+    textItem_currentPhase->setPos(x + xChange, 3 * y);
+    textItem_currentUnits->setPos(x + xChange, 5 * y);
+    textItem_currentEnergie->setPos(x + xChange, 7 * y);
+
+    gameWidButtonScene->addItem(playerTag);
+    gameWidButtonScene->addItem(energieTag);
+    gameWidButtonScene->addItem(unitsTag);
+    gameWidButtonScene->addItem(phaseTag);
+
+    gameWidButtonScene->addItem(textItem_currentPlayer);
+    gameWidButtonScene->addItem(textItem_currentPhase);
+    gameWidButtonScene->addItem(textItem_currentEnergie);
+    gameWidButtonScene->addItem(textItem_currentUnits);
+
     double startPos = gameWidButtonScene->width() / double(buttonVector.size());
     for(unsigned int i = 0; i < buttonVector.size(); i++)
     {
@@ -160,6 +161,37 @@ void GameWidget::gameWidCreateButtonBar(std::vector<Button*> buttonVector)
 
 void GameWidget::clearScenes()
 {
+    //leere gameWidInfoScene
+    for(auto &it : gameWidInfoScene->items())
+    {
+        gameWidInfoScene->removeItem(it);
+    }
+    gameWidInfoScene->update();
+
+    //leere gameWidOptionsScene
+    for(auto &it : gameWidOptionsScene->items())
+    {
+        gameWidOptionsScene->removeItem(it);
+    }
+    gameWidOptionsScene->update();
+}
+
+void GameWidget::clearAllScenes()
+{
+    //leere gameWidButtonScene
+    for(auto &it : gameWidButtonScene->items())
+    {
+        gameWidButtonScene->removeItem(it);
+    }
+    gameWidButtonScene->update();
+
+    //leere gameWidGameScene
+    for(auto &it : gameWidGameScene->items())
+    {
+        gameWidGameScene->removeItem(it);
+    }
+    gameWidGameScene->update();
+
     //leere gameWidInfoScene
     for(auto &it : gameWidInfoScene->items())
     {
@@ -203,6 +235,57 @@ void GameWidget::animateUnit(Unit * unitToAnimate, std::vector<QPointF> points)
         animation->setPosAt(i/(double)points.size(), points[points.size() - i]);
     }
     timer->start();
+}
+
+void GameWidget::gameWidCreateMap(std::vector<std::vector<HexagonMatchfield *> > &hexagonGrid, std::vector<Button *> button_menueBar, Player *playerOne)
+{
+    clearAllScenes();
+    //Mögliche Typen:
+    //"waterDeep"           (Tiefes Meer)
+    //"waterSeashore"       (Küste)
+    //"forrest"             (Wald)
+    //"grassland"           (Wiese)
+    //"streetStraight"      (Straße Gerade)
+    //"streetCurve"         (Straße mit Kurve)
+    //"mountainTop"         (Bergspitze)
+    //"mountainSide"        (Bergseite)
+
+    for(unsigned int i=0; i<hexagonGrid.size(); i++)
+    {
+        for(unsigned int j=0; j<hexagonGrid[i].size(); j++)
+        {
+
+            Qt::GlobalColor color = Qt::black; // Grundfarbe
+            if(!hexagonGrid[i][j]->getHexFogOfWar())
+            {
+                if(hexagonGrid[i][j]->getUnit_stationed() != nullptr) //Zeige Farbe von der Unit
+                {
+                    if(hexagonGrid[i][j]->getUnit_stationed()->getUnitPlayer() == playerOne)
+                        color = Qt::blue;
+                    else
+                        color = Qt::red;
+                }
+                else //Zeige Farbe des Feldes
+                {
+                    if(hexagonGrid[i][j]->getHexMatchfieldType() == "waterDeep")
+                        color = Qt::darkCyan;
+                    if(hexagonGrid[i][j]->getHexMatchfieldType() == "waterSeashore")
+                        color = Qt::cyan;
+                    if(hexagonGrid[i][j]->getHexMatchfieldType() == "forrest")
+                        color = Qt::darkGreen;
+                    if(hexagonGrid[i][j]->getHexMatchfieldType() == "grassland")
+                        color = Qt::green;
+                    if(hexagonGrid[i][j]->getHexMatchfieldType() == "mountainTop")
+                        color = Qt::gray;
+                }
+            }
+            MapPixel* pixel = new MapPixel(i*10,j*10,color);
+            gameWidGameScene->addItem(pixel);
+        }
+    }
+    button_menueBar[3]->setPos(0,0);
+    gameWidButtonScene->addItem(button_menueBar[3]);
+    gameWidButtonScene->update();
 }
 
 void GameWidget::setInfoScene(HexagonDisplayInfo *info)
@@ -381,4 +464,32 @@ void UnitDisplayInfo::mousePressEvent(QGraphicsSceneMouseEvent*)
     color = Qt::red;
     setZValue(1);
     emit unitDispl_clicked(ptr_UnitToDisplay);
+}
+
+
+// MAP #############################################################
+MapPixel::MapPixel(int x, int y, Qt::GlobalColor color) :
+    QGraphicsRectItem(QRect(x,y,10,10)),
+    colorRect(color)
+{
+}
+
+void MapPixel::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    QPen pen;
+    QBrush brush;
+
+    brush.setStyle(Qt::SolidPattern);
+    brush.setColor(colorRect);
+    pen.setWidth(1);
+    pen.setColor(Qt::black);
+
+    painter->setPen(pen);
+    painter->setBrush(brush);
+    painter->drawRect(rect());
+}
+
+QRectF MapPixel::boundingRect()
+{
+    return rect();
 }

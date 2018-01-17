@@ -63,7 +63,6 @@ protected:
     //"streetCurve"         (Straße mit Kurve)
     //"mountainTop"         (Bergspitze)
     //"mountainSide"        (Bergseite)
-    //"boltanium"           (Boltanium)
     int int_boltaniumCurrent;
     QColor qcolor_HexColor;
     QPixmap qpixmap_boltanium;

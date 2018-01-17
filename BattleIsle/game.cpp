@@ -24,7 +24,8 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     selectionCache(NULL),
     gameOptions(init_options),
     ptr_gameGameWid(ptr_gameWid), ptr_playerOne(new Player("Eins", 1)), ptr_playerTwo(new Player("Zwei", 2)), ptr_playerActive(ptr_playerOne),
-    ptr_roundCurrent(new Round(10))
+    ptr_roundCurrent(new Round(10)),
+    MapView(false)
 {
     // Erstelle eine Map
     // Dies ist nur für Testzwecke! Sollte später gelöscht werden:
@@ -145,15 +146,18 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     ButtonMove* movebutton = new ButtonMove(64,64);
     ButtonAction* actionbutton = new ButtonAction(64,64);
     ButtonChangePhase* changephasebutton = new ButtonChangePhase(64,64);
+    ButtonMap* mapbutton = new ButtonMap(64,64);
     //ButtonMenue* menuebutton = new ButtonMenue(64,64);
 
     button_menueBar.push_back(movebutton);
     button_menueBar.push_back(actionbutton);
     button_menueBar.push_back(changephasebutton);
+    button_menueBar.push_back(mapbutton);
     //button_menueBar.push_back(menuebutton);
     connect(movebutton,SIGNAL(clicked()),this,SLOT(buttonPressedMove()));
     connect(actionbutton,SIGNAL(clicked()),this,SLOT(buttonPressedAction()));
     connect(changephasebutton,SIGNAL(clicked()),this,SLOT(buttonPressedChangePhase()));
+    connect(mapbutton, SIGNAL(clicked()), this, SLOT(buttonPressedMap()));
     //connect(menuebutton,SIGNAL(clicked()),this,SLOT(buttonPressedMenue()));
 
     ptr_gameGameWid->gameWidCreateButtonBar(button_menueBar);
@@ -350,6 +354,22 @@ void Game::buttonPressedAction()
         {
             calculateTargets(selectionCache, selectionCache->getUnit_stationed()->getActionRange());
         }
+    }
+}
+
+void Game::buttonPressedMap()
+{
+    if(!MapView)
+    {
+        MapView = true;
+        ptr_gameGameWid->gameWidCreateMap(hexagonMatchfield_gameGrid, button_menueBar, ptr_playerOne);
+    }
+    else
+    {
+        MapView = false;
+        ptr_gameGameWid->clearAllScenes();
+        ptr_gameGameWid->gameWidCreateMatchfield(hexagonMatchfield_gameGrid);
+        ptr_gameGameWid->gameWidCreateButtonBar(button_menueBar);
     }
 }
 
