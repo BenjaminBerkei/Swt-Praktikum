@@ -326,12 +326,14 @@ void GameWidget::gameWidCreateMap(std::vector<std::vector<HexagonMatchfield *> >
     //"streetCurve"         (Straße mit Kurve)
     //"mountainTop"         (Bergspitze)
     //"mountainSide"        (Bergseite)
-    gameWidMapScene->setSceneRect(ui->graphicsView_gameView->rect());
     qreal pixSize = 10;
-    qreal xCenterView = ui->graphicsView_gameView->rect().center().x();
-    qreal yCenterView = ui->graphicsView_gameView->rect().center().y();
     qreal mapWidth = hexagonGrid.size() * pixSize;
     qreal mapHeight= hexagonGrid[0].size() * pixSize;
+
+    gameWidMapScene->setSceneRect(0,0, mapWidth, mapHeight);
+    qreal xCenterView = gameWidMapScene->sceneRect().center().x();
+    qreal yCenterView = gameWidMapScene->sceneRect().center().y();
+
 
     qreal xStart = xCenterView - .5 * mapWidth;
     qreal yStart = yCenterView - .5 * mapHeight;

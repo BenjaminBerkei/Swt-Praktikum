@@ -80,6 +80,7 @@ public:
     void resizeEvent(QResizeEvent*, int mainHeight, int mainWdith);
     void gameWidCreateMatchfield(std::vector<std::vector<HexagonMatchfield*>> &hexagonGrid);
     void gameWidCreateButtonBar(std::vector<Button *> buttonVector);
+    void gameWidCreateMap(std::vector<std::vector<HexagonMatchfield*>> &hexagonGrid); //Erstellt die Map Uebersicht
     void clearButtonScene();
     void clearInfoScene();
     void clearOptionsScene();
@@ -90,7 +91,6 @@ public:
     void updateMatchfieldScene();
     void repaintGameView();
     void animateUnit(Unit*, std::vector<QPointF>);
-    void gameWidCreateMap(std::vector<std::vector<HexagonMatchfield*>> &hexagonGrid); //Erstellt die Map Uebersicht
 
 
     //get und set Methoden
