@@ -34,6 +34,8 @@
 #include "player.h"
 #include <QTimeLine>
 #include <QGraphicsItemAnimation>
+#include <QPushButton>
+#include <QGraphicsProxyWidget>
 
 class Unit;
 class Player;
@@ -56,11 +58,18 @@ private:
     QGraphicsScene *gameWidInfoScene;
     QGraphicsScene *gameWidOptionsScene;
     QGraphicsScene *gameWidButtonScene;
+    QGraphicsScene *gameWidMenueScene;
+    QGraphicsScene *gameWidMapScene;
 
     QGraphicsTextItem *textItem_currentPlayer;
     QGraphicsTextItem *textItem_currentEnergie;
     QGraphicsTextItem *textItem_currentUnits;
     QGraphicsTextItem *textItem_currentPhase;
+
+    QPushButton* qbuttonSaveGame;
+    QPushButton* qbuttonEndGame;
+    QPushButton* qbuttonLoadGame;
+    QPushButton* qbuttonResume;
 
     int sizeX;
     int sizeY;
@@ -71,13 +80,17 @@ public:
     void resizeEvent(QResizeEvent*, int mainHeight, int mainWdith);
     void gameWidCreateMatchfield(std::vector<std::vector<HexagonMatchfield*>> &hexagonGrid);
     void gameWidCreateButtonBar(std::vector<Button *> buttonVector);
-    void clearScenes(); //Loschet die Info- und Optionsscene
+    void clearButtonScene();
+    void clearInfoScene();
+    void clearOptionsScene();
+    void clearGameScene();
     void clearAllScenes(); //Loescht alle Scenen
+    void setEnableButtonScene(bool);
     void updateInfoOptScenes();
     void updateMatchfieldScene();
     void repaintGameView();
     void animateUnit(Unit*, std::vector<QPointF>);
-    void gameWidCreateMap(std::vector<std::vector<HexagonMatchfield*>> &hexagonGrid, std::vector<Button*> button_menueBar, Player* playerOne); //Erstellt die Map Uebersicht
+    void gameWidCreateMap(std::vector<std::vector<HexagonMatchfield*>> &hexagonGrid); //Erstellt die Map Uebersicht
 
 
     //get und set Methoden
@@ -93,9 +106,22 @@ public:
     QGraphicsScene *getGameWidOptionsScene() const;
     QGraphicsScene *getGameWidGameScene() const;
     QGraphicsScene *getGameWidButtonScene() const;
+    QGraphicsScene *getGameWidMenueScene() const;
+    QGraphicsView* getGameWidGameView() const;
+    QGraphicsScene *getGameWidMapScene() const;
+
+private:
+    void gameWidCreateMenueScene();
+
+private slots:
+    void SLOT_qbuttonSaveGame_clicked();
+    void SLOT_qbuttonLoadGame_clicked();
+    void SLOT_qbuttonEndGame_clicked();
+    void SLOT_qbuttonResume_clicked();
 
 signals:
     void SIGNAL_gameWidChangeIndexFromStack(int);
+    void SIGNAL_MenueButtonPushed(int);
 };
 
 //Klasse um die Hexagons in der Infobox anzeigen zu lassen

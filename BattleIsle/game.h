@@ -36,6 +36,7 @@
 #include <QObject>
 #include <queue>
 #include <QVector3D>
+#include <QGraphicsView>
 
 class GameWidget; //Vorwärtsdeklaration
 class HexagonMatchfield;
@@ -69,12 +70,13 @@ private:
     static std::vector<QPoint> vector_evenNeighbors;
 
     bool MapView; //Sagt an ob man sich in der Map Uebersicht befindet
+    bool MenueView;
 public:
     Game(Options* init_options, GameWidget* ptr_gameWid);
     //Game(QString pathToSaveFile);
-    //void loadGame(QString pathToSaveFile);
-    //void saveGame();
-    //void endGame();
+    void loadGame(QString pathToSaveFile);
+    void saveGame();
+    void endGame();
     void Dijkstra();
 
     /* Nicht im UML-Diagramm, sind nur eine Hilfsfunktionen für processSelection*/
@@ -105,6 +107,7 @@ public slots:
     void buttonPressedMap();
     void buttonPressedMenue();
     void buttonPressedChangePhase();
+    void SLOT_MenueButtonSelected(int);
 };
 class Compare
 {

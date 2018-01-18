@@ -157,7 +157,7 @@ void ButtonChangePhase::printType()
 /*ButtonMenue*/
 ButtonMenue::ButtonMenue(int sizeX, int sizeY)
 {
-    QPixmap pix(":/img/Buttons/hexagonGruenMenue.png");
+    QPixmap pix(":/buttonRess/Buttons/RepairMit.png");
     setPixmap(pix.scaled(sizeX,sizeY));
 }
 

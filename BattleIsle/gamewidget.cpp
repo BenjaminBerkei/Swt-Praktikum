@@ -38,12 +38,82 @@ QGraphicsScene *GameWidget::getGameWidButtonScene() const
     return gameWidButtonScene;
 }
 
+void GameWidget::gameWidCreateMenueScene()
+{
+    qbuttonSaveGame = new QPushButton();
+    qbuttonEndGame = new QPushButton();
+    qbuttonLoadGame = new QPushButton();
+    qbuttonResume = new QPushButton();
+
+    qbuttonSaveGame->setText("qbuttonSaveGame");
+    qbuttonEndGame->setText("qbuttonEndGame");
+    qbuttonLoadGame->setText("qbuttonLoadGame");
+    qbuttonResume->setText("qbuttonResume");
+
+    qbuttonSaveGame->setGeometry(0,0,200,30);
+    qbuttonEndGame->setGeometry(0,0,200,30);
+    qbuttonLoadGame->setGeometry(0,0,200,30);
+    qbuttonResume->setGeometry(0,0,200,30);
+
+    QGraphicsProxyWidget * proxy_saveGame = gameWidMenueScene->addWidget(qbuttonSaveGame);
+    QGraphicsProxyWidget * proxy_endGame = gameWidMenueScene->addWidget(qbuttonEndGame);
+    QGraphicsProxyWidget * proxy_laodGame = gameWidMenueScene->addWidget(qbuttonLoadGame);
+    QGraphicsProxyWidget * proxy_resume = gameWidMenueScene->addWidget(qbuttonResume);
+
+    qreal x = ui->graphicsView_gameView->rect().center().x();
+    qreal y = ui->graphicsView_gameView->rect().center().y();
+    qreal xVersch = 0;
+    qreal yVersch = 50;
+
+    proxy_laodGame->setPos(x,y);
+    proxy_saveGame->setPos(x + xVersch,y + yVersch);
+    proxy_endGame->setPos(x + 2 * xVersch,y + 2 * yVersch);
+    proxy_resume->setPos(x + 3 * xVersch,y + 3 * yVersch);
+
+    connect(qbuttonSaveGame,SIGNAL(clicked()), this, SLOT(SLOT_qbuttonSaveGame_clicked()));
+    connect(qbuttonEndGame,SIGNAL(clicked()), this, SLOT(SLOT_qbuttonEndGame_clicked()));
+    connect(qbuttonLoadGame,SIGNAL(clicked()), this, SLOT(SLOT_qbuttonLoadGame_clicked()));
+    connect(qbuttonResume,SIGNAL(clicked()), this, SLOT(SLOT_qbuttonResume_clicked()));
+}
+
+void GameWidget::SLOT_qbuttonSaveGame_clicked()
+{
+    emit SIGNAL_MenueButtonPushed(0);
+}
+void GameWidget::SLOT_qbuttonLoadGame_clicked()
+{
+    emit SIGNAL_MenueButtonPushed(1);
+}
+void GameWidget::SLOT_qbuttonEndGame_clicked()
+{
+    emit SIGNAL_MenueButtonPushed(2);
+}
+void GameWidget::SLOT_qbuttonResume_clicked()
+{
+    emit SIGNAL_MenueButtonPushed(3);
+}
+
+QGraphicsScene *GameWidget::getGameWidMenueScene() const
+{
+    return gameWidMenueScene;
+}
+
+QGraphicsView *GameWidget::getGameWidGameView() const
+{
+    return ui->graphicsView_gameView;
+}
+
+QGraphicsScene *GameWidget::getGameWidMapScene() const
+{
+    return gameWidMapScene;
+}
+
 GameWidget::GameWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::GameWidget),
     gameWidGameScene(new QGraphicsScene(this)), gameWidInfoScene(new QGraphicsScene(this)),
     gameWidOptionsScene(new QGraphicsScene(this)), gameWidButtonScene(new QGraphicsScene(this)),
-    sizeX(50), sizeY(50)
+    gameWidMenueScene(new QGraphicsScene(this)), gameWidMapScene(new QGraphicsScene(this)), sizeX(50), sizeY(50)
 {
     ui->setupUi(this);
     ui->graphicsView_buttonView->setScene(gameWidButtonScene);
@@ -52,12 +122,14 @@ GameWidget::GameWidget(QWidget *parent) :
     ui->graphicsView_optionsView->setScene(gameWidOptionsScene);
 
     gameWidButtonScene->setSceneRect(ui->graphicsView_buttonView->rect());
+    gameWidMapScene->setSceneRect(ui->graphicsView_buttonView->rect());
 
     textItem_currentPlayer = new QGraphicsTextItem("");
     textItem_currentEnergie= new QGraphicsTextItem("");
     textItem_currentUnits= new QGraphicsTextItem("");
     textItem_currentPhase= new QGraphicsTextItem("");
 
+    gameWidCreateMenueScene();
 
     ui->graphicsView_optionsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->graphicsView_optionsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -159,7 +231,15 @@ void GameWidget::gameWidCreateButtonBar(std::vector<Button*> buttonVector)
     gameWidButtonScene->update();
 }
 
-void GameWidget::clearScenes()
+void GameWidget::clearButtonScene()
+{
+    for(auto &it : gameWidButtonScene->items())
+    {
+        gameWidButtonScene->removeItem(it);
+    }
+}
+
+void GameWidget::clearInfoScene()
 {
     //leere gameWidInfoScene
     for(auto &it : gameWidInfoScene->items())
@@ -168,6 +248,10 @@ void GameWidget::clearScenes()
     }
     gameWidInfoScene->update();
 
+}
+
+void GameWidget::clearOptionsScene()
+{
     //leere gameWidOptionsScene
     for(auto &it : gameWidOptionsScene->items())
     {
@@ -176,35 +260,29 @@ void GameWidget::clearScenes()
     gameWidOptionsScene->update();
 }
 
-void GameWidget::clearAllScenes()
+void GameWidget::clearGameScene()
 {
-    //leere gameWidButtonScene
-    for(auto &it : gameWidButtonScene->items())
-    {
-        gameWidButtonScene->removeItem(it);
-    }
-    gameWidButtonScene->update();
-
-    //leere gameWidGameScene
     for(auto &it : gameWidGameScene->items())
     {
         gameWidGameScene->removeItem(it);
     }
     gameWidGameScene->update();
+}
 
-    //leere gameWidInfoScene
-    for(auto &it : gameWidInfoScene->items())
-    {
-        gameWidInfoScene->removeItem(it);
-    }
-    gameWidInfoScene->update();
+void GameWidget::clearAllScenes()
+{
+    clearButtonScene();
+    clearInfoScene();
+    clearOptionsScene();
+    clearGameScene();
+}
 
-    //leere gameWidOptionsScene
-    for(auto &it : gameWidOptionsScene->items())
+void GameWidget::setEnableButtonScene(bool state)
+{
+    for(auto &it : gameWidButtonScene->items())
     {
-        gameWidOptionsScene->removeItem(it);
+            it->setEnabled(state);
     }
-    gameWidOptionsScene->update();
 }
 
 void GameWidget::updateInfoOptScenes()
@@ -237,9 +315,8 @@ void GameWidget::animateUnit(Unit * unitToAnimate, std::vector<QPointF> points)
     timer->start();
 }
 
-void GameWidget::gameWidCreateMap(std::vector<std::vector<HexagonMatchfield *> > &hexagonGrid, std::vector<Button *> button_menueBar, Player *playerOne)
+void GameWidget::gameWidCreateMap(std::vector<std::vector<HexagonMatchfield *> > &hexagonGrid)
 {
-    clearAllScenes();
     //Mögliche Typen:
     //"waterDeep"           (Tiefes Meer)
     //"waterSeashore"       (Küste)
@@ -249,6 +326,17 @@ void GameWidget::gameWidCreateMap(std::vector<std::vector<HexagonMatchfield *> >
     //"streetCurve"         (Straße mit Kurve)
     //"mountainTop"         (Bergspitze)
     //"mountainSide"        (Bergseite)
+    gameWidMapScene->setSceneRect(ui->graphicsView_gameView->rect());
+    qreal pixSize = 10;
+    qreal xCenterView = ui->graphicsView_gameView->rect().center().x();
+    qreal yCenterView = ui->graphicsView_gameView->rect().center().y();
+    qreal mapWidth = hexagonGrid.size() * pixSize;
+    qreal mapHeight= hexagonGrid[0].size() * pixSize;
+
+    qreal xStart = xCenterView - .5 * mapWidth;
+    qreal yStart = yCenterView - .5 * mapHeight;
+
+    gameWidMapScene->clear();
 
     for(unsigned int i=0; i<hexagonGrid.size(); i++)
     {
@@ -260,7 +348,7 @@ void GameWidget::gameWidCreateMap(std::vector<std::vector<HexagonMatchfield *> >
             {
                 if(hexagonGrid[i][j]->getUnit_stationed() != nullptr) //Zeige Farbe von der Unit
                 {
-                    if(hexagonGrid[i][j]->getUnit_stationed()->getUnitPlayer() == playerOne)
+                    if(hexagonGrid[i][j]->getUnit_stationed()->getUnitPlayer()->getPlayerID() == 1)
                         color = Qt::blue;
                     else
                         color = Qt::red;
@@ -279,13 +367,10 @@ void GameWidget::gameWidCreateMap(std::vector<std::vector<HexagonMatchfield *> >
                         color = Qt::gray;
                 }
             }
-            MapPixel* pixel = new MapPixel(i*10,j*10,color);
-            gameWidGameScene->addItem(pixel);
+            MapPixel* pixel = new MapPixel(xStart + i*pixSize,yStart + j*pixSize,color);
+            gameWidMapScene->addItem(pixel);
         }
     }
-    button_menueBar[3]->setPos(ui->graphicsView_buttonView->width() / 2.0, 20);
-    gameWidButtonScene->addItem(button_menueBar[3]);
-    gameWidButtonScene->update();
 }
 
 void GameWidget::setInfoScene(HexagonDisplayInfo *info)

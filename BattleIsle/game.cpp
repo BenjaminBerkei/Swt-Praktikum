@@ -25,7 +25,7 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     gameOptions(init_options),
     ptr_gameGameWid(ptr_gameWid), ptr_playerOne(new Player("Eins", 1)), ptr_playerTwo(new Player("Zwei", 2)), ptr_playerActive(ptr_playerOne),
     ptr_roundCurrent(new Round(10)),
-    MapView(false)
+    MapView(false), MenueView(false)
 {
     // Erstelle eine Map
     // Dies ist nur für Testzwecke! Sollte später gelöscht werden:
@@ -147,20 +147,37 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     ButtonAction* actionbutton = new ButtonAction(64,64);
     ButtonChangePhase* changephasebutton = new ButtonChangePhase(64,64);
     ButtonMap* mapbutton = new ButtonMap(64,64);
-    //ButtonMenue* menuebutton = new ButtonMenue(64,64);
+    ButtonMenue* menuebutton = new ButtonMenue(64,64);
 
     button_menueBar.push_back(movebutton);
     button_menueBar.push_back(actionbutton);
     button_menueBar.push_back(changephasebutton);
     button_menueBar.push_back(mapbutton);
-    //button_menueBar.push_back(menuebutton);
+    button_menueBar.push_back(menuebutton);
     connect(movebutton,SIGNAL(clicked()),this,SLOT(buttonPressedMove()));
     connect(actionbutton,SIGNAL(clicked()),this,SLOT(buttonPressedAction()));
     connect(changephasebutton,SIGNAL(clicked()),this,SLOT(buttonPressedChangePhase()));
     connect(mapbutton, SIGNAL(clicked()), this, SLOT(buttonPressedMap()));
-    //connect(menuebutton,SIGNAL(clicked()),this,SLOT(buttonPressedMenue()));
+    connect(menuebutton,SIGNAL(clicked()),this,SLOT(buttonPressedMenue()));
+
+    connect(ptr_gameGameWid, SIGNAL(SIGNAL_MenueButtonPushed(int)), this, SLOT(SLOT_MenueButtonSelected(int)));
 
     ptr_gameGameWid->gameWidCreateButtonBar(button_menueBar);
+}
+
+void Game::loadGame(QString )
+{
+    qDebug() << "Load Game";
+}
+
+void Game::saveGame()
+{
+    qDebug() << "SaveGame";
+}
+
+void Game::endGame()
+{
+    qDebug() << "End Game";
 }
 
 void Game::processSelection(HexagonMatchfield *selection)
@@ -362,20 +379,31 @@ void Game::buttonPressedMap()
     if(!MapView)
     {
         MapView = true;
-        ptr_gameGameWid->gameWidCreateMap(hexagonMatchfield_gameGrid, button_menueBar, ptr_playerOne);
+        ptr_gameGameWid->setEnableButtonScene(false);
+        button_menueBar[3]->setEnabled(true);
+        ptr_gameGameWid->gameWidCreateMap(hexagonMatchfield_gameGrid);
+        ptr_gameGameWid->getGameWidGameView()->setScene(ptr_gameGameWid->getGameWidMapScene());
     }
     else
     {
         MapView = false;
-        ptr_gameGameWid->clearAllScenes();
-        ptr_gameGameWid->gameWidCreateMatchfield(hexagonMatchfield_gameGrid);
-        ptr_gameGameWid->gameWidCreateButtonBar(button_menueBar);
+        ptr_gameGameWid->setEnableButtonScene(true);
+        ptr_gameGameWid->getGameWidGameView()->setScene(ptr_gameGameWid->getGameWidGameScene());
     }
 }
 
 void Game::buttonPressedMenue()
 {
-
+    if(MenueView){
+        ptr_gameGameWid->getGameWidGameView()->setScene(ptr_gameGameWid->getGameWidGameScene());
+        ptr_gameGameWid->setEnableButtonScene(true);
+        MenueView = false;
+    }else{
+        ptr_gameGameWid->getGameWidGameView()->setScene(ptr_gameGameWid->getGameWidMenueScene());
+        ptr_gameGameWid->setEnableButtonScene(false);
+        button_menueBar[4]->setEnabled(true);
+        MenueView = true;
+    }
 }
 
 void Game::buttonPressedChangePhase()
@@ -410,6 +438,21 @@ void Game::buttonPressedChangePhase()
     ptr_gameGameWid->getGameWidButtonScene()->update();
 }
 
+void Game::SLOT_MenueButtonSelected(int menue)
+{
+    switch(menue)
+    {
+    case 0 : saveGame(); return;
+    case 1 : loadGame(""); return;
+    case 2 : endGame(); return;
+    case 3 :
+        ptr_gameGameWid->getGameWidGameView()->setScene(ptr_gameGameWid->getGameWidGameScene());
+        ptr_gameGameWid->setEnableButtonScene(true);
+        return;
+    }
+
+}
+
 /*HilfsFunktionen Start#######################################################################*/
 void Game::resetHexMatchfield()
 {
@@ -420,7 +463,8 @@ void Game::resetHexMatchfield()
         selectionCache = nullptr;
     }
     resetTargetCache();
-    ptr_gameGameWid->clearScenes();
+    ptr_gameGameWid->clearInfoScene();
+    ptr_gameGameWid->clearOptionsScene();
 }
 
 void Game::resetTargetCache()
