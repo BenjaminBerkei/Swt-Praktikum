@@ -74,14 +74,11 @@ int StaticUnit::moveTo(HexagonMatchfield* )
 // HQ
 
 HeadquaterUnit::HeadquaterUnit(QString filepath, Player* player)
-	: StaticUnit(filepath, player){}
+    : FactoryUnit(filepath, player)
+{
+}
 
 HeadquaterUnit::~HeadquaterUnit(){}
-
-bool HeadquaterUnit::action(HexagonMatchfield* )
-{
-    return true;
-}
 
 bool HeadquaterUnit::checkUnitDestroyed()
 {
@@ -95,7 +92,7 @@ bool HeadquaterUnit::checkUnitDestroyed()
 
 Unit* HeadquaterUnit::createUnit()
 {
-	return new HeadquaterUnit(unitFile);
+    return new HeadquaterUnit(unitFile, unitPlayer);
 }
 
 // Depot
@@ -134,7 +131,7 @@ void DepotUnit::repairUnit(Unit* unitTarget)
 
 Unit* DepotUnit::createUnit()
 {
-	return new DepotUnit(unitFile);
+    return new DepotUnit(unitFile, unitPlayer);
 }
 
 // Factory
@@ -196,7 +193,7 @@ void FactoryUnit::produceUnit(HexagonMatchfield* hexTarget)
 
 Unit* FactoryUnit::createUnit()
 {
-    return new FactoryUnit(unitFile);
+    return new FactoryUnit(unitFile, unitPlayer);
 }
 
 void FactoryUnit::resetBuildUnloadParameter()

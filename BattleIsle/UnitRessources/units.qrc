@@ -6,6 +6,7 @@
         <file>dynamicUnit/lucas.txt</file>
         <file>dynamicUnit/mannuel.txt</file>
         <file>dynamicUnit/msmiguel.txt</file>
+        <file>dynamicUnit/scpmerlin</file>
     </qresource>
     <qresource prefix="/static">
         <file>staticUnit/depot.txt</file>

@@ -40,15 +40,16 @@ QGraphicsScene *GameWidget::getGameWidButtonScene() const
 
 void GameWidget::gameWidCreateMenueScene()
 {
+
     qbuttonSaveGame = new QPushButton();
     qbuttonEndGame = new QPushButton();
     qbuttonLoadGame = new QPushButton();
     qbuttonResume = new QPushButton();
 
-    qbuttonSaveGame->setText("qbuttonSaveGame");
-    qbuttonEndGame->setText("qbuttonEndGame");
-    qbuttonLoadGame->setText("qbuttonLoadGame");
-    qbuttonResume->setText("qbuttonResume");
+    qbuttonSaveGame->setText("SaveGame");
+    qbuttonEndGame->setText("EndGame");
+    qbuttonLoadGame->setText("LoadGame");
+    qbuttonResume->setText("Resume");
 
     qbuttonSaveGame->setGeometry(0,0,200,30);
     qbuttonEndGame->setGeometry(0,0,200,30);
@@ -124,11 +125,6 @@ GameWidget::GameWidget(QWidget *parent) :
     gameWidButtonScene->setSceneRect(ui->graphicsView_buttonView->rect());
     gameWidMapScene->setSceneRect(ui->graphicsView_buttonView->rect());
 
-    textItem_currentPlayer = new QGraphicsTextItem("");
-    textItem_currentEnergie= new QGraphicsTextItem("");
-    textItem_currentUnits= new QGraphicsTextItem("");
-    textItem_currentPhase= new QGraphicsTextItem("");
-
     gameWidCreateMenueScene();
 
     ui->graphicsView_optionsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -192,6 +188,10 @@ void GameWidget::gameWidCreateMatchfield(std::vector<std::vector<HexagonMatchfie
 
 void GameWidget::gameWidCreateButtonBar(std::vector<Button*> buttonVector)
 {
+    textItem_currentPlayer = new QGraphicsTextItem("");
+    textItem_currentEnergie= new QGraphicsTextItem("");
+    textItem_currentUnits= new QGraphicsTextItem("");
+    textItem_currentPhase= new QGraphicsTextItem("");
 
     QGraphicsTextItem* playerTag = new QGraphicsTextItem("Player: ");
     QGraphicsTextItem* energieTag = new QGraphicsTextItem("Energie: ");
@@ -275,6 +275,15 @@ void GameWidget::clearAllScenes()
     clearInfoScene();
     clearOptionsScene();
     clearGameScene();
+}
+
+void GameWidget::resetGameWidget()
+{
+    gameWidGameScene->clear();
+    gameWidButtonScene->clear();
+    gameWidInfoScene->clear();
+    gameWidOptionsScene->clear();
+    gameWidMapScene->clear();
 }
 
 void GameWidget::setEnableButtonScene(bool state)

@@ -109,7 +109,18 @@ void DynamicUnit::levelUpBonus() {
 	//setze Level alle 3 Kills eins höher
     if (int_unitEXP == 30) {
 		int_unitLevel += 1;
-	}
+        int_unitEXP = 0;
+    }
+}
+
+void DynamicUnit::resetUnit()
+{
+    int_unitCurrentMoveRange = int_unitMoveRange;
+    bool_unitUsed = false;
+    if((int_unitCurrentHP += int_unitAutoRep) > int_unitHP)
+    {
+        int_unitCurrentHP = int_unitHP;
+    }
 }
 
 
@@ -638,32 +649,66 @@ LightUnit *LightUnit::createUnit()
 // BuildLightUnit
 
 BuildLightUnit::BuildLightUnit(QString filepath, Player* player)
-	: LightUnit(filepath, player){}
+    : LightUnit(filepath, player)
+{
+    production["Depot"] = new DepotUnit(":/static/staticUnit/depot.txt", unitPlayer);
+    production["Fabrik"] = new FactoryUnit(":/static/staticUnit/factory.txt", unitPlayer);
+
+    for(auto &it : production)
+    {
+        connect(it.second->getUnitDisplay(), SIGNAL(unitDispl_clicked(Unit*)), this, SLOT(SLOT_setUnitToBuild(Unit*)));
+        vector_unitStorage.push_back(it.second);
+    }
+}
 
 BuildLightUnit::~BuildLightUnit(){}
 
-bool BuildLightUnit::action(HexagonMatchfield* hex_target){
+bool BuildLightUnit::action(HexagonMatchfield* hexTarget){
 	
-	produceUnit(hex_target);
-    if(hex_target->getUnit_stationed() != nullptr){
-		return true;
-	}
-
-	return false;
+    if(bool_unitUsed == true)
+    {
+        return false;
+    }
+    qDebug() << "Builder Action:";
+    qDebug() << "\t" << unitToBuild;
+    if(unitToBuild != "" && unitPlayer->getCurrentEnergieStorage() - production[unitToBuild]->getUnitCost() >= 0
+            && hexTarget->getUnit_stationed() == nullptr && production[unitToBuild]->moveTo(hexTarget) != -1)
+    {
+        produceUnit(hexTarget);
+        resetBuildUnloadParameter();
+        bool_unitUsed = true;
+        return true;
+    }
+    resetBuildUnloadParameter();
+    return false;
 }
 
 
-void BuildLightUnit::produceUnit(HexagonMatchfield* hex_target){
-	int int_energy = unitPlayer->getCurrentEnergieStorage();
-	if(int_energy >= 50){
-        hex_target->setUnit_stationed(new DepotUnit(":/static/staticUnit/depot.txt", unitPlayer));
-		unitPlayer->setCurrentEnergieStorage(int_energy - 50);
-    }
+void BuildLightUnit::produceUnit(HexagonMatchfield* hexTarget)
+{
+    hexTarget->setUnit_stationed(production[unitToBuild]->createUnit());
+    unitPlayer->setCurrentEnergieStorage(unitPlayer->getCurrentEnergieStorage() - hexTarget->getUnit_stationed()->getUnitCost());
 }
 
 BuildLightUnit *BuildLightUnit::createUnit()
 {
     return new BuildLightUnit(unitFile, unitPlayer);
+}
+
+void BuildLightUnit::resetBuildUnloadParameter()
+{
+    if(unitToBuild != "")
+    {
+        production[unitToBuild]->getUnitDisplay()->setColor(Qt::black);
+        production[unitToBuild]->getUnitDisplay()->setZValue(0);
+        unitToBuild = "";
+    }
+}
+
+void BuildLightUnit::SLOT_setUnitToBuild(Unit *unit)
+{
+    resetBuildUnloadParameter();
+    unitToBuild = unit->getUnitName();
 }
 
 

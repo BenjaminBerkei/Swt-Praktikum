@@ -53,6 +53,8 @@ private slots:
     void on_qbutton_startGame_clicked();
     void on_qbutton_loadGame_clicked();
     void on_qbutton_options_clicked();
+    void gameEnded();
+
 
 signals:
     void SIGNAL_smwChangeIndexFromStack(int);

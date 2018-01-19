@@ -86,6 +86,7 @@ public:
     void clearOptionsScene();
     void clearGameScene();
     void clearAllScenes(); //Loescht alle Scenen
+    void resetGameWidget();
     void setEnableButtonScene(bool);
     void updateInfoOptScenes();
     void updateMatchfieldScene();

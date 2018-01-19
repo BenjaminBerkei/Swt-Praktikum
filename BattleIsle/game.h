@@ -73,6 +73,7 @@ private:
     bool MenueView;
 public:
     Game(Options* init_options, GameWidget* ptr_gameWid);
+    ~Game();
     //Game(QString pathToSaveFile);
     void loadGame(QString pathToSaveFile);
     void saveGame();
@@ -108,6 +109,8 @@ public slots:
     void buttonPressedMenue();
     void buttonPressedChangePhase();
     void SLOT_MenueButtonSelected(int);
+signals:
+    void gameOver();
 };
 class Compare
 {

@@ -12,6 +12,23 @@
 #include "menuewidget.h"
 #include "ui_menuewidget.h"
 
+void MenueWidget::setPtr_runningGame(Game *value)
+{
+    if(ptr_runningGame != nullptr)
+    {
+        delete ptr_runningGame;
+        ptr_runningGame = nullptr;
+    }
+    ptr_runningGame = value;
+    qDebug() << "Auf: " << ptr_runningGame << "gesetzt";
+
+}
+
+Game *MenueWidget::getPtr_runningGame() const
+{
+    return ptr_runningGame;
+}
+
 MenueWidget::MenueWidget(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MenueWidget)
@@ -22,6 +39,7 @@ MenueWidget::MenueWidget(QWidget *parent) :
     ptr_mwOptionsWidget = new OptionsWidget(this, this, ptr_mwStartMenueWidget->getPtr_smwOptions());
     ptr_mwLoadGameWidget = new LoadGameWidget(this);
     ptr_mwGameWidget = new GameWidget(this);
+    ptr_runningGame = nullptr;
 
     //Füge die Verschiedenen Fenster dem MenueWidget zu
     ui->stack->addWidget(ptr_mwStartMenueWidget);
@@ -47,4 +65,12 @@ void MenueWidget::resizeEvent(QResizeEvent *event)
     {
         ptr_mwGameWidget->resizeEvent(event, this->height(), this->width());
     }
+}
+
+void MenueWidget::deleteGame()
+{
+    qDebug() << "\t delete";
+    delete ptr_runningGame;
+    qDebug() << "\t delete done";
+    ptr_runningGame = nullptr;
 }

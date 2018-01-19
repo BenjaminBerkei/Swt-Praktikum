@@ -99,7 +99,7 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
 
                     if(hexType != "waterDeep" && hexType != "waterSeashore")
                     {
-                        int randomUnitType = qrand() % 8;
+                        int randomUnitType = qrand() % 9;
 
                         switch(randomUnitType)
                         {
@@ -117,6 +117,7 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
                                 anzHQ++;
                             }
                             break;
+                        case 8 : randomUnit = new BuildLightUnit(":/dynamic/dynamicUnit/scpmerlin", randPlayer); break;
                         }
                     }else{
                         randomUnit = new WaterUnit(":/dynamic/dynamicUnit/msmiguel.txt", randPlayer);
@@ -135,11 +136,6 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     countUnits();
     setFogOfWar();
 
-
-    ptr_gameGameWid->setPlayerLabel(ptr_playerActive->getPlayerName());
-    ptr_gameGameWid->setPhaseLabel("Move");
-    ptr_gameGameWid->setUnitsLabel(ptr_playerActive->getPlayerUnitNumber());
-    ptr_gameGameWid->setEnergieLabel(ptr_playerActive->getCurrentEnergieStorage(), ptr_playerActive->getPlayerTotalEnergie());
        //##################################################################
 
     //Buttons Einfuegen
@@ -163,6 +159,45 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     connect(ptr_gameGameWid, SIGNAL(SIGNAL_MenueButtonPushed(int)), this, SLOT(SLOT_MenueButtonSelected(int)));
 
     ptr_gameGameWid->gameWidCreateButtonBar(button_menueBar);
+
+    ptr_gameGameWid->setPlayerLabel(ptr_playerActive->getPlayerName());
+    ptr_gameGameWid->setPhaseLabel("Move");
+    ptr_gameGameWid->setUnitsLabel(ptr_playerActive->getPlayerUnitNumber());
+    ptr_gameGameWid->setEnergieLabel(ptr_playerActive->getCurrentEnergieStorage(), ptr_playerActive->getPlayerTotalEnergie());
+}
+
+Game::~Game()
+{
+    resetHexMatchfield();
+    for(auto &it : hexagonMatchfield_gameGrid)
+    {
+        for(auto &ut : it)
+        {
+            qDebug() << "\t delete Matchfield";
+            delete ut;
+        }
+    }
+    qDebug() << "\t done";
+
+    for(auto &it : unit_UnitGrid)
+    {
+        for(auto &ut : it)
+        {
+            qDebug() << "\t delete Untis";
+            delete ut;
+        }
+    }
+    qDebug() << "\t done";
+
+    for(auto &it : button_menueBar)
+    {
+        qDebug() << "\t delete buttons";
+        delete it;
+    }
+    qDebug() << "\t done";
+    qDebug() << "delete Players";
+    delete ptr_playerOne;
+    delete ptr_playerTwo;
 }
 
 void Game::loadGame(QString )
@@ -177,7 +212,11 @@ void Game::saveGame()
 
 void Game::endGame()
 {
-    qDebug() << "End Game";
+    emit gameOver();
+
+    qDebug() << "Before reset Game Widget";
+    ptr_gameGameWid->resetGameWidget();
+    qDebug() << "After reset Game Widget";
 }
 
 void Game::processSelection(HexagonMatchfield *selection)
@@ -252,14 +291,10 @@ void Game::processSelection(HexagonMatchfield *selection)
     case PATH :
         qDebug() << "case PATH";
         moveUnitTo(selection);
-        qDebug() << "nach moveUnitTo";
 
         /*Neuen Selection Cache nach Bewegung*/
         selectionCache = selection;
         selectionCache->setState(ACTIVE);
-
-        qDebug() << "selectionCache State:" << selectionCache->getState() << "\n"
-                 << "\t" << selectionCache->getQcolor_HexColor();
 
         /*Darstellungen setzen*/
         ptr_gameGameWid->setInfoScene(selectionCache->getPtr_hexMfieldDisplay());
@@ -269,13 +304,13 @@ void Game::processSelection(HexagonMatchfield *selection)
         setFogOfWar();
         break;
     }
-    qDebug() << "Switch ende";
+    qDebug() << "\t Switch ende";
     checkUnitGrid();
-    checkWinCondition();
     countUnits();
     ptr_gameGameWid->updateInfoOptScenes();
     ptr_gameGameWid->updateMatchfieldScene();
-    qDebug() << "ProcessSelection ende";
+    checkWinCondition();
+    qDebug() << "\t ProcessSelection ende";
 }
 
 void Game::Dijkstra()
@@ -634,10 +669,11 @@ void Game::checkWinCondition()
     if(ptr_playerOne->getPlayerUnitNumber() == 0 || ptr_playerOne->getHQDestroyed())
     {
         qDebug() << "Spieler Eins Verloren";
-    }
-    if(ptr_playerTwo->getPlayerUnitNumber() == 0 || ptr_playerTwo->getHQDestroyed())
+        endGame();
+    }else if(ptr_playerTwo->getPlayerUnitNumber() == 0 || ptr_playerTwo->getHQDestroyed())
     {
         qDebug() << "Spieler Zwei Verloren";
+        endGame();
     }
 }
 

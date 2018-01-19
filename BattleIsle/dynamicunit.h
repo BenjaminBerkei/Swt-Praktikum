@@ -39,6 +39,7 @@ DynamicUnit(QString, Player*);
   
   void autoRepair();
   void levelUpBonus();
+  void resetUnit();
 
 };
 
@@ -145,6 +146,9 @@ public:
 
 class BuildLightUnit : public LightUnit
 {
+    Q_OBJECT
+    QString unitToBuild;
+    std::map<QString, Unit*> production;
 public:
     BuildLightUnit(QString, Player*  = nullptr);
     ~BuildLightUnit();
@@ -152,6 +156,10 @@ public:
     bool action(HexagonMatchfield* );
     void produceUnit(HexagonMatchfield *hex_target);
     virtual BuildLightUnit* createUnit();
+    void resetBuildUnloadParameter();
+
+private slots:
+    void SLOT_setUnitToBuild(Unit* unit);
 };
 
 // Medium

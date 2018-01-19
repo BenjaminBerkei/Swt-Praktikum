@@ -40,17 +40,6 @@ public:
 	int moveTo(HexagonMatchfield*);
 };
 
-class HeadquaterUnit : public StaticUnit
-{
-public:
-    HeadquaterUnit(QString, Player* = nullptr);
-    ~HeadquaterUnit();
-
-	bool action(HexagonMatchfield*);
-    virtual bool checkUnitDestroyed();
-	Unit* createUnit();
-};
-
 class DepotUnit : public StaticUnit
 {
 public:
@@ -85,4 +74,13 @@ private slots:
     void SLOT_setUnitToBuild(Unit* unit);
 };
 
+class HeadquaterUnit : public FactoryUnit
+{
+public:
+    HeadquaterUnit(QString, Player* = nullptr);
+    ~HeadquaterUnit();
+
+    virtual bool checkUnitDestroyed();
+    Unit* createUnit();
+};
 #endif
