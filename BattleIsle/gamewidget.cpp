@@ -387,11 +387,14 @@ void GameWidget::gameWidCreateMap(std::vector<std::vector<HexagonMatchfield *> >
 
 void GameWidget::SLOT_gameWidCenterHex(HexagonMatchfield *hex)
 {
-    /*
-        ptr_gameGameWid->setEnableButtonScene(true);
-        ptr_gameGameWid->getGameWidGameView()->setScene(ptr_gameGameWid->getGameWidGameScene());*/
     setEnableButtonScene(true);
     ui->graphicsView_gameView->setScene(gameWidGameScene);
+    ui->graphicsView_gameView->centerOn(hex);
+}
+
+void GameWidget::SLOT_gameWidDestroyMap()
+{
+
 }
 
 void GameWidget::setInfoScene(HexagonDisplayInfo *info)

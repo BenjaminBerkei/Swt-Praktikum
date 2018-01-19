@@ -120,6 +120,7 @@ private slots:
     void SLOT_qbuttonEndGame_clicked();
     void SLOT_qbuttonResume_clicked();
     void SLOT_gameWidCenterHex(HexagonMatchfield* hex);
+    void SLOT_gameWidDestroyMap();
 
 signals:
     void SIGNAL_gameWidChangeIndexFromStack(int);

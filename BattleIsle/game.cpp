@@ -25,7 +25,7 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     gameOptions(init_options),
     ptr_gameGameWid(ptr_gameWid), ptr_playerOne(new Player("Eins", 1)), ptr_playerTwo(new Player("Zwei", 2)), ptr_playerActive(ptr_playerOne),
     ptr_roundCurrent(new Round(10)),
-    MapView(false), MenueView(false)
+    MenueView(false)
 {
     // Erstelle eine Map
     // Dies ist nur für Testzwecke! Sollte später gelöscht werden:
@@ -412,20 +412,9 @@ void Game::buttonPressedAction()
 
 void Game::buttonPressedMap()
 {
-    if(!MapView)
-    {
-        MapView = true;
         ptr_gameGameWid->setEnableButtonScene(false);
-        button_menueBar[3]->setEnabled(true);
         ptr_gameGameWid->gameWidCreateMap(hexagonMatchfield_gameGrid);
-        ptr_gameGameWid->getGameWidGameView()->setScene(ptr_gameGameWid->getGameWidMapScene());
-    }
-    else
-    {
-        MapView = false;
-        ptr_gameGameWid->setEnableButtonScene(true);
-        ptr_gameGameWid->getGameWidGameView()->setScene(ptr_gameGameWid->getGameWidGameScene());
-    }
+        ptr_gameGameWid->getGameWidGameView()->setScene(ptr_gameGameWid->getGameWidMapScene());   
 }
 
 void Game::buttonPressedMenue()
