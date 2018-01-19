@@ -59,7 +59,7 @@ protected:
     std::map<QString, Unit*> production;
 
 public:
-    FactoryUnit(QString, Player* = nullptr);
+    FactoryUnit(QString, bool ,Player* = nullptr);
 	~FactoryUnit();
 
 	QString getUnitToBuild() const;
@@ -83,4 +83,6 @@ public:
     virtual bool checkUnitDestroyed();
     Unit* createUnit();
 };
+
+
 #endif

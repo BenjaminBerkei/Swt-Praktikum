@@ -45,7 +45,6 @@ void HexagonMatchfield::setState(const MATCHFIELDSTATE &value)
     }
     else if(state == ACTIVE)
     {
-        qDebug() << "\t Active set";
         setZValue(2);
         qcolor_HexColor = Qt::red;
     }
@@ -127,12 +126,8 @@ HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, QString type, U
     }
     //Skalierung kann hier angepasst werden
     setPixmap(pixmap().scaled(64,64));
-
-    if(int_boltaniumCurrent > 0)
-    {
-        qpixmap_boltanium.load(":/img/Boltanium/Boltanium_high.png");
-        qpixmap_boltanium = qpixmap_boltanium.scaled(64,64);
-    }
+    qpixmap_boltanium.load(":/img/Boltanium/Boltanium_high.png");
+    qpixmap_boltanium = qpixmap_boltanium.scaled(64,64);
 
     ptr_hexMfieldDisplay = new HexagonDisplayInfo(this);
 }
@@ -154,10 +149,6 @@ void HexagonMatchfield::paint(QPainter *painter, const QStyleOptionGraphicsItem 
 
     painter->drawPath(shape());
 
-    if(int_boltaniumCurrent > 0)
-    {
-        painter->drawPixmap(0,0,qpixmap_boltanium);
-    }
     if(bool_hexFogOfWar)
     {
         QBrush brush;
@@ -168,6 +159,11 @@ void HexagonMatchfield::paint(QPainter *painter, const QStyleOptionGraphicsItem 
         painter->setBrush(brush);
 
         painter->drawPath(shape());
+    }else{
+        if(int_boltaniumCurrent > 0 )
+        {
+            painter->drawPixmap(0,0,qpixmap_boltanium);
+        }
     }
 }
 

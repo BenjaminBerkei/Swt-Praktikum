@@ -31,6 +31,7 @@ public:
 DynamicUnit(QString, Player*);
 ~DynamicUnit();
 
+virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
   int getUnitAutoRep() const;
   int getUnitLevel() const;
 
@@ -150,7 +151,7 @@ class BuildLightUnit : public LightUnit
     QString unitToBuild;
     std::map<QString, Unit*> production;
 public:
-    BuildLightUnit(QString, Player*  = nullptr);
+    BuildLightUnit(QString,bool, Player*  = nullptr);
     ~BuildLightUnit();
 
     bool action(HexagonMatchfield* );

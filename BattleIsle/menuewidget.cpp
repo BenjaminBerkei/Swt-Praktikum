@@ -20,8 +20,6 @@ void MenueWidget::setPtr_runningGame(Game *value)
         ptr_runningGame = nullptr;
     }
     ptr_runningGame = value;
-    qDebug() << "Auf: " << ptr_runningGame << "gesetzt";
-
 }
 
 Game *MenueWidget::getPtr_runningGame() const
@@ -69,8 +67,6 @@ void MenueWidget::resizeEvent(QResizeEvent *event)
 
 void MenueWidget::deleteGame()
 {
-    qDebug() << "\t delete";
     delete ptr_runningGame;
-    qDebug() << "\t delete done";
     ptr_runningGame = nullptr;
 }

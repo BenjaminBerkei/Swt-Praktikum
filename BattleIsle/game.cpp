@@ -76,6 +76,13 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
                 else
                     vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "forrest", 0));
             }
+            int randBoltanium = qrand() % 100;
+            if(randBoltanium < 20)
+            {
+                int randBoltaniumAmount = (qrand() % 200) + 50;
+                qDebug() << randBoltaniumAmount;
+                vectorHex[j]->setBoltaniumCurrent(randBoltaniumAmount);
+            }
             connect(vectorHex[j],SIGNAL(SIGNAL_clicked(HexagonMatchfield*)),this,SLOT(processSelection(HexagonMatchfield*)));
         }
         hexagonMatchfield_gameGrid.push_back(vectorHex);
@@ -84,7 +91,9 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     qDebug() << "Bemerkung: Zufallsfeld erstellt (in Klasse Game). Nur für Testzwecke.";
 
     //Einheiten belegen
+
     int anzHQ = 0;
+
     for(int i = 0; i < sizeX; i++)
     {
         std::vector<Unit*> vectorUnit;
@@ -109,7 +118,7 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
                         case 3 : randomUnit = new MediumUnit(":/dynamic/dynamicUnit/lucas.txt", randPlayer); break;
                         case 4 : randomUnit = new HeavyUnit(":/dynamic/dynamicUnit/mannuel.txt", randPlayer); break;
                         case 5 : randomUnit = new DepotUnit(":/static/staticUnit/depot.txt", randPlayer); break;
-                        case 6 : randomUnit = new FactoryUnit(":/static/staticUnit/factory.txt", randPlayer); break;
+                        case 6 : randomUnit = new FactoryUnit(":/static/staticUnit/factory.txt", true, randPlayer); break;
                         case 7 :
                             if(anzHQ < 2)
                             {
@@ -117,7 +126,7 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
                                 anzHQ++;
                             }
                             break;
-                        case 8 : randomUnit = new BuildLightUnit(":/dynamic/dynamicUnit/scpmerlin", randPlayer); break;
+                        case 8 : randomUnit = new BuildLightUnit(":/dynamic/dynamicUnit/scpmerlin", true, randPlayer); break;
                         }
                     }else{
                         randomUnit = new WaterUnit(":/dynamic/dynamicUnit/msmiguel.txt", randPlayer);
@@ -132,10 +141,44 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
         }
         unit_UnitGrid.push_back(vectorUnit);
     }
-    ptr_gameGameWid->gameWidCreateMatchfield(hexagonMatchfield_gameGrid);
-    countUnits();
-    setFogOfWar();
+    /*
 
+    for(int i = 0; i < sizeX; i++)
+    {
+        std::vector<Unit*> vectorUnit;
+        for(int j = 0; j < sizeY; j++)
+        {
+            vectorUnit.push_back(nullptr);
+        }
+        unit_UnitGrid.push_back(vectorUnit);
+    }
+    unit_UnitGrid[2][2] = new HeadquaterUnit(":/static/staticUnit/headquater.txt", ptr_playerOne);
+    unit_UnitGrid[3][2] = new TransporterGroundUnit(":/dynamic/dynamicUnit/kevarn.txt", ptr_playerOne);
+    unit_UnitGrid[2][3] = new TransporterGroundUnit(":/dynamic/dynamicUnit/kevarn.txt", ptr_playerOne);
+    unit_UnitGrid[3][3] = new LightUnit(":/dynamic/dynamicUnit/r1demon", ptr_playerOne);
+    hexagonMatchfield_gameGrid[2][2]->setUnit_stationed(unit_UnitGrid[2][2]);
+    hexagonMatchfield_gameGrid[3][2]->setUnit_stationed(unit_UnitGrid[3][2]);
+    hexagonMatchfield_gameGrid[2][3]->setUnit_stationed(unit_UnitGrid[2][3]);
+    hexagonMatchfield_gameGrid[3][3]->setUnit_stationed(unit_UnitGrid[3][3]);
+
+
+    unit_UnitGrid[sizeX - 3][sizeY - 3] = new HeadquaterUnit(":/static/staticUnit/headquater.txt", ptr_playerTwo);
+    unit_UnitGrid[sizeX - 4][sizeY - 3] = new TransporterGroundUnit(":/dynamic/dynamicUnit/kevarn.txt", ptr_playerTwo);
+    unit_UnitGrid[sizeX - 3][sizeY - 4] = new TransporterGroundUnit(":/dynamic/dynamicUnit/kevarn.txt", ptr_playerTwo);
+    unit_UnitGrid[sizeX - 4][sizeY - 4] = new LightUnit(":/dynamic/dynamicUnit/r1demon", ptr_playerTwo);
+    hexagonMatchfield_gameGrid[sizeX - 3][sizeX - 3]->setUnit_stationed(unit_UnitGrid[sizeX - 3][sizeX - 3]);
+    hexagonMatchfield_gameGrid[sizeX - 4][sizeX - 3]->setUnit_stationed(unit_UnitGrid[sizeX - 4][sizeX - 3]);
+    hexagonMatchfield_gameGrid[sizeX - 3][sizeX - 4]->setUnit_stationed(unit_UnitGrid[sizeX - 3][sizeX - 4]);
+    hexagonMatchfield_gameGrid[sizeX - 4][sizeX - 4]->setUnit_stationed(unit_UnitGrid[sizeX - 4][sizeX - 4]);
+*/
+
+    ptr_gameGameWid->gameWidCreateMatchfield(hexagonMatchfield_gameGrid);
+    qDebug() << "\t gameWidCreate Done";
+    countUnits();
+    qDebug() << "\t Count units done";
+    setFogOfWar();
+    qDebug() << "\t fog of war done";
+    qDebug() << "--------------------Feld Erstellt-----------------";
        //##################################################################
 
     //Buttons Einfuegen
@@ -173,29 +216,22 @@ Game::~Game()
     {
         for(auto &ut : it)
         {
-            qDebug() << "\t delete Matchfield";
             delete ut;
         }
     }
-    qDebug() << "\t done";
 
     for(auto &it : unit_UnitGrid)
     {
         for(auto &ut : it)
         {
-            qDebug() << "\t delete Untis";
             delete ut;
         }
     }
-    qDebug() << "\t done";
 
     for(auto &it : button_menueBar)
     {
-        qDebug() << "\t delete buttons";
         delete it;
     }
-    qDebug() << "\t done";
-    qDebug() << "delete Players";
     delete ptr_playerOne;
     delete ptr_playerTwo;
 }
@@ -214,9 +250,7 @@ void Game::endGame()
 {
     emit gameOver();
 
-    qDebug() << "Before reset Game Widget";
     ptr_gameGameWid->resetGameWidget();
-    qDebug() << "After reset Game Widget";
 }
 
 void Game::processSelection(HexagonMatchfield *selection)
@@ -224,13 +258,6 @@ void Game::processSelection(HexagonMatchfield *selection)
     switch(selection->getState())
     {
     case INACTIVE:
-        qDebug() << "case INACTIVE";
-
-        /*Wenn vorher eine auswahl da war, welche ein transporter oder factory war, müssen die zurückgesetzt werden*/
-        if(selectionCache != nullptr && selectionCache->getUnit_stationed() != nullptr)
-        {
-            selectionCache->getUnit_stationed()->resetBuildUnloadParameter();
-        }
 
         resetHexMatchfield();
         selectionCache = selection;
@@ -246,7 +273,6 @@ void Game::processSelection(HexagonMatchfield *selection)
         break;
 
     case ACTIVE:
-        qDebug() << "case ACTIVE";
 
         /*Wenn vorher eine auswahl da war, welche ein transporter oder factory war, müssen die zurückgesetzt werden*/
         if(selectionCache != nullptr && selectionCache->getUnit_stationed() != nullptr)
@@ -257,7 +283,6 @@ void Game::processSelection(HexagonMatchfield *selection)
         break;
 
     case TARGET:
-        qDebug() << "case TARGET";
         if(ptr_roundCurrent->getCurrentPhase() == MOVE)     //Move Phase
         {
             for(auto &it : targetCache)        //Ziele auf zustand TARGET zurücksetzen
@@ -289,7 +314,6 @@ void Game::processSelection(HexagonMatchfield *selection)
         }
         break;
     case PATH :
-        qDebug() << "case PATH";
         moveUnitTo(selection);
 
         /*Neuen Selection Cache nach Bewegung*/
@@ -304,13 +328,11 @@ void Game::processSelection(HexagonMatchfield *selection)
         setFogOfWar();
         break;
     }
-    qDebug() << "\t Switch ende";
     checkUnitGrid();
     countUnits();
     ptr_gameGameWid->updateInfoOptScenes();
     ptr_gameGameWid->updateMatchfieldScene();
     checkWinCondition();
-    qDebug() << "\t ProcessSelection ende";
 }
 
 void Game::Dijkstra()
@@ -448,7 +470,7 @@ void Game::buttonPressedChangePhase()
     if(ptr_roundCurrent->getCurrentPhase() == MOVE)
     {
         ptr_playerActive = ptr_playerActive == ptr_playerOne ? ptr_playerTwo : ptr_playerOne;
-        resetUnits(ptr_playerActive);
+        resetUnits();
         resetHexMatchfield();
         setFogOfWar();
         button_menueBar[0]->setBool_ButtonShowActivation(true); // Setze das der Movebutton nicht "geschwaertzt" werden soll
@@ -677,13 +699,13 @@ void Game::checkWinCondition()
     }
 }
 
-void Game::resetUnits(Player * player)
+void Game::resetUnits()
 {
     for(auto &iteratorX : unit_UnitGrid)    //Durchlaufen des Grids
     {
         for(auto &unit : iteratorX)
         {
-            if(unit != nullptr && unit->getUnitPlayer() == player)
+            if(unit != nullptr)
             {
                 unit->resetUnit();     //Untis Move range zurücksetzen
             }
@@ -700,7 +722,7 @@ void Game::countUnits()
     {
         for(auto &unit : iterator)
         {
-            if(unit != nullptr)
+            if(unit != nullptr && unit->getUnitPlayer() != nullptr)
             {
                 unit->getUnitPlayer()->increaseUnitNumber();
 

@@ -156,6 +156,7 @@ private:
     QString qStringUnitDispUnitLife;
     QString qStringUnitDispMovement;
     QString qStringUnitDispUnitAttack;
+    QString qStringUnitDispUnitCost;
     QColor color;
 
 public:

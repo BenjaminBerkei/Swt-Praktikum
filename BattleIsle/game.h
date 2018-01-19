@@ -90,7 +90,7 @@ public:
     void showPath(HexagonMatchfield *);     //Weg einer bewegung anzeigen
     void checkUnitGrid();                   //Prüfen ob eine Einheit gestorben ist
     void checkWinCondition();               //Prüfen ob ein spieler gewonnen hat
-    void resetUnits(Player*);
+    void resetUnits();
     void countUnits();
     int offset_distance(QPoint, QPoint);
 

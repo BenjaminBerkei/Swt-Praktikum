@@ -40,16 +40,19 @@ StartMenueWidget::~StartMenueWidget()
 
 void StartMenueWidget::startGame( Options *options_initOptions )
 {
+    //Erstelle ein Objekt vom Typ Game
+    ptr_smwMenueWidget->setPtr_runningGame(new Game(options_initOptions, ptr_smwMenueWidget->getPtr_mwGameWidget()));
+    connect(ptr_smwMenueWidget->getPtr_runningGame(), SIGNAL(gameOver()), this, SLOT(gameEnded()));
+
     ptr_smwMenueWidget->resize( 1200,750 );
     ptr_smwMenueWidget->ui->stack->resize( 1190, 740 );
     ptr_smwMenueWidget->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
 
-    //Erstelle ein Objekt vom Typ Game
-    ptr_smwMenueWidget->setPtr_runningGame(new Game(options_initOptions, ptr_smwMenueWidget->getPtr_mwGameWidget()));
-    connect(ptr_smwMenueWidget->getPtr_runningGame(), SIGNAL(gameOver()), this, SLOT(gameEnded()));
     //Wechsel zu Widget 3
     emit SIGNAL_smwChangeIndexFromStack( 3 );
     //Das Signal wird im Konstruktor von MenueWidget verbunden
+
+
 }
 
 void StartMenueWidget::switchToOptions()
@@ -104,18 +107,10 @@ void StartMenueWidget::on_qbutton_options_clicked()
 
 void StartMenueWidget::gameEnded()
 {
-    qDebug() << "Before Delete Game";
     ptr_smwMenueWidget->deleteGame();
-    qDebug() << "\t After Delete Game";
-    qDebug() << "Before Resize";
     ptr_smwMenueWidget->resize(400, 500);
     ptr_smwMenueWidget->ui->stack->resize(380, 440);
-    qDebug() << "\t After Resize";
-    qDebug() << "Before Move";
     ptr_smwMenueWidget->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
-    qDebug() << "\t After Move";
-    qDebug() << "Emit stack change";
+    ptr_smwMenueWidget->repaint();
     emit SIGNAL_smwChangeIndexFromStack(0);
-    qDebug() << "\t after Emit stack change";
-
 }

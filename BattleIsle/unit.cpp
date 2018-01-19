@@ -53,6 +53,15 @@ void Unit::produceUnit(HexagonMatchfield*)
     return;
 }
 
+void Unit::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    if(bool_unitUsed == true)
+    {
+        painter->setOpacity(.7);
+    }
+    QGraphicsPixmapItem::paint(painter,option,widget);
+}
+
 void Unit::resetUnit()
 {
     int_unitCurrentMoveRange = int_unitMoveRange;

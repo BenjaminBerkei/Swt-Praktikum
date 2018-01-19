@@ -66,7 +66,7 @@ public:
     virtual void autoRepair();
     virtual void levelUpBonus();
     virtual void produceUnit(HexagonMatchfield*);
-
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     /*Hilfsfunktionen*/
     virtual void resetUnit();
     virtual void addUnitToStorage(Unit* unit);
@@ -105,5 +105,6 @@ public:
     void setUnitEXP(const int);
     void setVector_unitStorage(const std::vector<Unit *> &value);
 };
+
 
 #endif

@@ -49,7 +49,6 @@ DynamicUnit::DynamicUnit(QString filepath, Player* player)
 
     QString pixmapPathPlayerOne = in.readLine();
     QString pixmapPathPlayerTwo = in.readLine();
-
     QPixmap pix;
     if(player == nullptr)
     {
@@ -77,6 +76,15 @@ DynamicUnit::DynamicUnit(QString filepath, Player* player)
 }
 
 DynamicUnit::~DynamicUnit(){}
+
+void DynamicUnit::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    if(bool_unitUsed == true || int_unitCurrentMoveRange == 0)
+    {
+        painter->setOpacity(.7);
+    }
+    QGraphicsPixmapItem::paint(painter,option,widget);
+}
 
 int DynamicUnit::getUnitAutoRep() const{
 		return int_unitAutoRep;
@@ -127,7 +135,7 @@ void DynamicUnit::resetUnit()
 // TransporterUnit
 
 TransporterUnit::TransporterUnit(QString filepath, Player* player)
-	: DynamicUnit(filepath, player){}
+    : DynamicUnit(filepath, player), unitToUnload(nullptr){}
 
 TransporterUnit::~TransporterUnit(){}
 
@@ -145,14 +153,20 @@ void TransporterUnit::setTransporterUnitCurrentCapacity(const int newCurrentCapa
 
 
 bool TransporterUnit::action(HexagonMatchfield* hex_target){
-    if(hex_target->getUnit_stationed() == nullptr){
+    qDebug() << "Transporter Action";
+    qDebug() << "\t " << hex_target->getQpoint_gridPosition();
+    if(hex_target->getUnit_stationed() == nullptr)
+    {
+        qDebug() << "\t Unit = null";
         if(unitToUnload != nullptr && unitToUnload->moveTo(hex_target) != -1)
         {
+            qDebug() << "unitToUnload != null";
             unload(hex_target);
             resetBuildUnloadParameter();
             return true;
         }
         else if(hex_target->getBoltaniumCurrent() > 0 ){
+            qDebug() << "\t Boltanium > 0";
 			farmBoltanium(hex_target);
 			return true;
 		}
@@ -176,12 +190,14 @@ void TransporterUnit::unload(HexagonMatchfield* hex_target){
 }
 
 void TransporterUnit::farmBoltanium(HexagonMatchfield* hex_target){
-	if(hex_target->getBoltaniumCurrent() > 10){
+    if(hex_target->getBoltaniumCurrent() >= 10){
+        qDebug() << "\t >= 10 : " << hex_target->getBoltaniumCurrent();
 		unitPlayer->setCurrentEnergieStorage(unitPlayer->getCurrentEnergieStorage() + 10);
 		hex_target->setBoltaniumCurrent(hex_target->getBoltaniumCurrent() - 10);
 	}
 	
 	else{
+        qDebug() << "\t < 10 : " << hex_target->getBoltaniumCurrent();
 		unitPlayer->setCurrentEnergieStorage(unitPlayer->getCurrentEnergieStorage() + hex_target->getBoltaniumCurrent());
 		hex_target->setBoltaniumCurrent(0);
     }
@@ -195,7 +211,6 @@ void TransporterUnit::addUnitToStorage(Unit *unit)
 
 void TransporterUnit::resetBuildUnloadParameter()
 {
-    qDebug() << "ResetBuidlLoadParamter";
     if(unitToUnload != nullptr)
     {
         for(auto &it : vector_unitStorage)
@@ -648,16 +663,21 @@ LightUnit *LightUnit::createUnit()
 
 // BuildLightUnit
 
-BuildLightUnit::BuildLightUnit(QString filepath, Player* player)
+BuildLightUnit::BuildLightUnit(QString filepath, bool bool_loadInventory, Player* player)
     : LightUnit(filepath, player)
 {
-    production["Depot"] = new DepotUnit(":/static/staticUnit/depot.txt", unitPlayer);
-    production["Fabrik"] = new FactoryUnit(":/static/staticUnit/factory.txt", unitPlayer);
+    qDebug() << "BuildLightUnit: " << bool_loadInventory;
 
-    for(auto &it : production)
+    if(bool_loadInventory == true)
     {
-        connect(it.second->getUnitDisplay(), SIGNAL(unitDispl_clicked(Unit*)), this, SLOT(SLOT_setUnitToBuild(Unit*)));
-        vector_unitStorage.push_back(it.second);
+        production["Depot"] = new DepotUnit(":/static/staticUnit/depot.txt", unitPlayer);
+        production["Fabrik"] = new FactoryUnit(":/static/staticUnit/factory.txt", false, unitPlayer);
+
+        for(auto &it : production)
+        {
+            connect(it.second->getUnitDisplay(), SIGNAL(unitDispl_clicked(Unit*)), this, SLOT(SLOT_setUnitToBuild(Unit*)));
+            vector_unitStorage.push_back(it.second);
+        }
     }
 }
 
@@ -669,8 +689,6 @@ bool BuildLightUnit::action(HexagonMatchfield* hexTarget){
     {
         return false;
     }
-    qDebug() << "Builder Action:";
-    qDebug() << "\t" << unitToBuild;
     if(unitToBuild != "" && unitPlayer->getCurrentEnergieStorage() - production[unitToBuild]->getUnitCost() >= 0
             && hexTarget->getUnit_stationed() == nullptr && production[unitToBuild]->moveTo(hexTarget) != -1)
     {
@@ -692,7 +710,7 @@ void BuildLightUnit::produceUnit(HexagonMatchfield* hexTarget)
 
 BuildLightUnit *BuildLightUnit::createUnit()
 {
-    return new BuildLightUnit(unitFile, unitPlayer);
+    return new BuildLightUnit(unitFile, true, unitPlayer);
 }
 
 void BuildLightUnit::resetBuildUnloadParameter()

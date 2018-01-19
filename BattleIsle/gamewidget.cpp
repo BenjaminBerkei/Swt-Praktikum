@@ -146,7 +146,7 @@ void GameWidget::resizeEvent(QResizeEvent *,int mainHeight, int mainWidth)
     ui->graphicsView_optionsView->setGeometry(xLeftTop + ui->graphicsView_gameView->width() + 5, yLeftTop + ui->graphicsView_informationsView->height() + 5, ui->graphicsView_informationsView->width(), this->height() - 100);
     ui->graphicsView_buttonView->setGeometry(xLeftTop, yLeftTop + ui->graphicsView_gameView->height() + 10, ui->graphicsView_gameView->width(), 110);
 
-    gameWidOptionsScene->setSceneRect(0,0, ui->graphicsView_optionsView->width() + 10,120 * gameWidOptionsScene->items().size() + 20);
+    gameWidOptionsScene->setSceneRect(0,0, ui->graphicsView_optionsView->width(),130 * gameWidOptionsScene->items().size());
 }
 
 void GameWidget::gameWidCreateMatchfield(std::vector<std::vector<HexagonMatchfield*>> &hexagonGrid)
@@ -404,12 +404,11 @@ void GameWidget::setOptScene(std::vector<Unit *> vector_Unit)
 
     if(vector_Unit.size() > 0)
     {
-        gameWidOptionsScene->setSceneRect(0,0, vector_Unit[0]->getUnitDisplay()->rect().width(),
-                                            120 * vector_Unit.size() + 20);
+        gameWidOptionsScene->setSceneRect(0,0, vector_Unit[0]->getUnitDisplay()->rect().width(), 130 * vector_Unit.size());
         for(unsigned i = 0; i < vector_Unit.size(); i++)
         {
             gameWidOptionsScene->addItem(vector_Unit[i]->getUnitDisplay());
-            vector_Unit[i]->getUnitDisplay()->setPos(50, i * vector_Unit[i]->getUnitDisplay()->rect().height() + 60);
+            vector_Unit[i]->getUnitDisplay()->setPos(50, i * vector_Unit[i]->getUnitDisplay()->rect().height() + 75);
         }
     }
     gameWidOptionsScene->update();
@@ -522,7 +521,7 @@ void UnitDisplayInfo::setColor(const QColor &value)
 }
 
 UnitDisplayInfo::UnitDisplayInfo(Unit *ptr_Unit)
-    : QGraphicsRectItem(QRectF(-50,-50,230,100), 0), ptr_UnitToDisplay(ptr_Unit), color(Qt::black)
+    : QGraphicsRectItem(QRectF(-50,-50,230,120), 0), ptr_UnitToDisplay(ptr_Unit), color(Qt::black)
 {
     updateText();
 }
@@ -537,7 +536,17 @@ void UnitDisplayInfo::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
     painter->drawText(QRectF(20,10,200,20),qStringUnitDispMovement);
     painter->drawText(QRectF(20,30,200,20),qStringUnitDispUnitAttack);
 
-    painter->setPen(QPen(color));
+    if(ptr_UnitToDisplay->getUnitPlayer()->getCurrentEnergieStorage() <  ptr_UnitToDisplay->getUnitCost())
+    {
+        painter->setPen(QPen(Qt::red));
+    }
+    painter->drawText(QRectF(20,50,200,20),qStringUnitDispUnitCost);
+
+    QPen pen;
+    pen.setWidth(3);
+    pen.setColor(color);
+
+    painter->setPen(pen);
     painter->drawRect(rect());
 
 }
@@ -553,6 +562,7 @@ void UnitDisplayInfo::updateText()
     qStringUnitDispUnitAttack = "Attack: A" + QString::number(ptr_UnitToDisplay->getUnitAirAtt()) + "/"
             + "G" + QString::number(ptr_UnitToDisplay->getUnitGroundAtt()) + "/"
             + "W" + QString::number(ptr_UnitToDisplay->getUnitWaterAtt());
+    qStringUnitDispUnitCost = "Cost: " + QString::number(ptr_UnitToDisplay->getUnitCost());
 }
 
 void UnitDisplayInfo::mousePressEvent(QGraphicsSceneMouseEvent*)

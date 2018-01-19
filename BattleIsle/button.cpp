@@ -163,7 +163,6 @@ ButtonMenue::ButtonMenue(int sizeX, int sizeY)
 
 void ButtonMenue::mousePressEvent(QGraphicsSceneMouseEvent *)
 {
-    qDebug() << "Meldung: Menue Button gedrückt.";
     emit clicked();
 }
 

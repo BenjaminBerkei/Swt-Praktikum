@@ -29,7 +29,7 @@ private:
     bool bool_HQDestroyed;
 
 public: 
-    Player(QString, int, int = 1000, int = 1000, int = 0, int = 0);
+    Player(QString, int, int = 1000, int = 250, int = 0, int = 0);
     ~Player();
     void increaseUnitNumber();
     void decreaseUnitNumber();
