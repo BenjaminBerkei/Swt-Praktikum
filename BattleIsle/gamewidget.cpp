@@ -379,6 +379,7 @@ void GameWidget::gameWidCreateMap(std::vector<std::vector<HexagonMatchfield *> >
                 }
             }
             MapPixel* pixel = new MapPixel(xStart + i*pixSize,yStart + j*pixSize,color);
+            connect(pixel, SIGNAL(SIGNAL_mapPixelClicked()), hexagonGrid[i][j], SLOT(mousePressEvent()));
             gameWidMapScene->addItem(pixel);
         }
     }
@@ -583,6 +584,11 @@ void MapPixel::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidge
     painter->setPen(pen);
     painter->setBrush(brush);
     painter->drawRect(rect());
+}
+
+void MapPixel::mousePressEvent(QGraphicsSceneMouseEvent *)
+{
+    emit SIGNAL_mapPixelClicked();
 }
 
 QRectF MapPixel::boundingRect()

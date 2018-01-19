@@ -170,14 +170,19 @@ signals:
 };
 
 
-class MapPixel : public QGraphicsRectItem
+class MapPixel : public QObject, public QGraphicsRectItem
 {
+    Q_OBJECT
 private:
     Qt::GlobalColor colorRect;
 public:
     MapPixel(int x, int y, Qt::GlobalColor color);
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
     QRectF boundingRect();
+
+signals:
+    void SIGNAL_mapPixelClicked();
 };
 #endif // GAMEWIDGET_H
