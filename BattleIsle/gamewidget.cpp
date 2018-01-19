@@ -351,6 +351,7 @@ void GameWidget::gameWidCreateMap(std::vector<std::vector<HexagonMatchfield *> >
 
     for(unsigned int i=0; i<hexagonGrid.size(); i++)
     {
+        std::vector<MapPixel*> vecMapPixel;
         for(unsigned int j=0; j<hexagonGrid[i].size(); j++)
         {
 
@@ -380,8 +381,11 @@ void GameWidget::gameWidCreateMap(std::vector<std::vector<HexagonMatchfield *> >
             }
             MapPixel* pixel = new MapPixel(xStart + i*pixSize,yStart + j*pixSize,color);
             connect(pixel, SIGNAL(SIGNAL_mapPixelClicked()), hexagonGrid[i][j], SLOT(mousePressEvent()));
+            connect(pixel, SIGNAL(SIGNAL_mapPixelClicked()),this, SLOT(SLOT_gameWidDestroyMap()));
+            vecMapPixel.push_back(pixel);
             gameWidMapScene->addItem(pixel);
         }
+        vectorVector_gameWidMiniMap.push_back(vecMapPixel);
     }
 }
 
@@ -394,7 +398,16 @@ void GameWidget::SLOT_gameWidCenterHex(HexagonMatchfield *hex)
 
 void GameWidget::SLOT_gameWidDestroyMap()
 {
+    for(int i = vectorVector_gameWidMiniMap.size() - 1; i >= 0; i--)
+    {
+        for(int j = vectorVector_gameWidMiniMap[i].size() - 1; j >= 0; j--)
+        {
+            delete vectorVector_gameWidMiniMap[i][j];
+            vectorVector_gameWidMiniMap[i].pop_back();
+        }
 
+    }
+    qDebug() << "Bemerkung: MiniMap zerstört";
 }
 
 void GameWidget::setInfoScene(HexagonDisplayInfo *info)

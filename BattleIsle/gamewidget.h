@@ -36,6 +36,7 @@
 #include <QGraphicsItemAnimation>
 #include <QPushButton>
 #include <QGraphicsProxyWidget>
+#include <vector>
 
 class Unit;
 class Player;
@@ -70,6 +71,8 @@ private:
     QPushButton* qbuttonEndGame;
     QPushButton* qbuttonLoadGame;
     QPushButton* qbuttonResume;
+
+    std::vector<std::vector<MapPixel*>> vectorVector_gameWidMiniMap;
 
     int sizeX;
     int sizeY;
