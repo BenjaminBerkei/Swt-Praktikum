@@ -77,6 +77,7 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
                     vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "forrest", 0));
             }
             connect(vectorHex[j],SIGNAL(SIGNAL_clicked(HexagonMatchfield*)),this,SLOT(processSelection(HexagonMatchfield*)));
+            connect(vectorHex[j],SIGNAL(SIGNAL_centerThis(HexagonMatchfield*)), ptr_gameWid, SLOT(SLOT_gameWidCenterHex(HexagonMatchfield*)));
         }
         hexagonMatchfield_gameGrid.push_back(vectorHex);
     }

@@ -385,6 +385,15 @@ void GameWidget::gameWidCreateMap(std::vector<std::vector<HexagonMatchfield *> >
     }
 }
 
+void GameWidget::SLOT_gameWidCenterHex(HexagonMatchfield *hex)
+{
+    /*
+        ptr_gameGameWid->setEnableButtonScene(true);
+        ptr_gameGameWid->getGameWidGameView()->setScene(ptr_gameGameWid->getGameWidGameScene());*/
+    setEnableButtonScene(true);
+    ui->graphicsView_gameView->setScene(gameWidGameScene);
+}
+
 void GameWidget::setInfoScene(HexagonDisplayInfo *info)
 {
     for(auto &it : gameWidInfoScene->items())

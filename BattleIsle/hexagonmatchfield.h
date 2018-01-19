@@ -94,6 +94,7 @@ public slots:
 
 signals:
     void SIGNAL_clicked(HexagonMatchfield*);
+    void SIGNAL_centerThis(HexagonMatchfield*);
 };
 
 #endif // HEXAGONMATCHFIELD_H

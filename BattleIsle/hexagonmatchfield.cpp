@@ -139,7 +139,13 @@ HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, QString type, U
 
 void HexagonMatchfield::mousePressEvent( QGraphicsSceneMouseEvent *)
 {
-    //Hier muss evetntuell noch was hin.
+    if(isActive())
+    {
+    }
+    else
+    {
+        emit SIGNAL_centerThis(this);
+    }
     emit SIGNAL_clicked( this );
 }
 
