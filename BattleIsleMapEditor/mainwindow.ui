@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1851</width>
+    <height>1046</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QGraphicsView" name="hexfieldGraphic">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>0</y>
+      <width>1641</width>
+      <height>951</height>
+     </rect>
+    </property>
+    <property name="sizeAdjustPolicy">
+     <enum>QAbstractScrollArea::AdjustToContents</enum>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>10</y>
+      <width>101</width>
+      <height>48</height>
+     </rect>
+    </property>
+    <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>X</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QSpinBox" name="spinBoxX"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Y</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QSpinBox" name="spinBoxY"/>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QGraphicsView" name="menueView">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>70</y>
+      <width>191</width>
+      <height>841</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="HexMenueBut">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>920</y>
+      <width>60</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Hexagon</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="UnitMenueBut">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>920</y>
+      <width>60</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Einheiten</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="ResetButton">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>960</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Reset</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="spinBoltanium">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>960</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>960</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Boltanium</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="rotateLBut">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>950</y>
+      <width>75</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;- Rotate</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="rotateRBut">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>950</y>
+      <width>75</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Rotate -&gt;</string>
+    </property>
+   </widget>
+   <zorder>menueView</zorder>
+   <zorder>hexfieldGraphic</zorder>
+   <zorder>layoutWidget</zorder>
+   <zorder>HexMenueBut</zorder>
+   <zorder>UnitMenueBut</zorder>
+   <zorder>ResetButton</zorder>
+   <zorder>spinBoltanium</zorder>
+   <zorder>label_3</zorder>
+   <zorder>rotateLBut</zorder>
+   <zorder>rotateRBut</zorder>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1851</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
