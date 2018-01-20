@@ -255,11 +255,21 @@ void Game::endGame()
 
 void Game::processSelection(HexagonMatchfield *selection)
 {
+    /*
+     * Verarbeitet die Eingabe des Nutzers.
+     * Zustad von Selection:
+     *      INACTIVE: Der SelectionCache wird auf selection gesetzt. Zudem werden die Scenes in gameWidget entsprechend angepasst.
+     *                  Der TargetCache wird zurückgesetzt und der state von selection wir auf ACTIVE gesetzt
+     *      ACTIVE: Das Spielfeld wird zurückgesetzt und der SelectionCache auf nullptr
+     *      TARGET: Wenn Round MOVE zurückliefert wird der Weg vom SelectionCache zur selection angezeigt
+     *              Wenn Round ACTION zurückliefert wird die action Funktion der der ausgewählten Einheit ausgeführt
+     *      PATH: Die ausgewählte Einheit wird auf die selection verlegt
+     * */
     switch(selection->getState())
     {
     case INACTIVE:
-
         resetHexMatchfield();
+
         selectionCache = selection;
         ptr_gameGameWid->setInfoScene(selectionCache->getPtr_hexMfieldDisplay());
 
@@ -273,13 +283,13 @@ void Game::processSelection(HexagonMatchfield *selection)
         break;
 
     case ACTIVE:
+        resetHexMatchfield();
 
         /*Wenn vorher eine auswahl da war, welche ein transporter oder factory war, müssen die zurückgesetzt werden*/
         if(selectionCache != nullptr && selectionCache->getUnit_stationed() != nullptr)
         {
             selectionCache->getUnit_stationed()->resetBuildUnloadParameter();
         }
-        resetHexMatchfield();
         break;
 
     case TARGET:
@@ -337,6 +347,10 @@ void Game::processSelection(HexagonMatchfield *selection)
 
 void Game::Dijkstra()
 {
+    /*
+     * Berechnung aller kürzesten Wege vom SelectionCache aus innerhalb der Reichweite
+     * Setzt den TargetChache mit den berechneten Zielen und setzt deren state auf TARGET
+     * */
     HexagonMatchfield* target = selectionCache;
 
     std::priority_queue<std::pair<HexagonMatchfield*, int>, std::vector<std::pair<HexagonMatchfield*, int>>, Compare> frontier;
@@ -407,6 +421,9 @@ void Game::Dijkstra()
 /*Move Button ausgewählt*/
 void Game::buttonPressedMove()
 {
+    /*
+     * Wenn der SLOT ausgelöst wird, wir
+     * */
     if(ptr_roundCurrent->getCurrentPhase() == MOVE)     //Phase prüfen
     {
         /*Wenn ein Feld ausgewählt wurde auf dem eine Einheit steht, welche dem aktiven Spieler gehört*/
@@ -470,7 +487,6 @@ void Game::buttonPressedChangePhase()
     if(ptr_roundCurrent->getCurrentPhase() == MOVE)
     {
         ptr_playerActive = ptr_playerActive == ptr_playerOne ? ptr_playerTwo : ptr_playerOne;
-        resetUnits();
         resetHexMatchfield();
         setFogOfWar();
         button_menueBar[0]->setBool_ButtonShowActivation(true); // Setze das der Movebutton nicht "geschwaertzt" werden soll
@@ -491,7 +507,8 @@ void Game::buttonPressedChangePhase()
     {
         selectionCache->getUnit_stationed()->resetBuildUnloadParameter();
     }
-
+    resetUnits();
+    ptr_gameGameWid->repaintGameView();
     ptr_gameGameWid->getGameWidButtonScene()->update();
 }
 
@@ -707,7 +724,8 @@ void Game::resetUnits()
         {
             if(unit != nullptr)
             {
-                unit->resetUnit();     //Untis Move range zurücksetzen
+                unit->resetMovementRange();     //Untis Move range zurücksetzen
+                unit->resetUnitUsed();
             }
         }
     }

@@ -62,9 +62,14 @@ void Unit::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     QGraphicsPixmapItem::paint(painter,option,widget);
 }
 
-void Unit::resetUnit()
+void Unit::resetMovementRange()
 {
     int_unitCurrentMoveRange = int_unitMoveRange;
+
+}
+
+void Unit::resetUnitUsed()
+{
     bool_unitUsed = false;
 }
 

@@ -68,7 +68,8 @@ public:
     virtual void produceUnit(HexagonMatchfield*);
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     /*Hilfsfunktionen*/
-    virtual void resetUnit();
+    virtual void resetMovementRange();
+    virtual void resetUnitUsed();
     virtual void addUnitToStorage(Unit* unit);
     virtual void resetBuildUnloadParameter();
     /*Hilfsfunktionen Ende*/
