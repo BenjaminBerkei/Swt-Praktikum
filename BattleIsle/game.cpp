@@ -137,6 +137,15 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     countUnits();
     setFogOfWar();
 
+    /*for(unsigned int i = 0; i < unit_UnitGrid.size(); i++)
+    {
+        for(unsigned int j = 0; j < unit_UnitGrid[i].size(); j++)
+        {
+            if(unit_UnitGrid[i][j] != nullptr)
+                qDebug() << "Unit (" << i << "," << j << ") ist vom Typ: |" << typeid(*unit_UnitGrid[i][j]).name() << "|";
+        }
+    }*/
+
        //##################################################################
 
     //Buttons Einfuegen

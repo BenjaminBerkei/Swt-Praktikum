@@ -291,6 +291,10 @@ void GameWidget::setEnableButtonScene(bool state)
     for(auto &it : gameWidButtonScene->items())
     {
             it->setEnabled(state);
+            if(state)
+                it->show();
+            else
+                it->hide();
     }
 }
 
@@ -355,7 +359,7 @@ void GameWidget::gameWidCreateMap(std::vector<std::vector<HexagonMatchfield *> >
         for(unsigned int j=0; j<hexagonGrid[i].size(); j++)
         {
 
-            Qt::GlobalColor color = Qt::black; // Grundfarbe
+            /*Qt::GlobalColor color = Qt::black; // Grundfarbe
             if(!hexagonGrid[i][j]->getHexFogOfWar())
             {
                 if(hexagonGrid[i][j]->getUnit_stationed() != nullptr) //Zeige Farbe von der Unit
@@ -378,8 +382,8 @@ void GameWidget::gameWidCreateMap(std::vector<std::vector<HexagonMatchfield *> >
                     if(hexagonGrid[i][j]->getHexMatchfieldType() == "mountainTop")
                         color = Qt::gray;
                 }
-            }
-            MapPixel* pixel = new MapPixel(xStart + i*pixSize,yStart + j*pixSize,color);
+            }*/
+            MapPixel* pixel = new MapPixel(xStart + i*pixSize,yStart + j*pixSize,hexagonGrid[i][j]);
             connect(pixel, SIGNAL(SIGNAL_mapPixelClicked()), hexagonGrid[i][j], SLOT(mousePressEvent()));
             connect(pixel, SIGNAL(SIGNAL_mapPixelClicked()),this, SLOT(SLOT_gameWidDestroyMap()));
             vecMapPixel.push_back(pixel);
@@ -407,7 +411,6 @@ void GameWidget::SLOT_gameWidDestroyMap()
         }
 
     }
-    qDebug() << "Bemerkung: MiniMap zerstört";
 }
 
 void GameWidget::setInfoScene(HexagonDisplayInfo *info)
@@ -590,25 +593,97 @@ void UnitDisplayInfo::mousePressEvent(QGraphicsSceneMouseEvent*)
 
 
 // MAP #############################################################
-MapPixel::MapPixel(int x, int y, Qt::GlobalColor color) :
+MapPixel::MapPixel(int x, int y, HexagonMatchfield *hex) :
     QGraphicsRectItem(QRect(x,y,10,10)),
-    colorRect(color)
+    ptr_mapPixHexaon(hex),
+    qpoint_mapPixPosition(QPoint(x,y))
 {
 }
 
 void MapPixel::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
+
+    Qt::GlobalColor colorBrush = Qt::black; // Grundfarbe
+    Qt::GlobalColor colorRect = Qt:: black;
+    int rectWidth = 1;
+    int zKoord = 1;
+    /* zKoor:
+     * 1: Normal
+     * 2: HeadQuater
+     * 3: Active
+     */
+        // Für das Grundrechteck
+        if((!ptr_mapPixHexaon->getHexFogOfWar()) && ptr_mapPixHexaon->getUnit_stationed() != nullptr && ptr_mapPixHexaon->getUnit_stationed()->getUnitMoveRange() == 0) // Alle statische Einheiten
+        {
+            if(ptr_mapPixHexaon->getUnit_stationed()->getUnitPlayer()->getPlayerID() == 1)
+                colorBrush = Qt::blue;
+            else
+                colorBrush = Qt::red;
+            rectWidth = 2;
+
+            if(ptr_mapPixHexaon->getUnit_stationed()->getUnitType() == QString(" HEADQUATERUNIT")) // Nur das Hauptquatier
+            {
+                rectWidth = 4;
+                colorRect = Qt::white;
+                zKoord = 2;
+                setRect(qpoint_mapPixPosition.x(), qpoint_mapPixPosition.y(), 18, 18);
+            }
+        }
+        else if(ptr_mapPixHexaon->getHexFogOfWar()) {} // Für den Fall Fog of War
+        else // Unbesetztes Feld und Dynamische Einheiten (weiter unten die Ellipse)
+        {
+            if(ptr_mapPixHexaon->getHexMatchfieldType() == "waterDeep")
+                colorBrush = Qt::darkCyan;
+            if(ptr_mapPixHexaon->getHexMatchfieldType() == "waterSeashore")
+                colorBrush = Qt::cyan;
+            if(ptr_mapPixHexaon->getHexMatchfieldType() == "forrest")
+                colorBrush = Qt::darkGreen;
+            if(ptr_mapPixHexaon->getHexMatchfieldType() == "grassland")
+                colorBrush = Qt::green;
+            if(ptr_mapPixHexaon->getHexMatchfieldType() == "mountainTop")
+                colorBrush = Qt::gray;
+        }
+
+
+    if(ptr_mapPixHexaon->getState() == ACTIVE) // Ein Aktives Feld
+    {
+        rectWidth = 4;
+        zKoord = 3;
+        colorRect = Qt::yellow;
+    }
+
+    // Zeichne Grundrechteck
     QPen pen;
     QBrush brush;
 
     brush.setStyle(Qt::SolidPattern);
-    brush.setColor(colorRect);
-    pen.setWidth(1);
-    pen.setColor(Qt::black);
+    brush.setColor(colorBrush);
+    pen.setWidth(rectWidth);
+    pen.setColor(colorRect);
 
     painter->setPen(pen);
     painter->setBrush(brush);
     painter->drawRect(rect());
+    setZValue(zKoord);
+
+    // Für die Ellipse im Grundrechteck
+    if(!ptr_mapPixHexaon->getHexFogOfWar() && ptr_mapPixHexaon->getUnit_stationed() != nullptr && ptr_mapPixHexaon->getUnit_stationed()->getUnitMoveRange() != 0) // Dynamische Einheit
+    {
+        Qt::GlobalColor colorEllipse = Qt::black;
+        int EllipseWitdh = 1;
+        if(ptr_mapPixHexaon->getUnit_stationed()->getUnitPlayer()->getPlayerID() == 1)
+            colorBrush = Qt::blue;
+        else
+            colorBrush = Qt::red;
+
+        //Zeichne die Ellipse
+        brush.setColor(colorBrush);
+        pen.setColor(colorEllipse);
+        pen.setWidth(EllipseWitdh);
+
+        painter->setBrush(brush);
+        painter->drawEllipse(rect().center(),4,4);
+    }
 }
 
 void MapPixel::mousePressEvent(QGraphicsSceneMouseEvent *)

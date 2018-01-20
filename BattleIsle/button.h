@@ -75,6 +75,7 @@ class ButtonMap : public Button
 public:
     ButtonMap(int sizeX = 64, int sizeY = 64);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
     void printType();
 signals:
@@ -90,6 +91,7 @@ class ButtonInformation : public Button
 public:
     ButtonInformation(int sizeX = 64, int sizeY = 64);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
     void printType();
 signals:
@@ -105,6 +107,7 @@ class ButtonChangePhase : public Button
 public:
     ButtonChangePhase(int sizeX = 64, int sizeY = 64);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
     void printType();
 signals:
@@ -120,6 +123,7 @@ class ButtonMenue : public Button
 public:
     ButtonMenue(int sizeX = 64, int sizeY = 64);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
     void printType();
 signals:
