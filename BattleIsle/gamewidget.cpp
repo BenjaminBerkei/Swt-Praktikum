@@ -619,8 +619,9 @@ void MapPixel::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidge
     int zKoord = 1;
     /* zKoor:
      * 1: Normal
-     * 2: HeadQuater
-     * 3: Active
+     * 2: Unit
+     * 3: HeadQuater
+     * 4: Active
      */
         // Für das Grundrechteck
         if((!ptr_mapPixHexaon->getHexFogOfWar()) && ptr_mapPixHexaon->getUnit_stationed() != nullptr && ptr_mapPixHexaon->getUnit_stationed()->getUnitMoveRange() == 0) // Alle statische Einheiten
@@ -630,12 +631,13 @@ void MapPixel::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidge
             else
                 colorBrush = Qt::red;
             rectWidth = 2;
+            zKoord = 2;
 
             if(ptr_mapPixHexaon->getUnit_stationed()->getUnitType() == QString(" HEADQUATERUNIT")) // Nur das Hauptquatier
             {
                 rectWidth = 4;
                 colorRect = Qt::white;
-                zKoord = 2;
+                zKoord = 3;
                 setRect(qpoint_mapPixPosition.x(), qpoint_mapPixPosition.y(), 18, 18);
             }
         }
@@ -652,13 +654,15 @@ void MapPixel::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidge
                 colorBrush = Qt::green;
             if(ptr_mapPixHexaon->getHexMatchfieldType() == "mountainTop")
                 colorBrush = Qt::gray;
+
+            if(ptr_mapPixHexaon->getBoltaniumCurrent() > 0) // Fuer Boltanium
+                colorBrush = Qt::darkMagenta;
         }
 
 
     if(ptr_mapPixHexaon->getState() == ACTIVE) // Ein Aktives Feld
     {
         rectWidth = 4;
-        zKoord = 3;
         colorRect = Qt::yellow;
     }
 
@@ -674,7 +678,6 @@ void MapPixel::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidge
     painter->setPen(pen);
     painter->setBrush(brush);
     painter->drawRect(rect());
-    setZValue(zKoord);
 
     // Für die Ellipse im Grundrechteck
     if(!ptr_mapPixHexaon->getHexFogOfWar() && ptr_mapPixHexaon->getUnit_stationed() != nullptr && ptr_mapPixHexaon->getUnit_stationed()->getUnitMoveRange() != 0) // Dynamische Einheit
@@ -686,14 +689,22 @@ void MapPixel::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidge
         else
             colorBrush = Qt::red;
 
+
+
         //Zeichne die Ellipse
         brush.setColor(colorBrush);
         pen.setColor(colorEllipse);
         pen.setWidth(EllipseWitdh);
 
         painter->setBrush(brush);
-        painter->drawEllipse(rect().center(),4,4);
+        painter->drawEllipse(rect().center(),6,6);
+        zKoord = 2;
     }
+    if(ptr_mapPixHexaon->getState() == ACTIVE) // Ein Aktives Feld
+    {
+        zKoord = 3;
+    }
+    setZValue(zKoord);
 }
 
 void MapPixel::mousePressEvent(QGraphicsSceneMouseEvent *)
