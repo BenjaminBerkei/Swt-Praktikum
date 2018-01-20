@@ -69,7 +69,6 @@ private:
     static std::vector<QPoint> vector_oddNeighbors;
     static std::vector<QPoint> vector_evenNeighbors;
 
-    bool MapView; //Sagt an ob man sich in der Map Uebersicht befindet
     bool MenueView;
 public:
     Game(Options* init_options, GameWidget* ptr_gameWid);

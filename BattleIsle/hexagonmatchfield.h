@@ -69,7 +69,6 @@ protected:
 
 public:
     HexagonMatchfield(QPoint qpoint_gridPosition, QString type, Unit* stationedUnit= 0);
-    void mousePressEvent(QGraphicsSceneMouseEvent* event);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 
@@ -90,8 +89,12 @@ public:
     bool getHexFogOfWar() const;
     void setHexFogOfWar(bool value);
 
+public slots:
+    void mousePressEvent(QGraphicsSceneMouseEvent* event = nullptr);
+
 signals:
     void SIGNAL_clicked(HexagonMatchfield*);
+    void SIGNAL_centerThis(HexagonMatchfield*);
 };
 
 #endif // HEXAGONMATCHFIELD_H

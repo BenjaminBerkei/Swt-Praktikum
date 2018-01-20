@@ -36,6 +36,7 @@
 #include <QGraphicsItemAnimation>
 #include <QPushButton>
 #include <QGraphicsProxyWidget>
+#include <vector>
 
 class Unit;
 class Player;
@@ -70,6 +71,8 @@ private:
     QPushButton* qbuttonEndGame;
     QPushButton* qbuttonLoadGame;
     QPushButton* qbuttonResume;
+
+    std::vector<std::vector<MapPixel*>> vectorVector_gameWidMiniMap;
 
     int sizeX;
     int sizeY;
@@ -119,6 +122,8 @@ private slots:
     void SLOT_qbuttonLoadGame_clicked();
     void SLOT_qbuttonEndGame_clicked();
     void SLOT_qbuttonResume_clicked();
+    void SLOT_gameWidCenterHex(HexagonMatchfield* hex); //Setzt ein Hexagon in die Mitte der View
+    void SLOT_gameWidDestroyMap(); //Loescht die Minimap wieder ordnungsgemaess
 
 signals:
     void SIGNAL_gameWidChangeIndexFromStack(int);
@@ -171,14 +176,20 @@ signals:
 };
 
 
-class MapPixel : public QGraphicsRectItem
+class MapPixel : public QObject, public QGraphicsRectItem
 {
+    Q_OBJECT
 private:
-    Qt::GlobalColor colorRect;
+    HexagonMatchfield* ptr_mapPixHexaon;
+    QPoint qpoint_mapPixPosition;
 public:
-    MapPixel(int x, int y, Qt::GlobalColor color);
+    MapPixel(int x, int y, HexagonMatchfield* hex);
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
     QRectF boundingRect();
+
+signals:
+    void SIGNAL_mapPixelClicked();
 };
 #endif // GAMEWIDGET_H
