@@ -41,7 +41,8 @@ ButtonMove::ButtonMove(int sizeX, int sizeY)
 
 void ButtonMove::mousePressEvent(QGraphicsSceneMouseEvent *)
 {
-    emit clicked();
+    if(getBool_ButtonShowActivation())
+        emit clicked();
 }
 
 void ButtonMove::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -76,7 +77,8 @@ ButtonAction::ButtonAction(int sizeX, int sizeY)
 
 void ButtonAction::mousePressEvent(QGraphicsSceneMouseEvent *)
 {
-    emit clicked();
+    if(getBool_ButtonShowActivation())
+        emit clicked();
 }
 
 void ButtonAction::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -110,7 +112,24 @@ ButtonMap::ButtonMap(int sizeX, int sizeY)
 
 void ButtonMap::mousePressEvent(QGraphicsSceneMouseEvent *)
 {
-    emit clicked();
+    if(getBool_ButtonShowActivation())
+        emit clicked();
+}
+
+void ButtonMap::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    QGraphicsPixmapItem::paint(painter, option, widget);
+    if(!getBool_ButtonShowActivation())
+    {
+        QBrush brush;
+        brush.setStyle(Qt::SolidPattern);
+        brush.setColor(Qt::black);
+
+        painter->setOpacity(.5);
+        painter->setBrush(brush);
+
+        painter->drawPath(shape());
+    }
 }
 
 void ButtonMap::printType()
@@ -128,8 +147,24 @@ ButtonInformation::ButtonInformation(int , int )
 
 void ButtonInformation::mousePressEvent(QGraphicsSceneMouseEvent *)
 {
-    qDebug() << "Meldung: Information Button gedrückt.";
-    emit clicked();
+    if(getBool_ButtonShowActivation())
+        emit clicked();
+}
+
+void ButtonInformation::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    QGraphicsPixmapItem::paint(painter, option, widget);
+    if(!getBool_ButtonShowActivation())
+    {
+        QBrush brush;
+        brush.setStyle(Qt::SolidPattern);
+        brush.setColor(Qt::black);
+
+        painter->setOpacity(.5);
+        painter->setBrush(brush);
+
+        painter->drawPath(shape());
+    }
 }
 
 void ButtonInformation::printType()
@@ -146,7 +181,24 @@ ButtonChangePhase::ButtonChangePhase(int sizeX, int sizeY)
 
 void ButtonChangePhase::mousePressEvent(QGraphicsSceneMouseEvent *)
 {
-    emit clicked();
+    if(getBool_ButtonShowActivation())
+        emit clicked();
+}
+
+void ButtonChangePhase::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    QGraphicsPixmapItem::paint(painter, option, widget);
+    if(!getBool_ButtonShowActivation())
+    {
+        QBrush brush;
+        brush.setStyle(Qt::SolidPattern);
+        brush.setColor(Qt::black);
+
+        painter->setOpacity(.5);
+        painter->setBrush(brush);
+
+        painter->drawPath(shape());
+    }
 }
 
 void ButtonChangePhase::printType()
@@ -163,7 +215,24 @@ ButtonMenue::ButtonMenue(int sizeX, int sizeY)
 
 void ButtonMenue::mousePressEvent(QGraphicsSceneMouseEvent *)
 {
-    emit clicked();
+    if(getBool_ButtonShowActivation())
+        emit clicked();
+}
+
+void ButtonMenue::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    QGraphicsPixmapItem::paint(painter, option, widget);
+    if(!getBool_ButtonShowActivation())
+    {
+        QBrush brush;
+        brush.setStyle(Qt::SolidPattern);
+        brush.setColor(Qt::black);
+
+        painter->setOpacity(.5);
+        painter->setBrush(brush);
+
+        painter->drawPath(shape());
+    }
 }
 
 void ButtonMenue::printType()

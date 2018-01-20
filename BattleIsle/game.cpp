@@ -25,7 +25,7 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     gameOptions(init_options),
     ptr_gameGameWid(ptr_gameWid), ptr_playerOne(new Player("Eins", 1)), ptr_playerTwo(new Player("Zwei", 2)), ptr_playerActive(ptr_playerOne),
     ptr_roundCurrent(new Round(10)),
-    MapView(false), MenueView(false)
+    MenueView(false)
 {
     // Erstelle eine Map
     // Dies ist nur für Testzwecke! Sollte später gelöscht werden:
@@ -84,6 +84,7 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
                 vectorHex[j]->setBoltaniumCurrent(randBoltaniumAmount);
             }
             connect(vectorHex[j],SIGNAL(SIGNAL_clicked(HexagonMatchfield*)),this,SLOT(processSelection(HexagonMatchfield*)));
+            connect(vectorHex[j],SIGNAL(SIGNAL_centerThis(HexagonMatchfield*)), ptr_gameWid, SLOT(SLOT_gameWidCenterHex(HexagonMatchfield*)));
         }
         hexagonMatchfield_gameGrid.push_back(vectorHex);
     }
@@ -179,6 +180,15 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     setFogOfWar();
     qDebug() << "\t fog of war done";
     qDebug() << "--------------------Feld Erstellt-----------------";
+
+    /*for(unsigned int i = 0; i < unit_UnitGrid.size(); i++)
+    {
+        for(unsigned int j = 0; j < unit_UnitGrid[i].size(); j++)
+        {
+            if(unit_UnitGrid[i][j] != nullptr)
+                qDebug() << "Unit (" << i << "," << j << ") ist vom Typ: |" << typeid(*unit_UnitGrid[i][j]).name() << "|";
+        }
+    }*/
        //##################################################################
 
     //Buttons Einfuegen
@@ -450,20 +460,9 @@ void Game::buttonPressedAction()
 
 void Game::buttonPressedMap()
 {
-    if(!MapView)
-    {
-        MapView = true;
         ptr_gameGameWid->setEnableButtonScene(false);
-        button_menueBar[3]->setEnabled(true);
         ptr_gameGameWid->gameWidCreateMap(hexagonMatchfield_gameGrid);
-        ptr_gameGameWid->getGameWidGameView()->setScene(ptr_gameGameWid->getGameWidMapScene());
-    }
-    else
-    {
-        MapView = false;
-        ptr_gameGameWid->setEnableButtonScene(true);
-        ptr_gameGameWid->getGameWidGameView()->setScene(ptr_gameGameWid->getGameWidGameScene());
-    }
+        ptr_gameGameWid->getGameWidGameView()->setScene(ptr_gameGameWid->getGameWidMapScene());   
 }
 
 void Game::buttonPressedMenue()
