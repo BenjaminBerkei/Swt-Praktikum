@@ -128,6 +128,7 @@ private slots:
 signals:
     void SIGNAL_gameWidChangeIndexFromStack(int);
     void SIGNAL_MenueButtonPushed(int);
+    void SIGNAL_changeStateOfButtons(); // Verbunden mit SLOT_checkStateOfButtons in der Klasse Game
 };
 
 //Klasse um die Hexagons in der Infobox anzeigen zu lassen
