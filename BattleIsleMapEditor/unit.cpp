@@ -1,3 +1,10 @@
+//-------------------
+//Autor: Miguel
+//letzte Änderung von Miugel
+//letzte Änderung: 20.01.2018
+//version 1.0
+//unit.cpp
+//------------------
 #include "unit.h"
 
 Unit::Unit(QPoint qpoint, QString name, int i)

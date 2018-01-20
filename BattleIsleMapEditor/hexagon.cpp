@@ -1,7 +1,15 @@
+//-------------------
+//Autor: Miguel
+//letzte Änderung von Miugel
+//letzte Änderung: 20.01.2018
+//version 1.0
+//hexagon.cpp
+//------------------
+
 #include "hexagon.h"
 
 Hexagon::Hexagon(QPoint qpoint, QString type, Unit *stationedUnit) :
-    qpoint_gridPosition(qpoint), unit_stationed(stationedUnit),
+    qpoint_gridPosition(qpoint), unit_stationed(stationedUnit), deg(0),
     HexMatchfieldType(type),int_boltaniumCurrent(), qcolor_HexColor(Qt::black)
 {
     if(HexMatchfieldType == "waterDeep")
@@ -11,24 +19,40 @@ Hexagon::Hexagon(QPoint qpoint, QString type, Unit *stationedUnit) :
     else if(HexMatchfieldType == "forrest")
         setPixmap(QPixmap(":/img/HexagonBilder/Forest.png"));
     else if(HexMatchfieldType == "grassland")
+
         setPixmap(QPixmap(":/img/HexagonBilder/Grass.png"));
     else if(HexMatchfieldType == "streetStraight")
         setPixmap(QPixmap(":/img/HexagonBilder/nordsued.png"));
+    else if(HexMatchfieldType == "streetStraight60d")
+        setPixmap(QPixmap(":/img/HexagonBilder/nordsued60d.png"));
+    else if(HexMatchfieldType == "streetStraight120d")
+        setPixmap(QPixmap(":/img/HexagonBilder/nordsued120d.png"));
+
     else if(HexMatchfieldType == "streetCurve")
         setPixmap(QPixmap(":/img/HexagonBilder/Street_nordwest.png"));
+    else if(HexMatchfieldType == "streetCurve60d")
+        setPixmap(QPixmap(":/img/HexagonBilder/Street_nordwest60d.png"));
+    else if(HexMatchfieldType == "streetCurve120d")
+        setPixmap(QPixmap(":/img/HexagonBilder/Street_nordwest120d.png"));
+    else if(HexMatchfieldType == "streetCurve180d")
+        setPixmap(QPixmap(":/img/HexagonBilder/Street_nordwest180d.png"));
+    else if(HexMatchfieldType == "streetCurve240d")
+        setPixmap(QPixmap(":/img/HexagonBilder/Street_nordwest240d.png"));
+    else if(HexMatchfieldType == "streetCurve300d")
+        setPixmap(QPixmap(":/img/HexagonBilder/Street_nordwest300d.png"));
+
     else if(HexMatchfieldType == "streetCrossing")
         setPixmap(QPixmap(":/img/HexagonBilder/Street_kreuzung.png"));
+    else if(HexMatchfieldType == "streetCrossing60d")
+        setPixmap(QPixmap(":/img/HexagonBilder/Street_kreuzung60d.png"));
+
     else if(HexMatchfieldType == "mountainTop")
         setPixmap(QPixmap(":/img/HexagonBilder/Mountain.png"));
     else if(HexMatchfieldType == "mountainSideStraight")
         setPixmap(QPixmap(":/img/HexagonBilder/BergSeiteGrade.png"));
     else if(HexMatchfieldType == "mountainSideCurve")
         setPixmap(QPixmap(":/img/HexagonBilder/BergSeiteSchräg.png"));
-    else
-    {
-        setPixmap(QPixmap(":/img/HexagonBilder/Grass.png"));
-        //"Warnung: Ein HexagonMatchfield ist vom Typ default (siehe switch(HexMatchfieldType) im Konstruktor)";
-    }
+
     //Skalierung kann hier angepasst werden
     setPixmap(pixmap().scaled(64,64));
 
@@ -75,24 +99,40 @@ void Hexagon::setHexMatchfieldType(QString type)
     else if(HexMatchfieldType == "forrest")
         setPixmap(QPixmap(":/img/HexagonBilder/Forest.png"));
     else if(HexMatchfieldType == "grassland")
+
         setPixmap(QPixmap(":/img/HexagonBilder/Grass.png"));
     else if(HexMatchfieldType == "streetStraight")
         setPixmap(QPixmap(":/img/HexagonBilder/nordsued.png"));
+    else if(HexMatchfieldType == "streetStraight60d")
+        setPixmap(QPixmap(":/img/HexagonBilder/nordsued60d.png"));
+    else if(HexMatchfieldType == "streetStraight120d")
+        setPixmap(QPixmap(":/img/HexagonBilder/nordsued120d.png"));
+
     else if(HexMatchfieldType == "streetCurve")
         setPixmap(QPixmap(":/img/HexagonBilder/Street_nordwest.png"));
+    else if(HexMatchfieldType == "streetCurve60d")
+        setPixmap(QPixmap(":/img/HexagonBilder/Street_nordwest60d.png"));
+    else if(HexMatchfieldType == "streetCurve120d")
+        setPixmap(QPixmap(":/img/HexagonBilder/Street_nordwest120d.png"));
+    else if(HexMatchfieldType == "streetCurve180d")
+        setPixmap(QPixmap(":/img/HexagonBilder/Street_nordwest180d.png"));
+    else if(HexMatchfieldType == "streetCurve240d")
+        setPixmap(QPixmap(":/img/HexagonBilder/Street_nordwest240d.png"));
+    else if(HexMatchfieldType == "streetCurve300d")
+        setPixmap(QPixmap(":/img/HexagonBilder/Street_nordwest300d.png"));
+
     else if(HexMatchfieldType == "streetCrossing")
         setPixmap(QPixmap(":/img/HexagonBilder/Street_kreuzung.png"));
+    else if(HexMatchfieldType == "streetCrossing60d")
+        setPixmap(QPixmap(":/img/HexagonBilder/Street_kreuzung60d.png"));
+
     else if(HexMatchfieldType == "mountainTop")
         setPixmap(QPixmap(":/img/HexagonBilder/Mountain.png"));
     else if(HexMatchfieldType == "mountainSideStraight")
         setPixmap(QPixmap(":/img/HexagonBilder/BergSeiteGrade.png"));
     else if(HexMatchfieldType == "mountainSideCurve")
         setPixmap(QPixmap(":/img/HexagonBilder/BergSeiteSchräg.png"));
-    else
-    {
-        setPixmap(QPixmap(":/img/HexagonBilder/Grass.png"));
-        //"Warnung: Ein HexagonMatchfield ist vom Typ default (siehe switch(HexMatchfieldType) im Konstruktor)";
-    }
+
     //Skalierung kann hier angepasst werden
     setPixmap(pixmap().scaled(64,64));
 
@@ -134,4 +174,14 @@ void Hexagon::setBoltaniumCurrent(int value){
 QPoint Hexagon::getQpoint_gridPosition() const
 {
     return qpoint_gridPosition;
+}
+
+int Hexagon::getDeg() const
+{
+    return deg;
+}
+
+void Hexagon::setDeg(int d)
+{
+    deg = d;
 }

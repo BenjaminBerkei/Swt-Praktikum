@@ -1,3 +1,11 @@
+//-------------------
+//Autor: Miguel
+//letzte Änderung von Miugel
+//letzte Änderung: 20.01.2018
+//version 1.0
+//mainwindow.cpp
+//------------------
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -7,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
     hexfield(new QGraphicsScene(this)),
     menuefield(new QGraphicsScene(this)),
     hexType(""), hexCacheField(nullptr), hexCacheMenue(nullptr), hexCacheUnit(nullptr),
-    sizeX(15), sizeY(10),
+    sizeX(15), sizeY(10), scaleFak(1.0),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -20,7 +28,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->UnitMenueBut, SIGNAL(clicked(bool)), this, SLOT(on_UnitMenueBut_clicked()));
     connect(ui->ResetButton, SIGNAL(clicked(bool)), this, SLOT(on_ResetButton_clicked()));
     connect(ui->spinBoltanium,SIGNAL(valueChanged(int)), this, SLOT(on_spinBoltanium_valueChanged(int)));
-
+    connect(ui->deleteBut, SIGNAL(clicked(bool)), this, SLOT(on_deleteBut_clicked()));
+    connect(ui->actionSpeichern, SIGNAL(triggered(bool)),this, SLOT(speichern_triggerd()));
+    connect(ui->actionSpeichernForBIC, SIGNAL(triggered(bool)),this, SLOT(speichern_triggerd()));
+    connect(ui->actionLoad_Map, SIGNAL(triggered(bool)),this, SLOT(ladenMap_triggered()));
 
     ui->spinBoxX->setValue(sizeX);
     ui->spinBoxY->setValue(sizeY);
@@ -66,11 +77,12 @@ void MainWindow::createHexfield(std::vector<std::vector<Hexagon*>> &hexagonGrid)
             if(hex->getUnit_stationed() != nullptr)
             {
                 hexfield->addItem(hex->getUnit_stationed());
-                hex->getUnit_stationed()->setPos(PicCoordX,PicCoordY);
+                hex->getUnit_stationed()->setPos(scaleFak*PicCoordX, scaleFak*PicCoordY);
             }
 
-           hex->setPos(PicCoordX, PicCoordY);
+           hex->setPos(scaleFak*PicCoordX, scaleFak*PicCoordY);
            hexfield->addItem(hex);
+           hex->setScale(scaleFak);
         }
     }
     ui->hexfieldGraphic->setScene( hexfield );
@@ -91,6 +103,7 @@ void MainWindow::createMenue(std::vector<Hexagon*> &hexagonGrid)
 
 void MainWindow::createUnitfield(std::vector<std::vector<Hexagon *>> &hexagonGrid)
 {
+
     for(unsigned int i = 0; i < hexagonGrid.size(); i++)
     {
         for(unsigned int j = 0; j < hexagonGrid[i].size(); j++)
@@ -123,6 +136,7 @@ void MainWindow::createUnitfield(std::vector<std::vector<Hexagon *>> &hexagonGri
            hex->setPos(PicCoordX, PicCoordY);
            menuefield->addItem(hex);
         }
+
     }
     ui->menueView->setScene( menuefield );
 }
@@ -279,12 +293,22 @@ void MainWindow::slot_getHexType(Hexagon * hex)
     hex->setZValue(3);
 
     hexCacheMenue = hex;
+    if(hexCacheField != nullptr)
+        hexCacheField->setDeg(0);
     menuefield->update();
 }
 
 void MainWindow::on_HexMenueBut_clicked()
 {
-    hexCacheUnit= nullptr;
+    menuefield->setSceneRect(0.0,0.0,0.0,0.0);
+
+    if(hexCacheUnit != nullptr)
+    {
+        hexCacheUnit->setHexColor(Qt::black);
+        hexCacheUnit->setZValue(0);
+        hexCacheUnit= nullptr;
+    }
+
     for(auto & it : menuefield->items())
     {
         menuefield->removeItem(it);
@@ -294,7 +318,16 @@ void MainWindow::on_HexMenueBut_clicked()
 
 void MainWindow::on_UnitMenueBut_clicked()
 {
-    hexCacheMenue= nullptr;
+    menuefield->setSceneRect(1.0,1.0,150.0,1600.0);
+
+    if(hexCacheMenue != nullptr)
+    {
+        hexCacheMenue->setHexColor(Qt::black);
+        hexCacheMenue->setZValue(0);
+        hexCacheMenue= nullptr;
+        hexType="";
+     }
+
     for(auto & it : menuefield->items())
     {
         menuefield->removeItem(it);
@@ -311,12 +344,7 @@ void MainWindow::on_ResetButton_clicked()
         hexCacheMenue= nullptr;
         hexType="";
      }
-    if(hexCacheField != nullptr)
-    {
-        hexCacheField->setHexColor(Qt::black);
-        hexCacheField->setZValue(0);
-        hexCacheField= nullptr;
-    }
+
     if(hexCacheUnit != nullptr)
     {
         hexCacheUnit->setHexColor(Qt::black);
@@ -362,8 +390,346 @@ void MainWindow::slot_changeUnit(Hexagon *hex)
         Unit* tmp = new Unit(tmpPoint, tmpName, tmpPly);
         hex->setUnit_stationed(tmp);
         hex->getUnit_stationed()->setPos(hex->pos());
+        hex->getUnit_stationed()->setScale(scaleFak);
         hexfield->addItem(hex->getUnit_stationed());
         fieldUnit.push_back(tmp);
     }
     hexfield->update();
+}
+
+void MainWindow::on_rotateRBut_clicked()
+{
+    if(hexCacheField != nullptr)
+    {
+        if(hexCacheField->getHexMatchfieldType() == "streetStraight" || hexCacheField->getHexMatchfieldType() == "streetStraight60d" || hexCacheField->getHexMatchfieldType() =="streetStraight120d")
+        {
+            hexCacheField->setDeg(hexCacheField->getDeg()+1);
+            switch (hexCacheField->getDeg())
+            {
+            case 0: hexType = "streetStraight"; break;
+            case 1: hexType = "streetStraight60d"; break;
+            case 2: hexType = "streetStraight120d"; hexCacheField->setDeg(-1); break;
+            }
+        }
+        else if(hexCacheField->getHexMatchfieldType() == "streetCurve" || hexCacheField->getHexMatchfieldType() == "streetCurve60d" || hexCacheField->getHexMatchfieldType() == "streetCurve120d" || hexCacheField->getHexMatchfieldType() == "streetCurve180d" || hexCacheField->getHexMatchfieldType() == "streetCurve240d" || hexCacheField->getHexMatchfieldType() == "streetCurve300d")
+        {
+            if(hexCacheField->getDeg() >= 3)
+                hexCacheField->setDeg(-3);
+
+            hexCacheField->setDeg(hexCacheField->getDeg()+1);
+            switch (hexCacheField->getDeg())
+            {
+            case 0: hexType = "streetCurve"; break;
+            case 1: hexType = "streetCurve60d"; break;
+            case 2: hexType = "streetCurve120d"; break;
+            case 3: hexType = "streetCurve180d"; hexCacheField->setDeg(-3); break;
+            case -2: hexType = "streetCurve240d"; break;
+            case -1: hexType = "streetCurve300d"; break;
+            }
+        }
+        else if(hexCacheField->getHexMatchfieldType() == "streetCrossing" || hexCacheField->getHexMatchfieldType() == "streetCrossing60d")
+        {
+            if(hexCacheField->getDeg() >= 1)
+                hexCacheField->setDeg(-1);
+
+            hexCacheField->setDeg(hexCacheField->getDeg()+1);
+            switch (hexCacheField->getDeg())
+            {
+            case 0: hexType = "streetCrossing"; break;
+            case 1: hexType = "streetCrossing60d";hexCacheField->setDeg(-1); break;
+            }
+        }
+        hexCacheField->setHexMatchfieldType(hexType);
+
+        if(hexCacheMenue != nullptr)
+            hexType = hexCacheMenue->getHexMatchfieldType();
+        else
+            hexType ="";
+
+        hexfield->update();
+    }
+}
+
+void MainWindow::on_rotateLBut_clicked()
+{
+    if(hexCacheField != nullptr)
+    {
+        if(hexCacheField->getHexMatchfieldType() == "streetStraight" || hexCacheField->getHexMatchfieldType() == "streetStraight60d" || hexCacheField->getHexMatchfieldType() =="streetStraight120d")
+        {
+            hexCacheField->setDeg(hexCacheField->getDeg()-1);
+            switch (hexCacheField->getDeg())
+            {
+            case 0: hexType = "streetStraight"; break;
+            case -1: hexType = "streetStraight120d"; break;
+            case -2: hexType = "streetStraight60d"; hexCacheField->setDeg(1); break;
+            }
+        }
+        else if(hexCacheField->getHexMatchfieldType() == "streetCurve" || hexCacheField->getHexMatchfieldType() == "streetCurve60d" || hexCacheField->getHexMatchfieldType() == "streetCurve120d" || hexCacheField->getHexMatchfieldType() == "streetCurve180d" || hexCacheField->getHexMatchfieldType() == "streetCurve240d" || hexCacheField->getHexMatchfieldType() == "streetCurve300d")
+        {
+            if(hexCacheField->getDeg() <= -3)
+                hexCacheField->setDeg(3);
+
+            hexCacheField->setDeg(hexCacheField->getDeg()-1);
+            switch (hexCacheField->getDeg())
+            {
+            case 0: hexType = "streetCurve"; break;
+            case 1: hexType = "streetCurve60d"; break;
+            case 2: hexType = "streetCurve120d"; break;
+            case -3: hexType = "streetCurve180d"; hexCacheField->setDeg(3); break;
+            case -2: hexType = "streetCurve240d"; break;
+            case -1: hexType = "streetCurve300d"; break;
+            }
+        }
+        else if(hexCacheField->getHexMatchfieldType() == "streetCrossing" || hexCacheField->getHexMatchfieldType() == "streetCrossing60d")
+        {
+            if(hexCacheField->getDeg() <= -1)
+                hexCacheField->setDeg(1);
+
+            hexCacheField->setDeg(hexCacheField->getDeg()-1);
+            switch (hexCacheField->getDeg())
+            {
+            case 0: hexType = "streetCrossing"; break;
+            case -1: hexType = "streetCrossing60d";hexCacheField->setDeg(-1); break;
+            }
+        }
+        hexCacheField->setHexMatchfieldType(hexType);
+
+        if(hexCacheMenue != nullptr)
+            hexType = hexCacheMenue->getHexMatchfieldType();
+        else
+            hexType ="";
+
+        hexfield->update();
+    }
+}
+
+void MainWindow::on_deleteBut_clicked()
+{
+    if(hexCacheField->getUnit_stationed() != nullptr)
+    {
+        hexfield->removeItem(hexCacheField->getUnit_stationed());
+        hexCacheField->setUnit_stationed(nullptr);
+    }
+}
+
+void MainWindow::on_zoomINBut_clicked()
+{
+    if(scaleFak <= 3)
+    {
+        scaleFak += 0.5;
+        for(auto & it : hexfield->items())
+        {
+            it->setScale(scaleFak);
+            hexfield->removeItem(it);
+        }
+        createHexfield(myField);
+    }
+}
+
+void MainWindow::on_zoomOutBut_clicked()
+{
+    if(scaleFak >= 0.5)
+    {
+        if(scaleFak >1)
+            scaleFak -= 0.5;
+        else
+            scaleFak -= 0.1;
+        for(auto & it : hexfield->items())
+        {
+            it->setScale(scaleFak);
+            hexfield->removeItem(it);
+        }
+        createHexfield(myField);
+    }
+}
+void MainWindow::on_deleteAllBut_clicked()
+{
+    for(unsigned int i = 0; i < myField.size(); i++)
+    {
+        for(unsigned int j = 0; j < myField[i].size(); j++)
+        {
+            if( myField[i][j]->getUnit_stationed() != nullptr)
+            {
+                hexfield->removeItem(myField[i][j]->getUnit_stationed());
+                myField[i][j]->setUnit_stationed(nullptr);
+            }
+        }
+    }
+    hexfield->update();
+}
+
+void MainWindow::on_deleteBoltBut_clicked()
+{
+    hexCacheField->setBoltaniumCurrent(0);
+    updateBolt();
+}
+
+void MainWindow::on_deleteAllBoltBut_clicked()
+{
+    for(unsigned int i = 0; i < myField.size(); i++)
+    {
+        for(unsigned int j = 0; j < myField[i].size(); j++)
+        {
+            myField[i][j]->setBoltaniumCurrent(0);
+        }
+    }
+    hexfield->update();
+}
+
+void MainWindow::speichern_triggerd()
+{
+     QString fileName = QFileDialog::getSaveFileName(this,
+             tr("Save File"), "",
+             tr("Data Text (*.txt);;All Files (*)"));
+     if (fileName.isEmpty())
+              return;
+          else {
+              QFile file(fileName);
+              if (!file.open(QIODevice::WriteOnly)) {
+                  QMessageBox::information(this, tr("Unable to open file"),
+                  //Bei Fehler Fehlerdialog ausgeben
+                      file.errorString());
+                  return;
+              }
+       QTextStream out(&file);
+       out << -1 << " " << sizeX << " " << sizeY << "\n";
+       for(unsigned int i = 0; i < myField.size(); i++)
+       {
+           for(unsigned int j = 0; j < myField[i].size(); j++)
+           {
+               Hexagon* hex = myField[i][j];
+
+               out << hex->getHexMatchfieldType() << " "<< hex->getBoltaniumCurrent() << " ";
+               if(hex->getUnit_stationed() != nullptr)
+               {
+                   out << 1 << " " << hex->getUnit_stationed()->getPLY() << " " << hex->getUnit_stationed()->getName() << "\n";
+               }
+               else
+                   out << 0 << "\n";
+           }
+       }
+        out << sizeX%sizeY;
+     }
+
+}
+
+void MainWindow::speichernForGame_triggerd()
+{
+     QString fileName = QFileDialog::getSaveFileName(this,
+             tr("Save File"), "",
+             tr("Data Text (*.txt);;All Files (*)"));
+     if (fileName.isEmpty())
+              return;
+          else {
+              QFile file(fileName);
+              if (!file.open(QIODevice::WriteOnly)) {
+                  QMessageBox::information(this, tr("Unable to open file"),
+                  //Bei Fehler Fehlerdialog ausgeben
+                      file.errorString());
+                  return;
+              }
+       QTextStream out(&file);
+       out << sizeX << " " << sizeY << "\n";
+       for(unsigned int i = 0; i < myField.size(); i++)
+       {
+           for(unsigned int j = 0; j < myField[i].size(); j++)
+           {
+               Hexagon* hex = myField[i][j];
+
+               out << i << " " << j << " " << hex->getHexMatchfieldType() << " "<< hex->getBoltaniumCurrent() << " ";
+               if(hex->getUnit_stationed() != nullptr)
+               {
+                   out << 1 << " " << hex->getUnit_stationed()->getPLY() << " " << hex->getUnit_stationed()->getFilepath() << "\n";
+               }
+               else
+                   out << 0 << "\n";
+           }
+       }
+
+     }
+
+}
+
+void MainWindow::ladenMap_triggered()
+{
+    QString fileName = QFileDialog::getOpenFileName(this,
+            tr("Open File"), "",
+            tr("Data Text (*.txt);;All Files (*)"));
+           //Voreinstellungen für den Laden_Dialog
+    if (fileName.isEmpty())
+             return;
+    else
+    {
+
+             QFile file(fileName);
+
+             if (!file.open(QIODevice::ReadOnly)) {
+                 QMessageBox::information(this, tr("Unable to open file"),
+                    //Bei Fehler Fehlerdialog ausgeben
+                     file.errorString());
+                 return;
+             }
+
+             QTextStream in(&file);
+             int tmp_E;
+
+
+             in >> tmp_E;
+             if(tmp_E == -1)
+             {
+                  in>> sizeX >> sizeY;
+                  std::vector<std::vector<Hexagon*>> hexagonGameGrid;
+                  for( int i = 0; i < sizeX; i++ )
+                  {
+                      std::vector<Hexagon*> vectorHex;
+                      for( int j = 0; j < sizeY; j++ )
+                      {
+                          //---------------
+                          int tmp_UnitBool;
+                          int tmp_Bolt;
+                          int tmp_ply;
+                          QString tmp_UnitTyp;
+                          QString tmp_Typ;
+                          Unit* tmp_Unit;
+                          Hexagon* tmp_Hex;
+                          // --------------
+                          in >> tmp_Typ >>tmp_Bolt >> tmp_UnitBool;
+                          if(tmp_UnitBool ==1 )
+                          {
+                              in >> tmp_ply >> tmp_UnitTyp;
+                          }
+                          else if(tmp_UnitBool != 0)
+                          {
+                              QMessageBox::information(this, tr("Unable to open file"),
+                                  file.errorString());
+                              return;
+                          }
+                          tmp_Unit = new Unit(QPoint(i,j), tmp_UnitTyp, tmp_ply);
+                          tmp_Hex = new Hexagon(QPoint(i,j), tmp_Typ, tmp_Unit);
+                          tmp_Hex->setBoltaniumCurrent(tmp_Bolt);
+                          vectorHex.push_back(tmp_Hex);
+                      }
+                      hexagonGameGrid.push_back(vectorHex);
+                   }
+                  in >> tmp_E;
+                  if(tmp_E != sizeX%sizeY)
+                  {
+                      QMessageBox::information(this, tr("Unable to open file"),
+                          file.errorString());
+                      return;
+                  }
+                  setMyField(hexagonGameGrid);
+                  for(auto & it : hexfield->items())
+                  {
+                      hexfield->removeItem(it);
+                  }
+                  createHexfield(hexagonGameGrid);
+             }
+             else
+             {
+                QMessageBox::information(this, tr("Unable to open file"),
+                    file.errorString());
+                return;
+             }
+    }
 }

@@ -1,3 +1,11 @@
+//-------------------
+//Autor: Miguel
+//letzte Änderung von Miugel
+//letzte Änderung: 20.01.2018
+//version 1.0
+//mainwindow.h
+//------------------
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -6,6 +14,9 @@
 #include <vector>
 #include <QGraphicsView>
 #include <QSpinBox>
+#include <QFile>
+#include <QFileDialog>
+#include <QMessageBox>
 #include "hexagon.h"
 #include "unit.h"
 
@@ -30,6 +41,7 @@ private:
     QString hexType;
     int sizeX;
     int sizeY;
+    double scaleFak;
     Hexagon* hexCacheField;
     Hexagon* hexCacheMenue;
     Hexagon* hexCacheUnit;
@@ -70,7 +82,17 @@ private slots:
     void on_spinBoltanium_valueChanged(int arg1);
     void slot_getUnit(Hexagon*);
     void slot_changeUnit(Hexagon*);
-
+    void on_rotateLBut_clicked();
+    void on_rotateRBut_clicked();
+    void on_deleteBut_clicked();
+    void on_zoomINBut_clicked();
+    void on_zoomOutBut_clicked();
+    void on_deleteAllBut_clicked();
+    void on_deleteBoltBut_clicked();
+    void on_deleteAllBoltBut_clicked();
+    void speichern_triggerd();
+    void speichernForGame_triggerd();
+    void ladenMap_triggered();
 };
 
 

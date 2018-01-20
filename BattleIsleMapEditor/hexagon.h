@@ -1,3 +1,11 @@
+//-------------------
+//Autor: Miguel
+//letzte Änderung von Miugel
+//letzte Änderung: 20.01.2018
+//version 1.0
+//hexagon.h
+//------------------
+
 #ifndef HEXAGON_H
 #define HEXAGON_H
 
@@ -26,8 +34,16 @@ protected:
     //"forrest"             (Wald)
     //"grassland"           (Wiese)
     //"streetStraight"      (Straße Gerade)
+    //"streetStraight60d"   (Straße Gerade 60°)
+    //"streetStraight120d"  (Straße Gerade 120°)
+    //"streetCurve60d"      (Straße mit Kurve 60°)
+    //"streetCurve120d"     (Straße mit Kurve 120°)
+    //"streetCurve180d"     (Straße mit Kurve 180°)
+    //"streetCurve240d"     (Straße mit Kurve 240°)
+    //"streetCurve300d"     (Straße mit Kurve 300°)
     //"streetCurve"         (Straße mit Kurve)
     //"streetCrossing"      (Straßenkruzung)
+    //"streetCrossing60d"   (Straßenkruzung 60°)
     //"mountainTop"         (Bergspitze)
     //"mountainSideStraight"(BergseiteGrade)
     //"mountainSideCurve"   (BergseiteSchräg)
@@ -36,6 +52,8 @@ protected:
     QColor qcolor_HexColor;
     QPixmap qpixmap_boltanium;
     QPoint qpoint_gridPosition;
+    int deg;
+
 public:
     Hexagon(QPoint, QString, Unit* stationedUnit= nullptr);
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
@@ -52,6 +70,9 @@ public:
 
     int getBoltaniumCurrent() const;
     void setBoltaniumCurrent(int);
+
+    int getDeg() const;
+    void setDeg(int);
 
     QPoint getQpoint_gridPosition() const;
 

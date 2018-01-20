@@ -1,3 +1,14 @@
+//-------------------
+//Projekt: Battle Isle Clone
+//         Map Editor
+//         SWT- Praktikum - Gruppe 2
+//Autor: Miguel
+//letzte Änderung von Miugel
+//letzte Änderung: 20.01.2018
+//version 1.0
+//main.cpp
+//------------------
+
 #include "mainwindow.h"
 #include "hexagon.h"
 #include "hexagonbase.h"

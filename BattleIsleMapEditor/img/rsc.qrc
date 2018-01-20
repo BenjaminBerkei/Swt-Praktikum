@@ -64,6 +64,14 @@
         <file>Boltanium/Boltanium_medium.png</file>
         <file>Boltanium/Boltanium_low.png</file>
         <file>Boltanium/Boltanium_high.png</file>
+        <file>HexagonBilder/nordsued60d.png</file>
+        <file>HexagonBilder/nordsued120d.png</file>
+        <file>HexagonBilder/Street_kreuzung60d.png</file>
+        <file>HexagonBilder/Street_nordwest60d.png</file>
+        <file>HexagonBilder/Street_nordwest120d.png</file>
+        <file>HexagonBilder/Street_nordwest180d.png</file>
+        <file>HexagonBilder/Street_nordwest240d.png</file>
+        <file>HexagonBilder/Street_nordwest300d.png</file>
     </qresource>
     <qresource prefix="/buttonRess">
         <file>Buttons/RepairOhne.png</file>
