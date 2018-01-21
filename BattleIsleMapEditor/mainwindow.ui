@@ -60,6 +60,9 @@ color: rgb(0, 0, 255);</string>
       <property name="text">
        <string>Unit Anzahl:</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
     </item>
     <item row="6" column="13">
@@ -179,7 +182,7 @@ color: rgb(0, 0, 255);</string>
      <widget class="QLabel" name="UnitAnzlabel_2">
       <property name="font">
        <font>
-        <pointsize>12</pointsize>
+        <pointsize>10</pointsize>
        </font>
       </property>
       <property name="text">
@@ -377,7 +380,6 @@ color: rgb(0, 0, 255);</string>
    <zorder>menueView</zorder>
    <zorder>hexfieldGraphic</zorder>
    <zorder>setBoltButt</zorder>
-   <zorder></zorder>
    <zorder>lcdBoltCach</zorder>
    <zorder>spinBoltanium</zorder>
    <zorder>rotateRBut</zorder>
@@ -401,7 +403,6 @@ color: rgb(0, 0, 255);</string>
    <zorder>UnitMenueBut</zorder>
    <zorder>HexMenueBut</zorder>
    <zorder>rotateLBut</zorder>
-   <zorder>layoutWidget</zorder>
    <zorder>labelTotal</zorder>
    <zorder>Ply1label</zorder>
    <zorder>Ply2label</zorder>
