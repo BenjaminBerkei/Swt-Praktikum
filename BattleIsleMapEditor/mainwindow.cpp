@@ -15,12 +15,13 @@ MainWindow::MainWindow(QWidget *parent) :
     hexfield(new QGraphicsScene(this)),
     menuefield(new QGraphicsScene(this)),
     hexType(""), hexCacheField(nullptr), hexCacheMenue(nullptr), hexCacheUnit(nullptr),
-    sizeX(15), sizeY(10), scaleFak(1.0),
+    sizeX(15), sizeY(10), scaleFak(1.0), fillRect(false),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     ui->hexfieldGraphic->setScene(hexfield);
     ui->menueView->setScene(menuefield); 
+    ui->fillingLabel->setText("False");
 
     connect(ui->spinBoxX, SIGNAL(valueChanged(int)), this, SLOT(spinBoxX_valueChanged(int)));
     connect(ui->spinBoxY, SIGNAL(valueChanged(int)), this, SLOT(spinBoxY_valueChanged(int)));
@@ -141,6 +142,15 @@ void MainWindow::createUnitfield(std::vector<std::vector<Hexagon *>> &hexagonGri
     ui->menueView->setScene( menuefield );
 }
 
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == 16777248)
+    {
+        fillRect = !fillRect;
+    }
+    setFillingLabel();
+}
+
 //getter und setter
 int MainWindow::getSizeX() const
 {
@@ -200,6 +210,16 @@ void MainWindow::setMyMenue(std::vector<Hexagon *> &hexagonGrid)
 void MainWindow::setHexType(QString type)
 {
     hexType = type;
+}
+
+void MainWindow::setFillingLabel()
+{
+    if(fillRect == true)
+    {
+            ui->fillingLabel->setText("True");
+    }else{
+        ui->fillingLabel->setText("False");
+    }
 }
 // Ende
 
@@ -272,10 +292,23 @@ void MainWindow::slot_changeHexType(Hexagon* hex)
     {
         hexCacheField->setHexColor(Qt::black);
         hexCacheField->setZValue(0);
+
+        if(hexType != "" && fillRect == true)
+        {
+            for(int x = std::min(hex->getQpoint_gridPosition().x(), hexCacheField->getQpoint_gridPosition().x()); x <= std::max(hex->getQpoint_gridPosition().x(), hexCacheField->getQpoint_gridPosition().x()); x++)
+            {
+                for(int y = std::min(hex->getQpoint_gridPosition().y(), hexCacheField->getQpoint_gridPosition().y()); y <= std::max(hex->getQpoint_gridPosition().y(), hexCacheField->getQpoint_gridPosition().y()); y++)
+                {
+                    myField[x][y]->setHexMatchfieldType(hexType);
+                }
+            }
+            fillRect = false;
+            setFillingLabel();
+        }
     }
+
     hex->setHexColor(Qt::red);
     hex->setZValue(3);
-
     hexCacheField = hex;
     hexfield->update();
     updateBolt();

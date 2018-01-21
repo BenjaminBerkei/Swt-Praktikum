@@ -39,3 +39,5 @@ FORMS += \
 
 RESOURCES += \
     img/rsc.qrc
+
+CONFIG += c++11

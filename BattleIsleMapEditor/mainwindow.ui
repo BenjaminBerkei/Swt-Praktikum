@@ -267,9 +267,38 @@
      </rect>
     </property>
    </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>700</x>
+      <y>970</y>
+      <width>81</width>
+      <height>19</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Fill: </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="fillingLabel">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <zorder>labelX</zorder>
+   <zorder>labelY</zorder>
+   <zorder>spinBoxX</zorder>
+   <zorder>spinBoxY</zorder>
    <zorder>menueView</zorder>
    <zorder>hexfieldGraphic</zorder>
-   <zorder>layoutWidget</zorder>
    <zorder>HexMenueBut</zorder>
    <zorder>UnitMenueBut</zorder>
    <zorder>ResetButton</zorder>
@@ -283,6 +312,8 @@
    <zorder>deleteAllBut</zorder>
    <zorder>deleteBoltBut</zorder>
    <zorder>deleteAllBoltBut</zorder>
+   <zorder>label</zorder>
+   <zorder>fillingLabel</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -290,12 +321,12 @@
      <x>0</x>
      <y>0</y>
      <width>1851</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">
     <property name="title">
-     <string>Datei</string>
+     <string>&amp;Datei</string>
     </property>
     <addaction name="actionNeue_Map"/>
     <addaction name="actionLoad_Map"/>
@@ -305,7 +336,7 @@
    </widget>
    <widget class="QMenu" name="menuHilfe">
     <property name="title">
-     <string>Hilfe</string>
+     <string>&amp;Hilfe</string>
     </property>
    </widget>
    <addaction name="menuDatei"/>
@@ -322,22 +353,22 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionNeue_Map">
    <property name="text">
-    <string>Neue Map</string>
+    <string>&amp;Neue Map</string>
    </property>
   </action>
   <action name="actionLoad_Map">
    <property name="text">
-    <string>Load Map</string>
+    <string>&amp;Load Map</string>
    </property>
   </action>
   <action name="actionSpeichern">
    <property name="text">
-    <string>Speichern</string>
+    <string>&amp;Speichern</string>
    </property>
   </action>
   <action name="actionSpeichernForBIC">
    <property name="text">
-    <string>Speichern für Battle Isle Clone</string>
+    <string>Speichern &amp;für Battle Isle Clone</string>
    </property>
   </action>
  </widget>

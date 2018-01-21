@@ -17,6 +17,8 @@
 #include <QFile>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <algorithm>
+#include <QKeyEvent>
 #include "hexagon.h"
 #include "unit.h"
 
@@ -46,6 +48,8 @@ private:
     Hexagon* hexCacheMenue;
     Hexagon* hexCacheUnit;
 
+    bool fillRect;
+
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
@@ -53,6 +57,7 @@ public:
     void createHexfield(std::vector<std::vector<Hexagon*>> &hexagonGrid);
     void createMenue(std::vector<Hexagon*> &hexagonGrid);
     void createUnitfield(std::vector<std::vector<Hexagon*>> &hexagonGrid);
+    void keyPressEvent(QKeyEvent *);
 
     int getSizeX() const;
     int getSizeY() const;
@@ -68,6 +73,7 @@ public:
     void setMyUnit(std::vector<std::vector<Hexagon*>> &hexagonGrid);
     void setMyMenue(std::vector<Hexagon*> &hexagonGrid);
     void setHexType(QString);
+    void setFillingLabel();
 
     void updateBolt();
 
