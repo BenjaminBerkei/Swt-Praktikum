@@ -1,8 +1,8 @@
 //-------------------
 //Autor: Miguel
 //letzte Änderung von Miugel
-//letzte Änderung: 20.01.2018
-//version 1.0
+//letzte Änderung: 21.01.2018
+//version 1.1
 //mainwindow.h
 //------------------
 
@@ -47,6 +47,7 @@ private:
     Hexagon* hexCacheField;
     Hexagon* hexCacheMenue;
     Hexagon* hexCacheUnit;
+    int boltCach;
 
     bool fillRect;
 
@@ -58,6 +59,7 @@ public:
     void createMenue(std::vector<Hexagon*> &hexagonGrid);
     void createUnitfield(std::vector<std::vector<Hexagon*>> &hexagonGrid);
     void keyPressEvent(QKeyEvent *);
+    void mousePressEvent(QMouseEvent*);
 
     int getSizeX() const;
     int getSizeY() const;
@@ -76,6 +78,9 @@ public:
     void setFillingLabel();
 
     void updateBolt();
+    void updateLCD();
+
+signals:
 
 private slots:
     void spinBoxX_valueChanged(int arg1);
@@ -96,6 +101,9 @@ private slots:
     void on_deleteAllBut_clicked();
     void on_deleteBoltBut_clicked();
     void on_deleteAllBoltBut_clicked();
+    void on_getBoltButt_clicked();
+    void on_setBoltButt_clicked();
+
     void speichern_triggerd();
     void speichernForGame_triggerd();
     void ladenMap_triggered();

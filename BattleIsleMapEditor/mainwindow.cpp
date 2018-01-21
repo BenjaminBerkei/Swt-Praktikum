@@ -1,8 +1,8 @@
 //-------------------
 //Autor: Miguel
 //letzte Änderung von Miugel
-//letzte Änderung: 20.01.2018
-//version 1.0
+//letzte Änderung: 21.01.2018
+//version 1.1
 //mainwindow.cpp
 //------------------
 
@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
     hexfield(new QGraphicsScene(this)),
     menuefield(new QGraphicsScene(this)),
     hexType(""), hexCacheField(nullptr), hexCacheMenue(nullptr), hexCacheUnit(nullptr),
-    sizeX(15), sizeY(10), scaleFak(1.0), fillRect(false),
+    sizeX(15), sizeY(10), scaleFak(1.0), boltCach(0), fillRect(false),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -36,6 +36,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->spinBoxX->setValue(sizeX);
     ui->spinBoxY->setValue(sizeY);
+
+    ui->lcdPlayer1->setPalette(Qt::blue);
+    ui->lcdPlayer2->setPalette(Qt::red);
+    ui->lcdBoltCach->setPalette(Qt::black);
+    ui->lcdBoltTotal->setPalette(Qt::black);
+    ui->lcdTotal->setPalette(Qt::black);
 
     ui->spinBoxX->setRange(1,150);
     ui->spinBoxY->setRange(1,150);
@@ -148,7 +154,25 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     {
         fillRect = !fillRect;
     }
+    else if(event->key() == Qt::Key_A)
+    {
+        on_rotateLBut_clicked();
+    }
+    else if(event->key() == Qt::Key_D)
+    {
+        on_rotateRBut_clicked();
+    }
     setFillingLabel();
+}
+
+void MainWindow::mousePressEvent(QMouseEvent * event)
+{
+        if(hexCacheField != nullptr)
+        {
+            hexCacheField->setHexColor(Qt::black);
+            hexCacheField->setZValue(0);
+            hexCacheField= nullptr;
+        }
 }
 
 //getter und setter
@@ -223,8 +247,45 @@ void MainWindow::setFillingLabel()
 }
 // Ende
 
-void MainWindow::updateBolt(){
-    ui->spinBoltanium->setValue(hexCacheField->getBoltaniumCurrent());
+void MainWindow::updateBolt()
+{
+    if(hexCacheField !=nullptr)
+        ui->spinBoltanium->setValue(hexCacheField->getBoltaniumCurrent());
+}
+
+void MainWindow::updateLCD()
+{
+    int tmpP1=0;
+    int tmpP2=0;
+    int tmpTot=0;
+    int tmpBolt=0;
+    for(unsigned int i = 0; i < myField.size(); i++)
+    {
+        for(unsigned int j = 0; j < myField[i].size(); j++)
+        {
+            Hexagon* hex = myField[i][j];
+            if(hex->getUnit_stationed() != nullptr)
+            {
+                if(hex->getUnit_stationed()->getPLY() == 1)
+                {
+                    tmpP1++;
+                    tmpTot++;
+                }
+                else if(hex->getUnit_stationed()->getPLY() == 2)
+                {
+                tmpTot++;
+                tmpP2++;
+                }
+                else
+                    tmpTot++;
+            }
+            tmpBolt += hex->getBoltaniumCurrent();
+        }
+    }
+    ui->lcdPlayer1->display(tmpP1);
+    ui->lcdPlayer2->display(tmpP2);
+    ui->lcdTotal->display(tmpTot);
+    ui->lcdBoltTotal->display(tmpBolt);
 }
 
 void MainWindow::spinBoxX_valueChanged(int arg1)
@@ -385,14 +446,28 @@ void MainWindow::on_ResetButton_clicked()
         hexCacheUnit= nullptr;
     }
 
+    if(hexCacheField != nullptr)
+    {
+        hexCacheField->setHexColor(Qt::black);
+        hexCacheField->setZValue(0);
+        hexCacheField= nullptr;
+    }
+
+    boltCach =0;
+    on_getBoltButt_clicked();
+    updateLCD();
     menuefield->update();
     hexfield->update();
 }
 
 void MainWindow::on_spinBoltanium_valueChanged(int arg1)
 {
-    hexCacheField->setBoltaniumCurrent(arg1);
-    hexfield->update();
+    if(hexCacheField != nullptr)
+    {
+        hexCacheField->setBoltaniumCurrent(arg1);
+        hexfield->update();
+        updateLCD();
+    }
 }
 
 void MainWindow::slot_getUnit(Hexagon *hex)
@@ -427,6 +502,7 @@ void MainWindow::slot_changeUnit(Hexagon *hex)
         hexfield->addItem(hex->getUnit_stationed());
         fieldUnit.push_back(tmp);
     }
+    updateLCD();
     hexfield->update();
 }
 
@@ -542,6 +618,7 @@ void MainWindow::on_deleteBut_clicked()
     {
         hexfield->removeItem(hexCacheField->getUnit_stationed());
         hexCacheField->setUnit_stationed(nullptr);
+        updateLCD();
     }
 }
 
@@ -588,6 +665,7 @@ void MainWindow::on_deleteAllBut_clicked()
             }
         }
     }
+    updateLCD();
     hexfield->update();
 }
 
@@ -595,6 +673,7 @@ void MainWindow::on_deleteBoltBut_clicked()
 {
     hexCacheField->setBoltaniumCurrent(0);
     updateBolt();
+    updateLCD();
 }
 
 void MainWindow::on_deleteAllBoltBut_clicked()
@@ -606,8 +685,27 @@ void MainWindow::on_deleteAllBoltBut_clicked()
             myField[i][j]->setBoltaniumCurrent(0);
         }
     }
+    updateLCD();
     hexfield->update();
 }
+
+void MainWindow::on_getBoltButt_clicked()
+{
+    if(hexCacheField != nullptr)
+    {
+        boltCach = hexCacheField->getBoltaniumCurrent();
+        ui->lcdBoltCach->display(boltCach);
+    }
+
+}
+
+void MainWindow::on_setBoltButt_clicked()
+{
+    hexCacheField->setBoltaniumCurrent(boltCach);
+    updateBolt();
+    updateLCD();
+}
+
 
 void MainWindow::speichern_triggerd()
 {
@@ -669,7 +767,7 @@ void MainWindow::speichernForGame_triggerd()
            {
                Hexagon* hex = myField[i][j];
 
-               out << i << " " << j << " " << hex->getHexMatchfieldType() << " "<< hex->getBoltaniumCurrent() << " ";
+               out << hex->getHexMatchfieldType() << " "<< hex->getBoltaniumCurrent() << " ";
                if(hex->getUnit_stationed() != nullptr)
                {
                    out << 1 << " " << hex->getUnit_stationed()->getPLY() << " " << hex->getUnit_stationed()->getFilepath() << "\n";
@@ -705,7 +803,6 @@ void MainWindow::ladenMap_triggered()
 
              QTextStream in(&file);
              int tmp_E;
-
 
              in >> tmp_E;
              if(tmp_E == -1)
