@@ -108,6 +108,7 @@ public slots:
     void buttonPressedMenue();
     void buttonPressedChangePhase();
     void SLOT_MenueButtonSelected(int);
+    void SLOT_checkStateOfButtons();
 signals:
     void gameOver();
 };

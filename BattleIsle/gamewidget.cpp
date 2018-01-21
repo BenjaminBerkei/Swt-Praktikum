@@ -290,12 +290,10 @@ void GameWidget::setEnableButtonScene(bool state)
 {
     for(auto &it : gameWidButtonScene->items())
     {
-            it->setEnabled(state);
-            if(state)
-                it->show();
-            else
-                it->hide();
+        it->setEnabled(state);
     }
+    if(state)
+        emit SIGNAL_changeStateOfButtons();
 }
 
 void GameWidget::updateInfoOptScenes()

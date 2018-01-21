@@ -14,6 +14,7 @@
  *              ChangePhase & Move Button Implementiert, Hilfsfunktionen  eingefügt
  * */
 #include "game.h"
+#include <typeinfo>
 using namespace std;
 
 std::vector<QPoint> Game::vector_evenNeighbors = {QPoint(1,0),QPoint(1,-1),QPoint(0,-1),QPoint(-1,-1),QPoint(-1,0),QPoint(0,1)};
@@ -181,15 +182,7 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     qDebug() << "\t fog of war done";
     qDebug() << "--------------------Feld Erstellt-----------------";
 
-    /*for(unsigned int i = 0; i < unit_UnitGrid.size(); i++)
-    {
-        for(unsigned int j = 0; j < unit_UnitGrid[i].size(); j++)
-        {
-            if(unit_UnitGrid[i][j] != nullptr)
-                qDebug() << "Unit (" << i << "," << j << ") ist vom Typ: |" << typeid(*unit_UnitGrid[i][j]).name() << "|";
-        }
-    }*/
-       //##################################################################
+    //##################################################################
 
     //Buttons Einfuegen
     ButtonMove* movebutton = new ButtonMove(64,64);
@@ -210,6 +203,8 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     connect(menuebutton,SIGNAL(clicked()),this,SLOT(buttonPressedMenue()));
 
     connect(ptr_gameGameWid, SIGNAL(SIGNAL_MenueButtonPushed(int)), this, SLOT(SLOT_MenueButtonSelected(int)));
+    connect(ptr_gameGameWid, SIGNAL(SIGNAL_changeStateOfButtons()), this, SLOT(SLOT_checkStateOfButtons()));
+    SLOT_checkStateOfButtons();
 
     ptr_gameGameWid->gameWidCreateButtonBar(button_menueBar);
 
@@ -487,15 +482,9 @@ void Game::buttonPressedChangePhase()
     {
         ptr_playerActive = ptr_playerActive == ptr_playerOne ? ptr_playerTwo : ptr_playerOne;
         resetHexMatchfield();
-        setFogOfWar();
-        button_menueBar[0]->setBool_ButtonShowActivation(true); // Setze das der Movebutton nicht "geschwaertzt" werden soll
-        button_menueBar[1]->setBool_ButtonShowActivation(false);// Setze das der Actionbutton "geschwaertzt" werden soll
+        setFogOfWar();        
     }
-    else
-    {
-        button_menueBar[0]->setBool_ButtonShowActivation(false); // Setze das der Movebutton "geschwaertzt" werden soll
-        button_menueBar[1]->setBool_ButtonShowActivation(true); // Setze das der Actionbutton nicht "geschwaertzt" werden soll
-    }
+    SLOT_checkStateOfButtons();
     resetTargetCache();
 
     ptr_gameGameWid->setPlayerLabel(ptr_playerActive->getPlayerName());
@@ -524,6 +513,20 @@ void Game::SLOT_MenueButtonSelected(int menue)
         return;
     }
 
+}
+
+void Game::SLOT_checkStateOfButtons()
+{
+    if(ptr_roundCurrent->getCurrentPhase() == MOVE)
+    {
+        button_menueBar[0]->setEnabled(true); // Setze das der Movebutton nicht "geschwaertzt" werden soll
+        button_menueBar[1]->setEnabled(false);// Setze das der Actionbutton "geschwaertzt" werden soll
+    }
+    else
+    {
+        button_menueBar[0]->setEnabled(false); // Setze das der Movebutton "geschwaertzt" werden soll
+        button_menueBar[1]->setEnabled(true); // Setze das der Actionbutton nicht "geschwaertzt" werden soll
+    }
 }
 
 /*HilfsFunktionen Start#######################################################################*/
