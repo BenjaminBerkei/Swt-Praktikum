@@ -1,8 +1,8 @@
 //-------------------
 //Autor: Miguel
 //letzte Änderung von Miugel
-//letzte Änderung: 20.01.2018
-//version 1.0
+//letzte Änderung: 21.01.2018
+//version 1.1
 //hexagon.cpp
 //------------------
 
@@ -146,7 +146,7 @@ void Hexagon::setHexMatchfieldType(QString type)
 
 void Hexagon::mousePressEvent( QGraphicsSceneMouseEvent * event)
 {
-    emit SIGNAL_clicked(this);
+        emit SIGNAL_clicked(this);
 }
 
 void Hexagon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -169,6 +169,11 @@ int Hexagon::getBoltaniumCurrent() const{
 
 void Hexagon::setBoltaniumCurrent(int value){
     int_boltaniumCurrent = value;
+    if(int_boltaniumCurrent > 0)
+    {
+        qpixmap_boltanium.load(":/img/Boltanium/Boltanium_high.png");
+        qpixmap_boltanium = qpixmap_boltanium.scaled(64,64);
+    }
 }
 
 QPoint Hexagon::getQpoint_gridPosition() const

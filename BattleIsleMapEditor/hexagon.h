@@ -1,8 +1,8 @@
 //-------------------
 //Autor: Miguel
 //letzte Änderung von Miugel
-//letzte Änderung: 20.01.2018
-//version 1.0
+//letzte Änderung: 21.01.2018
+//version 1.1
 //hexagon.h
 //------------------
 
