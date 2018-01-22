@@ -631,7 +631,7 @@ void MapPixel::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidge
             rectWidth = 2;
             zKoord = 2;
 
-            if(ptr_mapPixHexaon->getUnit_stationed()->getUnitType() == QString(" HEADQUATERUNIT")) // Nur das Hauptquatier
+            if(ptr_mapPixHexaon->getUnit_stationed()->getUnitType() == QString("HEADQUATERUNIT")) // Nur das Hauptquatier
             {
                 rectWidth = 4;
                 colorRect = Qt::white;

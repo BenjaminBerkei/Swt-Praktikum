@@ -14,25 +14,27 @@
 #define PLAYER_HPP
 
 #include <QString> 
-
+#include <QTextStream>
 class Game;
 
 class Player 
 { 
 private: 
     QString str_playerName;
-    const int int_playerID;
+    int int_playerID;
     int int_playerScore;
     int int_playerTotalEnergie;
 	int int_currentEnergieStorage;
     int int_playerUnitNumber;
     bool bool_HQDestroyed;
+    bool bool_isKI;
 
 public: 
-    Player(QString, int, int = 1000, int = 250, int = 0, int = 0);
+    Player(QString, int,bool = false, int = 1000, int = 250, int = 0, int = 0);
     ~Player();
     void increaseUnitNumber();
     void decreaseUnitNumber();
+    void serialize(QTextStream&);
 
 	QString getPlayerName() const;	//const correctness, heßt das diese Funktion keinen wert verändern wird, damit umgeht man iA Fehler die aus versehen passieren
     int getPlayerScore() const;

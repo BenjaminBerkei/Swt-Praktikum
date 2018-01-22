@@ -86,6 +86,12 @@ void DynamicUnit::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     QGraphicsPixmapItem::paint(painter,option,widget);
 }
 
+void DynamicUnit::serialize(QTextStream & out)
+{
+    out << str_unitType << " " << unitFile << " " << unitPlayer->getPlayerID() << " "
+        << int_unitCurrentHP << " " << int_unitCurrentMoveRange << " " << int_unitLevel << "\n";
+}
+
 int DynamicUnit::getUnitAutoRep() const{
 		return int_unitAutoRep;
 }
@@ -207,6 +213,16 @@ void TransporterUnit::addUnitToStorage(Unit *unit)
 {
     vector_unitStorage.push_back(unit);
     connect(unit->getUnitDisplay(),SIGNAL(unitDispl_clicked(Unit*)),this, SLOT(SLOT_setUnitToUnload(Unit*)));
+}
+
+void TransporterUnit::serialize(QTextStream &out)
+{
+    DynamicUnit::serialize(out);
+    out << vector_unitStorage.size() << "\n";
+    for(auto &unitInStorage : vector_unitStorage)
+    {
+        unitInStorage->serialize(out);
+    }
 }
 
 void TransporterUnit::resetBuildUnloadParameter()
@@ -666,8 +682,6 @@ LightUnit *LightUnit::createUnit()
 BuildLightUnit::BuildLightUnit(QString filepath, bool bool_loadInventory, Player* player)
     : LightUnit(filepath, player)
 {
-    qDebug() << "BuildLightUnit: " << bool_loadInventory;
-
     if(bool_loadInventory == true)
     {
         production["Depot"] = new DepotUnit(":/static/staticUnit/depot.txt", unitPlayer);

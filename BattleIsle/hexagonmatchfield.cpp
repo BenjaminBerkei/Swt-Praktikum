@@ -173,6 +173,24 @@ void HexagonMatchfield::paint(QPainter *painter, const QStyleOptionGraphicsItem 
     }
 }
 
+void HexagonMatchfield::serialize(QTextStream &out)
+{
+    if(int_boltaniumCurrent > 0 || unit_stationed != nullptr)
+    {
+        out << qpoint_gridPosition.x() << " " << qpoint_gridPosition.y() << " "
+            << int_boltaniumCurrent << " ";
+        if(unit_stationed != nullptr)
+        {
+            out << "1";
+            out << "\n";
+            unit_stationed->serialize(out);
+        }else{
+            out << "0";
+            out << "\n";
+        }
+    }
+}
+
 int HexagonMatchfield::getBoltaniumCurrent() const{
     return int_boltaniumCurrent;
 }

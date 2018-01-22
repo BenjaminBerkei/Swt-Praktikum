@@ -19,3 +19,9 @@ Options::Options(bool bool_KI, bool bool_fog, QString str_m, int int_limit)
 {
 
 }
+
+void Options::serialize(QTextStream &out)
+{
+    out << str_map << " " << bool_fogOfWar << " "
+        << int_roundLimit << " " << bool_ki << "\n";
+}

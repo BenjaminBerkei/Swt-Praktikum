@@ -30,7 +30,11 @@ StaticUnit::StaticUnit(QString filepath, Player* player)
 	in >> int_unitHP;
 	in >> int_unitStorageMax;
     in >> int_EnergieStorage;
-    str_unitType = in.readLine();
+    in >> str_unitType;
+
+    QString buffer; //Aufgrund des Zeilenumbruchs
+    buffer = in.readLine();
+
     str_unitDetails = in.readLine();
 
     QString pixmapPathPlayerNeutral = in.readLine();
@@ -59,6 +63,12 @@ StaticUnit::StaticUnit(QString filepath, Player* player)
     {
         int_unitView = int_unitMoveRange;
     }
+}
+
+void StaticUnit::serialize(QTextStream &out)
+{
+    out << str_unitType << " " << unitFile << " " << unitPlayer->getPlayerID() << " "
+        << int_unitCurrentHP << "\n";
 }
 
 int StaticUnit::getEnergieStorage() const
@@ -149,7 +159,6 @@ Unit* DepotUnit::createUnit()
 FactoryUnit::FactoryUnit(QString filepath, bool bool_loadInventory, Player* player)
 	: StaticUnit(filepath, player), unitToBuild("")
 {
-    qDebug() << "Factory: " << bool_loadInventory;
     if(bool_loadInventory == true)
     {
         production["B.E.N"] = new LightUnit(":/dynamic/dynamicUnit/ben.txt", unitPlayer);

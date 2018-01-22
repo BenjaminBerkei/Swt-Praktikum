@@ -9,6 +9,7 @@
 #include <QObject>
 #include <string>
 #include <QDebug>
+#include <QTextStream>
 
 class Options : public QObject
 {
@@ -22,6 +23,7 @@ private:
 public:
     Options();
     Options(bool bool_KI, bool bool_fog, QString str_m, int int_limit);
+    void serialize(QTextStream&);
 
     //get und set Methoden
     bool getBool_ki() { return bool_ki; }

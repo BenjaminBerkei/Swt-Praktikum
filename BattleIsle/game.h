@@ -37,6 +37,10 @@
 #include <queue>
 #include <QVector3D>
 #include <QGraphicsView>
+#include <QFileDialog>
+#include <QTextStream>
+#include <QFile>
+#include <QTextCodec>
 
 class GameWidget; //Vorwärtsdeklaration
 class HexagonMatchfield;
@@ -92,6 +96,7 @@ public:
     void resetUnits();
     void countUnits();
     int offset_distance(QPoint, QPoint);
+    void serialize(QTextStream&);
 
 private:
     QVector3D oddqToCube(QPoint);   //Für Referenzen betrachte https://www.redblobgames.com/grids/hexagons/#distances , Kapitel: Distance

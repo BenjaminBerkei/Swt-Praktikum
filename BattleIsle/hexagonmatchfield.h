@@ -31,6 +31,7 @@
 
 #include <QString>
 #include <QDebug>
+#include <QTextStream>
 
 class Unit;
 class Game;
@@ -70,6 +71,7 @@ protected:
 public:
     HexagonMatchfield(QPoint qpoint_gridPosition, QString type, Unit* stationedUnit= 0);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    void serialize(QTextStream&);
 
 
     //get und set Methoden

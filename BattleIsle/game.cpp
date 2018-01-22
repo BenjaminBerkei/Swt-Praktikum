@@ -81,7 +81,6 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
             if(randBoltanium < 20)
             {
                 int randBoltaniumAmount = (qrand() % 200) + 50;
-                qDebug() << randBoltaniumAmount;
                 vectorHex[j]->setBoltaniumCurrent(randBoltaniumAmount);
             }
             connect(vectorHex[j],SIGNAL(SIGNAL_clicked(HexagonMatchfield*)),this,SLOT(processSelection(HexagonMatchfield*)));
@@ -249,6 +248,37 @@ void Game::loadGame(QString )
 void Game::saveGame()
 {
     qDebug() << "SaveGame";
+    QString qstring_pathToSaveFile = QFileDialog::getSaveFileName(ptr_gameGameWid, tr("Save File"), "", tr("Data Text (*.txt);;All Files (*)"));
+
+    if(qstring_pathToSaveFile.isEmpty())
+    {
+        qDebug() << "File Name Empty";
+        return;
+    }
+
+    QFile file_saveFile(qstring_pathToSaveFile);
+
+    if(!file_saveFile.open(QIODevice::WriteOnly))
+    {
+        qDebug() << " Could not open the file for writing";
+        return;
+    }
+
+    QTextStream out(&file_saveFile);
+    out.setCodec(QTextCodec::codecForName("UTF-8"));
+
+    out << "Battle Isle Clone V 2.7 \n";
+    gameOptions->serialize(out);
+    ptr_playerOne->serialize(out);
+    ptr_playerTwo->serialize(out);
+    ptr_roundCurrent->serialize(out);
+    for(auto &iteratorX : hexagonMatchfield_gameGrid)
+    {
+        for(auto &hex : iteratorX)
+        {
+            hex->serialize(out);
+        }
+    }
 }
 
 void Game::endGame()
@@ -784,6 +814,11 @@ int Game::offset_distance(QPoint a, QPoint b)
     QVector3D ac = oddqToCube(a);
     QVector3D bc = oddqToCube(b);
     return cube_distance(ac, bc);
+}
+
+void Game::serialize(QTextStream &)
+{
+    qDebug() << "Serialisieren Game: ";
 }
 
 

@@ -32,6 +32,7 @@ DynamicUnit(QString, Player*);
 ~DynamicUnit();
 
 virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+void serialize(QTextStream&);
   int getUnitAutoRep() const;
   int getUnitLevel() const;
 
@@ -70,16 +71,17 @@ public:
 	TransporterUnit(QString, Player*);
     ~TransporterUnit();
 
-    int getTransporterUnitCapacity() const;
-  	int getTransporterUnitCurrentCapacity() const;
-    void setTransporterUnitCurrentCapacity(const int);
-
     virtual bool action(HexagonMatchfield *hex_target);
     void unload(HexagonMatchfield *hex_target);
     void farmBoltanium(HexagonMatchfield *hex_target);
     void addUnitToStorage(Unit* unit);
+    void serialize(QTextStream &);
 
     void resetBuildUnloadParameter();
+
+    int getTransporterUnitCapacity() const;
+    int getTransporterUnitCurrentCapacity() const;
+    void setTransporterUnitCurrentCapacity(const int);
 public slots:
     void SLOT_setUnitToUnload(Unit* unit);
 };

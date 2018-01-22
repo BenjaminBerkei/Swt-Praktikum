@@ -11,9 +11,9 @@
 #include "player.h"
 
 
-Player::Player(QString playerName,int id,  int totalEnergie, int currentEnergie, int unitNumber, int playerScore)
+Player::Player(QString playerName,int id, bool ki, int totalEnergie, int currentEnergie, int unitNumber, int playerScore)
     :str_playerName(playerName), int_playerID(id), int_playerScore(playerScore), int_playerTotalEnergie(totalEnergie),
-      int_currentEnergieStorage(currentEnergie), int_playerUnitNumber(unitNumber), bool_HQDestroyed(false) {}
+      int_currentEnergieStorage(currentEnergie), int_playerUnitNumber(unitNumber), bool_HQDestroyed(false), bool_isKI(ki) {}
 
 Player::~Player(){
 	/*
@@ -30,6 +30,20 @@ void Player::increaseUnitNumber()
 void Player::decreaseUnitNumber()
 {
     int_playerUnitNumber--;
+}
+
+void Player::serialize(QTextStream& out)
+{
+    out << int_playerID << " " << str_playerName << " " << int_playerScore << " "
+        << int_currentEnergieStorage;
+    if(bool_isKI == true)
+    {
+        out << " " << 1;
+    }else{
+        out << " " << 0;
+    }
+    out << "\n";
+
 }
 
 void Player::setPlayerName(QString name){ 

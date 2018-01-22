@@ -22,6 +22,7 @@
 #include <QTextStream>
 #include <QString> 
 #include <QPoint>
+#include <QTextStream>
 
 class HexagonMatchfield;
 class UnitDisplayInfo;
@@ -62,6 +63,7 @@ public:
     virtual Unit* createUnit() = 0;
     virtual bool checkUnitDestroyed();
     virtual bool action(HexagonMatchfield*) = 0;
+    virtual void serialize(QTextStream&) = 0;
     virtual int moveTo(HexagonMatchfield*);
     virtual void autoRepair();
     virtual void levelUpBonus();

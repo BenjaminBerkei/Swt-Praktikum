@@ -23,7 +23,19 @@ Round::Round(int maxAnz = 0)
 Round::~Round()
 {
 	delete currentRoundPhase;
-	return;
+    return;
+}
+
+void Round::serialize(QTextStream & out)
+{
+    out << int_currentRoundNumber << " ";
+    if(currentRoundPhase->currentPhase() == MOVE)
+    {
+        out << "MOVE";
+    }else{
+        out << "ACTION";
+    }
+    out << "\n";
 }
 
 void Round::setCurrentRoundPhase(Phase* phase)

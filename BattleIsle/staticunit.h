@@ -35,6 +35,7 @@ protected:
 
 public:
     StaticUnit(QString, Player* = nullptr);
+    void serialize(QTextStream &);
 
 	int getEnergieStorage() const;	
 	int moveTo(HexagonMatchfield*);
