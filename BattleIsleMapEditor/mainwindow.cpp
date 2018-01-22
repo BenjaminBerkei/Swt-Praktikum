@@ -31,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->spinBoltanium,SIGNAL(valueChanged(int)), this, SLOT(on_spinBoltanium_valueChanged(int)));
     connect(ui->deleteBut, SIGNAL(clicked(bool)), this, SLOT(on_deleteBut_clicked()));
     connect(ui->actionSpeichern, SIGNAL(triggered(bool)),this, SLOT(speichern_triggerd()));
-    connect(ui->actionSpeichernForBIC, SIGNAL(triggered(bool)),this, SLOT(speichern_triggerd()));
+    connect(ui->actionSpeichernForBIC, SIGNAL(triggered(bool)),this, SLOT(speichernForGame_triggerd()));
     connect(ui->actionLoad_Map, SIGNAL(triggered(bool)),this, SLOT(ladenMap_triggered()));
 
     ui->spinBoxX->setValue(sizeX);
