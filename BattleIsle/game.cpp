@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Author: Manuel
  * Version: 0.1
  * Datum 30.12.2017
@@ -12,6 +12,12 @@
  * Datum 14.01.2018
  * Kommentare: ProcessSelection bearbeitet, Dijkstra gefixed, reset funktion geändert, Player cameFrom und current_cost eingefügt,
  *              ChangePhase & Move Button Implementiert, Hilfsfunktionen  eingefügt
+ *
+ * Author: Miguel
+ * Version: 0.5
+ * Datum: 23.01.2018
+ * Kommentar: getter und setter für targetCache, camefrom und costs. Dijkstra muss jetzt ein HexagonMatchfield* uebergeben bekommen
+ * 		Grund für die Aenderung ist die KI.
  * */
 #include "game.h"
 #include <typeinfo>
