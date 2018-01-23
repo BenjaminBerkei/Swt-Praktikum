@@ -380,13 +380,13 @@ void Game::processSelection(HexagonMatchfield *selection)
     checkWinCondition();
 }
 
-void Game::Dijkstra()
+void Game::Dijkstra(HexagonMatchfield* start, int factor)
 {
     /*
      * Berechnung aller kürzesten Wege vom SelectionCache aus innerhalb der Reichweite
      * Setzt den TargetChache mit den berechneten Zielen und setzt deren state auf TARGET
      * */
-    HexagonMatchfield* target = selectionCache;
+    HexagonMatchfield* target = start;
 
     std::priority_queue<std::pair<HexagonMatchfield*, int>, std::vector<std::pair<HexagonMatchfield*, int>>, Compare> frontier;
 
@@ -433,7 +433,7 @@ void Game::Dijkstra()
                         int new_cost = current_cost[current] + target->getUnit_stationed()->moveTo(neighbour);
 
                         /*Wenn diese Kosten geringer als die Reichweite der Einheit und besser als die bisherigen Kosten sind, dann..*/
-                        if(new_cost <= target->getUnit_stationed()->getUnitCurrentMoveRange() && new_cost < current_cost[neighbour])
+                        if(new_cost <= target->getUnit_stationed()->getUnitCurrentMoveRange()*factor && new_cost < current_cost[neighbour])
                         {
                             current_cost[neighbour] = new_cost; //Kosten aktualisieren
                             came_from[neighbour] = current;     //Vorgänger auf das Aktuelle Feld setzem
@@ -465,7 +465,7 @@ void Game::buttonPressedMove()
         if(selectionCache != nullptr && selectionCache->getUnit_stationed() != nullptr
                 && selectionCache->getUnit_stationed()->getUnitPlayer() == ptr_playerActive)
         {
-            Dijkstra();     //Berechnen aller möglichen Ziele
+            Dijkstra(selectionCache);     //Berechnen aller möglichen Ziele
         }
     }
 }
@@ -827,4 +827,19 @@ void Game::serialize(QTextStream &)
 bool Compare::operator()(std::pair<HexagonMatchfield*, int> a, std::pair<HexagonMatchfield*, int> b)
 {
     return a.second < b.second;
+}
+
+//fuer ki
+std::vector<HexagonMatchfield*> Game::getTargetCache() const
+{
+	return targetCache;
+}
+
+std::map<HexagonMatchfield*, HexagonMatchfield*> Game::getCamefrom() const
+{
+	return came_from;
+}
+std::map<HexagonMatchfield*, int> Game::getCurrentCost() const
+{
+	return current_cost;
 }

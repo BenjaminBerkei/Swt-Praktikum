@@ -81,7 +81,7 @@ public:
     void loadGame(QString pathToSaveFile);
     void saveGame();
     void endGame();
-    void Dijkstra();
+    void Dijkstra(HexagonMatchfield*, int = 1);
 
     /* Nicht im UML-Diagramm, sind nur eine Hilfsfunktionen für processSelection*/
     void resetHexMatchfield();
@@ -98,6 +98,10 @@ public:
     int offset_distance(QPoint, QPoint);
     void serialize(QTextStream&);
 
+	//fuer ki
+	std::vector<HexagonMatchfield*> getTargetCache() const;
+	std::map<HexagonMatchfield*, HexagonMatchfield*> getCamefrom() const;
+	std::map<HexagonMatchfield*, int> getCurrentCost() const;
 private:
     QVector3D oddqToCube(QPoint);   //Für Referenzen betrachte https://www.redblobgames.com/grids/hexagons/#distances , Kapitel: Distance
     QPoint cubeToOddq(QVector3D);
@@ -116,6 +120,7 @@ public slots:
     void SLOT_checkStateOfButtons();
 signals:
     void gameOver();
+
 };
 class Compare
 {
