@@ -5,12 +5,13 @@
 //Autor: Miguel
 //letzte Änderung von Miugel
 //letzte Änderung: 21.01.2018
-//version 1.1
+//version 1.2
 //main.cpp
 //------------------
 
 #include "mainwindow.h"
 #include "hexagon.h"
+#include "unit.h"
 #include <vector>
 #include <QApplication>
 
