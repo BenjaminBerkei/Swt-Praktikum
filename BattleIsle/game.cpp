@@ -535,6 +535,9 @@ bool Game::loadMapForNewGame(QString filepath)
             }
             vecHexagon.push_back(new HexagonMatchfield(QPoint(i,j), typeHex, vecUnit[j]));
             vecHexagon[j]->setBoltaniumCurrent(boltanium);
+
+            connect(vecHexagon[j],SIGNAL(SIGNAL_clicked(HexagonMatchfield*)),this,SLOT(processSelection(HexagonMatchfield*)));
+            connect(vecHexagon[j],SIGNAL(SIGNAL_centerThis(HexagonMatchfield*)), ptr_gameGameWid, SLOT(SLOT_gameWidCenterHex(HexagonMatchfield*)));
         }
         unit_UnitGrid.push_back(vecUnit);
         hexagonMatchfield_gameGrid.push_back(vecHexagon);

@@ -403,6 +403,7 @@ void GameWidget::gameWidCreateMap(std::vector<std::vector<HexagonMatchfield *> >
 
 void GameWidget::SLOT_gameWidCenterHex(HexagonMatchfield *hex)
 {
+    qDebug() << "SLOT_gameWidCenterHex ausgefuehrt.";
     setEnableButtonScene(true);
     ui->graphicsView_gameView->setScene(gameWidGameScene);
     ui->graphicsView_gameView->centerOn(hex);
@@ -410,6 +411,7 @@ void GameWidget::SLOT_gameWidCenterHex(HexagonMatchfield *hex)
 
 void GameWidget::SLOT_gameWidDestroyMap()
 {
+    qDebug() << "SLOT_gameWidDestroyMap ausgefuehrt.";
     for(int i = vectorVector_gameWidMiniMap.size() - 1; i >= 0; i--)
     {
         for(int j = vectorVector_gameWidMiniMap[i].size() - 1; j >= 0; j--)
