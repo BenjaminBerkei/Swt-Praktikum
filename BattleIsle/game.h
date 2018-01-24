@@ -17,6 +17,20 @@
  * Datum 14.01.2018
  * Kommentare: ProcessSelection bearbeitet, Dijkstra gefixed, reset funktion geändert, Player cameFrom und current_cost eingefügt,
  *              ChangePhase & Move Button Implementiert, Hilfsfunktionen  eingefügt
+ *
+ * Autho: Manuel
+ * Version: 0.5
+ * Datum: 24.01.2018
+ * Kommentar:
+ * Folgende Probleme gibt es noch:
+ * -    Minimap: Laedt man ein Save Game so funktioniert die Minimap nicht korrekt. Das Problem entsteht, wenn auf die Minimap geklickt wird um
+ *      wieder zum Spiel zurueck zu gelangen. Das ganze ensteht dadurch, dass das entsprechende Hexagon nicht aktiv ist (siehe in das
+ *      mousePressEvent von HexagonMatchfield. Dort liefert die Funktion isActive() ein true zurueck, auch wenn die Minimap aktuell
+ *      angezeigt wird, was ich nicht verstehe)
+ *
+ * -    MoveRange: Hat eine keine MoveRange mehr, wird dies nicht korrekt abgespeichert. Beim Laden dieses Spieles existert diese MoveRange nicht.
+ *
+ * -    Resize: Wird ein Spiel ueber das Menue beendet und ein neues Spiel gestartet, passt sich das Fenster nicht angemessen an.
  * */
 
 #ifndef GAME_H
@@ -105,6 +119,9 @@ private:
     QVector3D oddqToCube(QPoint);   //Für Referenzen betrachte https://www.redblobgames.com/grids/hexagons/#distances , Kapitel: Distance
     QPoint cubeToOddq(QVector3D);
     int cube_distance(QVector3D, QVector3D);
+    void readSaveGame(QString);
+    void createRandomMap();
+    void createButtons();
     /*Hilfsfunktionen Ende*/
 
 public slots:

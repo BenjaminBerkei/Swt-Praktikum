@@ -58,7 +58,7 @@ Round *Round::unserialize(QTextStream &in)
     in >> str_round;
     in >> maxRoundNumber;
 
-    qDebug() << "unserialize von Player ausfuehren mit \n\t" << currentRoundNumber << "\n\t" <<
+    qDebug() << "unserialize von Round ausfuehren mit \n\t" << currentRoundNumber << "\n\t" <<
                 str_round << "\n\t" << maxRoundNumber;
 
     return new Round(str_round,currentRoundNumber,maxRoundNumber);

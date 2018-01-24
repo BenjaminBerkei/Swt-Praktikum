@@ -55,6 +55,21 @@ void StartMenueWidget::startGame( Options *options_initOptions )
 
 }
 
+void StartMenueWidget::loadGame(QString pathToLoadFile)
+{
+    //Erstelle ein Objekt vom Typ Game
+    ptr_smwMenueWidget->setPtr_runningGame(new Game(pathToLoadFile, ptr_smwMenueWidget->getPtr_mwGameWidget()));
+    connect(ptr_smwMenueWidget->getPtr_runningGame(), SIGNAL(gameOver()), this, SLOT(gameEnded()));
+
+    ptr_smwMenueWidget->resize( 1200,750 );
+    ptr_smwMenueWidget->ui->stack->resize( 1190, 740 );
+    ptr_smwMenueWidget->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
+
+    //Wechsel zu Widget 3
+    emit SIGNAL_smwChangeIndexFromStack( 3 );
+    //Das Signal wird im Konstruktor von MenueWidget verbunden
+}
+
 void StartMenueWidget::switchToOptions()
 {
     //Wechsel zu Widget 2
@@ -99,7 +114,7 @@ void StartMenueWidget::on_qbutton_loadGame_clicked()
 {
     //switchToLoadGame();
     QString pathToLoadFile = QFileDialog::getOpenFileName(this);
-    Game(pathToLoadFile, ptr_smwMenueWidget->getPtr_mwGameWidget());
+    loadGame(pathToLoadFile);
 }
 
 void StartMenueWidget::on_qbutton_options_clicked()

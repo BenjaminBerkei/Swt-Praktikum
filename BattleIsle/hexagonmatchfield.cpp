@@ -135,9 +135,12 @@ HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, QString type, U
 void HexagonMatchfield::mousePressEvent( QGraphicsSceneMouseEvent *)
 {
     if(isActive())
-    {}
+    {
+        qDebug() << "Hexagon Aktiv.";
+    }
     else
     {
+        qDebug() << "Hexagon ist nicht Aktiv. Sende Signal SIGNAL_centerThis";
         emit SIGNAL_centerThis(this);
     }
     emit SIGNAL_clicked( this );
