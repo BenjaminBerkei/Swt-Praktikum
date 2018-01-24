@@ -18,12 +18,12 @@ StaticUnit::StaticUnit(QString filepath, Player* player)
     : Unit()
 {
     QFile file(filepath);
-    QTextStream in(&file);
     if(!file.open(QFile::ReadOnly | QFile::Text))
     {
         qDebug() << "Warnung: File nicht gefunden";
         return;
     }
+    QTextStream in(&file);
     str_unitName = in.readLine();
 	in >> int_unitView;
     in >> int_actionRange;

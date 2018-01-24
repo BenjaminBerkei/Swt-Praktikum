@@ -11,9 +11,9 @@
 #include "player.h"
 
 
-Player::Player(QString playerName,int id, bool ki, int totalEnergie, int currentEnergie, int unitNumber, int playerScore)
+Player::Player(QString playerName,int id, bool ki, int currentEnergie, int playerScore, int totalEnergie)
     :str_playerName(playerName), int_playerID(id), int_playerScore(playerScore), int_playerTotalEnergie(totalEnergie),
-      int_currentEnergieStorage(currentEnergie), int_playerUnitNumber(unitNumber), bool_HQDestroyed(false), bool_isKI(ki) {}
+      int_currentEnergieStorage(currentEnergie), int_playerUnitNumber(0), bool_HQDestroyed(false), bool_isKI(ki) {}
 
 Player::~Player(){
 	/*
@@ -44,6 +44,28 @@ void Player::serialize(QTextStream& out)
     }
     out << "\n";
 
+}
+
+Player *Player::unserialize(QTextStream &in)
+{
+    int playerID;
+    QString playerName;
+    int score;
+    int boltaniumCurrent;
+    int int_ki;
+    bool ki;
+
+    in >> playerID;
+    in >> playerName;
+    in >> score;
+    in >> boltaniumCurrent;
+    in >> int_ki;
+    ki = (bool)int_ki;
+
+    qDebug() << "unserialize von Player ausfuehren mit \n\t" << playerID  << "\n\t" << playerName
+                  << "\n\t" << score  << "\n\t" << boltaniumCurrent  << "\n\t" << int_ki;
+
+    return new Player(playerName,playerID,ki,boltaniumCurrent,score);
 }
 
 void Player::setPlayerName(QString name){ 

@@ -16,6 +16,7 @@
 
 #include "enumerations.h"
 #include <QTextStream>
+#include <QDebug>
 
 class Phase;
 
@@ -28,8 +29,10 @@ private:
 
 public:
 	Round(int);
+    Round(QString, int, int);
 	~Round();
     void serialize(QTextStream&);
+    static Round* unserialize(QTextStream&);
 	void setCurrentRoundPhase(Phase*);
 	void changePhase();
     bool checkGameOver();

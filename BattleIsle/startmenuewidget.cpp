@@ -97,7 +97,9 @@ void StartMenueWidget::on_qbutton_startGame_clicked()
 
 void StartMenueWidget::on_qbutton_loadGame_clicked()
 {
-    switchToLoadGame();
+    //switchToLoadGame();
+    QString pathToLoadFile = QFileDialog::getOpenFileName(this);
+    Game(pathToLoadFile, ptr_smwMenueWidget->getPtr_mwGameWidget());
 }
 
 void StartMenueWidget::on_qbutton_options_clicked()

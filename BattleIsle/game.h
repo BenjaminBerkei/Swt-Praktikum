@@ -76,12 +76,15 @@ private:
     bool MenueView;
 public:
     Game(Options* init_options, GameWidget* ptr_gameWid);
+    Game(QString, GameWidget*);
     ~Game();
     //Game(QString pathToSaveFile);
     void loadGame(QString pathToSaveFile);
     void saveGame();
     void endGame();
     void Dijkstra();
+    bool loadMapFromSaveGame(QString);
+    bool loadMapForNewGame(QString);
 
     /* Nicht im UML-Diagramm, sind nur eine Hilfsfunktionen für processSelection*/
     void resetHexMatchfield();

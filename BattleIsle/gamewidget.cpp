@@ -109,6 +109,16 @@ QGraphicsScene *GameWidget::getGameWidMapScene() const
     return gameWidMapScene;
 }
 
+void GameWidget::setSizeX(int value)
+{
+    sizeX = value;
+}
+
+void GameWidget::setSizeY(int value)
+{
+    sizeY = value;
+}
+
 GameWidget::GameWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::GameWidget),

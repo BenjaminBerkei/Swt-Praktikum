@@ -69,7 +69,7 @@ protected:
     QPixmap qpixmap_boltanium;
 
 public:
-    HexagonMatchfield(QPoint qpoint_gridPosition, QString type, Unit* stationedUnit= 0);
+    HexagonMatchfield(QPoint qpoint_gridPosition, QString type, Unit* stationedUnit = nullptr);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     void serialize(QTextStream&);
 
