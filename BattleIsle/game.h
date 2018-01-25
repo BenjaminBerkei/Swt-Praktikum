@@ -72,34 +72,33 @@ class Game : public QObject
 {
     Q_OBJECT
 private:
-    HexagonMatchfield* selectionCache;
-    std::vector<HexagonMatchfield*> targetCache;
+    HexagonMatchfield* ptr_hexSelectionCache;
+    std::vector<HexagonMatchfield*> vec_hexTargetCache;
 
-    std::vector<std::vector<HexagonMatchfield*>> hexagonMatchfield_gameGrid;
-    std::vector<std::vector<Unit*>> unit_UnitGrid;
-    std::vector<Button*> button_menueBar;
+    std::vector<std::vector<HexagonMatchfield*>> vec_hexGameGrid;
+    std::vector<std::vector<Unit*>> vec_unitGrid;
+    std::vector<Button*> vec_buttonMenueBar;
 
-    Options* gameOptions;
-    GameWidget* ptr_gameGameWid;
+    Options* ptr_gameOptions;
+    GameWidget* ptr_gameWidget;
 
-    std::map<HexagonMatchfield*, HexagonMatchfield*> came_from;
-    std::map<HexagonMatchfield*, int> current_cost;
+    std::map<HexagonMatchfield*, HexagonMatchfield*> map_hexCameFrom;
+    std::map<HexagonMatchfield*, int> map_hexCurrentCost;
 
     Player* ptr_playerOne;
     Player* ptr_playerTwo;
     Player* ptr_playerActive;
     Round* ptr_roundCurrent;
 
-    static std::vector<QPoint> vector_oddNeighbors;
-    static std::vector<QPoint> vector_evenNeighbors;
+    static std::vector<QPoint> vec_qpointOddNeighbors;
+    static std::vector<QPoint> vec_qpointEvenNeighbors;
 
-    bool MenueView;
+    bool bool_menueView;
 public:
     Game(Options* init_options, GameWidget* ptr_gameWid);
     Game(QString, GameWidget*);
     ~Game();
     //Game(QString pathToSaveFile);
-    void loadGame(QString pathToSaveFile);
     void saveGame();
     void endGame();
     void Dijkstra(HexagonMatchfield*, int = 1);

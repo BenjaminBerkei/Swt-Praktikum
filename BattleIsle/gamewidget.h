@@ -123,7 +123,6 @@ private:
 
 private slots:
     void SLOT_qbuttonSaveGame_clicked();
-    void SLOT_qbuttonLoadGame_clicked();
     void SLOT_qbuttonEndGame_clicked();
     void SLOT_qbuttonResume_clicked();
     void SLOT_gameWidCenterHex(HexagonMatchfield* hex); //Setzt ein Hexagon in die Mitte der View

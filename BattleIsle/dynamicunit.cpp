@@ -279,7 +279,7 @@ AirUnit *AirUnit::createUnit()
 // TransporterUnit
 
 TransporterUnit::TransporterUnit(QString filepath, Player* player)
-    : DynamicUnit(filepath, player), unitToUnload(nullptr){}
+    : DynamicUnit(filepath, player), ptr_unitToUnload(nullptr){}
 
 int TransporterUnit::getTransporterUnitCapacity() const{
 		return int_transporterUnitCapacity;
@@ -300,9 +300,9 @@ bool TransporterUnit::action(HexagonMatchfield* hex_target){
     if(hex_target->getUnit_stationed() == nullptr)
     {
         qDebug() << "\t Unit = null";
-        if(unitToUnload != nullptr && unitToUnload->moveTo(hex_target) != -1)
+        if(ptr_unitToUnload != nullptr && ptr_unitToUnload->moveTo(hex_target) != -1)
         {
-            qDebug() << "unitToUnload != null";
+            qDebug() << "ptr_unitToUnload != null";
             unload(hex_target);
             resetBuildUnloadParameter();
             return true;
@@ -318,12 +318,12 @@ bool TransporterUnit::action(HexagonMatchfield* hex_target){
 }
 
 void TransporterUnit::unload(HexagonMatchfield* hex_target){
-	hex_target->setUnit_stationed(unitToUnload);
-    disconnect(unitToUnload->getUnitDisplay(), SIGNAL(unitDispl_clicked(Unit*)), this, SLOT(SLOT_setUnitToUnload(Unit*)));
+    hex_target->setUnit_stationed(ptr_unitToUnload);
+    disconnect(ptr_unitToUnload->getUnitDisplay(), SIGNAL(unitDispl_clicked(Unit*)), this, SLOT(SLOT_setUnitToUnload(Unit*)));
 	
 	int i = 0;
     for(auto &x : vector_unitStorage){
-		if(unitToUnload == x){
+        if(ptr_unitToUnload == x){
 			vector_unitStorage.erase(vector_unitStorage.begin() + i);
 			break;
 		}
@@ -363,13 +363,13 @@ void TransporterUnit::serialize(QTextStream &out)
 
 void TransporterUnit::resetBuildUnloadParameter()
 {
-    if(unitToUnload != nullptr)
+    if(ptr_unitToUnload != nullptr)
     {
         for(auto &it : vector_unitStorage)
         {
             it->getUnitDisplay()->setColor(Qt::black);
             it->getUnitDisplay()->setZValue(0);
-            unitToUnload = nullptr;
+            ptr_unitToUnload = nullptr;
         }
     }
 }
@@ -377,7 +377,7 @@ void TransporterUnit::resetBuildUnloadParameter()
 void TransporterUnit::SLOT_setUnitToUnload(Unit *unit)
 {
     resetBuildUnloadParameter();
-    unitToUnload = unit;
+    ptr_unitToUnload = unit;
 }
 
 
@@ -392,11 +392,8 @@ int TransporterAirUnit::moveTo(HexagonMatchfield *hex_target){
     if(hex_target->getUnit_stationed() == nullptr)
     {
         return 1;
-    }else if(hex_target->getUnit_stationed() != nullptr
-            && hex_target->getUnit_stationed()->getUnitPlayer() == unitPlayer
-            && (hex_target->getUnit_stationed()->getUnitType() == "TRANSPORTERAIR"
-                || hex_target->getUnit_stationed()->getUnitType() == "TRANSPORTERGROUND"
-                || hex_target->getUnit_stationed()->getUnitType() == "TRANSPORTERWATER")){
+    }else if(hex_target->getUnit_stationed()->getUnitPlayer() == unitPlayer
+            && hex_target->getUnit_stationed()->getUnitType().contains("TRANSPORTER")){
         return 1;
     }
     return -1;
@@ -428,11 +425,7 @@ int TransporterGroundUnit::moveTo(HexagonMatchfield *hex_target){
             return 1;
         }
 
-        else if(hex_type == "streetStraight"){
-            return 1;
-        }
-
-        else if(hex_type == "streetCurve"){
+        else if(hex_type.contains("street")){
             return 1;
         }
 
@@ -440,19 +433,11 @@ int TransporterGroundUnit::moveTo(HexagonMatchfield *hex_target){
             return 2;
         }
 
-        else if(hex_type == "mountainTop" ){
+        else if(hex_type.contains("mountain")){
             return 2;
         }
-
-        else if(hex_type == "mountainSide"){
-            return 2;
-        }
-    }
-    if(hex_target->getUnit_stationed() != nullptr
-            && hex_target->getUnit_stationed()->getUnitPlayer() == unitPlayer
-            && (hex_target->getUnit_stationed()->getUnitType() == "TRANSPORTERAIR"
-                || hex_target->getUnit_stationed()->getUnitType() == "TRANSPORTERGROUND"
-                || hex_target->getUnit_stationed()->getUnitType() == "TRANSPORTERWATER"))
+    }else if(hex_target->getUnit_stationed()->getUnitPlayer() == unitPlayer
+            && hex_target->getUnit_stationed()->getUnitType().contains("TRANSPORTER"))
     {
         return 1;
     }
@@ -485,13 +470,8 @@ int TransporterWaterUnit::moveTo(HexagonMatchfield *hex_target){
         else if(hex_type == "waterSeashore"){
             return 1;
         }
-    }
-
-    if(hex_target->getUnit_stationed() != nullptr
-            && hex_target->getUnit_stationed()->getUnitPlayer() == unitPlayer
-            && (hex_target->getUnit_stationed()->getUnitType() == "TRANSPORTERAIR"
-                || hex_target->getUnit_stationed()->getUnitType() == "TRANSPORTERGROUND"
-                || hex_target->getUnit_stationed()->getUnitType() == "TRANSPORTERWATER")){
+    }else if(hex_target->getUnit_stationed()->getUnitPlayer() == unitPlayer
+            && hex_target->getUnit_stationed()->getUnitType().contains("TRANSPORTER")){
         return 1;
     }
 
@@ -635,11 +615,7 @@ int LightUnit::moveTo(HexagonMatchfield *hex_target){
             return 1;
         }
 
-        else if(hex_type == "streetStraight"){
-            return 1;
-        }
-
-        else if(hex_type == "streetCurve"){
+        else if(hex_type.contains("street")){
             return 1;
         }
 
@@ -647,19 +623,11 @@ int LightUnit::moveTo(HexagonMatchfield *hex_target){
             return 1;
         }
 
-        else if(hex_type == "mountainTop" ){
+        else if(hex_type.contains("mountain")){
             return 1;
         }
-
-        else if(hex_type == "mountainSide"){
-            return 2;
-        }
-    }
-    if(hex_target->getUnit_stationed() != nullptr
-            && hex_target->getUnit_stationed()->getUnitPlayer() == unitPlayer
-            && (hex_target->getUnit_stationed()->getUnitType() == "TRANSPORTERAIR"
-                || hex_target->getUnit_stationed()->getUnitType() == "TRANSPORTERGROUND"
-                || hex_target->getUnit_stationed()->getUnitType() == "TRANSPORTERWATER")){
+    }else if(hex_target->getUnit_stationed()->getUnitPlayer() == unitPlayer
+            && hex_target->getUnit_stationed()->getUnitType().contains("TRANSPORTER")){
         return 1;
     }
 
@@ -674,7 +642,7 @@ LightUnit *LightUnit::createUnit()
 // BuildLightUnit
 
 BuildLightUnit::BuildLightUnit(QString filepath, bool bool_loadInventory, Player* player)
-    : LightUnit(filepath, player)
+    : LightUnit(filepath, player), qstring_unitToBuild("")
 {
     if(bool_loadInventory == true)
     {
@@ -700,8 +668,8 @@ bool BuildLightUnit::action(HexagonMatchfield* hexTarget){
     {
         return false;
     }
-    if(unitToBuild != "" && unitPlayer->getCurrentEnergieStorage() - production[unitToBuild]->getUnitCost() >= 0
-            && hexTarget->getUnit_stationed() == nullptr && production[unitToBuild]->moveTo(hexTarget) != -1)
+    if(qstring_unitToBuild != "" && unitPlayer->getCurrentEnergieStorage() - production[qstring_unitToBuild]->getUnitCost() >= 0
+            && hexTarget->getUnit_stationed() == nullptr && production[qstring_unitToBuild]->moveTo(hexTarget) != -1)
     {
         produceUnit(hexTarget);
         resetBuildUnloadParameter();
@@ -715,7 +683,7 @@ bool BuildLightUnit::action(HexagonMatchfield* hexTarget){
 
 void BuildLightUnit::produceUnit(HexagonMatchfield* hexTarget)
 {
-    hexTarget->setUnit_stationed(production[unitToBuild]->createUnit());
+    hexTarget->setUnit_stationed(production[qstring_unitToBuild]->createUnit());
     unitPlayer->setCurrentEnergieStorage(unitPlayer->getCurrentEnergieStorage() - hexTarget->getUnit_stationed()->getUnitCost());
 }
 
@@ -726,18 +694,18 @@ BuildLightUnit *BuildLightUnit::createUnit()
 
 void BuildLightUnit::resetBuildUnloadParameter()
 {
-    if(unitToBuild != "")
+    if(qstring_unitToBuild != "")
     {
-        production[unitToBuild]->getUnitDisplay()->setColor(Qt::black);
-        production[unitToBuild]->getUnitDisplay()->setZValue(0);
-        unitToBuild = "";
+        production[qstring_unitToBuild]->getUnitDisplay()->setColor(Qt::black);
+        production[qstring_unitToBuild]->getUnitDisplay()->setZValue(0);
+        qstring_unitToBuild = "";
     }
 }
 
 void BuildLightUnit::SLOT_setUnitToBuild(Unit *unit)
 {
     resetBuildUnloadParameter();
-    unitToBuild = unit->getUnitName();
+    qstring_unitToBuild = unit->getUnitName();
 }
 
 
@@ -756,11 +724,7 @@ int MediumUnit::moveTo(HexagonMatchfield *hex_target){
             return 1;
         }
 
-        else if(hex_type == "streetStraight"){
-            return 1;
-        }
-
-        else if(hex_type == "streetCurve"){
+        else if(hex_type.contains("street")){
             return 1;
         }
 
@@ -768,19 +732,11 @@ int MediumUnit::moveTo(HexagonMatchfield *hex_target){
             return 2;
         }
 
-        else if(hex_type == "mountainTop" ){
+        else if(hex_type.contains("mountain") ){
             return -1;
         }
-
-        else if(hex_type == "mountainSide"){
-            return -1;
-        }
-    }
-    if(hex_target->getUnit_stationed() != nullptr
-            && hex_target->getUnit_stationed()->getUnitPlayer() == unitPlayer
-            && (hex_target->getUnit_stationed()->getUnitType() == "TRANSPORTERAIR"
-                || hex_target->getUnit_stationed()->getUnitType() == "TRANSPORTERGROUND"
-                || hex_target->getUnit_stationed()->getUnitType() == "TRANSPORTERWATER")){
+    }else if(hex_target->getUnit_stationed()->getUnitPlayer() == unitPlayer
+            && hex_target->getUnit_stationed()->getUnitType().contains("TRANSPORTER")){
         return 1;
     }
 
@@ -807,11 +763,7 @@ int HeavyUnit::moveTo(HexagonMatchfield *hex_target){
             return 2;
         }
 
-        else if(hex_type == "streetStraight"){
-            return 2;
-        }
-
-        else if(hex_type == "streetCurve"){
+        else if(hex_type.contains("street")){
             return 2;
         }
 
@@ -819,19 +771,11 @@ int HeavyUnit::moveTo(HexagonMatchfield *hex_target){
             return -1;
         }
 
-        else if(hex_type == "mountainTop" ){
+        else if(hex_type.contains("mountain") ){
             return -1;
         }
-
-        else if(hex_type == "mountainSide"){
-            return -1;
-        }
-    }
-    if(hex_target->getUnit_stationed() != nullptr
-            && hex_target->getUnit_stationed()->getUnitPlayer() == unitPlayer
-            && (hex_target->getUnit_stationed()->getUnitType() == "TRANSPORTERAIR"
-                || hex_target->getUnit_stationed()->getUnitType() == "TRANSPORTERGROUND"
-                || hex_target->getUnit_stationed()->getUnitType() == "TRANSPORTERWATER")){
+    }else if(hex_target->getUnit_stationed()->getUnitPlayer() == unitPlayer
+            && hex_target->getUnit_stationed()->getUnitType().contains("TRANSPORTER")){
         return 1;
     }
     return -1;
@@ -860,12 +804,8 @@ int WaterUnit::moveTo(HexagonMatchfield *hex_target){
         else if(hex_type == "waterSeashore"){
             return 2;
         }
-    }
-    if(hex_target->getUnit_stationed() != nullptr
-            && hex_target->getUnit_stationed()->getUnitPlayer() == unitPlayer
-            && (hex_target->getUnit_stationed()->getUnitType() == "TRANSPORTERAIR"
-                || hex_target->getUnit_stationed()->getUnitType() == "TRANSPORTERGROUND"
-                || hex_target->getUnit_stationed()->getUnitType() == "TRANSPORTERWATER")){
+    }else if(hex_target->getUnit_stationed()->getUnitPlayer() == unitPlayer
+            && hex_target->getUnit_stationed()->getUnitType().contains("TRANSPORTER")){
         return 1;
     }
 
