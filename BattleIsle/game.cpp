@@ -173,10 +173,10 @@ void Game::processSelection(HexagonMatchfield *selection)
         resetHexMatchfield();
         ptr_hexSelectionCache = selection;
         ptr_gameWidget->setInfoScene(ptr_hexSelectionCache->getPtr_hexMfieldDisplay());
-        if(ptr_hexSelectionCache->getUnit_stationed() != nullptr && ptr_hexSelectionCache->getUnit_stationed()->getUnitPlayer() == ptr_playerActive)
+        if(ptr_hexSelectionCache->getUnitStationed() != nullptr && ptr_hexSelectionCache->getUnitStationed()->getUnitPlayer() == ptr_playerActive)
         {
-            ptr_hexSelectionCache->getUnit_stationed()->resetBuildUnloadParameter();
-            ptr_gameWidget->setOptScene(ptr_hexSelectionCache->getUnit_stationed()->getVector_unitStorage());
+            ptr_hexSelectionCache->getUnitStationed()->resetBuildUnloadParameter();
+            ptr_gameWidget->setOptScene(ptr_hexSelectionCache->getUnitStationed()->getVector_unitStorage());
         }
         //Angeklicktes auf AKTIVE setzten
         ptr_hexSelectionCache->setState(ACTIVE);
@@ -186,9 +186,9 @@ void Game::processSelection(HexagonMatchfield *selection)
         resetHexMatchfield();
 
         /*Wenn vorher eine auswahl da war, welche ein transporter oder factory war, müssen die zurückgesetzt werden*/
-        if(ptr_hexSelectionCache != nullptr && ptr_hexSelectionCache->getUnit_stationed() != nullptr)
+        if(ptr_hexSelectionCache != nullptr && ptr_hexSelectionCache->getUnitStationed() != nullptr)
         {
-            ptr_hexSelectionCache->getUnit_stationed()->resetBuildUnloadParameter();
+            ptr_hexSelectionCache->getUnitStationed()->resetBuildUnloadParameter();
         }
         break;
 
@@ -203,17 +203,17 @@ void Game::processSelection(HexagonMatchfield *selection)
 
         }else if(ptr_roundCurrent->getCurrentPhase() == ACTION )    //Action Phase
         {
-            if(ptr_hexSelectionCache->getUnit_stationed()->action(selection))  //Wenn die Action geglückt ist
+            if(ptr_hexSelectionCache->getUnitStationed()->action(selection))  //Wenn die Action geglückt ist
             {
                 /*Prüfen ob eine neue Einheit auf dem Grid ist*/
-                if(selection->getUnit_stationed() != nullptr
+                if(selection->getUnitStationed() != nullptr
                         && vec_unitGrid[selection->getQpoint_gridPosition().x()][selection->getQpoint_gridPosition().y()] == nullptr)
                 {
-                    vec_unitGrid[selection->getQpoint_gridPosition().x()][selection->getQpoint_gridPosition().y()] = selection->getUnit_stationed(); // in das Grid einfügen
-                    selection->getUnit_stationed()->setPos(selection->pos());   //Position in der Scene setzen
-                    ptr_gameWidget->getGameWidGameScene()->addItem(selection->getUnit_stationed());    //in die Scene einfügen
+                    vec_unitGrid[selection->getQpoint_gridPosition().x()][selection->getQpoint_gridPosition().y()] = selection->getUnitStationed(); // in das Grid einfügen
+                    selection->getUnitStationed()->setPos(selection->pos());   //Position in der Scene setzen
+                    ptr_gameWidget->getGameWidGameScene()->addItem(selection->getUnitStationed());    //in die Scene einfügen
                 }
-                ptr_gameWidget->setOptScene(ptr_hexSelectionCache->getUnit_stationed()->getVector_unitStorage());
+                ptr_gameWidget->setOptScene(ptr_hexSelectionCache->getUnitStationed()->getVector_unitStorage());
 
                 ptr_gameWidget->setUnitsLabel(ptr_playerActive->getPlayerUnitNumber());    //Label updaten
                 ptr_gameWidget->setEnergieLabel(ptr_playerActive->getCurrentEnergieStorage(), ptr_playerActive->getPlayerTotalEnergie());
@@ -232,7 +232,7 @@ void Game::processSelection(HexagonMatchfield *selection)
 
         /*Darstellungen setzen*/
         ptr_gameWidget->setInfoScene(ptr_hexSelectionCache->getPtr_hexMfieldDisplay());
-        ptr_gameWidget->setOptScene(ptr_hexSelectionCache->getUnit_stationed()->getVector_unitStorage());
+        ptr_gameWidget->setOptScene(ptr_hexSelectionCache->getUnitStationed()->getVector_unitStorage());
 
         resetTargetCache();
         setFogOfWar();
@@ -288,17 +288,17 @@ void Game::Dijkstra(HexagonMatchfield* start, int factor)
                 HexagonMatchfield* neighbour = vec_hexGameGrid[x][y];
 
                 /*Berechnen der neuen Kosten, bestehend aus den Kosten um auf das Aktuelle Feld zu kommen + die Kosten um zum  Nachbarn zu kommen*/
-                if(target->getUnit_stationed()->moveTo(neighbour) != -1)
+                if(target->getUnitStationed()->moveTo(neighbour) != -1)
                 {
 
                         /*Wenn dieser noch nicht betrachtet wurde, kosten absurd hochlegen, damit diese auf jeden fall gesetzt werden*/
                         if(map_hexCurrentCost.find(neighbour) == map_hexCurrentCost.end())
                             map_hexCurrentCost[neighbour] = 999;
 
-                        int new_cost = map_hexCurrentCost[current] + target->getUnit_stationed()->moveTo(neighbour);
+                        int new_cost = map_hexCurrentCost[current] + target->getUnitStationed()->moveTo(neighbour);
 
                         /*Wenn diese Kosten geringer als die Reichweite der Einheit und besser als die bisherigen Kosten sind, dann..*/
-                        if(new_cost <= target->getUnit_stationed()->getUnitCurrentMoveRange()*factor && new_cost < map_hexCurrentCost[neighbour])
+                        if(new_cost <= target->getUnitStationed()->getUnitCurrentMoveRange()*factor && new_cost < map_hexCurrentCost[neighbour])
                         {
                             map_hexCurrentCost[neighbour] = new_cost; //Kosten aktualisieren
                             map_hexCameFrom[neighbour] = current;     //Vorgänger auf das Aktuelle Feld setzem
@@ -482,8 +482,8 @@ void Game::buttonPressedMove()
     if(ptr_roundCurrent->getCurrentPhase() == MOVE)     //Phase prüfen
     {
         /*Wenn ein Feld ausgewählt wurde auf dem eine Einheit steht, welche dem aktiven Spieler gehört*/
-        if(ptr_hexSelectionCache != nullptr && ptr_hexSelectionCache->getUnit_stationed() != nullptr
-                && ptr_hexSelectionCache->getUnit_stationed()->getUnitPlayer() == ptr_playerActive)
+        if(ptr_hexSelectionCache != nullptr && ptr_hexSelectionCache->getUnitStationed() != nullptr
+                && ptr_hexSelectionCache->getUnitStationed()->getUnitPlayer() == ptr_playerActive)
         {
             Dijkstra(ptr_hexSelectionCache);     //Berechnen aller möglichen Ziele
         }
@@ -494,11 +494,11 @@ void Game::buttonPressedAction()
 {
     if(ptr_roundCurrent->getCurrentPhase() == ACTION )
     {
-        if(ptr_hexSelectionCache != nullptr && ptr_hexSelectionCache->getUnit_stationed() != nullptr
-                && ptr_hexSelectionCache->getUnit_stationed()->getUnitPlayer() == ptr_playerActive
-                && ptr_hexSelectionCache->getUnit_stationed()->getUnitUsed() == false)
+        if(ptr_hexSelectionCache != nullptr && ptr_hexSelectionCache->getUnitStationed() != nullptr
+                && ptr_hexSelectionCache->getUnitStationed()->getUnitPlayer() == ptr_playerActive
+                && ptr_hexSelectionCache->getUnitStationed()->getUnitUsed() == false)
         {
-            calculateTargets(ptr_hexSelectionCache, ptr_hexSelectionCache->getUnit_stationed()->getActionRange());
+            calculateTargets(ptr_hexSelectionCache, ptr_hexSelectionCache->getUnitStationed()->getActionRange());
         }
     }
 }
@@ -541,9 +541,9 @@ void Game::buttonPressedChangePhase()
     ptr_gameWidget->setPhaseLabel(ptr_roundCurrent->getCurrentPhase() == MOVE ? "Move" : "Action");
     ptr_gameWidget->setUnitsLabel(ptr_playerActive->getPlayerUnitNumber());
     ptr_gameWidget->setEnergieLabel(ptr_playerActive->getCurrentEnergieStorage(), ptr_playerActive->getPlayerTotalEnergie());
-    if(ptr_hexSelectionCache != nullptr && ptr_hexSelectionCache->getUnit_stationed() != nullptr)
+    if(ptr_hexSelectionCache != nullptr && ptr_hexSelectionCache->getUnitStationed() != nullptr)
     {
-        ptr_hexSelectionCache->getUnit_stationed()->resetBuildUnloadParameter();
+        ptr_hexSelectionCache->getUnitStationed()->resetBuildUnloadParameter();
     }
     resetUnits();
     ptr_gameWidget->repaintGameView();
@@ -605,20 +605,20 @@ void Game::resetTargetCache()
 }
 void Game::moveUnitTo(HexagonMatchfield * target)
 {
-    Unit* unitToMove = ptr_hexSelectionCache->getUnit_stationed();
+    Unit* unitToMove = ptr_hexSelectionCache->getUnitStationed();
     unitToMove->setUnitCurrentMoveRange(unitToMove->getUnitCurrentMoveRange() - map_hexCurrentCost[target]);
 
-    if(target->getUnit_stationed() != nullptr &&
-            (target->getUnit_stationed()->getUnitType() == "TRANSPORTERAIR"
-            || target->getUnit_stationed()->getUnitType() == "TRANSPORTERGROUND"
-            || target->getUnit_stationed()->getUnitType() == "TRANSPORTERWATER"))
+    if(target->getUnitStationed() != nullptr &&
+            (target->getUnitStationed()->getUnitType() == "TRANSPORTERAIR"
+            || target->getUnitStationed()->getUnitType() == "TRANSPORTERGROUND"
+            || target->getUnitStationed()->getUnitType() == "TRANSPORTERWATER"))
     {
-        target->getUnit_stationed()->addUnitToStorage(unitToMove); // Einheit in den Vektor der Transportereinheit verlegt
+        target->getUnitStationed()->addUnitToStorage(unitToMove); // Einheit in den Vektor der Transportereinheit verlegt
         ptr_gameWidget->getGameWidGameScene()->removeItem(unitToMove); // Einheit aus der Scene gelöscht
     }
     else
     {
-        target->setUnit_stationed(unitToMove);      //Einheit verlegen auf das Ziel
+        target->setUnitStationed(unitToMove);      //Einheit verlegen auf das Ziel
         vec_unitGrid[target->getQpoint_gridPosition().x()][target->getQpoint_gridPosition().y()] = unitToMove; //Einheit im Grid verlegt
 
         /*Animation*/
@@ -630,7 +630,7 @@ void Game::moveUnitTo(HexagonMatchfield * target)
         ptr_gameWidget->animateUnit(unitToMove, path);
     }
     vec_unitGrid[ptr_hexSelectionCache->getQpoint_gridPosition().x()][ptr_hexSelectionCache->getQpoint_gridPosition().y()] = nullptr; //Einheit aus dem UnitGrid löschen
-    ptr_hexSelectionCache->setUnit_stationed(nullptr);     //Einheit vom alten feld entfernen
+    ptr_hexSelectionCache->setUnitStationed(nullptr);     //Einheit vom alten feld entfernen
     ptr_hexSelectionCache->setState(INACTIVE);     //Auswahl auf inactiv setzen
     ptr_hexSelectionCache = nullptr;
 }
@@ -713,9 +713,9 @@ void Game::setFogOfWar()
     {
         for(auto &hex : iterator)
         {
-            if(hex->getUnit_stationed() != nullptr && hex->getUnit_stationed()->getUnitPlayer() == ptr_playerActive)
+            if(hex->getUnitStationed() != nullptr && hex->getUnitStationed()->getUnitPlayer() == ptr_playerActive)
             {
-                calculateTargets(hex, hex->getUnit_stationed()->getUnitView());
+                calculateTargets(hex, hex->getUnitStationed()->getUnitView());
                 for(auto &it : vec_hexTargetCache)
                 {
                     it->setHexFogOfWar(false);
@@ -744,7 +744,7 @@ void Game::checkUnitGrid()
         {
             if(vec_unitGrid[x][y] != nullptr && vec_unitGrid[x][y]->checkUnitDestroyed())
             {
-                vec_hexGameGrid[x][y]->setUnit_stationed(nullptr);
+                vec_hexGameGrid[x][y]->setUnitStationed(nullptr);
                 delete vec_unitGrid[x][y];
                 vec_unitGrid[x][y] = nullptr;
             }
@@ -914,7 +914,7 @@ bool Game::readSaveGame(QString filepath)
            vec_unitGrid[posX][posY] = readUnitFromStream(in);
            if(vec_unitGrid[posX][posY] != nullptr)
            {
-               vec_hexGameGrid[posX][posY]->setUnit_stationed(vec_unitGrid[posX][posY]);
+               vec_hexGameGrid[posX][posY]->setUnitStationed(vec_unitGrid[posX][posY]);
            }
 
        }else{
@@ -1053,7 +1053,7 @@ void Game::createRandomMap()
                     }
 
                     vectorUnit.push_back(randomUnit);
-                    vec_hexGameGrid[i][j]->setUnit_stationed(vectorUnit[j]);
+                    vec_hexGameGrid[i][j]->setUnitStationed(vectorUnit[j]);
 
                 }else{
                     vectorUnit.push_back(nullptr);

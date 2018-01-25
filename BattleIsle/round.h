@@ -25,7 +25,7 @@ class Round
 private:
 	int int_maxRoundNumber;
 	int int_currentRoundNumber;
-	Phase* currentRoundPhase;
+    Phase* phase_currentRoundPhase;
 
 public:
 	Round(int);

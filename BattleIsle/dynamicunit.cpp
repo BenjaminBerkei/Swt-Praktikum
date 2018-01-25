@@ -153,11 +153,11 @@ AirUnit::AirUnit(QString filepath, Player* player)
 int AirUnit::moveTo(HexagonMatchfield *hex_target)
 {
     //Flugzeug hat selbe Kosten für alles.
-    if(hex_target->getUnit_stationed() == nullptr)
+    if(hex_target->getUnitStationed() == nullptr)
     {
         return 1;
-    }else if(hex_target->getUnit_stationed()->getUnitPlayer() == unitPlayer
-            && hex_target->getUnit_stationed()->getUnitType().contains("TRANSPORTER")){
+    }else if(hex_target->getUnitStationed()->getUnitPlayer() == unitPlayer
+            && hex_target->getUnitStationed()->getUnitType().contains("TRANSPORTER")){
         return 1;
     }
     return -1;
@@ -168,7 +168,7 @@ bool AirUnit::action(HexagonMatchfield *hex_target) {
     {
         return false;
     }
-    Unit *target = hex_target->getUnit_stationed();
+    Unit *target = hex_target->getUnitStationed();
 
     if(target == nullptr)
     {
@@ -297,7 +297,7 @@ void TransporterUnit::setTransporterUnitCurrentCapacity(const int newCurrentCapa
 bool TransporterUnit::action(HexagonMatchfield* hex_target){
     qDebug() << "Transporter Action";
     qDebug() << "\t " << hex_target->getQpoint_gridPosition();
-    if(hex_target->getUnit_stationed() == nullptr)
+    if(hex_target->getUnitStationed() == nullptr)
     {
         qDebug() << "\t Unit = null";
         if(ptr_unitToUnload != nullptr && ptr_unitToUnload->moveTo(hex_target) != -1)
@@ -318,7 +318,7 @@ bool TransporterUnit::action(HexagonMatchfield* hex_target){
 }
 
 void TransporterUnit::unload(HexagonMatchfield* hex_target){
-    hex_target->setUnit_stationed(ptr_unitToUnload);
+    hex_target->setUnitStationed(ptr_unitToUnload);
     disconnect(ptr_unitToUnload->getUnitDisplay(), SIGNAL(unitDispl_clicked(Unit*)), this, SLOT(SLOT_setUnitToUnload(Unit*)));
 	
 	int i = 0;
@@ -389,11 +389,11 @@ TransporterAirUnit::TransporterAirUnit(QString filepath, Player* player)
 
 int TransporterAirUnit::moveTo(HexagonMatchfield *hex_target){
 	//Flugzeug hat selbe Kosten für alles.
-    if(hex_target->getUnit_stationed() == nullptr)
+    if(hex_target->getUnitStationed() == nullptr)
     {
         return 1;
-    }else if(hex_target->getUnit_stationed()->getUnitPlayer() == unitPlayer
-            && hex_target->getUnit_stationed()->getUnitType().contains("TRANSPORTER")){
+    }else if(hex_target->getUnitStationed()->getUnitPlayer() == unitPlayer
+            && hex_target->getUnitStationed()->getUnitType().contains("TRANSPORTER")){
         return 1;
     }
     return -1;
@@ -418,7 +418,7 @@ int TransporterGroundUnit::moveTo(HexagonMatchfield *hex_target){
 
     QString hex_type = hex_target->getHexMatchfieldType();
 
-    if(hex_target->getUnit_stationed() == nullptr)
+    if(hex_target->getUnitStationed() == nullptr)
     {
 
         if(hex_type == "grassland"){
@@ -436,8 +436,8 @@ int TransporterGroundUnit::moveTo(HexagonMatchfield *hex_target){
         else if(hex_type.contains("mountain")){
             return 2;
         }
-    }else if(hex_target->getUnit_stationed()->getUnitPlayer() == unitPlayer
-            && hex_target->getUnit_stationed()->getUnitType().contains("TRANSPORTER"))
+    }else if(hex_target->getUnitStationed()->getUnitPlayer() == unitPlayer
+            && hex_target->getUnitStationed()->getUnitType().contains("TRANSPORTER"))
     {
         return 1;
     }
@@ -462,7 +462,7 @@ TransporterWaterUnit::TransporterWaterUnit(QString filepath, Player* player)
 int TransporterWaterUnit::moveTo(HexagonMatchfield *hex_target){
 
     QString hex_type = hex_target->getHexMatchfieldType();
-    if(hex_target->getUnit_stationed() == nullptr)
+    if(hex_target->getUnitStationed() == nullptr)
     {
         if(hex_type == "waterDeep"){
             return 2;
@@ -470,8 +470,8 @@ int TransporterWaterUnit::moveTo(HexagonMatchfield *hex_target){
         else if(hex_type == "waterSeashore"){
             return 1;
         }
-    }else if(hex_target->getUnit_stationed()->getUnitPlayer() == unitPlayer
-            && hex_target->getUnit_stationed()->getUnitType().contains("TRANSPORTER")){
+    }else if(hex_target->getUnitStationed()->getUnitPlayer() == unitPlayer
+            && hex_target->getUnitStationed()->getUnitType().contains("TRANSPORTER")){
         return 1;
     }
 
@@ -497,7 +497,7 @@ bool GroundUnit::action(HexagonMatchfield *hex_target) {
         return false;
     }
 
-    Unit *target = hex_target->getUnit_stationed();
+    Unit *target = hex_target->getUnitStationed();
 	
 	if(target == nullptr){
 		return false;
@@ -609,7 +609,7 @@ LightUnit::LightUnit(QString filepath, Player* player)
 int LightUnit::moveTo(HexagonMatchfield *hex_target){
 
     QString hex_type = hex_target->getHexMatchfieldType();
-    if(hex_target->getUnit_stationed() == nullptr)
+    if(hex_target->getUnitStationed() == nullptr)
     {
         if(hex_type == "grassland"){
             return 1;
@@ -626,8 +626,8 @@ int LightUnit::moveTo(HexagonMatchfield *hex_target){
         else if(hex_type.contains("mountain")){
             return 1;
         }
-    }else if(hex_target->getUnit_stationed()->getUnitPlayer() == unitPlayer
-            && hex_target->getUnit_stationed()->getUnitType().contains("TRANSPORTER")){
+    }else if(hex_target->getUnitStationed()->getUnitPlayer() == unitPlayer
+            && hex_target->getUnitStationed()->getUnitType().contains("TRANSPORTER")){
         return 1;
     }
 
@@ -669,7 +669,7 @@ bool BuildLightUnit::action(HexagonMatchfield* hexTarget){
         return false;
     }
     if(qstring_unitToBuild != "" && unitPlayer->getCurrentEnergieStorage() - production[qstring_unitToBuild]->getUnitCost() >= 0
-            && hexTarget->getUnit_stationed() == nullptr && production[qstring_unitToBuild]->moveTo(hexTarget) != -1)
+            && hexTarget->getUnitStationed() == nullptr && production[qstring_unitToBuild]->moveTo(hexTarget) != -1)
     {
         produceUnit(hexTarget);
         resetBuildUnloadParameter();
@@ -683,8 +683,8 @@ bool BuildLightUnit::action(HexagonMatchfield* hexTarget){
 
 void BuildLightUnit::produceUnit(HexagonMatchfield* hexTarget)
 {
-    hexTarget->setUnit_stationed(production[qstring_unitToBuild]->createUnit());
-    unitPlayer->setCurrentEnergieStorage(unitPlayer->getCurrentEnergieStorage() - hexTarget->getUnit_stationed()->getUnitCost());
+    hexTarget->setUnitStationed(production[qstring_unitToBuild]->createUnit());
+    unitPlayer->setCurrentEnergieStorage(unitPlayer->getCurrentEnergieStorage() - hexTarget->getUnitStationed()->getUnitCost());
 }
 
 BuildLightUnit *BuildLightUnit::createUnit()
@@ -718,7 +718,7 @@ MediumUnit::MediumUnit(QString filepath, Player* player)
 int MediumUnit::moveTo(HexagonMatchfield *hex_target){
 
     QString hex_type = hex_target->getHexMatchfieldType();
-    if(hex_target->getUnit_stationed() == nullptr)
+    if(hex_target->getUnitStationed() == nullptr)
     {
         if(hex_type == "grassland"){
             return 1;
@@ -735,8 +735,8 @@ int MediumUnit::moveTo(HexagonMatchfield *hex_target){
         else if(hex_type.contains("mountain") ){
             return -1;
         }
-    }else if(hex_target->getUnit_stationed()->getUnitPlayer() == unitPlayer
-            && hex_target->getUnit_stationed()->getUnitType().contains("TRANSPORTER")){
+    }else if(hex_target->getUnitStationed()->getUnitPlayer() == unitPlayer
+            && hex_target->getUnitStationed()->getUnitType().contains("TRANSPORTER")){
         return 1;
     }
 
@@ -757,7 +757,7 @@ HeavyUnit::HeavyUnit(QString filepath, Player* player)
 int HeavyUnit::moveTo(HexagonMatchfield *hex_target){
 
     QString hex_type = hex_target->getHexMatchfieldType();
-    if(hex_target->getUnit_stationed() == nullptr)
+    if(hex_target->getUnitStationed() == nullptr)
     {
         if(hex_type == "grassland"){
             return 2;
@@ -774,8 +774,8 @@ int HeavyUnit::moveTo(HexagonMatchfield *hex_target){
         else if(hex_type.contains("mountain") ){
             return -1;
         }
-    }else if(hex_target->getUnit_stationed()->getUnitPlayer() == unitPlayer
-            && hex_target->getUnit_stationed()->getUnitType().contains("TRANSPORTER")){
+    }else if(hex_target->getUnitStationed()->getUnitPlayer() == unitPlayer
+            && hex_target->getUnitStationed()->getUnitType().contains("TRANSPORTER")){
         return 1;
     }
     return -1;
@@ -796,7 +796,7 @@ WaterUnit::WaterUnit(QString filepath, Player* player)
 int WaterUnit::moveTo(HexagonMatchfield *hex_target){
 
     QString hex_type = hex_target->getHexMatchfieldType();
-    if(hex_target->getUnit_stationed() == nullptr)
+    if(hex_target->getUnitStationed() == nullptr)
     {
         if(hex_type == "waterDeep"){
             return 1;
@@ -804,8 +804,8 @@ int WaterUnit::moveTo(HexagonMatchfield *hex_target){
         else if(hex_type == "waterSeashore"){
             return 2;
         }
-    }else if(hex_target->getUnit_stationed()->getUnitPlayer() == unitPlayer
-            && hex_target->getUnit_stationed()->getUnitType().contains("TRANSPORTER")){
+    }else if(hex_target->getUnitStationed()->getUnitPlayer() == unitPlayer
+            && hex_target->getUnitStationed()->getUnitType().contains("TRANSPORTER")){
         return 1;
     }
 
@@ -819,7 +819,7 @@ bool WaterUnit::action(HexagonMatchfield *hex_target) {
         return false;
     }
 
-    Unit *target = hex_target->getUnit_stationed();
+    Unit *target = hex_target->getUnitStationed();
 	
 	if(target == nullptr){
 		return false;

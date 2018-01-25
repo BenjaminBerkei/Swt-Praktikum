@@ -51,10 +51,10 @@ protected:
      * 5: Units
      */
     bool bool_hexFogOfWar;
-    Unit* unit_stationed;
+    Unit* ptr_unitStationed;
     MATCHFIELDSTATE state;
-    HexagonDisplayInfo* ptr_hexMfieldDisplay;
-    QString HexMatchfieldType;
+    HexagonDisplayInfo* ptr_hexDisplay;
+    QString qstring_hexType;
     //Mögliche Typen:
     //"waterDeep"           (Tiefes Meer)
     //"waterSeashore"       (Küste)
@@ -65,7 +65,7 @@ protected:
     //"mountainTop"         (Bergspitze)
     //"mountainSide"        (Bergseite)
     int int_boltaniumCurrent;
-    QColor qcolor_HexColor;
+    QColor qcolor_hexColor;
     QPixmap qpixmap_boltanium;
 
 public:
@@ -76,13 +76,13 @@ public:
 
 
     //get und set Methoden
-    QString getHexMatchfieldType() {return HexMatchfieldType;}
+    QString getHexMatchfieldType() {return qstring_hexType;}
     MATCHFIELDSTATE getState() const;
     HexagonDisplayInfo *getPtr_hexMfieldDisplay() const;
     void setState(const MATCHFIELDSTATE &value);
 
-    Unit *getUnit_stationed() const;
-    void setUnit_stationed(Unit *value);
+    Unit *getUnitStationed() const;
+    void setUnitStationed(Unit *value);
     
     int getBoltaniumCurrent() const;
     void setBoltaniumCurrent(int value);

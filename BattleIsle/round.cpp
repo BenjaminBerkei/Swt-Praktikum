@@ -16,7 +16,7 @@ Round::Round(int maxAnz = 0)
 {
     int_maxRoundNumber=maxAnz*10;
     int_currentRoundNumber=10;
-	currentRoundPhase = new MovePhase;
+    phase_currentRoundPhase = new MovePhase;
     return;
 }
 
@@ -25,21 +25,21 @@ Round::Round(QString phase, int currentNumber, int maxNumber)
     int_maxRoundNumber = maxNumber;
     int_currentRoundNumber = currentNumber;
     if(phase == "MOVE")
-        currentRoundPhase = new MovePhase;
+        phase_currentRoundPhase = new MovePhase;
     else
-        currentRoundPhase = new ActionPhase;
+        phase_currentRoundPhase = new ActionPhase;
 }
 
 Round::~Round()
 {
-	delete currentRoundPhase;
+    delete phase_currentRoundPhase;
     return;
 }
 
 void Round::serialize(QTextStream & out)
 {
     out << int_currentRoundNumber << " ";
-    if(currentRoundPhase->currentPhase() == MOVE)
+    if(phase_currentRoundPhase->currentPhase() == MOVE)
     {
         out << "MOVE ";
     }else{
@@ -66,14 +66,14 @@ Round *Round::unserialize(QTextStream &in)
 
 void Round::setCurrentRoundPhase(Phase* phase)
 {
-	delete currentRoundPhase;
-	currentRoundPhase = phase;
+    delete phase_currentRoundPhase;
+    phase_currentRoundPhase = phase;
 	return;
 }
 
 void Round::changePhase()
 {
-	currentRoundPhase->changePhase(this);
+    phase_currentRoundPhase->changePhase(this);
 	return;
 }
 
@@ -98,7 +98,7 @@ int Round::getMaxRoundNumber() const
 
 PHASE Round::getCurrentPhase() const
 {
-    return currentRoundPhase->currentPhase();
+    return phase_currentRoundPhase->currentPhase();
 }
 
 void Round::setCurrentRoundNumber(const int roundAnz)
@@ -109,7 +109,7 @@ void Round::setCurrentRoundNumber(const int roundAnz)
 
 void MovePhase::changePhase(Round* round)
 {
-	round->setCurrentRoundPhase(new ActionPhase);
+    round->setCurrentRoundPhase(new ActionPhase);
     return;
 }
 
@@ -120,7 +120,7 @@ PHASE MovePhase::currentPhase()
 
 void ActionPhase::changePhase(Round* round)
 {
-	round->setCurrentRoundPhase(new MovePhase);
+    round->setCurrentRoundPhase(new MovePhase);
     round->setCurrentRoundNumber(round->getCurrentRoundNumber() + 5);
 }
 

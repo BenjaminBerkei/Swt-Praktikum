@@ -173,10 +173,10 @@ void GameWidget::gameWidCreateMatchfield(std::vector<std::vector<HexagonMatchfie
                 PicCoordY = j * PicSizeY;
             }
 
-            if(hex->getUnit_stationed() != nullptr)
+            if(hex->getUnitStationed() != nullptr)
             {
-                gameWidGameScene->addItem(hex->getUnit_stationed());
-                hex->getUnit_stationed()->setPos(PicCoordX,PicCoordY);
+                gameWidGameScene->addItem(hex->getUnitStationed());
+                hex->getUnitStationed()->setPos(PicCoordX,PicCoordY);
             }
 
             hex->setPos(PicCoordX, PicCoordY);
@@ -363,9 +363,9 @@ void GameWidget::gameWidCreateMap(std::vector<std::vector<HexagonMatchfield *> >
             /*Qt::GlobalColor color = Qt::black; // Grundfarbe
             if(!hexagonGrid[i][j]->getHexFogOfWar())
             {
-                if(hexagonGrid[i][j]->getUnit_stationed() != nullptr) //Zeige Farbe von der Unit
+                if(hexagonGrid[i][j]->getUnitStationed() != nullptr) //Zeige Farbe von der Unit
                 {
-                    if(hexagonGrid[i][j]->getUnit_stationed()->getUnitPlayer()->getPlayerID() == 1)
+                    if(hexagonGrid[i][j]->getUnitStationed()->getUnitPlayer()->getPlayerID() == 1)
                         color = Qt::blue;
                     else
                         color = Qt::red;
@@ -492,9 +492,9 @@ void HexagonDisplayInfo::paint(QPainter *painter, const QStyleOptionGraphicsItem
     painter->drawPixmap(-50 ,-50, hexToDisplay->pixmap());
     painter->drawText(QRectF(20,-50,1000,200),qStringHexDispHexType);
 
-    if(hexToDisplay->getHexFogOfWar() != true && hexToDisplay->getUnit_stationed() != nullptr)
+    if(hexToDisplay->getHexFogOfWar() != true && hexToDisplay->getUnitStationed() != nullptr)
     {
-        painter->drawPixmap(-50,-50, hexToDisplay->getUnit_stationed()->pixmap());
+        painter->drawPixmap(-50,-50, hexToDisplay->getUnitStationed()->pixmap());
         painter->drawText(QRectF(20,-30,200,20),qStringUnitDispUnitName);
         painter->drawText(QRectF(20,-10, 200,20),qStringUnitDispUnitType);
         painter->drawText(QRectF(20,10,200,20),qStringUnitDispUnitLife);
@@ -514,28 +514,28 @@ void HexagonDisplayInfo::updateText()
 {
     qStringHexDispHexType = "Hex Typ: " + hexToDisplay->getHexMatchfieldType();
 
-    if(hexToDisplay->getUnit_stationed() != nullptr)
+    if(hexToDisplay->getUnitStationed() != nullptr)
     {
-        qStringUnitDispUnitName = "Name: " + hexToDisplay->getUnit_stationed()->getUnitName();
-        qStringUnitDispUnitType = "Unit Typ: " + hexToDisplay->getUnit_stationed()->getUnitType();
-        qStringUnitDispUnitLife = "HP: " + QString::number(hexToDisplay->getUnit_stationed()->getUnitCurrentHP()) + "/"
-                                            + QString::number(hexToDisplay->getUnit_stationed()->getUnitHP());
-        if(hexToDisplay->getUnit_stationed()->getUnitMoveRange() > 0)
+        qStringUnitDispUnitName = "Name: " + hexToDisplay->getUnitStationed()->getUnitName();
+        qStringUnitDispUnitType = "Unit Typ: " + hexToDisplay->getUnitStationed()->getUnitType();
+        qStringUnitDispUnitLife = "HP: " + QString::number(hexToDisplay->getUnitStationed()->getUnitCurrentHP()) + "/"
+                                            + QString::number(hexToDisplay->getUnitStationed()->getUnitHP());
+        if(hexToDisplay->getUnitStationed()->getUnitMoveRange() > 0)
         {
-            qStringUnitDispMovement = "MoveRange: " + QString::number(hexToDisplay->getUnit_stationed()->getUnitMoveRange()) + "/"
-                    + QString::number(hexToDisplay->getUnit_stationed()->getUnitCurrentMoveRange());
+            qStringUnitDispMovement = "MoveRange: " + QString::number(hexToDisplay->getUnitStationed()->getUnitMoveRange()) + "/"
+                    + QString::number(hexToDisplay->getUnitStationed()->getUnitCurrentMoveRange());
         }else{
             qStringUnitDispMovement = "NONE";
         }
-        if(hexToDisplay->getUnit_stationed()->getUnitAirAtt() == 0
-                && hexToDisplay->getUnit_stationed()->getUnitGroundAtt() == 0
-                && hexToDisplay->getUnit_stationed()->getUnitWaterAtt() == 0)
+        if(hexToDisplay->getUnitStationed()->getUnitAirAtt() == 0
+                && hexToDisplay->getUnitStationed()->getUnitGroundAtt() == 0
+                && hexToDisplay->getUnitStationed()->getUnitWaterAtt() == 0)
         {
             qStringUnitDispUnitAttack = "NONE";
         }else{
-            qStringUnitDispUnitAttack = "Attack: A" + QString::number(hexToDisplay->getUnit_stationed()->getUnitAirAtt()) + "/"
-                    + "G" + QString::number(hexToDisplay->getUnit_stationed()->getUnitGroundAtt()) + "/"
-                    + "W" + QString::number(hexToDisplay->getUnit_stationed()->getUnitWaterAtt());
+            qStringUnitDispUnitAttack = "Attack: A" + QString::number(hexToDisplay->getUnitStationed()->getUnitAirAtt()) + "/"
+                    + "G" + QString::number(hexToDisplay->getUnitStationed()->getUnitGroundAtt()) + "/"
+                    + "W" + QString::number(hexToDisplay->getUnitStationed()->getUnitWaterAtt());
         }
 
     }else{
@@ -627,16 +627,16 @@ void MapPixel::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidge
      * 4: Active
      */
         // Für das Grundrechteck
-        if((!ptr_mapPixHexaon->getHexFogOfWar()) && ptr_mapPixHexaon->getUnit_stationed() != nullptr && ptr_mapPixHexaon->getUnit_stationed()->getUnitMoveRange() == 0) // Alle statische Einheiten
+        if((!ptr_mapPixHexaon->getHexFogOfWar()) && ptr_mapPixHexaon->getUnitStationed() != nullptr && ptr_mapPixHexaon->getUnitStationed()->getUnitMoveRange() == 0) // Alle statische Einheiten
         {
-            if(ptr_mapPixHexaon->getUnit_stationed()->getUnitPlayer()->getPlayerID() == 1)
+            if(ptr_mapPixHexaon->getUnitStationed()->getUnitPlayer()->getPlayerID() == 1)
                 colorBrush = Qt::blue;
             else
                 colorBrush = Qt::red;
             rectWidth = 2;
             zKoord = 2;
 
-            if(ptr_mapPixHexaon->getUnit_stationed()->getUnitType() == QString("HEADQUATERUNIT")) // Nur das Hauptquatier
+            if(ptr_mapPixHexaon->getUnitStationed()->getUnitType() == QString("HEADQUATERUNIT")) // Nur das Hauptquatier
             {
                 rectWidth = 4;
                 colorRect = Qt::white;
@@ -682,11 +682,11 @@ void MapPixel::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidge
     painter->drawRect(rect());
 
     // Für die Ellipse im Grundrechteck
-    if(!ptr_mapPixHexaon->getHexFogOfWar() && ptr_mapPixHexaon->getUnit_stationed() != nullptr && ptr_mapPixHexaon->getUnit_stationed()->getUnitMoveRange() != 0) // Dynamische Einheit
+    if(!ptr_mapPixHexaon->getHexFogOfWar() && ptr_mapPixHexaon->getUnitStationed() != nullptr && ptr_mapPixHexaon->getUnitStationed()->getUnitMoveRange() != 0) // Dynamische Einheit
     {
         Qt::GlobalColor colorEllipse = Qt::black;
         int EllipseWitdh = 1;
-        if(ptr_mapPixHexaon->getUnit_stationed()->getUnitPlayer()->getPlayerID() == 1)
+        if(ptr_mapPixHexaon->getUnitStationed()->getUnitPlayer()->getPlayerID() == 1)
             colorBrush = Qt::blue;
         else
             colorBrush = Qt::red;

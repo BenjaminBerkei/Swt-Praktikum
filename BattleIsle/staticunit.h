@@ -55,8 +55,8 @@ class FactoryUnit : public StaticUnit
 {
     Q_OBJECT
 protected:
-	QString unitToBuild; 
-    std::map<QString, Unit*> production;
+    QString qstring_unitToBuild;
+    std::map<QString, Unit*> map_production;
 
 public:
     FactoryUnit(QString, bool ,Player* = nullptr);

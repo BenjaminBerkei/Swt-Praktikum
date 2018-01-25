@@ -36,43 +36,43 @@ void HexagonMatchfield::setState(const MATCHFIELDSTATE &value)
     if(state == INACTIVE)
     {
         setZValue(0);
-        qcolor_HexColor = Qt::black;
+        qcolor_hexColor = Qt::black;
     }
     else if(state == TARGET)
     {
         setZValue(1);
-        qcolor_HexColor = Qt::yellow;
+        qcolor_hexColor = Qt::yellow;
     }
     else if(state == ACTIVE)
     {
         setZValue(2);
-        qcolor_HexColor = Qt::red;
+        qcolor_hexColor = Qt::red;
     }
     else if(state == PATH)
     {
         setZValue(2);
-        qcolor_HexColor = Qt::green;
+        qcolor_hexColor = Qt::green;
     }
 }
 
 HexagonDisplayInfo *HexagonMatchfield::getPtr_hexMfieldDisplay() const
 {
-    return ptr_hexMfieldDisplay;
+    return ptr_hexDisplay;
 }
 
-Unit *HexagonMatchfield::getUnit_stationed() const
+Unit *HexagonMatchfield::getUnitStationed() const
 {
-    return unit_stationed;
+    return ptr_unitStationed;
 }
 
-void HexagonMatchfield::setUnit_stationed(Unit *value)
+void HexagonMatchfield::setUnitStationed(Unit *value)
 {
-    unit_stationed = value;
+    ptr_unitStationed = value;
 }
 
 QColor HexagonMatchfield::getQcolor_HexColor() const
 {
-    return qcolor_HexColor;
+    return qcolor_hexColor;
 }
 
 bool HexagonMatchfield::getHexFogOfWar() const
@@ -85,7 +85,7 @@ void HexagonMatchfield::setHexFogOfWar(bool value)
     if(bool_hexFogOfWar != value)
     {
         bool_hexFogOfWar = value;
-        if(unit_stationed != nullptr)
+        if(ptr_unitStationed != nullptr)
         {
             qreal zValue = 0;
             if(bool_hexFogOfWar == true)
@@ -94,54 +94,54 @@ void HexagonMatchfield::setHexFogOfWar(bool value)
             }else{
                 zValue = 5;
             }
-            unit_stationed->setZValue(zValue);
+            ptr_unitStationed->setZValue(zValue);
         }
     }
 }
 
 HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, QString type, Unit *stationedUnit) :
-    HexagonBase( qpoint_gridPosition ), bool_hexFogOfWar(false), unit_stationed(stationedUnit), state(INACTIVE),
-    HexMatchfieldType(type),int_boltaniumCurrent(0), qcolor_HexColor(Qt::black)
+    HexagonBase( qpoint_gridPosition ), bool_hexFogOfWar(false), ptr_unitStationed(stationedUnit), state(INACTIVE),
+    qstring_hexType(type),int_boltaniumCurrent(0), qcolor_hexColor(Qt::black)
 {
-    if(HexMatchfieldType == "waterDeep")
+    if(qstring_hexType == "waterDeep")
         setPixmap(QPixmap(":/img/HexagonBilder/Meer.png"));
-    else if(HexMatchfieldType == "waterSeashore")
+    else if(qstring_hexType == "waterSeashore")
         setPixmap(QPixmap(":/img/HexagonBilder/Kueste.png"));
-    else if(HexMatchfieldType == "forrest")
+    else if(qstring_hexType == "forrest")
         setPixmap(QPixmap(":/img/HexagonBilder/Forest.png"));
-    else if(HexMatchfieldType == "grassland")
+    else if(qstring_hexType == "grassland")
 
         setPixmap(QPixmap(":/img/HexagonBilder/Grass.png"));
-    else if(HexMatchfieldType == "streetStraight")
+    else if(qstring_hexType == "streetStraight")
         setPixmap(QPixmap(":/img/HexagonBilder/nordsued.png"));
-    else if(HexMatchfieldType == "streetStraight60d")
+    else if(qstring_hexType == "streetStraight60d")
         setPixmap(QPixmap(":/img/HexagonBilder/nordsued60d.png"));
-    else if(HexMatchfieldType == "streetStraight120d")
+    else if(qstring_hexType == "streetStraight120d")
         setPixmap(QPixmap(":/img/HexagonBilder/nordsued120d.png"));
 
-    else if(HexMatchfieldType == "streetCurve")
+    else if(qstring_hexType == "streetCurve")
         setPixmap(QPixmap(":/img/HexagonBilder/Street_nordwest.png"));
-    else if(HexMatchfieldType == "streetCurve60d")
+    else if(qstring_hexType == "streetCurve60d")
         setPixmap(QPixmap(":/img/HexagonBilder/Street_nordwest60d.png"));
-    else if(HexMatchfieldType == "streetCurve120d")
+    else if(qstring_hexType == "streetCurve120d")
         setPixmap(QPixmap(":/img/HexagonBilder/Street_nordwest120d.png"));
-    else if(HexMatchfieldType == "streetCurve180d")
+    else if(qstring_hexType == "streetCurve180d")
         setPixmap(QPixmap(":/img/HexagonBilder/Street_nordwest180d.png"));
-    else if(HexMatchfieldType == "streetCurve240d")
+    else if(qstring_hexType == "streetCurve240d")
         setPixmap(QPixmap(":/img/HexagonBilder/Street_nordwest240d.png"));
-    else if(HexMatchfieldType == "streetCurve300d")
+    else if(qstring_hexType == "streetCurve300d")
         setPixmap(QPixmap(":/img/HexagonBilder/Street_nordwest300d.png"));
 
-    else if(HexMatchfieldType == "streetCrossing")
+    else if(qstring_hexType == "streetCrossing")
         setPixmap(QPixmap(":/img/HexagonBilder/Street_kreuzung.png"));
-    else if(HexMatchfieldType == "streetCrossing60d")
+    else if(qstring_hexType == "streetCrossing60d")
         setPixmap(QPixmap(":/img/HexagonBilder/Street_kreuzung60d.png"));
 
-    else if(HexMatchfieldType == "mountainTop")
+    else if(qstring_hexType == "mountainTop")
         setPixmap(QPixmap(":/img/HexagonBilder/Mountain.png"));
-    else if(HexMatchfieldType == "mountainSideStraight")
+    else if(qstring_hexType == "mountainSideStraight")
         setPixmap(QPixmap(":/img/HexagonBilder/BergSeiteGrade.png"));
-    else if(HexMatchfieldType == "mountainSideCurve")
+    else if(qstring_hexType == "mountainSideCurve")
         setPixmap(QPixmap(":/img/HexagonBilder/BergSeiteSchräg.png"));
 
     //Skalierung kann hier angepasst werden
@@ -149,12 +149,12 @@ HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, QString type, U
     qpixmap_boltanium.load(":/img/Boltanium/Boltanium_high.png");
     qpixmap_boltanium = qpixmap_boltanium.scaled(64,64);
 
-    ptr_hexMfieldDisplay = new HexagonDisplayInfo(this);
+    ptr_hexDisplay = new HexagonDisplayInfo(this);
 }
 
 HexagonMatchfield::~HexagonMatchfield()
 {
-    delete ptr_hexMfieldDisplay;
+    delete ptr_hexDisplay;
 }
 
 void HexagonMatchfield::mousePressEvent( QGraphicsSceneMouseEvent *)
@@ -168,9 +168,9 @@ void HexagonMatchfield::mousePressEvent( QGraphicsSceneMouseEvent *)
         qDebug() << "Hexagon ist nicht Aktiv. Sende Signal SIGNAL_centerThis";
         emit SIGNAL_centerThis(this);
     }
-    if(unit_stationed != nullptr)
+    if(ptr_unitStationed != nullptr)
     {
-        unit_stationed->getUnitDisplay()->updateText();
+        ptr_unitStationed->getUnitDisplay()->updateText();
     }
     emit SIGNAL_clicked( this );
 }
@@ -180,7 +180,7 @@ void HexagonMatchfield::paint(QPainter *painter, const QStyleOptionGraphicsItem 
     QGraphicsPixmapItem::paint(painter, option, widget);
 
     QPen pen;
-    pen.setColor(qcolor_HexColor);
+    pen.setColor(qcolor_hexColor);
     pen.setWidth(2);
     painter->setPen(pen);
 
@@ -206,15 +206,15 @@ void HexagonMatchfield::paint(QPainter *painter, const QStyleOptionGraphicsItem 
 
 void HexagonMatchfield::serialize(QTextStream &out)
 {
-    if(int_boltaniumCurrent > 0 || unit_stationed != nullptr)
+    if(int_boltaniumCurrent > 0 || ptr_unitStationed != nullptr)
     {
         out << qpoint_gridPosition.x() << " " << qpoint_gridPosition.y() << " "
             << int_boltaniumCurrent << " ";
-        if(unit_stationed != nullptr)
+        if(ptr_unitStationed != nullptr)
         {
             out << "1";
             out << "\n";
-            unit_stationed->serialize(out);
+            ptr_unitStationed->serialize(out);
         }else{
             out << "0";
             out << "\n";
