@@ -28,15 +28,15 @@ std::vector<QPoint> Game::vector_oddNeighbors = {QPoint(1,1),QPoint(1,0),QPoint(
 
 
 Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
-    selectionCache(nullptr), gameOptions(init_options), ptr_gameGameWid(ptr_gameWid),
+    selectionCache(nullptr), ptr_options(init_options), ptr_gameGameWid(ptr_gameWid),
     ptr_playerOne(new Player("Eins", 1)), ptr_playerTwo(new Player("Zwei", 2)),
     ptr_playerActive(ptr_playerOne), MenueView(false)
 {
 /*Starten eines Spiels mit den Optionen definiert in init_Options*/
 
-    ptr_roundCurrent = new Round(gameOptions->getInt_roundLimit());
+    ptr_roundCurrent = new Round(ptr_options->getInt_roundLimit());
 
-    if(!loadMapForNewGame(gameOptions->getStr_map()))
+    if(!loadMapForNewGame(ptr_options->getStr_map()))
     {
         createRandomMap();
     }
@@ -119,26 +119,31 @@ void Game::loadGame(QString )
 
 void Game::saveGame()
 {
-    qDebug() << "SaveGame";
-    QString qstring_pathToSaveFile = QFileDialog::getSaveFileName(ptr_gameGameWid, tr("Save File"), "", tr("Data Text (*.txt);;All Files (*)"));
-
-    if(qstring_pathToSaveFile.isEmpty())
+    if(ptr_options->getStr_map() != "Random")
     {
-        qDebug() << "File Name Empty";
-        return;
+        qDebug() << "SaveGame";
+        QString qstring_pathToSaveFile = QFileDialog::getSaveFileName(ptr_gameGameWid, tr("Save File"), "", tr("Data Text (*.txt);;All Files (*)"));
+
+        if(qstring_pathToSaveFile.isEmpty())
+        {
+            qDebug() << "File Name Empty";
+            return;
+        }
+
+        QFile file_saveFile(qstring_pathToSaveFile);
+
+        if(!file_saveFile.open(QIODevice::WriteOnly))
+        {
+            qDebug() << " Could not open the file for writing";
+            return;
+        }
+
+        QTextStream out(&file_saveFile);
+        out.setCodec(QTextCodec::codecForName("UTF-8"));
+        serialize(out);
+    }else{
+        qDebug() << "Random Spiele können nicht gespeichert werden";
     }
-
-    QFile file_saveFile(qstring_pathToSaveFile);
-
-    if(!file_saveFile.open(QIODevice::WriteOnly))
-    {
-        qDebug() << " Could not open the file for writing";
-        return;
-    }
-
-    QTextStream out(&file_saveFile);
-    out.setCodec(QTextCodec::codecForName("UTF-8"));
-    serialize(out);
 }
 
 void Game::endGame()
@@ -866,9 +871,9 @@ bool Game::readSaveGame(QString filepath)
         return false;
     }
 
-    gameOptions = Options::unserialize(in);
+    ptr_options = Options::unserialize(in);
 
-    if( gameOptions->getBool_ki() == true)
+    if( ptr_options->getBool_ki() == true)
     {
         ptr_playerOne = Player::unserialize(in);
         //später
@@ -893,7 +898,7 @@ bool Game::readSaveGame(QString filepath)
 
     ptr_roundCurrent = Round::unserialize(in);
 
-    loadMapFromSaveGame(gameOptions->getStr_map());
+    loadMapFromSaveGame(ptr_options->getStr_map());
 
     int posX, posY, boltanium, unitStationed;
 
@@ -1211,7 +1216,7 @@ int Game::offset_distance(QPoint a, QPoint b)
 void Game::serialize(QTextStream &out)
 {
     out << "Battle Isle Clone V2.7\nSave Game\n";
-    gameOptions->serialize(out);
+    ptr_options->serialize(out);
     ptr_playerOne->serialize(out);
     ptr_playerTwo->serialize(out);
     out << ptr_playerActive->getPlayerID() << "\n";

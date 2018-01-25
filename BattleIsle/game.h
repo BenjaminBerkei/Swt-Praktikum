@@ -79,7 +79,7 @@ private:
     std::vector<std::vector<Unit*>> unit_UnitGrid;
     std::vector<Button*> button_menueBar;
 
-    Options* gameOptions;
+    Options* ptr_options;
     GameWidget* ptr_gameGameWid;
 
     std::map<HexagonMatchfield*, HexagonMatchfield*> came_from;
