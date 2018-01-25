@@ -91,19 +91,6 @@ void DynamicUnit::serialize(QTextStream & out)
         << int_unitCurrentMoveRange << "\n";
 }
 
-int DynamicUnit::getUnitAutoRep() const{
-		return int_unitAutoRep;
-}
-
-int DynamicUnit::getUnitLevel() const{
-		return int_unitLevel;
-}
-
-void DynamicUnit::setUnitAutoRep(const int newUnitAutoRep)
-{
-    int_unitAutoRep = newUnitAutoRep;
-	return;
-}
 
 void DynamicUnit::autoRepair() {
 	if (int_unitCurrentHP + int_unitAutoRep > int_unitHP) {
@@ -136,7 +123,159 @@ void DynamicUnit::resetUnit()
     }
 }
 
+int DynamicUnit::getUnitAutoRep() const{
+        return int_unitAutoRep;
+}
 
+int DynamicUnit::getUnitLevel() const{
+        return int_unitLevel;
+}
+
+void DynamicUnit::setUnitAutoRep(const int newUnitAutoRep)
+{
+    int_unitAutoRep = newUnitAutoRep;
+}
+
+void DynamicUnit::setUnitLevel(const int value)
+{
+    int_unitLevel = value;
+}
+
+
+
+
+// AirUnit
+
+AirUnit::AirUnit(QString filepath, Player* player)
+    : DynamicUnit(filepath, player){}
+
+
+int AirUnit::moveTo(HexagonMatchfield *hex_target)
+{
+    //Flugzeug hat selbe Kosten für alles.
+    if(hex_target->getUnit_stationed() == nullptr)
+    {
+        return 1;
+    }else if(hex_target->getUnit_stationed()->getUnitPlayer() == unitPlayer
+            && hex_target->getUnit_stationed()->getUnitType().contains("TRANSPORTER")){
+        return 1;
+    }
+    return -1;
+}
+
+bool AirUnit::action(HexagonMatchfield *hex_target) {
+    if(bool_unitUsed)
+    {
+        return false;
+    }
+    Unit *target = hex_target->getUnit_stationed();
+
+    if(target == nullptr)
+    {
+        return false;
+    }
+
+    if(target->getUnitPlayer() == this->getUnitPlayer())
+    {
+        return false;
+    }
+
+    int int_target_current_hp = target->getUnitCurrentHP();
+    QString target_type = target->getUnitType();
+
+    /* RNG mit zufälligem Seed für später initalisieren */
+    srand(time(NULL));
+
+    int int_unitSpecificAtt = 0;
+    bool bool_fights_back = false;
+
+    if(target_type == "LIGHTUNIT" || target_type == "MEDIUMUNIT" || target_type == "HEAVYUNIT"){
+        int_unitSpecificAtt = int_unitGroundAtt; bool_fights_back = true;
+    }
+
+    else if(target_type == "WATERUNIT"){
+        int_unitSpecificAtt = int_unitWaterAtt; bool_fights_back = true;
+    }
+
+    else if(target_type == "AIRUNIT"){
+        int_unitSpecificAtt = int_unitAirAtt; bool_fights_back = true;
+    }
+
+    if(bool_fights_back){
+
+        if (int_target_current_hp - int_unitSpecificAtt <= 0) {
+            target->setUnitCurrentHP(0);
+            int_unitEXP +=10;
+            levelUpBonus();
+            bool_unitUsed = true;
+            return true;
+        }
+
+        else {
+            target->setUnitCurrentHP(int_target_current_hp - int_unitSpecificAtt);
+
+            //zurück angreifen mit 50 - 75% unseres Attk. Wertes
+            int int_generated_number = (rand() % 26) + 50;
+            double db_percentage_value = ((double)int_generated_number) / 100.0;
+
+            int backfire = (int)(target->getUnitAirAtt()*db_percentage_value);
+            if(int_unitCurrentHP - backfire <= 0){
+                int_unitCurrentHP = 0;
+                target->setUnitEXP(target->getUnitEXP() + 10);
+                target->levelUpBonus();
+                bool_unitUsed = true;
+                return true;
+            }
+
+            else{
+                int_unitCurrentHP -= backfire;
+                bool_unitUsed = true;
+                return true;
+            }
+
+        }
+    }
+
+    if(!bool_fights_back){
+        if(target_type == "TRANSPORTERAIR"){
+            int_unitSpecificAtt = int_unitAirAtt;
+        }
+
+        else if(target_type == "TRANSPORTERWATER"){
+            int_unitSpecificAtt = int_unitWaterAtt;
+        }
+
+        else if(target_type == "TRANSPORTERGROUND"){
+            int_unitSpecificAtt = int_unitGroundAtt;
+        }
+
+        //Gebäude
+        else{
+            int_unitSpecificAtt = int_unitGroundAtt;
+        }
+
+        if (int_target_current_hp - int_unitSpecificAtt <= 0) {
+            target->setUnitCurrentHP(0);
+            int_unitEXP +=10;
+            levelUpBonus();
+            bool_unitUsed = true;
+            return true;
+        }
+
+        else {
+            target->setUnitCurrentHP(int_target_current_hp - int_unitSpecificAtt);
+            bool_unitUsed = true;
+            return true;
+        }
+    }
+    return false;
+
+}
+
+AirUnit *AirUnit::createUnit()
+{
+    return new AirUnit(unitFile, unitPlayer);
+}
 // TransporterUnit
 
 TransporterUnit::TransporterUnit(QString filepath, Player* player)
@@ -365,142 +504,6 @@ TransporterWaterUnit *TransporterWaterUnit::createUnit()
 }
 
 
-
-// AirUnit
-
-AirUnit::AirUnit(QString filepath, Player* player)
-	: DynamicUnit(filepath, player){}
-
-
-int AirUnit::moveTo(HexagonMatchfield *hex_target)
-{
-	//Flugzeug hat selbe Kosten für alles.
-    if(hex_target->getUnit_stationed() == nullptr)
-    {
-        return 1;
-    }else if(hex_target->getUnit_stationed() != nullptr
-            && hex_target->getUnit_stationed()->getUnitPlayer() == unitPlayer
-            && (hex_target->getUnit_stationed()->getUnitType() == "TRANSPORTERAIR"
-                || hex_target->getUnit_stationed()->getUnitType() == "TRANSPORTERGROUND"
-                || hex_target->getUnit_stationed()->getUnitType() == "TRANSPORTERWATER")){
-        return 1;
-    }
-    return -1;
-}
-
-bool AirUnit::action(HexagonMatchfield *hex_target) {
-    if(bool_unitUsed)
-    {
-        return false;
-    }
-    Unit *target = hex_target->getUnit_stationed();
-	
-    if(target == nullptr)
-    {
-		return false;
-    }
-
-    if(target->getUnitPlayer() == this->getUnitPlayer())
-    {
-        return false;
-    }
-
-	int int_target_current_hp = target->getUnitCurrentHP();
-    QString target_type = target->getUnitType();
-
-	/* RNG mit zufälligem Seed für später initalisieren */
-	srand(time(NULL));
-
-	int int_unitSpecificAtt = 0;
-	bool bool_fights_back = false;
-
-	if(target_type == "LIGHTUNIT" || target_type == "MEDIUMUNIT" || target_type == "HEAVYUNIT"){
-		int_unitSpecificAtt = int_unitGroundAtt; bool_fights_back = true;
-	}
-
-	else if(target_type == "WATERUNIT"){
-		int_unitSpecificAtt = int_unitWaterAtt; bool_fights_back = true;
-	}
-
-	else if(target_type == "AIRUNIT"){
-		int_unitSpecificAtt = int_unitAirAtt; bool_fights_back = true;
-	}
-
-	if(bool_fights_back){
-
-		if (int_target_current_hp - int_unitSpecificAtt <= 0) {
-			target->setUnitCurrentHP(0);
-			int_unitEXP +=10;
-			levelUpBonus();
-            bool_unitUsed = true;
-			return true;
-		}
-
-		else {
-			target->setUnitCurrentHP(int_target_current_hp - int_unitSpecificAtt);
-
-			//zurück angreifen mit 50 - 75% unseres Attk. Wertes
-			int int_generated_number = (rand() % 26) + 50;
-			double db_percentage_value = ((double)int_generated_number) / 100.0;
-
-			int backfire = (int)(target->getUnitAirAtt()*db_percentage_value);
-			if(int_unitCurrentHP - backfire <= 0){
-				int_unitCurrentHP = 0;
-				target->setUnitEXP(target->getUnitEXP() + 10);
-				target->levelUpBonus();
-                bool_unitUsed = true;
-				return true;
-			}
-
-			else{
-				int_unitCurrentHP -= backfire;
-                bool_unitUsed = true;
-				return true;
-			}
-
-		}
-	}
-
-	if(!bool_fights_back){
-		if(target_type == "TRANSPORTERAIR"){
-			int_unitSpecificAtt = int_unitAirAtt;
-		}
-
-		else if(target_type == "TRANSPORTERWATER"){
-			int_unitSpecificAtt = int_unitWaterAtt;
-		}
-
-		else if(target_type == "TRANSPORTERGROUND"){
-			int_unitSpecificAtt = int_unitGroundAtt;
-		}
-
-		//Gebäude
-		else{
-			int_unitSpecificAtt = int_unitGroundAtt;
-		}
-
-		if (int_target_current_hp - int_unitSpecificAtt <= 0) {
-			target->setUnitCurrentHP(0);
-			int_unitEXP +=10;
-			levelUpBonus();
-            bool_unitUsed = true;
-			return true;
-		}
-
-		else {
-			target->setUnitCurrentHP(int_target_current_hp - int_unitSpecificAtt);
-            bool_unitUsed = true;
-			return true;
-		}
-	}
-	return false;
-
-}
-
-AirUnit *AirUnit::createUnit()
-{
-    return new AirUnit(unitFile, unitPlayer);
-}
 
 // GroundUnit
 

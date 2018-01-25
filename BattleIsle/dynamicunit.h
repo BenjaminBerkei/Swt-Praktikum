@@ -23,25 +23,25 @@
 class DynamicUnit : public Unit
 {
 protected:
-  int int_unitAutoRep;
-  int int_unitLevel;
+      int int_unitAutoRep;
+      int int_unitLevel;
 
 
 public:
-DynamicUnit(QString, Player*);
+    DynamicUnit(QString, Player*);
 
-virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-void serialize(QTextStream&);
-  int getUnitAutoRep() const;
-  int getUnitLevel() const;
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    void serialize(QTextStream&);
 
-  void setUnitAutoRep(const int);
-  void setUnitLevel(const int);
-  
-  void autoRepair();
-  void levelUpBonus();
-  void resetUnit();
+    void autoRepair();
+    void levelUpBonus();
+    void resetUnit();
 
+    int getUnitAutoRep() const;
+    int getUnitLevel() const;
+
+    void setUnitAutoRep(const int);
+    void setUnitLevel(const int);
 };
 
 // Air
