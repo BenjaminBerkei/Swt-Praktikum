@@ -31,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->spinBoltanium,SIGNAL(valueChanged(int)), this, SLOT(on_spinBoltanium_valueChanged(int)));
     connect(ui->deleteBut, SIGNAL(clicked(bool)), this, SLOT(on_deleteBut_clicked()));
     connect(ui->actionSpeichern, SIGNAL(triggered(bool)),this, SLOT(speichern_triggerd()));
-    connect(ui->actionSpeichernForBIC, SIGNAL(triggered(bool)),this, SLOT(speichern_triggerd()));
+    connect(ui->actionSpeichernForBIC, SIGNAL(triggered(bool)),this, SLOT(speichernForGame_triggerd()));
     connect(ui->actionLoad_Map, SIGNAL(triggered(bool)),this, SLOT(ladenMap_triggered()));
 
     ui->spinBoxX->setValue(sizeX);
@@ -770,7 +770,8 @@ void MainWindow::speichernForGame_triggerd()
                out << hex->getHexMatchfieldType() << " "<< hex->getBoltaniumCurrent() << " ";
                if(hex->getUnit_stationed() != nullptr)
                {
-                   out << 1 << " " << hex->getUnit_stationed()->getPLY() << " " << hex->getUnit_stationed()->getFilepath() << "\n";
+                   out << 1 << " " << hex->getUnit_stationed()->getPLY() << " "
+                       << hex->getUnit_stationed()->getUnitType() << " " << hex->getUnit_stationed()->getFilepath() << "\n";
                }
                else
                    out << 0 << "\n";

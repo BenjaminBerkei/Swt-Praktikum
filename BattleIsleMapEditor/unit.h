@@ -28,6 +28,7 @@ private:
     QPoint gridPos;
     int unitPLY;
     QString filepath;
+    QString unitType;
 public:
     Unit(QPoint, QString, int = 0);
 
@@ -39,6 +40,7 @@ public:
     void setPLY(int);
     QString getFilepath();
     void setFielpath(QString);
+    QString getUnitType() const;
 };
 
 #endif // UNIT_H

@@ -869,11 +869,10 @@ void Game::readSaveGame(QString filepath)
     ptr_roundCurrent = Round::unserialize(in);
     loadMapFromSaveGame(gameOptions->getStr_map());
 
-    int posX, posY, boltanium, unitStationed, unitPlayer, unitHP, unitMoveRange, unitLevel;
+    int posX, posY, boltanium, unitStationed, unitPlayer, unitHP, unitMoveRange, unitUsed, unitLevel;
     QString unitType, unitPath;
 
     in >> tmp;
-
     while(tmp != "")
     {
        posX = tmp.toInt();
@@ -889,14 +888,15 @@ void Game::readSaveGame(QString filepath)
            in >> unitPath;
            in >> unitPlayer;
            in >> unitHP;
-
+           in >> unitUsed;
+           qDebug() << "Eingelesene Einheit: " << "\n\t" << unitType << "\n\t" << unitPath
+                    << "\n\t" << unitPlayer << "\n\t" << unitHP;
            Player* ptr_playerTemp = nullptr;
+
            if(unitPlayer == 1)
            {
                ptr_playerTemp = ptr_playerOne;
-           }
-           else
-           {
+           }else{
                ptr_playerTemp = ptr_playerTwo;
            }
 
@@ -904,23 +904,29 @@ void Game::readSaveGame(QString filepath)
            {
                unit_UnitGrid[posX][posY] = new FactoryUnit(unitPath, true, ptr_playerTemp);
                hexagonMatchfield_gameGrid[posX][posY]->setUnit_stationed(unit_UnitGrid[posX][posY]);
+               unit_UnitGrid[posX][posY]->setUnitCurrentHP(unitHP);
+               unit_UnitGrid[posX][posY]->setUnitUsed((bool)unitUsed);
            }
            else if( unitType == "HEADQUATERUNIT")
            {
                unit_UnitGrid[posX][posY] = new HeadquaterUnit(unitPath,ptr_playerTemp);
                hexagonMatchfield_gameGrid[posX][posY]->setUnit_stationed(unit_UnitGrid[posX][posY]);
+               unit_UnitGrid[posX][posY]->setUnitCurrentHP(unitHP);
+               unit_UnitGrid[posX][posY]->setUnitUsed((bool)unitUsed);
            }
            else if(unitType == "AIRUNIT")
            {
                unit_UnitGrid[posX][posY] = new AirUnit(unitPath, ptr_playerTemp);
                hexagonMatchfield_gameGrid[posX][posY]->setUnit_stationed(unit_UnitGrid[posX][posY]);
+
                in >> unitMoveRange;
                in >> unitLevel;
+               qDebug() << "\t" << unit_UnitGrid[posX][posY]->getUnitMoveRange() << "\n\t" << unitLevel;
 
-               qDebug() << "unitMoveRange:  " << unitMoveRange;
-               unit_UnitGrid[posX][posY]->setUnitMoveRange(unitMoveRange);
-               qDebug() << "gesetzte unitMoveRange:     " <<
-                           unit_UnitGrid[posX][posY]->getUnitMoveRange();
+               unit_UnitGrid[posX][posY]->setUnitCurrentHP(unitHP);
+               unit_UnitGrid[posX][posY]->setUnitUsed((bool)unitUsed);
+               unit_UnitGrid[posX][posY]->setUnitCurrentMoveRange(unitMoveRange);
+
                //unit_UnitGrid[posX][posY]->setUnitLevel(unitLevel);
            }
            //Hier spaeter noch weiter ausbauen (andere Unittypen hinzufuegen)

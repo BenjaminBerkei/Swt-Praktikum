@@ -89,7 +89,7 @@ void DynamicUnit::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 void DynamicUnit::serialize(QTextStream & out)
 {
     out << str_unitType << " " << unitFile << " " << unitPlayer->getPlayerID() << " "
-        << int_unitCurrentHP << " " << int_unitCurrentMoveRange << " " << int_unitLevel << "\n";
+        << int_unitCurrentHP << " " << bool_unitUsed  << " " << int_unitLevel << " " << int_unitCurrentMoveRange << "\n";
 }
 
 int DynamicUnit::getUnitAutoRep() const{

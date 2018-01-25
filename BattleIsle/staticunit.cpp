@@ -68,7 +68,7 @@ StaticUnit::StaticUnit(QString filepath, Player* player)
 void StaticUnit::serialize(QTextStream &out)
 {
     out << str_unitType << " " << unitFile << " " << unitPlayer->getPlayerID() << " "
-        << int_unitCurrentHP << "\n";
+        << int_unitCurrentHP << " " << bool_unitUsed << "\n";
 }
 
 int StaticUnit::getEnergieStorage() const

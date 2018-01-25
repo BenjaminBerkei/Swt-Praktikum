@@ -7,6 +7,11 @@
 //------------------
 #include "unit.h"
 
+QString Unit::getUnitType() const
+{
+    return unitType;
+}
+
 Unit::Unit(QPoint qpoint, QString name, int i)
     : unitName(name), gridPos(qpoint), unitPLY(i)
 {
@@ -20,6 +25,7 @@ Unit::Unit(QPoint qpoint, QString name, int i)
         case 1: setPixmap(QPixmap(":/img/StaticOhneRand/HQ_blau.png")); break;
         case 2: setPixmap(QPixmap(":/img/StaticOhneRand/HQ_rot.png")); break;
         }
+        unitType = "HEADQUATERUNIT";
     }
     if(name == "factory")
     {
@@ -30,6 +36,7 @@ Unit::Unit(QPoint qpoint, QString name, int i)
         case 1: setPixmap(QPixmap(":/img/StaticOhneRand/Factory_blau.png")); break;
         case 2: setPixmap(QPixmap(":/img/StaticOhneRand/Factory_rot.png")); break;
         }
+        unitType = "FACTORYUNIT";
     }
     if(name == "depot")
     {
@@ -40,6 +47,7 @@ Unit::Unit(QPoint qpoint, QString name, int i)
         case 1: setPixmap(QPixmap(":/img/StaticOhneRand/Lager_blau.png")); break;
         case 2: setPixmap(QPixmap(":/img/StaticOhneRand/Lager_rot.png")); break;
         }
+        unitType = "DEPOTUNIT";
     }
     //groundunit
     if(name == "ben")
@@ -150,6 +158,8 @@ Unit::Unit(QPoint qpoint, QString name, int i)
         case 1: setPixmap(QPixmap(":/img/AirOhneRand/CAS_Firebird_blau.png")); break;
         case 2: setPixmap(QPixmap(":/img/AirOhneRand/CAS_Firebird_rot.png")); break;
         }
+        unitType = "AIRUNIT";
+
     }
     if(name == "g2giant")
     {
@@ -159,6 +169,8 @@ Unit::Unit(QPoint qpoint, QString name, int i)
         case 1: setPixmap(QPixmap(":/img/AirOhneRand/G-2_Giant_blau.png")); break;
         case 2: setPixmap(QPixmap(":/img/AirOhneRand/G-2_Giant_rot.png")); break;
         }
+        unitType = "AIRUNIT";
+
     }
     if(name == "xa7raven")
     {
@@ -168,6 +180,8 @@ Unit::Unit(QPoint qpoint, QString name, int i)
         case 1: setPixmap(QPixmap(":/img/AirOhneRand/XA-7_Raven_blau.png")); break;
         case 2: setPixmap(QPixmap(":/img/AirOhneRand/XA-7_Raven_rot.png")); break;
         }
+        unitType = "AIRUNIT";
+
     }
     if(name == "xf7mosquito")
     {
@@ -177,6 +191,7 @@ Unit::Unit(QPoint qpoint, QString name, int i)
         case 1: setPixmap(QPixmap(":/img/AirOhneRand/XF-7_Mosquito_blau.png")); break;
         case 2: setPixmap(QPixmap(":/img/AirOhneRand/XF-7_Mosquito_rot.png")); break;
         }
+        return;
     }
     //waterunit
     if(name == "cvamazon")
