@@ -156,7 +156,7 @@ void GameWidget::resizeEvent(QResizeEvent *,int mainHeight, int mainWidth)
     ui->graphicsView_optionsView->setGeometry(xLeftTop + ui->graphicsView_gameView->width() + 5, yLeftTop + ui->graphicsView_informationsView->height() + 5, ui->graphicsView_informationsView->width(), this->height() - 100);
     ui->graphicsView_buttonView->setGeometry(xLeftTop, yLeftTop + ui->graphicsView_gameView->height() + 10, ui->graphicsView_gameView->width(), 110);
 
-    gameWidOptionsScene->setSceneRect(0,0, ui->graphicsView_optionsView->width(),130 * gameWidOptionsScene->items().size());
+    gameWidOptionsScene->setSceneRect(gameWidOptionsScene->itemsBoundingRect());
 }
 
 void GameWidget::gameWidCreateMatchfield(std::vector<std::vector<HexagonMatchfield*>> &hexagonGrid)
@@ -193,6 +193,7 @@ void GameWidget::gameWidCreateMatchfield(std::vector<std::vector<HexagonMatchfie
             gameWidGameScene->addItem(hex);
         }
     }
+    gameWidGameScene->setSceneRect(gameWidGameScene->itemsBoundingRect());
     ui->graphicsView_gameView->setScene( gameWidGameScene );
 }
 
@@ -294,6 +295,8 @@ void GameWidget::resetGameWidget()
     gameWidInfoScene->clear();
     gameWidOptionsScene->clear();
     gameWidMapScene->clear();
+    sizeX = 0;
+    sizeY = 0;
 }
 
 void GameWidget::setEnableButtonScene(bool state)
@@ -443,12 +446,12 @@ void GameWidget::setOptScene(std::vector<Unit *> vector_Unit)
 
     if(vector_Unit.size() > 0)
     {
-        gameWidOptionsScene->setSceneRect(0,0, vector_Unit[0]->getUnitDisplay()->rect().width(), 130 * vector_Unit.size());
         for(unsigned i = 0; i < vector_Unit.size(); i++)
         {
             gameWidOptionsScene->addItem(vector_Unit[i]->getUnitDisplay());
             vector_Unit[i]->getUnitDisplay()->setPos(50, i * vector_Unit[i]->getUnitDisplay()->rect().height() + 75);
         }
+        gameWidOptionsScene->setSceneRect(gameWidOptionsScene->itemsBoundingRect());
     }
     gameWidOptionsScene->update();
 }
@@ -586,7 +589,7 @@ void UnitDisplayInfo::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
     pen.setColor(color);
 
     painter->setPen(pen);
-    painter->drawRect(rect());
+    painter->drawRect(boundingRect());
 
 }
 
@@ -664,7 +667,6 @@ void MapPixel::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidge
                 colorBrush = Qt::green;
             if(ptr_mapPixHexaon->getHexMatchfieldType() == "mountainTop")
                 colorBrush = Qt::gray;
-
             if(ptr_mapPixHexaon->getBoltaniumCurrent() > 0) // Fuer Boltanium
                 colorBrush = Qt::darkMagenta;
         }

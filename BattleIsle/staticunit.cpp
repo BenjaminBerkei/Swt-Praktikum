@@ -88,8 +88,6 @@ HeadquaterUnit::HeadquaterUnit(QString filepath, Player* player)
 {
 }
 
-HeadquaterUnit::~HeadquaterUnit(){}
-
 bool HeadquaterUnit::checkUnitDestroyed()
 {
     if(int_unitCurrentHP <= 0)
@@ -192,7 +190,20 @@ FactoryUnit::FactoryUnit(QString filepath, bool bool_loadInventory, Player* play
     }
 }
 
-FactoryUnit::~FactoryUnit() {}
+FactoryUnit::~FactoryUnit()
+{
+    for(auto &it : production)
+    {
+        delete it.second;
+    }
+    production.clear();
+    for(auto &it : vector_unitStorage)
+    {
+        delete it;
+    }
+    delete ptr_UnitDisplay;
+
+}
 
 QString FactoryUnit::getUnitToBuild() const
 {

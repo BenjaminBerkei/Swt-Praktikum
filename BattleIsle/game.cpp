@@ -30,11 +30,7 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
 
     ptr_roundCurrent = new Round(gameOptions->getInt_roundLimit());
 
-    if(loadMapForNewGame(gameOptions->getStr_map()))
-    {
-        qDebug() << "Map konnte geladen werden";
-    }
-    else
+    if(!loadMapForNewGame(gameOptions->getStr_map()))
     {
         createRandomMap();
     }
@@ -55,7 +51,10 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
 Game::Game(QString filepath, GameWidget *gameWidegt)
     : selectionCache(nullptr), ptr_gameGameWid(gameWidegt)
 {
-    readSaveGame(filepath);
+    if(!readSaveGame(filepath))
+    {
+        createRandomMap();
+    }
 
     ptr_gameGameWid->gameWidCreateMatchfield(hexagonMatchfield_gameGrid);
     countUnits();
@@ -360,6 +359,10 @@ bool Game::loadMapForNewGame(QString filepath)
                 {
                    vecUnit.push_back(new FactoryUnit(unitPath, true, ptr_playerTemp));
                 }
+                if(unitType == "DEPOTUNIT")
+                {
+                   vecUnit.push_back(new DepotUnit(unitPath, ptr_playerTemp));
+                }
                 else if( unitType == "HEADQUATERUNIT")
                 {
                     vecUnit.push_back(new HeadquaterUnit(unitPath,ptr_playerTemp));
@@ -391,6 +394,7 @@ bool Game::loadMapForNewGame(QString filepath)
 
 bool Game::loadMapFromSaveGame(QString filepath)
 {
+
     QFile file(filepath);
     if(!file.open(QFile::ReadOnly | QFile::Text))
     {
@@ -399,28 +403,36 @@ bool Game::loadMapFromSaveGame(QString filepath)
     }
 
     QTextStream in(&file);
+
     QString tmp;
     QString typeHex;
     int dimX, dimY;
 
+    //Leere den das Spielfeld und befreie Speicher
+    for(auto &it : hexagonMatchfield_gameGrid)
+    {
+        for(auto &ut : it)
+        {
+            delete ut;
+        }
+        it.clear();
+    }
+    hexagonMatchfield_gameGrid.clear();
+    for(auto &it : unit_UnitGrid)
+    {
+        for(auto &ut : it)
+        {
+            delete ut;
+        }
+        it.clear();
+    }
+    unit_UnitGrid.clear();
+
+    /*Einlesen der Dimensionen*/
     in >> dimX;
     in >> dimY;
     ptr_gameGameWid->setSizeX(dimX);
     ptr_gameGameWid->setSizeY(dimY);
-
-    //Leere den Vektor falls er etwas enthaelt
-    if(hexagonMatchfield_gameGrid.size() != 0)
-    {
-        for(auto &it : hexagonMatchfield_gameGrid)
-        {
-            for(auto &ut : it)
-            {
-                delete ut;
-            }
-            it.clear();
-        }
-        hexagonMatchfield_gameGrid.clear();
-    }
 
     //Hexagone einlesen
     for(int i = 0; i < dimX; i++)
@@ -805,13 +817,17 @@ int Game::cube_distance(QVector3D a, QVector3D b)
     return (abs(a.x() - b.x()) + abs(a.y() - b.y()) + abs(a.z() - b.z())) / 2;
 }
 
-void Game::readSaveGame(QString filepath)
+bool Game::readSaveGame(QString filepath)
 {
+    /*
+     * Lade ein Spiel aus einer gespeicherten txt Datei mit dem Pfad filepath
+     * Versionsnummer muss mit der Version des Ladens übereinstimmen
+     * */
     QFile file(filepath);
     if(!file.open(QFile::ReadOnly | QFile::Text))
     {
         qDebug() << "File nicht gefunden";
-        return;
+        return false;
     }
 
     QTextStream in(&file);
@@ -826,7 +842,7 @@ void Game::readSaveGame(QString filepath)
     if(Version != "V2.7")
     {
         qDebug() << "Falsche Version. Eingelesene Version: " << Version;
-        return;
+        return false;
     }
 
     tmp = in.readLine();
@@ -838,7 +854,7 @@ void Game::readSaveGame(QString filepath)
     if(textType != "Save Game")
     {
         qDebug() << "Falsches Format. Eingelesen: " << textType;
-        return;
+        return false;
     }
 
     gameOptions = Options::unserialize(in);
@@ -867,10 +883,10 @@ void Game::readSaveGame(QString filepath)
     }
 
     ptr_roundCurrent = Round::unserialize(in);
+
     loadMapFromSaveGame(gameOptions->getStr_map());
 
-    int posX, posY, boltanium, unitStationed, unitPlayer, unitHP, unitMoveRange, unitUsed, unitLevel;
-    QString unitType, unitPath;
+    int posX, posY, boltanium, unitStationed;
 
     in >> tmp;
     while(tmp != "")
@@ -884,60 +900,15 @@ void Game::readSaveGame(QString filepath)
 
        if(unitStationed == 1)
        {
-           in >> unitType;
-           in >> unitPath;
-           in >> unitPlayer;
-           in >> unitHP;
-           in >> unitUsed;
-           qDebug() << "Eingelesene Einheit: " << "\n\t" << unitType << "\n\t" << unitPath
-                    << "\n\t" << unitPlayer << "\n\t" << unitHP;
-           Player* ptr_playerTemp = nullptr;
+           unit_UnitGrid[posX][posY] = readUnitFromStream(in);
+           hexagonMatchfield_gameGrid[posX][posY]->setUnit_stationed(unit_UnitGrid[posX][posY]);
 
-           if(unitPlayer == 1)
-           {
-               ptr_playerTemp = ptr_playerOne;
-           }else{
-               ptr_playerTemp = ptr_playerTwo;
-           }
-
-           if(unitType == "FACTORYUNIT")
-           {
-               unit_UnitGrid[posX][posY] = new FactoryUnit(unitPath, true, ptr_playerTemp);
-               hexagonMatchfield_gameGrid[posX][posY]->setUnit_stationed(unit_UnitGrid[posX][posY]);
-               unit_UnitGrid[posX][posY]->setUnitCurrentHP(unitHP);
-               unit_UnitGrid[posX][posY]->setUnitUsed((bool)unitUsed);
-           }
-           else if( unitType == "HEADQUATERUNIT")
-           {
-               unit_UnitGrid[posX][posY] = new HeadquaterUnit(unitPath,ptr_playerTemp);
-               hexagonMatchfield_gameGrid[posX][posY]->setUnit_stationed(unit_UnitGrid[posX][posY]);
-               unit_UnitGrid[posX][posY]->setUnitCurrentHP(unitHP);
-               unit_UnitGrid[posX][posY]->setUnitUsed((bool)unitUsed);
-           }
-           else if(unitType == "AIRUNIT")
-           {
-               unit_UnitGrid[posX][posY] = new AirUnit(unitPath, ptr_playerTemp);
-               hexagonMatchfield_gameGrid[posX][posY]->setUnit_stationed(unit_UnitGrid[posX][posY]);
-
-               in >> unitMoveRange;
-               in >> unitLevel;
-               qDebug() << "\t" << unit_UnitGrid[posX][posY]->getUnitMoveRange() << "\n\t" << unitLevel;
-
-               unit_UnitGrid[posX][posY]->setUnitCurrentHP(unitHP);
-               unit_UnitGrid[posX][posY]->setUnitUsed((bool)unitUsed);
-               unit_UnitGrid[posX][posY]->setUnitCurrentMoveRange(unitMoveRange);
-
-               //unit_UnitGrid[posX][posY]->setUnitLevel(unitLevel);
-           }
-           //Hier spaeter noch weiter ausbauen (andere Unittypen hinzufuegen)
-           else
-           {
-               unit_UnitGrid[posX][posY] = nullptr;
-           }
+       }else{
+           unit_UnitGrid[posX][posY] = nullptr;
        }
        in >> tmp;
     }
-
+    return true;
 }
 
 void Game::createRandomMap()
@@ -960,6 +931,25 @@ void Game::createRandomMap()
     //"streetCurve"         (Straße mit Kurve)
     //"mountainTop"         (Bergspitze)
     //"mountainSide"        (Bergseite)
+    for(auto &it : hexagonMatchfield_gameGrid)
+    {
+        for(auto &ut : it)
+        {
+            delete ut;
+        }
+        it.clear();
+    }
+    hexagonMatchfield_gameGrid.clear();
+
+    for(auto &it : unit_UnitGrid)
+    {
+        for(auto &ut : it)
+        {
+            delete ut;
+        }
+        it.clear();
+    }
+    unit_UnitGrid.clear();
 
     for( int i = 0; i < sizeX; i++ )
     {
@@ -1079,6 +1069,123 @@ void Game::createButtons()
     SLOT_checkStateOfButtons();
 
     ptr_gameGameWid->gameWidCreateButtonBar(button_menueBar);
+}
+
+Unit *Game::createUnitFromType(QString unitType, QString unitPath, Player * ptr_playerTemp)
+{
+    if(unitType == "FACTORYUNIT")
+    {
+        return new FactoryUnit(unitPath, true, ptr_playerTemp);
+    }
+    else if( unitType == "HEADQUATERUNIT")
+    {
+        return new HeadquaterUnit(unitPath,ptr_playerTemp);
+    }
+    else if( unitType == "DEPOTUNIT")
+    {
+        return new DepotUnit(unitPath,ptr_playerTemp);
+    }else if(unitType == "AIRUNIT")
+    {
+        return new AirUnit(unitPath, ptr_playerTemp);
+    }else if(unitType == "LIGHTUNIT")
+    {
+        return new LightUnit(unitPath, ptr_playerTemp);
+    }else if(unitType == "MEDIUMUNIT")
+    {
+        return new MediumUnit(unitPath, ptr_playerTemp);
+    }else if(unitType == "HEAVYUNIT")
+    {
+        return new HeavyUnit(unitPath, ptr_playerTemp);
+    }else if(unitType == "WATERUNIT")
+    {
+        return new WaterUnit(unitPath, ptr_playerTemp);
+    }else if(unitType == "TRANSPORTERGROUND")
+    {
+        return new TransporterGroundUnit(unitPath, ptr_playerTemp);
+    }else if(unitType == "TRANSPORTERWATER")
+    {
+        return new TransporterWaterUnit(unitPath, ptr_playerTemp);
+    }else if(unitType == "TRANSPORTERAIR")
+    {
+        return new TransporterAirUnit(unitPath, ptr_playerTemp);
+    }else if(unitType == "BUILDERUNIT")
+    {
+        return new BuildLightUnit(unitPath, true,ptr_playerTemp);
+    }
+}
+
+Unit *Game::readUnitFromStream(QTextStream &in)
+{
+    int unitPlayer, unitHP, unitMoveRange, unitUsed, unitLevel;
+    QString unitType, unitPath;
+
+    bool isDynamicUnit = true;
+    bool isTransporterUnit = false;
+    Unit* unitFromStream = nullptr;
+
+    in >> unitType;
+    in >> unitPath;
+    in >> unitPlayer;
+    in >> unitHP;
+    in >> unitUsed;
+    qDebug() << "Eingelesene Einheit: " << "\n\t" << unitType << "\n\t" << unitPath
+             << "\n\t" << unitPlayer << "\n\t" << unitHP;
+    Player* ptr_playerTemp = nullptr;
+
+    if(unitPlayer == 1)
+    {
+        ptr_playerTemp = ptr_playerOne;
+    }else{
+        ptr_playerTemp = ptr_playerTwo;
+    }
+
+    unitFromStream = createUnitFromType(unitType, unitPath, ptr_playerTemp);
+
+    unitFromStream->setUnitCurrentHP(unitHP);
+    unitFromStream->setUnitUsed(unitUsed);
+
+    if(unitType == "DEPOTUNIT" || unitType == "HEADQUATERUNIT" || unitType == "FACTORYUNIT")
+    {
+        isDynamicUnit = false;
+    }else if(unitType.contains("TRANSPORTER"))
+    {
+        isTransporterUnit = true;
+    }
+
+     qDebug() << "\t" << isDynamicUnit << "\n\t" << isTransporterUnit;
+    if(isDynamicUnit == true)
+    {
+        in >> unitLevel;
+        in >> unitMoveRange;
+        unitFromStream->setUnitCurrentMoveRange(unitMoveRange);
+        //unitFromStream->setUnitLevel(unitLevel);
+        qDebug() << "\t" << unitMoveRange << "\n\t" << unitLevel;
+    }
+
+    if(isTransporterUnit == true)
+    {
+        loadInventory(in, unitFromStream);
+    }
+    return unitFromStream;
+}
+
+void Game::loadInventory(QTextStream & in, Unit * containerUnit)
+{
+    /*
+     * Lese Größe > 0 =>
+     * for(größe)
+     *      einheit einlesen
+     *      einheit in containerUnit einfügen
+     *      wenn (einheit == transporter)
+     *          loadInventory(in, einheit);
+     * */
+
+    int size = 0;
+    in >> size;
+    for(int i = 0; i < size; i++)
+    {
+        containerUnit->addUnitToStorage(readUnitFromStream(in));
+    }
 }
 
 int Game::offset_distance(QPoint a, QPoint b)

@@ -28,8 +28,6 @@
  *      mousePressEvent von HexagonMatchfield. Dort liefert die Funktion isActive() ein true zurueck, auch wenn die Minimap aktuell
  *      angezeigt wird, was ich nicht verstehe)
  *
- * -    MoveRange: Hat eine keine MoveRange mehr, wird dies nicht korrekt abgespeichert. Beim Laden dieses Spieles existert diese MoveRange nicht.
- *
  * -    Resize: Wird ein Spiel ueber das Menue beendet und ein neues Spiel gestartet, passt sich das Fenster nicht angemessen an.
  * */
 
@@ -97,8 +95,9 @@ public:
     void saveGame();
     void endGame();
     void Dijkstra();
-    bool loadMapFromSaveGame(QString);
     bool loadMapForNewGame(QString);
+    bool readSaveGame(QString);
+    bool loadMapFromSaveGame(QString);
 
     /* Nicht im UML-Diagramm, sind nur eine Hilfsfunktionen für processSelection*/
     void resetHexMatchfield();
@@ -119,9 +118,12 @@ private:
     QVector3D oddqToCube(QPoint);   //Für Referenzen betrachte https://www.redblobgames.com/grids/hexagons/#distances , Kapitel: Distance
     QPoint cubeToOddq(QVector3D);
     int cube_distance(QVector3D, QVector3D);
-    void readSaveGame(QString);
     void createRandomMap();
     void createButtons();
+    Unit* createUnitFromType(QString, QString, Player*);
+    Unit* readUnitFromStream(QTextStream&);
+    void loadInventory(QTextStream&, Unit*);
+
     /*Hilfsfunktionen Ende*/
 
 public slots:

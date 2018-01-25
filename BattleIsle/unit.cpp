@@ -25,6 +25,7 @@ Unit::~Unit()
     {
         delete it;
     }
+    delete ptr_UnitDisplay;
 }
 
 bool Unit::checkUnitDestroyed()

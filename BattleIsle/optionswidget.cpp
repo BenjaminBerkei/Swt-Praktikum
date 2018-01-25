@@ -37,6 +37,7 @@ OptionsWidget::OptionsWidget( QWidget *parent, MenueWidget *parentMenueWidget, O
         ui->comboBox_rounds->setCurrentIndex(0);
 
     new QListWidgetItem(tr(":/test/map.txt"), ui->listWidget_maps);
+    new QListWidgetItem(tr(":/test/map2.txt"), ui->listWidget_maps);
 }
 
 OptionsWidget::~OptionsWidget()

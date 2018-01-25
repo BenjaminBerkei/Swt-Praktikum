@@ -29,7 +29,6 @@ protected:
 
 public:
 DynamicUnit(QString, Player*);
-~DynamicUnit();
 
 virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 void serialize(QTextStream&);
@@ -51,7 +50,6 @@ class AirUnit : public DynamicUnit
 {
 public:
     AirUnit(QString, Player*  = nullptr);
-    ~AirUnit();
 
 	int moveTo(HexagonMatchfield* );
 	bool action(HexagonMatchfield* );
@@ -69,7 +67,6 @@ protected:
     Unit* unitToUnload;
 public:
 	TransporterUnit(QString, Player*);
-    ~TransporterUnit();
 
     virtual bool action(HexagonMatchfield *hex_target);
     void unload(HexagonMatchfield *hex_target);
@@ -92,7 +89,6 @@ class TransporterAirUnit : public TransporterUnit
 {
 public:
     TransporterAirUnit(QString, Player*  = nullptr);
-    ~TransporterAirUnit();
 
   int moveTo(HexagonMatchfield* hex_target);
   virtual TransporterAirUnit* createUnit();
@@ -104,7 +100,6 @@ class TransporterGroundUnit : public TransporterUnit
 {
 public:
     TransporterGroundUnit(QString, Player*  = nullptr);
-    ~TransporterGroundUnit();
 
   int moveTo(HexagonMatchfield* );
   virtual TransporterGroundUnit* createUnit();
@@ -116,7 +111,6 @@ class TransporterWaterUnit : public TransporterUnit
 {
 public:
     TransporterWaterUnit(QString, Player*  = nullptr);
-    ~TransporterWaterUnit();
 
   int moveTo(HexagonMatchfield* );
   virtual TransporterWaterUnit* createUnit();
@@ -128,7 +122,6 @@ class GroundUnit : public DynamicUnit
 {
 public:
     GroundUnit(QString, Player*  = nullptr);
-    ~GroundUnit();
 
 	 bool action(HexagonMatchfield* );     
 };
@@ -139,7 +132,6 @@ class LightUnit : public GroundUnit
 {
 public:
     LightUnit(QString, Player*  = nullptr);
-    ~LightUnit();
 
 	int moveTo(HexagonMatchfield* );
     virtual LightUnit* createUnit();
@@ -171,7 +163,6 @@ class MediumUnit : public GroundUnit
 {
 public:
     MediumUnit(QString, Player*  = nullptr);
-    ~MediumUnit();
 
 	int moveTo(HexagonMatchfield* );
     virtual MediumUnit* createUnit();
@@ -183,7 +174,6 @@ class HeavyUnit : public GroundUnit
 {
 public:
     HeavyUnit(QString, Player*  = nullptr);
-    ~HeavyUnit();
 
     int moveTo(HexagonMatchfield* );
     virtual HeavyUnit* createUnit();
@@ -196,7 +186,6 @@ class WaterUnit : public DynamicUnit
 {
 public:
     WaterUnit(QString, Player*  = nullptr);
-    ~WaterUnit();
 
 	int moveTo(HexagonMatchfield* );
     bool action(HexagonMatchfield* );

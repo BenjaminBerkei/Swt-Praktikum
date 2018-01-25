@@ -58,7 +58,7 @@ protected:
 
 public:
 	Unit();
-    ~Unit();
+    virtual ~Unit();
 
     virtual Unit* createUnit() = 0;
     virtual bool checkUnitDestroyed();

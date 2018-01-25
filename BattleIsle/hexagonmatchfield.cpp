@@ -110,26 +110,51 @@ HexagonMatchfield::HexagonMatchfield(QPoint qpoint_gridPosition, QString type, U
     else if(HexMatchfieldType == "forrest")
         setPixmap(QPixmap(":/img/HexagonBilder/Forest.png"));
     else if(HexMatchfieldType == "grassland")
+
         setPixmap(QPixmap(":/img/HexagonBilder/Grass.png"));
     else if(HexMatchfieldType == "streetStraight")
-        setPixmap(QPixmap(":/img/HexagonBilder/Street_nordwest.png"));
+        setPixmap(QPixmap(":/img/HexagonBilder/nordsued.png"));
+    else if(HexMatchfieldType == "streetStraight60d")
+        setPixmap(QPixmap(":/img/HexagonBilder/nordsued60d.png"));
+    else if(HexMatchfieldType == "streetStraight120d")
+        setPixmap(QPixmap(":/img/HexagonBilder/nordsued120d.png"));
+
     else if(HexMatchfieldType == "streetCurve")
         setPixmap(QPixmap(":/img/HexagonBilder/Street_nordwest.png"));
+    else if(HexMatchfieldType == "streetCurve60d")
+        setPixmap(QPixmap(":/img/HexagonBilder/Street_nordwest60d.png"));
+    else if(HexMatchfieldType == "streetCurve120d")
+        setPixmap(QPixmap(":/img/HexagonBilder/Street_nordwest120d.png"));
+    else if(HexMatchfieldType == "streetCurve180d")
+        setPixmap(QPixmap(":/img/HexagonBilder/Street_nordwest180d.png"));
+    else if(HexMatchfieldType == "streetCurve240d")
+        setPixmap(QPixmap(":/img/HexagonBilder/Street_nordwest240d.png"));
+    else if(HexMatchfieldType == "streetCurve300d")
+        setPixmap(QPixmap(":/img/HexagonBilder/Street_nordwest300d.png"));
+
+    else if(HexMatchfieldType == "streetCrossing")
+        setPixmap(QPixmap(":/img/HexagonBilder/Street_kreuzung.png"));
+    else if(HexMatchfieldType == "streetCrossing60d")
+        setPixmap(QPixmap(":/img/HexagonBilder/Street_kreuzung60d.png"));
+
     else if(HexMatchfieldType == "mountainTop")
         setPixmap(QPixmap(":/img/HexagonBilder/Mountain.png"));
-    else if(HexMatchfieldType == "mountainSide")
-        qDebug() << "Warnung: Für Bergseite ist noch kein Bild hinterlegt. (HexagonMatchfield von typ mountainSide erzeugt)";
-    else
-    {
-        setPixmap(QPixmap(":/img/HexagonBilder/Grass.png"));
-        qDebug() << "Warnung: Ein HexagonMatchfield ist vom Typ default (siehe switch(HexMatchfieldType) im Konstruktor)";
-    }
+    else if(HexMatchfieldType == "mountainSideStraight")
+        setPixmap(QPixmap(":/img/HexagonBilder/BergSeiteGrade.png"));
+    else if(HexMatchfieldType == "mountainSideCurve")
+        setPixmap(QPixmap(":/img/HexagonBilder/BergSeiteSchräg.png"));
+
     //Skalierung kann hier angepasst werden
     setPixmap(pixmap().scaled(64,64));
     qpixmap_boltanium.load(":/img/Boltanium/Boltanium_high.png");
     qpixmap_boltanium = qpixmap_boltanium.scaled(64,64);
 
     ptr_hexMfieldDisplay = new HexagonDisplayInfo(this);
+}
+
+HexagonMatchfield::~HexagonMatchfield()
+{
+    delete ptr_hexMfieldDisplay;
 }
 
 void HexagonMatchfield::mousePressEvent( QGraphicsSceneMouseEvent *)
@@ -142,6 +167,10 @@ void HexagonMatchfield::mousePressEvent( QGraphicsSceneMouseEvent *)
     {
         qDebug() << "Hexagon ist nicht Aktiv. Sende Signal SIGNAL_centerThis";
         emit SIGNAL_centerThis(this);
+    }
+    if(unit_stationed != nullptr)
+    {
+        unit_stationed->getUnitDisplay()->updateText();
     }
     emit SIGNAL_clicked( this );
 }

@@ -20,7 +20,7 @@
 //DynamicUnit
 
 DynamicUnit::DynamicUnit(QString filepath, Player* player)
-    : Unit()
+    : Unit(), int_unitLevel(0)
 {
     QFile file(filepath);
     if(!file.open(QFile::ReadOnly | QFile::Text))
@@ -75,8 +75,6 @@ DynamicUnit::DynamicUnit(QString filepath, Player* player)
     }
 }
 
-DynamicUnit::~DynamicUnit(){}
-
 void DynamicUnit::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     if(bool_unitUsed == true || int_unitCurrentMoveRange == 0)
@@ -89,7 +87,8 @@ void DynamicUnit::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 void DynamicUnit::serialize(QTextStream & out)
 {
     out << str_unitType << " " << unitFile << " " << unitPlayer->getPlayerID() << " "
-        << int_unitCurrentHP << " " << bool_unitUsed  << " " << int_unitLevel << " " << int_unitCurrentMoveRange << "\n";
+        << int_unitCurrentHP << " " << bool_unitUsed  << " " << int_unitLevel << " "
+        << int_unitCurrentMoveRange << "\n";
 }
 
 int DynamicUnit::getUnitAutoRep() const{
@@ -142,8 +141,6 @@ void DynamicUnit::resetUnit()
 
 TransporterUnit::TransporterUnit(QString filepath, Player* player)
     : DynamicUnit(filepath, player), unitToUnload(nullptr){}
-
-TransporterUnit::~TransporterUnit(){}
 
 int TransporterUnit::getTransporterUnitCapacity() const{
 		return int_transporterUnitCapacity;
@@ -250,7 +247,6 @@ void TransporterUnit::SLOT_setUnitToUnload(Unit *unit)
 TransporterAirUnit::TransporterAirUnit(QString filepath, Player* player)
     : TransporterUnit(filepath, player){}
 
-TransporterAirUnit::~TransporterAirUnit(){}
 
 int TransporterAirUnit::moveTo(HexagonMatchfield *hex_target){
 	//Flugzeug hat selbe Kosten für alles.
@@ -281,7 +277,6 @@ TransporterAirUnit *TransporterAirUnit::createUnit()
 TransporterGroundUnit::TransporterGroundUnit(QString filepath, Player* player)
     : TransporterUnit(filepath, player){}
 
-TransporterGroundUnit::~TransporterGroundUnit(){}
 
 int TransporterGroundUnit::moveTo(HexagonMatchfield *hex_target){
 
@@ -339,7 +334,6 @@ TransporterGroundUnit *TransporterGroundUnit::createUnit()
 TransporterWaterUnit::TransporterWaterUnit(QString filepath, Player* player)
     : TransporterUnit(filepath, player){}
 
-TransporterWaterUnit::~TransporterWaterUnit(){}
 
 int TransporterWaterUnit::moveTo(HexagonMatchfield *hex_target){
 
@@ -377,7 +371,6 @@ TransporterWaterUnit *TransporterWaterUnit::createUnit()
 AirUnit::AirUnit(QString filepath, Player* player)
 	: DynamicUnit(filepath, player){}
 
-AirUnit::~AirUnit(){}
 
 int AirUnit::moveTo(HexagonMatchfield *hex_target)
 {
@@ -514,7 +507,6 @@ AirUnit *AirUnit::createUnit()
 GroundUnit::GroundUnit(QString filepath, Player* player)
 	: DynamicUnit(filepath, player){}
 
-GroundUnit::~GroundUnit(){}
 
 bool GroundUnit::action(HexagonMatchfield *hex_target) {
     if(bool_unitUsed)
@@ -630,7 +622,6 @@ bool GroundUnit::action(HexagonMatchfield *hex_target) {
 LightUnit::LightUnit(QString filepath, Player* player)
 	: GroundUnit(filepath, player){}
 
-LightUnit::~LightUnit(){}
 
 int LightUnit::moveTo(HexagonMatchfield *hex_target){
 
@@ -695,7 +686,19 @@ BuildLightUnit::BuildLightUnit(QString filepath, bool bool_loadInventory, Player
     }
 }
 
-BuildLightUnit::~BuildLightUnit(){}
+BuildLightUnit::~BuildLightUnit()
+{
+    for(auto &it : production)
+    {
+        delete it.second;
+    }
+    production.clear();
+    for(auto &it : vector_unitStorage)
+    {
+        delete it;
+    }
+    delete ptr_UnitDisplay;
+}
 
 bool BuildLightUnit::action(HexagonMatchfield* hexTarget){
 	
@@ -749,7 +752,6 @@ void BuildLightUnit::SLOT_setUnitToBuild(Unit *unit)
 MediumUnit::MediumUnit(QString filepath, Player* player)
 	: GroundUnit(filepath, player){}
 
-MediumUnit::~MediumUnit(){}
 
 int MediumUnit::moveTo(HexagonMatchfield *hex_target){
 
@@ -801,7 +803,6 @@ MediumUnit *MediumUnit::createUnit()
 HeavyUnit::HeavyUnit(QString filepath, Player* player)
 	: GroundUnit(filepath, player){}
 
-HeavyUnit::~HeavyUnit(){}
 
 int HeavyUnit::moveTo(HexagonMatchfield *hex_target){
 
@@ -853,7 +854,6 @@ HeavyUnit *HeavyUnit::createUnit()
 WaterUnit::WaterUnit(QString filepath, Player* player)
 	: DynamicUnit(filepath, player){}
 
-WaterUnit::~WaterUnit(){}
 
 int WaterUnit::moveTo(HexagonMatchfield *hex_target){
 
