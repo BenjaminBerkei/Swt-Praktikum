@@ -41,7 +41,7 @@ private:
 public:
     explicit StartMenueWidget(QWidget *parent = 0, MenueWidget* ptr_menueWidget = 0);
     ~StartMenueWidget();
-    void startGame(Options* options_initOptions);
+    void startGame();
     void loadGame(QString);
     void switchToOptions();
     void switchToLoadGame();

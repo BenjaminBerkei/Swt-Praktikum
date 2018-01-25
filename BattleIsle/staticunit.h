@@ -60,7 +60,7 @@ protected:
 
 public:
     FactoryUnit(QString, bool ,Player* = nullptr);
-    virtual ~FactoryUnit();
+    ~FactoryUnit();
 
 	QString getUnitToBuild() const;
 	void setUnitToBuild(const QString);

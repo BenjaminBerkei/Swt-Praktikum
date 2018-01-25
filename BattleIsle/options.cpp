@@ -9,7 +9,7 @@
 
 /*StandardKonstruktor, kann noch angepasst werden*/
 Options::Options()
-    : Options(0, 1, "Standard", 16)
+    : Options(0, 1, "Random", 16)
 {
 
 }

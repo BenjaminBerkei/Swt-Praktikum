@@ -688,16 +688,7 @@ BuildLightUnit::BuildLightUnit(QString filepath, bool bool_loadInventory, Player
 
 BuildLightUnit::~BuildLightUnit()
 {
-    for(auto &it : production)
-    {
-        delete it.second;
-    }
     production.clear();
-    for(auto &it : vector_unitStorage)
-    {
-        delete it;
-    }
-    delete ptr_UnitDisplay;
 }
 
 bool BuildLightUnit::action(HexagonMatchfield* hexTarget){

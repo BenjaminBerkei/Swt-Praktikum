@@ -78,6 +78,7 @@ Game::Game(QString filepath, GameWidget *gameWidegt)
 
 Game::~Game()
 {
+    qDebug() << "Destruktor Game";
     resetHexMatchfield();
     for(auto &it : hexagonMatchfield_gameGrid)
     {
@@ -86,7 +87,7 @@ Game::~Game()
             delete ut;
         }
     }
-
+    qDebug() << "\t Hexagon Matchfield Grid gelöscht";
     for(auto &it : unit_UnitGrid)
     {
         for(auto &ut : it)
@@ -94,13 +95,15 @@ Game::~Game()
             delete ut;
         }
     }
-
+    qDebug() << "\t Unit Grid gelöscht";
     for(auto &it : button_menueBar)
     {
         delete it;
     }
+    qDebug() << "\t Button Bar gelöscht";
     delete ptr_playerOne;
     delete ptr_playerTwo;
+    qDebug() << "\t Player Gelöscht";
 }
 
 void Game::loadGame(QString )
@@ -913,13 +916,17 @@ bool Game::readSaveGame(QString filepath)
 
 void Game::createRandomMap()
 {
-    //Größe
-    int sizeX = ptr_gameGameWid->getSizeX();
-    int sizeY = ptr_gameGameWid->getSizeY();
 
     //Für eine Zufallszahl
     QTime time = QTime::currentTime();
     qsrand((uint)time.msec());
+
+    //Größe
+    int sizeX = qrand() % 100 + 20;
+    int sizeY = qrand() % 100 + 20;
+
+    ptr_gameGameWid->setSizeX(sizeX);
+    ptr_gameGameWid->setSizeY(sizeY);
 
     //HexagonMatchfield(QPoint (*,*), string type)
     //Mögliche Typen:

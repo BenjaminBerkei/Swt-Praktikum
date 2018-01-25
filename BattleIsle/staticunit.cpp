@@ -116,9 +116,8 @@ DepotUnit::DepotUnit(QString filepath, Player* player)
 
 DepotUnit::~DepotUnit()
 {
-    for(auto &it : vector_unitStorage)
-        delete it;
-    unitPlayer->setPlayerTotalEnergie(unitPlayer->getPlayerTotalEnergie() - int_EnergieStorage);
+    if(unitPlayer != nullptr)
+        unitPlayer->setPlayerTotalEnergie(unitPlayer->getPlayerTotalEnergie() - int_EnergieStorage);
 }
 
 bool DepotUnit::action(HexagonMatchfield* hexTarget)
@@ -192,17 +191,7 @@ FactoryUnit::FactoryUnit(QString filepath, bool bool_loadInventory, Player* play
 
 FactoryUnit::~FactoryUnit()
 {
-    for(auto &it : production)
-    {
-        delete it.second;
-    }
     production.clear();
-    for(auto &it : vector_unitStorage)
-    {
-        delete it;
-    }
-    delete ptr_UnitDisplay;
-
 }
 
 QString FactoryUnit::getUnitToBuild() const

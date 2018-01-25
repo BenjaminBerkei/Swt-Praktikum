@@ -59,14 +59,16 @@ MenueWidget::~MenueWidget()
 
 void MenueWidget::resizeEvent(QResizeEvent *event)
 {
-    if(ui->stack->currentIndex() == 3)
+    if(ui->stack->currentIndex() == 3 && ptr_runningGame != nullptr)
     {
         ptr_mwGameWidget->resizeEvent(event, this->height(), this->width());
     }
+    qDebug() << "Resize event";
 }
 
 void MenueWidget::deleteGame()
 {
     delete ptr_runningGame;
+    qDebug() << "Game delete fertig";
     ptr_runningGame = nullptr;
 }
