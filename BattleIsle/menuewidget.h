@@ -40,6 +40,7 @@ public:
     ~MenueWidget();
     void resizeEvent(QResizeEvent*);
     void deleteGame();
+
     //get und set Methoden
     StartMenueWidget* getPtr_mwStartMenueWidget() { return ptr_mwStartMenueWidget; }
     GameWidget* getPtr_mwGameWidget() { return ptr_mwGameWidget; }

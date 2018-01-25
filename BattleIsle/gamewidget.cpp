@@ -109,12 +109,22 @@ QGraphicsScene *GameWidget::getGameWidMapScene() const
     return gameWidMapScene;
 }
 
+void GameWidget::setSizeX(int value)
+{
+    sizeX = value;
+}
+
+void GameWidget::setSizeY(int value)
+{
+    sizeY = value;
+}
+
 GameWidget::GameWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::GameWidget),
     gameWidGameScene(new QGraphicsScene(this)), gameWidInfoScene(new QGraphicsScene(this)),
     gameWidOptionsScene(new QGraphicsScene(this)), gameWidButtonScene(new QGraphicsScene(this)),
-    gameWidMenueScene(new QGraphicsScene(this)), gameWidMapScene(new QGraphicsScene(this)), sizeX(50), sizeY(50)
+    gameWidMenueScene(new QGraphicsScene(this)), gameWidMapScene(new QGraphicsScene(this)), sizeX(0), sizeY(0)
 {
     ui->setupUi(this);
     ui->graphicsView_buttonView->setScene(gameWidButtonScene);
@@ -146,7 +156,7 @@ void GameWidget::resizeEvent(QResizeEvent *,int mainHeight, int mainWidth)
     ui->graphicsView_optionsView->setGeometry(xLeftTop + ui->graphicsView_gameView->width() + 5, yLeftTop + ui->graphicsView_informationsView->height() + 5, ui->graphicsView_informationsView->width(), this->height() - 100);
     ui->graphicsView_buttonView->setGeometry(xLeftTop, yLeftTop + ui->graphicsView_gameView->height() + 10, ui->graphicsView_gameView->width(), 110);
 
-    gameWidOptionsScene->setSceneRect(0,0, ui->graphicsView_optionsView->width(),130 * gameWidOptionsScene->items().size());
+    gameWidOptionsScene->setSceneRect(gameWidOptionsScene->itemsBoundingRect());
 }
 
 void GameWidget::gameWidCreateMatchfield(std::vector<std::vector<HexagonMatchfield*>> &hexagonGrid)
@@ -183,6 +193,7 @@ void GameWidget::gameWidCreateMatchfield(std::vector<std::vector<HexagonMatchfie
             gameWidGameScene->addItem(hex);
         }
     }
+    gameWidGameScene->setSceneRect(gameWidGameScene->itemsBoundingRect());
     ui->graphicsView_gameView->setScene( gameWidGameScene );
 }
 
@@ -284,6 +295,8 @@ void GameWidget::resetGameWidget()
     gameWidInfoScene->clear();
     gameWidOptionsScene->clear();
     gameWidMapScene->clear();
+    sizeX = 0;
+    sizeY = 0;
 }
 
 void GameWidget::setEnableButtonScene(bool state)
@@ -393,6 +406,7 @@ void GameWidget::gameWidCreateMap(std::vector<std::vector<HexagonMatchfield *> >
 
 void GameWidget::SLOT_gameWidCenterHex(HexagonMatchfield *hex)
 {
+    qDebug() << "SLOT_gameWidCenterHex ausgefuehrt.";
     setEnableButtonScene(true);
     ui->graphicsView_gameView->setScene(gameWidGameScene);
     ui->graphicsView_gameView->centerOn(hex);
@@ -400,6 +414,7 @@ void GameWidget::SLOT_gameWidCenterHex(HexagonMatchfield *hex)
 
 void GameWidget::SLOT_gameWidDestroyMap()
 {
+    qDebug() << "SLOT_gameWidDestroyMap ausgefuehrt.";
     for(int i = vectorVector_gameWidMiniMap.size() - 1; i >= 0; i--)
     {
         for(int j = vectorVector_gameWidMiniMap[i].size() - 1; j >= 0; j--)
@@ -431,12 +446,12 @@ void GameWidget::setOptScene(std::vector<Unit *> vector_Unit)
 
     if(vector_Unit.size() > 0)
     {
-        gameWidOptionsScene->setSceneRect(0,0, vector_Unit[0]->getUnitDisplay()->rect().width(), 130 * vector_Unit.size());
         for(unsigned i = 0; i < vector_Unit.size(); i++)
         {
             gameWidOptionsScene->addItem(vector_Unit[i]->getUnitDisplay());
             vector_Unit[i]->getUnitDisplay()->setPos(50, i * vector_Unit[i]->getUnitDisplay()->rect().height() + 75);
         }
+        gameWidOptionsScene->setSceneRect(gameWidOptionsScene->itemsBoundingRect());
     }
     gameWidOptionsScene->update();
 }
@@ -574,7 +589,7 @@ void UnitDisplayInfo::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
     pen.setColor(color);
 
     painter->setPen(pen);
-    painter->drawRect(rect());
+    painter->drawRect(boundingRect());
 
 }
 
@@ -652,7 +667,6 @@ void MapPixel::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidge
                 colorBrush = Qt::green;
             if(ptr_mapPixHexaon->getHexMatchfieldType() == "mountainTop")
                 colorBrush = Qt::gray;
-
             if(ptr_mapPixHexaon->getBoltaniumCurrent() > 0) // Fuer Boltanium
                 colorBrush = Qt::darkMagenta;
         }

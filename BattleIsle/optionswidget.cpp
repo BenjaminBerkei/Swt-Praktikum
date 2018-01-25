@@ -36,6 +36,9 @@ OptionsWidget::OptionsWidget( QWidget *parent, MenueWidget *parentMenueWidget, O
     else
         ui->comboBox_rounds->setCurrentIndex(0);
 
+    new QListWidgetItem(tr("Random"), ui->listWidget_maps);
+    new QListWidgetItem(tr(":/test/map.txt"), ui->listWidget_maps);
+    new QListWidgetItem(tr(":/test/map2.txt"), ui->listWidget_maps);
 }
 
 OptionsWidget::~OptionsWidget()
@@ -70,6 +73,12 @@ void OptionsWidget::on_qbutton_apply_clicked()
     else
         ptr_optWidOptions->setInt_roundLimit(0);
 
+    if(ui->listWidget_maps->currentItem() != nullptr)
+    {
+        ptr_optWidOptions->setStr_map(ui->listWidget_maps->currentItem()->text());
+    }else{
+        ptr_optWidOptions->setStr_map("");
+    }
 
     (ptr_optWidMenueWidget->getPtr_mwStartMenueWidget())->smwUpdateSettings();
     returnToStartMenue();

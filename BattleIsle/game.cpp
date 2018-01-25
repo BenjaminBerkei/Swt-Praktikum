@@ -28,190 +28,25 @@ std::vector<QPoint> Game::vector_oddNeighbors = {QPoint(1,1),QPoint(1,0),QPoint(
 
 
 Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
-    selectionCache(NULL),
-    gameOptions(init_options),
-    ptr_gameGameWid(ptr_gameWid), ptr_playerOne(new Player("Eins", 1)), ptr_playerTwo(new Player("Zwei", 2)), ptr_playerActive(ptr_playerOne),
-    ptr_roundCurrent(new Round(10)),
-    MenueView(false)
+    selectionCache(nullptr), gameOptions(init_options), ptr_gameGameWid(ptr_gameWid),
+    ptr_playerOne(new Player("Eins", 1)), ptr_playerTwo(new Player("Zwei", 2)),
+    ptr_playerActive(ptr_playerOne), MenueView(false)
 {
-    // Erstelle eine Map
-    // Dies ist nur für Testzwecke! Sollte später gelöscht werden:
-    //##################################################################
-    //Größe
-    int sizeX = ptr_gameGameWid->getSizeX();
-    int sizeY = ptr_gameGameWid->getSizeY();
+/*Starten eines Spiels mit den Optionen definiert in init_Options*/
 
-    //Für eine Zufallszahl
-    QTime time = QTime::currentTime();
-    qsrand((uint)time.msec());
+    ptr_roundCurrent = new Round(gameOptions->getInt_roundLimit());
 
-    //HexagonMatchfield(QPoint (*,*), string type)
-    //Mögliche Typen:
-    //"waterDeep"           (Tiefes Meer)
-    //"waterSeashore"       (Küste)
-    //"forrest"             (Wald)
-    //"grassland"           (Wiese)
-    //"streetStraight"      (Straße Gerade)
-    //"streetCurve"         (Straße mit Kurve)
-    //"mountainTop"         (Bergspitze)
-    //"mountainSide"        (Bergseite)
-
-    for( int i = 0; i < sizeX; i++ )
+    if(!loadMapForNewGame(gameOptions->getStr_map()))
     {
-        vector<HexagonMatchfield*> vectorHex;
-        for( int j = 0; j < sizeY; j++ )
-        {
-            if( i == 0 || i == sizeX-1 || j == 0 || j == sizeY-1 )
-                vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "waterDeep", 0));
-            else if( i == 1 || i == sizeX - 2 || j == 1 || j == sizeY - 2 )
-                vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "waterSeashore", 0));
-            else
-            {
-                int modulo = 10;
-                if(hexagonMatchfield_gameGrid[i-1][j]->getHexMatchfieldType() == "forrest")
-                    modulo += 6;
-                if(hexagonMatchfield_gameGrid[i-1][j-1]->getHexMatchfieldType() == "forrest")
-                    modulo += 6;
-                if(vectorHex[j-1]->getHexMatchfieldType() == "forrest")
-                    modulo += 6;
-                int randomInt = qrand() % modulo;
-                if(randomInt < 8)
-                    if(randomInt < 1)
-                        vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "mountainTop", 0));
-                    else
-                        vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "grassland", 0));
-                else
-                    vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "forrest", 0));
-            }
-            int randBoltanium = qrand() % 100;
-            if(randBoltanium < 20)
-            {
-                int randBoltaniumAmount = (qrand() % 200) + 50;
-                vectorHex[j]->setBoltaniumCurrent(randBoltaniumAmount);
-            }
-            connect(vectorHex[j],SIGNAL(SIGNAL_clicked(HexagonMatchfield*)),this,SLOT(processSelection(HexagonMatchfield*)));
-            connect(vectorHex[j],SIGNAL(SIGNAL_centerThis(HexagonMatchfield*)), ptr_gameWid, SLOT(SLOT_gameWidCenterHex(HexagonMatchfield*)));
-        }
-        hexagonMatchfield_gameGrid.push_back(vectorHex);
+        createRandomMap();
     }
-
-    qDebug() << "Bemerkung: Zufallsfeld erstellt (in Klasse Game). Nur für Testzwecke.";
-
-    //Einheiten belegen
-
-    int anzHQ = 0;
-
-    for(int i = 0; i < sizeX; i++)
-    {
-        std::vector<Unit*> vectorUnit;
-        for(int j = 0; j < sizeY; j++)
-        {
-                int randomInt = qrand() % 100;
-                if(randomInt < 5)
-                {
-                    Unit* randomUnit = nullptr;
-                    QString hexType = hexagonMatchfield_gameGrid[i][j]->getHexMatchfieldType();
-                    Player* randPlayer = (qrand() % 2) == 0 ? ptr_playerOne : ptr_playerTwo;
-
-                    if(hexType != "waterDeep" && hexType != "waterSeashore")
-                    {
-                        int randomUnitType = qrand() % 9;
-
-                        switch(randomUnitType)
-                        {
-                        case 0 : randomUnit = new AirUnit(":/dynamic/dynamicUnit/derbolten.txt", randPlayer); break;
-                        case 1 : randomUnit = new TransporterGroundUnit(":/dynamic/dynamicUnit/kevarn.txt", randPlayer); break;
-                        case 2 : randomUnit = new LightUnit(":/dynamic/dynamicUnit/ben.txt", randPlayer); break;
-                        case 3 : randomUnit = new MediumUnit(":/dynamic/dynamicUnit/lucas.txt", randPlayer); break;
-                        case 4 : randomUnit = new HeavyUnit(":/dynamic/dynamicUnit/mannuel.txt", randPlayer); break;
-                        case 5 : randomUnit = new DepotUnit(":/static/staticUnit/depot.txt", randPlayer); break;
-                        case 6 : randomUnit = new FactoryUnit(":/static/staticUnit/factory.txt", true, randPlayer); break;
-                        case 7 :
-                            if(anzHQ < 2)
-                            {
-                                randomUnit = new HeadquaterUnit(":/static/staticUnit/headquater.txt", anzHQ == 0 ? ptr_playerOne : ptr_playerTwo);
-                                anzHQ++;
-                            }
-                            break;
-                        case 8 : randomUnit = new BuildLightUnit(":/dynamic/dynamicUnit/scpmerlin", true, randPlayer); break;
-                        }
-                    }else{
-                        randomUnit = new WaterUnit(":/dynamic/dynamicUnit/msmiguel.txt", randPlayer);
-                    }
-
-                    vectorUnit.push_back(randomUnit);
-                    hexagonMatchfield_gameGrid[i][j]->setUnit_stationed(vectorUnit[j]);
-
-                }else{
-                    vectorUnit.push_back(nullptr);
-                }
-        }
-        unit_UnitGrid.push_back(vectorUnit);
-    }
-    /*
-
-    for(int i = 0; i < sizeX; i++)
-    {
-        std::vector<Unit*> vectorUnit;
-        for(int j = 0; j < sizeY; j++)
-        {
-            vectorUnit.push_back(nullptr);
-        }
-        unit_UnitGrid.push_back(vectorUnit);
-    }
-    unit_UnitGrid[2][2] = new HeadquaterUnit(":/static/staticUnit/headquater.txt", ptr_playerOne);
-    unit_UnitGrid[3][2] = new TransporterGroundUnit(":/dynamic/dynamicUnit/kevarn.txt", ptr_playerOne);
-    unit_UnitGrid[2][3] = new TransporterGroundUnit(":/dynamic/dynamicUnit/kevarn.txt", ptr_playerOne);
-    unit_UnitGrid[3][3] = new LightUnit(":/dynamic/dynamicUnit/r1demon", ptr_playerOne);
-    hexagonMatchfield_gameGrid[2][2]->setUnit_stationed(unit_UnitGrid[2][2]);
-    hexagonMatchfield_gameGrid[3][2]->setUnit_stationed(unit_UnitGrid[3][2]);
-    hexagonMatchfield_gameGrid[2][3]->setUnit_stationed(unit_UnitGrid[2][3]);
-    hexagonMatchfield_gameGrid[3][3]->setUnit_stationed(unit_UnitGrid[3][3]);
-
-
-    unit_UnitGrid[sizeX - 3][sizeY - 3] = new HeadquaterUnit(":/static/staticUnit/headquater.txt", ptr_playerTwo);
-    unit_UnitGrid[sizeX - 4][sizeY - 3] = new TransporterGroundUnit(":/dynamic/dynamicUnit/kevarn.txt", ptr_playerTwo);
-    unit_UnitGrid[sizeX - 3][sizeY - 4] = new TransporterGroundUnit(":/dynamic/dynamicUnit/kevarn.txt", ptr_playerTwo);
-    unit_UnitGrid[sizeX - 4][sizeY - 4] = new LightUnit(":/dynamic/dynamicUnit/r1demon", ptr_playerTwo);
-    hexagonMatchfield_gameGrid[sizeX - 3][sizeX - 3]->setUnit_stationed(unit_UnitGrid[sizeX - 3][sizeX - 3]);
-    hexagonMatchfield_gameGrid[sizeX - 4][sizeX - 3]->setUnit_stationed(unit_UnitGrid[sizeX - 4][sizeX - 3]);
-    hexagonMatchfield_gameGrid[sizeX - 3][sizeX - 4]->setUnit_stationed(unit_UnitGrid[sizeX - 3][sizeX - 4]);
-    hexagonMatchfield_gameGrid[sizeX - 4][sizeX - 4]->setUnit_stationed(unit_UnitGrid[sizeX - 4][sizeX - 4]);
-*/
 
     ptr_gameGameWid->gameWidCreateMatchfield(hexagonMatchfield_gameGrid);
-    qDebug() << "\t gameWidCreate Done";
     countUnits();
-    qDebug() << "\t Count units done";
     setFogOfWar();
-    qDebug() << "\t fog of war done";
-    qDebug() << "--------------------Feld Erstellt-----------------";
-
-    //##################################################################
 
     //Buttons Einfuegen
-    ButtonMove* movebutton = new ButtonMove(64,64);
-    ButtonAction* actionbutton = new ButtonAction(64,64);
-    ButtonChangePhase* changephasebutton = new ButtonChangePhase(64,64);
-    ButtonMap* mapbutton = new ButtonMap(64,64);
-    ButtonMenue* menuebutton = new ButtonMenue(64,64);
-
-    button_menueBar.push_back(movebutton);
-    button_menueBar.push_back(actionbutton);
-    button_menueBar.push_back(changephasebutton);
-    button_menueBar.push_back(mapbutton);
-    button_menueBar.push_back(menuebutton);
-    connect(movebutton,SIGNAL(clicked()),this,SLOT(buttonPressedMove()));
-    connect(actionbutton,SIGNAL(clicked()),this,SLOT(buttonPressedAction()));
-    connect(changephasebutton,SIGNAL(clicked()),this,SLOT(buttonPressedChangePhase()));
-    connect(mapbutton, SIGNAL(clicked()), this, SLOT(buttonPressedMap()));
-    connect(menuebutton,SIGNAL(clicked()),this,SLOT(buttonPressedMenue()));
-
-    connect(ptr_gameGameWid, SIGNAL(SIGNAL_MenueButtonPushed(int)), this, SLOT(SLOT_MenueButtonSelected(int)));
-    connect(ptr_gameGameWid, SIGNAL(SIGNAL_changeStateOfButtons()), this, SLOT(SLOT_checkStateOfButtons()));
-    SLOT_checkStateOfButtons();
-
-    ptr_gameGameWid->gameWidCreateButtonBar(button_menueBar);
+    createButtons();
 
     ptr_gameGameWid->setPlayerLabel(ptr_playerActive->getPlayerName());
     ptr_gameGameWid->setPhaseLabel("Move");
@@ -219,8 +54,37 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     ptr_gameGameWid->setEnergieLabel(ptr_playerActive->getCurrentEnergieStorage(), ptr_playerActive->getPlayerTotalEnergie());
 }
 
+Game::Game(QString filepath, GameWidget *gameWidegt)
+    : selectionCache(nullptr), ptr_gameGameWid(gameWidegt)
+{
+    if(!readSaveGame(filepath))
+    {
+        createRandomMap();
+    }
+
+    ptr_gameGameWid->gameWidCreateMatchfield(hexagonMatchfield_gameGrid);
+    countUnits();
+    setFogOfWar();
+
+    //Buttons Einfuegen
+    createButtons();
+
+    ptr_gameGameWid->setPlayerLabel(ptr_playerActive->getPlayerName());
+    if(ptr_roundCurrent->getCurrentPhase() == MOVE)
+    {
+        ptr_gameGameWid->setPhaseLabel("Move");
+    }
+    else
+    {
+        ptr_gameGameWid->setPhaseLabel("Action");
+    }
+    ptr_gameGameWid->setUnitsLabel(ptr_playerActive->getPlayerUnitNumber());
+    ptr_gameGameWid->setEnergieLabel(ptr_playerActive->getCurrentEnergieStorage(), ptr_playerActive->getPlayerTotalEnergie());
+}
+
 Game::~Game()
 {
+    qDebug() << "Destruktor Game";
     resetHexMatchfield();
     for(auto &it : hexagonMatchfield_gameGrid)
     {
@@ -229,7 +93,7 @@ Game::~Game()
             delete ut;
         }
     }
-
+    qDebug() << "\t Hexagon Matchfield Grid gelöscht";
     for(auto &it : unit_UnitGrid)
     {
         for(auto &ut : it)
@@ -237,13 +101,15 @@ Game::~Game()
             delete ut;
         }
     }
-
+    qDebug() << "\t Unit Grid gelöscht";
     for(auto &it : button_menueBar)
     {
         delete it;
     }
+    qDebug() << "\t Button Bar gelöscht";
     delete ptr_playerOne;
     delete ptr_playerTwo;
+    qDebug() << "\t Player Gelöscht";
 }
 
 void Game::loadGame(QString )
@@ -272,19 +138,7 @@ void Game::saveGame()
 
     QTextStream out(&file_saveFile);
     out.setCodec(QTextCodec::codecForName("UTF-8"));
-
-    out << "Battle Isle Clone V 2.7 \n";
-    gameOptions->serialize(out);
-    ptr_playerOne->serialize(out);
-    ptr_playerTwo->serialize(out);
-    ptr_roundCurrent->serialize(out);
-    for(auto &iteratorX : hexagonMatchfield_gameGrid)
-    {
-        for(auto &hex : iteratorX)
-        {
-            hex->serialize(out);
-        }
-    }
+    serialize(out);
 }
 
 void Game::endGame()
@@ -306,14 +160,18 @@ void Game::processSelection(HexagonMatchfield *selection)
      *              Wenn Round ACTION zurückliefert wird die action Funktion der der ausgewählten Einheit ausgeführt
      *      PATH: Die ausgewählte Einheit wird auf die selection verlegt
      * */
+
+    if(selection == nullptr)
+    {
+        qDebug() << "Fehler: selection ist ein Nullptr! In processSelection(HexagonMatchfield*)";
+    }
+
     switch(selection->getState())
     {
     case INACTIVE:
         resetHexMatchfield();
-
         selectionCache = selection;
         ptr_gameGameWid->setInfoScene(selectionCache->getPtr_hexMfieldDisplay());
-
         if(selectionCache->getUnit_stationed() != nullptr && selectionCache->getUnit_stationed()->getUnitPlayer() == ptr_playerActive)
         {
             selectionCache->getUnit_stationed()->resetBuildUnloadParameter();
@@ -455,9 +313,164 @@ void Game::Dijkstra(HexagonMatchfield* start, int factor)
     }
 }
 
+bool Game::loadMapForNewGame(QString filepath)
+{
+    QFile file(filepath);
+    if(!file.open(QFile::ReadOnly | QFile::Text))
+    {
+        qDebug() << "File nicht gefunden";
+        return false;
+    }
+
+    QTextStream in(&file);
+    QString typeHex;
+    QString unitType;
+    QString unitPath;
+    int int_playerID;
+    int int_isUnitSet;
+    int boltanium;
+    int dimX, dimY;
+
+    in >> dimX;
+    in >> dimY;
+    ptr_gameGameWid->setSizeX(dimX);
+    ptr_gameGameWid->setSizeY(dimY);
+
+    //Hexagone einlesen
+    for(int i = 0; i < dimX; i++)
+    {
+        std::vector<HexagonMatchfield*> vecHexagon;
+        std::vector<Unit*> vecUnit;
+        for(int j = 0; j < dimY; j++)
+        {
+            in >> typeHex;
+            in >> boltanium;
+            in >> int_isUnitSet;
+            qDebug() << "Eingelesen: " << "\n\t" << typeHex << "\n\t" << boltanium << "\n\t" << int_isUnitSet;
+            if(int_isUnitSet != 0)
+            {
+                in >> int_playerID;
+                in >> unitType;
+                in >> unitPath;
+                qDebug() << "Player einlesen: " << "\n\t" << int_playerID;
+                qDebug() << "Unit Einlesen:" << "\n\t" << unitType << "\n\t" << unitPath;
+                Player* ptr_playerTemp = nullptr;
+                if(int_playerID == 1)
+                {
+                    ptr_playerTemp = ptr_playerOne;
+                }
+                else
+                {
+                    ptr_playerTemp = ptr_playerTwo;
+                }
+
+                if(unitType == "FACTORYUNIT")
+                {
+                   vecUnit.push_back(new FactoryUnit(unitPath, true, ptr_playerTemp));
+                }
+                if(unitType == "DEPOTUNIT")
+                {
+                   vecUnit.push_back(new DepotUnit(unitPath, ptr_playerTemp));
+                }
+                else if( unitType == "HEADQUATERUNIT")
+                {
+                    vecUnit.push_back(new HeadquaterUnit(unitPath,ptr_playerTemp));
+                }
+                else if(unitType == "AIRUNIT")
+                {
+                    vecUnit.push_back(new AirUnit(unitPath, ptr_playerTemp));
+                }
+                //Hier spaeter noch weiter ausbauen (andere Unittypen hinzufuegen)
+                else
+                {
+                    vecUnit.push_back(nullptr);
+                }
+            }else{
+                vecUnit.push_back(nullptr);
+            }
+            vecHexagon.push_back(new HexagonMatchfield(QPoint(i,j), typeHex, vecUnit[j]));
+            vecHexagon[j]->setBoltaniumCurrent(boltanium);
+
+            connect(vecHexagon[j],SIGNAL(SIGNAL_clicked(HexagonMatchfield*)),this,SLOT(processSelection(HexagonMatchfield*)));
+            connect(vecHexagon[j],SIGNAL(SIGNAL_centerThis(HexagonMatchfield*)), ptr_gameGameWid, SLOT(SLOT_gameWidCenterHex(HexagonMatchfield*)));
+        }
+        unit_UnitGrid.push_back(vecUnit);
+        hexagonMatchfield_gameGrid.push_back(vecHexagon);
+    }
+
+    return true;
+}
+
+bool Game::loadMapFromSaveGame(QString filepath)
+{
+
+    QFile file(filepath);
+    if(!file.open(QFile::ReadOnly | QFile::Text))
+    {
+        qDebug() << "File nicht gefunden";
+        return false;
+    }
+
+    QTextStream in(&file);
+
+    QString tmp;
+    QString typeHex;
+    int dimX, dimY;
+
+    //Leere den das Spielfeld und befreie Speicher
+    for(auto &it : hexagonMatchfield_gameGrid)
+    {
+        for(auto &ut : it)
+        {
+            delete ut;
+        }
+        it.clear();
+    }
+    hexagonMatchfield_gameGrid.clear();
+    for(auto &it : unit_UnitGrid)
+    {
+        for(auto &ut : it)
+        {
+            delete ut;
+        }
+        it.clear();
+    }
+    unit_UnitGrid.clear();
+
+    /*Einlesen der Dimensionen*/
+    in >> dimX;
+    in >> dimY;
+    ptr_gameGameWid->setSizeX(dimX);
+    ptr_gameGameWid->setSizeY(dimY);
+
+    //Hexagone einlesen
+    for(int i = 0; i < dimX; i++)
+    {
+        std::vector<HexagonMatchfield*> vecHexagon;
+        for(int j = 0; j < dimY; j++)
+        {
+            in >> typeHex;
+            vecHexagon.push_back(new HexagonMatchfield(QPoint(i,j), typeHex, nullptr));
+            connect(vecHexagon[j],SIGNAL(SIGNAL_clicked(HexagonMatchfield*)),this,SLOT(processSelection(HexagonMatchfield*)));
+            connect(vecHexagon[j],SIGNAL(SIGNAL_centerThis(HexagonMatchfield*)), ptr_gameGameWid, SLOT(SLOT_gameWidCenterHex(HexagonMatchfield*)));
+            tmp = in.readLine();
+        }
+        hexagonMatchfield_gameGrid.push_back(vecHexagon);
+    }
 
 
-
+    //UnitGrid mit Nullptr initialisieren
+    for(int i = 0; i < dimX; i++)
+    {
+        std::vector<Unit*> vecUnit;
+        for(int j = 0; j < dimY; j++)
+        {
+            vecUnit.push_back(nullptr);
+        }
+        unit_UnitGrid.push_back(vecUnit);
+    }
+    return true;
+}
 
 /*Move Button ausgewählt*/
 void Game::buttonPressedMove()
@@ -688,7 +701,6 @@ void Game::calculateTargets(HexagonMatchfield * center, int range)
 
 void Game::setFogOfWar()
 {
-
     for(auto &iterator : hexagonMatchfield_gameGrid)
     {
         for(auto &hex : iterator)
@@ -696,7 +708,6 @@ void Game::setFogOfWar()
             hex->setHexFogOfWar(true);
         }
     }
-
     for(auto &iterator : hexagonMatchfield_gameGrid)
     {
         for(auto &hex : iterator)
@@ -815,6 +826,381 @@ int Game::cube_distance(QVector3D a, QVector3D b)
     return (abs(a.x() - b.x()) + abs(a.y() - b.y()) + abs(a.z() - b.z())) / 2;
 }
 
+bool Game::readSaveGame(QString filepath)
+{
+    /*
+     * Lade ein Spiel aus einer gespeicherten txt Datei mit dem Pfad filepath
+     * Versionsnummer muss mit der Version des Ladens übereinstimmen
+     * */
+    QFile file(filepath);
+    if(!file.open(QFile::ReadOnly | QFile::Text))
+    {
+        qDebug() << "File nicht gefunden";
+        return false;
+    }
+
+    QTextStream in(&file);
+    QString tmp;
+    QString Version;
+    in >> tmp;
+    in >> tmp;
+    in >> tmp;
+    in >> Version;
+
+    //Ueberpruefe Version
+    if(Version != "V2.7")
+    {
+        qDebug() << "Falsche Version. Eingelesene Version: " << Version;
+        return false;
+    }
+
+    tmp = in.readLine();
+
+    //Ueberpruefe Format
+    QString textType;
+    textType = in.readLine();
+
+    if(textType != "Save Game")
+    {
+        qDebug() << "Falsches Format. Eingelesen: " << textType;
+        return false;
+    }
+
+    gameOptions = Options::unserialize(in);
+
+    if( gameOptions->getBool_ki() == true)
+    {
+        ptr_playerOne = Player::unserialize(in);
+        //später
+    }
+    else
+    {
+        ptr_playerOne = Player::unserialize(in);
+        ptr_playerTwo = Player::unserialize(in);
+    }
+
+    int playerActive;
+    in >> playerActive;
+
+    if(playerActive == 1)
+    {
+        ptr_playerActive = ptr_playerOne;
+    }
+    else
+    {
+        ptr_playerActive = ptr_playerTwo;
+    }
+
+    ptr_roundCurrent = Round::unserialize(in);
+
+    loadMapFromSaveGame(gameOptions->getStr_map());
+
+    int posX, posY, boltanium, unitStationed;
+
+    in >> tmp;
+    while(tmp != "")
+    {
+       posX = tmp.toInt();
+       in >> posY;
+       in >> boltanium;
+       in >> unitStationed;
+
+       hexagonMatchfield_gameGrid[posX][posY]->setBoltaniumCurrent(boltanium);
+
+       if(unitStationed == 1)
+       {
+           unit_UnitGrid[posX][posY] = readUnitFromStream(in);
+           hexagonMatchfield_gameGrid[posX][posY]->setUnit_stationed(unit_UnitGrid[posX][posY]);
+
+       }else{
+           unit_UnitGrid[posX][posY] = nullptr;
+       }
+       in >> tmp;
+    }
+    return true;
+}
+
+void Game::createRandomMap()
+{
+
+    //Für eine Zufallszahl
+    QTime time = QTime::currentTime();
+    qsrand((uint)time.msec());
+
+    //Größe
+    int sizeX = qrand() % 100 + 20;
+    int sizeY = qrand() % 100 + 20;
+
+    ptr_gameGameWid->setSizeX(sizeX);
+    ptr_gameGameWid->setSizeY(sizeY);
+
+    //HexagonMatchfield(QPoint (*,*), string type)
+    //Mögliche Typen:
+    //"waterDeep"           (Tiefes Meer)
+    //"waterSeashore"       (Küste)
+    //"forrest"             (Wald)
+    //"grassland"           (Wiese)
+    //"streetStraight"      (Straße Gerade)
+    //"streetCurve"         (Straße mit Kurve)
+    //"mountainTop"         (Bergspitze)
+    //"mountainSide"        (Bergseite)
+    for(auto &it : hexagonMatchfield_gameGrid)
+    {
+        for(auto &ut : it)
+        {
+            delete ut;
+        }
+        it.clear();
+    }
+    hexagonMatchfield_gameGrid.clear();
+
+    for(auto &it : unit_UnitGrid)
+    {
+        for(auto &ut : it)
+        {
+            delete ut;
+        }
+        it.clear();
+    }
+    unit_UnitGrid.clear();
+
+    for( int i = 0; i < sizeX; i++ )
+    {
+        vector<HexagonMatchfield*> vectorHex;
+        for( int j = 0; j < sizeY; j++ )
+        {
+            if( i == 0 || i == sizeX-1 || j == 0 || j == sizeY-1 )
+                vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "waterDeep", 0));
+            else if( i == 1 || i == sizeX - 2 || j == 1 || j == sizeY - 2 )
+                vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "waterSeashore", 0));
+            else
+            {
+                int modulo = 10;
+                if(hexagonMatchfield_gameGrid[i-1][j]->getHexMatchfieldType() == "forrest")
+                    modulo += 6;
+                if(hexagonMatchfield_gameGrid[i-1][j-1]->getHexMatchfieldType() == "forrest")
+                    modulo += 6;
+                if(vectorHex[j-1]->getHexMatchfieldType() == "forrest")
+                    modulo += 6;
+                int randomInt = qrand() % modulo;
+                if(randomInt < 8)
+                    if(randomInt < 1)
+                        vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "mountainTop", 0));
+                    else
+                        vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "grassland", 0));
+                else
+                    vectorHex.push_back(new HexagonMatchfield(QPoint(i,j), "forrest", 0));
+            }
+            int randBoltanium = qrand() % 100;
+            if(randBoltanium < 20)
+            {
+                int randBoltaniumAmount = (qrand() % 200) + 50;
+                vectorHex[j]->setBoltaniumCurrent(randBoltaniumAmount);
+            }
+            connect(vectorHex[j],SIGNAL(SIGNAL_clicked(HexagonMatchfield*)),this,SLOT(processSelection(HexagonMatchfield*)));
+            connect(vectorHex[j],SIGNAL(SIGNAL_centerThis(HexagonMatchfield*)), ptr_gameGameWid, SLOT(SLOT_gameWidCenterHex(HexagonMatchfield*)));
+        }
+        hexagonMatchfield_gameGrid.push_back(vectorHex);
+    }
+
+    qDebug() << "Bemerkung: Zufallsfeld erstellt (in Klasse Game). Nur für Testzwecke.";
+
+    //Einheiten belegen
+
+    int anzHQ = 0;
+
+    for(int i = 0; i < sizeX; i++)
+    {
+        std::vector<Unit*> vectorUnit;
+        for(int j = 0; j < sizeY; j++)
+        {
+                int randomInt = qrand() % 100;
+                if(randomInt < 5)
+                {
+                    Unit* randomUnit = nullptr;
+                    QString hexType = hexagonMatchfield_gameGrid[i][j]->getHexMatchfieldType();
+                    Player* randPlayer = (qrand() % 2) == 0 ? ptr_playerOne : ptr_playerTwo;
+
+                    if(hexType != "waterDeep" && hexType != "waterSeashore")
+                    {
+                        int randomUnitType = qrand() % 9;
+
+                        switch(randomUnitType)
+                        {
+                        case 0 : randomUnit = new AirUnit(":/dynamic/dynamicUnit/derbolten.txt", randPlayer); break;
+                        case 1 : randomUnit = new TransporterGroundUnit(":/dynamic/dynamicUnit/kevarn.txt", randPlayer); break;
+                        case 2 : randomUnit = new LightUnit(":/dynamic/dynamicUnit/ben.txt", randPlayer); break;
+                        case 3 : randomUnit = new MediumUnit(":/dynamic/dynamicUnit/lucas.txt", randPlayer); break;
+                        case 4 : randomUnit = new HeavyUnit(":/dynamic/dynamicUnit/mannuel.txt", randPlayer); break;
+                        case 5 : randomUnit = new DepotUnit(":/static/staticUnit/depot.txt", randPlayer); break;
+                        case 6 : randomUnit = new FactoryUnit(":/static/staticUnit/factory.txt", true, randPlayer); break;
+                        case 7 :
+                            if(anzHQ < 2)
+                            {
+                                randomUnit = new HeadquaterUnit(":/static/staticUnit/headquater.txt", anzHQ == 0 ? ptr_playerOne : ptr_playerTwo);
+                                anzHQ++;
+                            }
+                            break;
+                        case 8 : randomUnit = new BuildLightUnit(":/dynamic/dynamicUnit/scpmerlin", true, randPlayer); break;
+                        }
+                    }else{
+                        randomUnit = new WaterUnit(":/dynamic/dynamicUnit/msmiguel.txt", randPlayer);
+                    }
+
+                    vectorUnit.push_back(randomUnit);
+                    hexagonMatchfield_gameGrid[i][j]->setUnit_stationed(vectorUnit[j]);
+
+                }else{
+                    vectorUnit.push_back(nullptr);
+                }
+        }
+        unit_UnitGrid.push_back(vectorUnit);
+    }
+}
+
+void Game::createButtons()
+{
+    ButtonMove* movebutton = new ButtonMove(64,64);
+    ButtonAction* actionbutton = new ButtonAction(64,64);
+    ButtonChangePhase* changephasebutton = new ButtonChangePhase(64,64);
+    ButtonMap* mapbutton = new ButtonMap(64,64);
+    ButtonMenue* menuebutton = new ButtonMenue(64,64);
+
+    button_menueBar.push_back(movebutton);
+    button_menueBar.push_back(actionbutton);
+    button_menueBar.push_back(changephasebutton);
+    button_menueBar.push_back(mapbutton);
+    button_menueBar.push_back(menuebutton);
+    connect(movebutton,SIGNAL(clicked()),this,SLOT(buttonPressedMove()));
+    connect(actionbutton,SIGNAL(clicked()),this,SLOT(buttonPressedAction()));
+    connect(changephasebutton,SIGNAL(clicked()),this,SLOT(buttonPressedChangePhase()));
+    connect(mapbutton, SIGNAL(clicked()), this, SLOT(buttonPressedMap()));
+    connect(menuebutton,SIGNAL(clicked()),this,SLOT(buttonPressedMenue()));
+
+    connect(ptr_gameGameWid, SIGNAL(SIGNAL_MenueButtonPushed(int)), this, SLOT(SLOT_MenueButtonSelected(int)));
+    connect(ptr_gameGameWid, SIGNAL(SIGNAL_changeStateOfButtons()), this, SLOT(SLOT_checkStateOfButtons()));
+    SLOT_checkStateOfButtons();
+
+    ptr_gameGameWid->gameWidCreateButtonBar(button_menueBar);
+}
+
+Unit *Game::createUnitFromType(QString unitType, QString unitPath, Player * ptr_playerTemp)
+{
+    if(unitType == "FACTORYUNIT")
+    {
+        return new FactoryUnit(unitPath, true, ptr_playerTemp);
+    }
+    else if( unitType == "HEADQUATERUNIT")
+    {
+        return new HeadquaterUnit(unitPath,ptr_playerTemp);
+    }
+    else if( unitType == "DEPOTUNIT")
+    {
+        return new DepotUnit(unitPath,ptr_playerTemp);
+    }else if(unitType == "AIRUNIT")
+    {
+        return new AirUnit(unitPath, ptr_playerTemp);
+    }else if(unitType == "LIGHTUNIT")
+    {
+        return new LightUnit(unitPath, ptr_playerTemp);
+    }else if(unitType == "MEDIUMUNIT")
+    {
+        return new MediumUnit(unitPath, ptr_playerTemp);
+    }else if(unitType == "HEAVYUNIT")
+    {
+        return new HeavyUnit(unitPath, ptr_playerTemp);
+    }else if(unitType == "WATERUNIT")
+    {
+        return new WaterUnit(unitPath, ptr_playerTemp);
+    }else if(unitType == "TRANSPORTERGROUND")
+    {
+        return new TransporterGroundUnit(unitPath, ptr_playerTemp);
+    }else if(unitType == "TRANSPORTERWATER")
+    {
+        return new TransporterWaterUnit(unitPath, ptr_playerTemp);
+    }else if(unitType == "TRANSPORTERAIR")
+    {
+        return new TransporterAirUnit(unitPath, ptr_playerTemp);
+    }else if(unitType == "BUILDERUNIT")
+    {
+        return new BuildLightUnit(unitPath, true,ptr_playerTemp);
+    }
+}
+
+Unit *Game::readUnitFromStream(QTextStream &in)
+{
+    int unitPlayer, unitHP, unitMoveRange, unitUsed, unitLevel;
+    QString unitType, unitPath;
+
+    bool isDynamicUnit = true;
+    bool isTransporterUnit = false;
+    Unit* unitFromStream = nullptr;
+
+    in >> unitType;
+    in >> unitPath;
+    in >> unitPlayer;
+    in >> unitHP;
+    in >> unitUsed;
+    qDebug() << "Eingelesene Einheit: " << "\n\t" << unitType << "\n\t" << unitPath
+             << "\n\t" << unitPlayer << "\n\t" << unitHP;
+    Player* ptr_playerTemp = nullptr;
+
+    if(unitPlayer == 1)
+    {
+        ptr_playerTemp = ptr_playerOne;
+    }else{
+        ptr_playerTemp = ptr_playerTwo;
+    }
+
+    unitFromStream = createUnitFromType(unitType, unitPath, ptr_playerTemp);
+
+    unitFromStream->setUnitCurrentHP(unitHP);
+    unitFromStream->setUnitUsed(unitUsed);
+
+    if(unitType == "DEPOTUNIT" || unitType == "HEADQUATERUNIT" || unitType == "FACTORYUNIT")
+    {
+        isDynamicUnit = false;
+    }else if(unitType.contains("TRANSPORTER"))
+    {
+        isTransporterUnit = true;
+    }
+
+     qDebug() << "\t" << isDynamicUnit << "\n\t" << isTransporterUnit;
+    if(isDynamicUnit == true)
+    {
+        in >> unitLevel;
+        in >> unitMoveRange;
+        unitFromStream->setUnitCurrentMoveRange(unitMoveRange);
+        //unitFromStream->setUnitLevel(unitLevel);
+        qDebug() << "\t" << unitMoveRange << "\n\t" << unitLevel;
+    }
+
+    if(isTransporterUnit == true)
+    {
+        loadInventory(in, unitFromStream);
+    }
+    return unitFromStream;
+}
+
+void Game::loadInventory(QTextStream & in, Unit * containerUnit)
+{
+    /*
+     * Lese Größe > 0 =>
+     * for(größe)
+     *      einheit einlesen
+     *      einheit in containerUnit einfügen
+     *      wenn (einheit == transporter)
+     *          loadInventory(in, einheit);
+     * */
+
+    int size = 0;
+    in >> size;
+    for(int i = 0; i < size; i++)
+    {
+        containerUnit->addUnitToStorage(readUnitFromStream(in));
+    }
+}
+
 int Game::offset_distance(QPoint a, QPoint b)
 {
     QVector3D ac = oddqToCube(a);
@@ -822,9 +1208,21 @@ int Game::offset_distance(QPoint a, QPoint b)
     return cube_distance(ac, bc);
 }
 
-void Game::serialize(QTextStream &)
+void Game::serialize(QTextStream &out)
 {
-    qDebug() << "Serialisieren Game: ";
+    out << "Battle Isle Clone V2.7\nSave Game\n";
+    gameOptions->serialize(out);
+    ptr_playerOne->serialize(out);
+    ptr_playerTwo->serialize(out);
+    out << ptr_playerActive->getPlayerID() << "\n";
+    ptr_roundCurrent->serialize(out);
+    for(auto &iteratorX : hexagonMatchfield_gameGrid)
+    {
+        for(auto &hex : iteratorX)
+        {
+            hex->serialize(out);
+        }
+    }
 }
 
 

@@ -15,6 +15,8 @@
 
 #include <QString> 
 #include <QTextStream>
+#include <QDebug>
+
 class Game;
 
 class Player 
@@ -30,11 +32,12 @@ private:
     bool bool_isKI;
 
 public: 
-    Player(QString, int,bool = false, int = 1000, int = 250, int = 0, int = 0);
+    Player(QString, int,bool = false, int = 250, int = 0, int = 1000);
     ~Player();
     void increaseUnitNumber();
     void decreaseUnitNumber();
     void serialize(QTextStream&);
+    static Player* unserialize(QTextStream&);
 
 	QString getPlayerName() const;	//const correctness, heßt das diese Funktion keinen wert verändern wird, damit umgeht man iA Fehler die aus versehen passieren
     int getPlayerScore() const;

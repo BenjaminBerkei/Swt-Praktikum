@@ -18,11 +18,25 @@
  * Kommentare: ProcessSelection bearbeitet, Dijkstra gefixed, reset funktion geändert, Player cameFrom und current_cost eingefügt,
  *              ChangePhase & Move Button Implementiert, Hilfsfunktionen  eingefügt
  *
+<<<<<<< HEAD
  * Author: Miguel
  * Version: 0.5
  * Datum: 23.01.2018
  * Kommentar: getter und setter für targetCache, camefrom und costs. Dijkstra muss jetzt ein HexagonMatchfield* uebergeben bekommen
  * 
+=======
+ * Autho: Manuel
+ * Version: 0.5
+ * Datum: 24.01.2018
+ * Kommentar:
+ * Folgende Probleme gibt es noch:
+ * -    Minimap: Laedt man ein Save Game so funktioniert die Minimap nicht korrekt. Das Problem entsteht, wenn auf die Minimap geklickt wird um
+ *      wieder zum Spiel zurueck zu gelangen. Das ganze ensteht dadurch, dass das entsprechende Hexagon nicht aktiv ist (siehe in das
+ *      mousePressEvent von HexagonMatchfield. Dort liefert die Funktion isActive() ein true zurueck, auch wenn die Minimap aktuell
+ *      angezeigt wird, was ich nicht verstehe)
+ *
+ * -    Resize: Wird ein Spiel ueber das Menue beendet und ein neues Spiel gestartet, passt sich das Fenster nicht angemessen an.
+>>>>>>> LucasBearbeitung
  * */
 
 #ifndef GAME_H
@@ -82,12 +96,16 @@ private:
     bool MenueView;
 public:
     Game(Options* init_options, GameWidget* ptr_gameWid);
+    Game(QString, GameWidget*);
     ~Game();
     //Game(QString pathToSaveFile);
     void loadGame(QString pathToSaveFile);
     void saveGame();
     void endGame();
     void Dijkstra(HexagonMatchfield*, int = 1);
+    bool loadMapForNewGame(QString);
+    bool readSaveGame(QString);
+    bool loadMapFromSaveGame(QString);
 
     /* Nicht im UML-Diagramm, sind nur eine Hilfsfunktionen für processSelection*/
     void resetHexMatchfield();
@@ -112,6 +130,12 @@ private:
     QVector3D oddqToCube(QPoint);   //Für Referenzen betrachte https://www.redblobgames.com/grids/hexagons/#distances , Kapitel: Distance
     QPoint cubeToOddq(QVector3D);
     int cube_distance(QVector3D, QVector3D);
+    void createRandomMap();
+    void createButtons();
+    Unit* createUnitFromType(QString, QString, Player*);
+    Unit* readUnitFromStream(QTextStream&);
+    void loadInventory(QTextStream&, Unit*);
+
     /*Hilfsfunktionen Ende*/
 
 public slots:

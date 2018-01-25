@@ -104,6 +104,9 @@ public:
     void setPhaseLabel(QString);
     void setUnitsLabel(int value);
     void setEnergieLabel(int current, int max);
+    void setSizeX(int value);
+    void setSizeY(int value);
+
     int getSizeX() const;
     int getSizeY() const;
     QGraphicsScene *getGameWidInfoScene() const;
@@ -113,6 +116,7 @@ public:
     QGraphicsScene *getGameWidMenueScene() const;
     QGraphicsView* getGameWidGameView() const;
     QGraphicsScene *getGameWidMapScene() const;
+
 
 private:
     void gameWidCreateMenueScene();

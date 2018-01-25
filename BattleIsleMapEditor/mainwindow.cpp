@@ -770,7 +770,8 @@ void MainWindow::speichernForGame_triggerd()
                out << hex->getHexMatchfieldType() << " "<< hex->getBoltaniumCurrent() << " ";
                if(hex->getUnit_stationed() != nullptr)
                {
-                   out << 1 << " " << hex->getUnit_stationed()->getPLY() << " " << hex->getUnit_stationed()->getFilepath() << "\n";
+                   out << 1 << " " << hex->getUnit_stationed()->getPLY() << " "
+                       << hex->getUnit_stationed()->getUnitType() << " " << hex->getUnit_stationed()->getFilepath() << "\n";
                }
                else
                    out << 0 << "\n";

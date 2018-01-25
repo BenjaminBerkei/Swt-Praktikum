@@ -18,12 +18,12 @@ StaticUnit::StaticUnit(QString filepath, Player* player)
     : Unit()
 {
     QFile file(filepath);
-    QTextStream in(&file);
     if(!file.open(QFile::ReadOnly | QFile::Text))
     {
         qDebug() << "Warnung: File nicht gefunden";
         return;
     }
+    QTextStream in(&file);
     str_unitName = in.readLine();
 	in >> int_unitView;
     in >> int_actionRange;
@@ -68,7 +68,7 @@ StaticUnit::StaticUnit(QString filepath, Player* player)
 void StaticUnit::serialize(QTextStream &out)
 {
     out << str_unitType << " " << unitFile << " " << unitPlayer->getPlayerID() << " "
-        << int_unitCurrentHP << "\n";
+        << int_unitCurrentHP << " " << bool_unitUsed << "\n";
 }
 
 int StaticUnit::getEnergieStorage() const
@@ -87,8 +87,6 @@ HeadquaterUnit::HeadquaterUnit(QString filepath, Player* player)
     : FactoryUnit(filepath, true, player)
 {
 }
-
-HeadquaterUnit::~HeadquaterUnit(){}
 
 bool HeadquaterUnit::checkUnitDestroyed()
 {
@@ -118,9 +116,8 @@ DepotUnit::DepotUnit(QString filepath, Player* player)
 
 DepotUnit::~DepotUnit()
 {
-    for(auto &it : vector_unitStorage)
-        delete it;
-    unitPlayer->setPlayerTotalEnergie(unitPlayer->getPlayerTotalEnergie() - int_EnergieStorage);
+    if(unitPlayer != nullptr)
+        unitPlayer->setPlayerTotalEnergie(unitPlayer->getPlayerTotalEnergie() - int_EnergieStorage);
 }
 
 bool DepotUnit::action(HexagonMatchfield* hexTarget)
@@ -192,7 +189,10 @@ FactoryUnit::FactoryUnit(QString filepath, bool bool_loadInventory, Player* play
     }
 }
 
-FactoryUnit::~FactoryUnit() {}
+FactoryUnit::~FactoryUnit()
+{
+    production.clear();
+}
 
 QString FactoryUnit::getUnitToBuild() const
 {

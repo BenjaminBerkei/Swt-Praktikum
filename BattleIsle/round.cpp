@@ -17,7 +17,17 @@ Round::Round(int maxAnz = 0)
     int_maxRoundNumber=maxAnz*10;
     int_currentRoundNumber=10;
 	currentRoundPhase = new MovePhase;
-	return;
+    return;
+}
+
+Round::Round(QString phase, int currentNumber, int maxNumber)
+{
+    int_maxRoundNumber = maxNumber;
+    int_currentRoundNumber = currentNumber;
+    if(phase == "MOVE")
+        currentRoundPhase = new MovePhase;
+    else
+        currentRoundPhase = new ActionPhase;
 }
 
 Round::~Round()
@@ -31,11 +41,27 @@ void Round::serialize(QTextStream & out)
     out << int_currentRoundNumber << " ";
     if(currentRoundPhase->currentPhase() == MOVE)
     {
-        out << "MOVE";
+        out << "MOVE ";
     }else{
-        out << "ACTION";
+        out << "ACTION ";
     }
+    out << int_maxRoundNumber;
     out << "\n";
+}
+
+Round *Round::unserialize(QTextStream &in)
+{
+    int currentRoundNumber, maxRoundNumber;
+    QString str_round;
+
+    in >> currentRoundNumber;
+    in >> str_round;
+    in >> maxRoundNumber;
+
+    qDebug() << "unserialize von Round ausfuehren mit \n\t" << currentRoundNumber << "\n\t" <<
+                str_round << "\n\t" << maxRoundNumber;
+
+    return new Round(str_round,currentRoundNumber,maxRoundNumber);
 }
 
 void Round::setCurrentRoundPhase(Phase* phase)

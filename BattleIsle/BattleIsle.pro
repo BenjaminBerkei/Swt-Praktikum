@@ -57,6 +57,7 @@ FORMS    += startmenuewidget.ui \
 
 RESOURCES += \
     img/rsc.qrc \
-    UnitRessources/units.qrc
+    UnitRessources/units.qrc \
+    maps/predefinedmaps.qrc
 
 CONFIG += c++11

@@ -38,10 +38,30 @@ StartMenueWidget::~StartMenueWidget()
     delete ui;
 }
 
-void StartMenueWidget::startGame( Options *options_initOptions )
+void StartMenueWidget::startGame()
+{
+    if(ptr_smwOptions != nullptr)
+    {
+        //Erstelle ein Objekt vom Typ Game
+        ptr_smwMenueWidget->setPtr_runningGame(new Game(ptr_smwOptions, ptr_smwMenueWidget->getPtr_mwGameWidget()));
+        connect(ptr_smwMenueWidget->getPtr_runningGame(), SIGNAL(gameOver()), this, SLOT(gameEnded()));
+
+        ptr_smwMenueWidget->resize( 1200,750 );
+        ptr_smwMenueWidget->ui->stack->resize( 1190, 740 );
+        ptr_smwMenueWidget->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
+
+        //Wechsel zu Widget 3
+        emit SIGNAL_smwChangeIndexFromStack( 3 );
+        //Das Signal wird im Konstruktor von MenueWidget verbunden
+    }
+
+
+}
+
+void StartMenueWidget::loadGame(QString pathToLoadFile)
 {
     //Erstelle ein Objekt vom Typ Game
-    ptr_smwMenueWidget->setPtr_runningGame(new Game(options_initOptions, ptr_smwMenueWidget->getPtr_mwGameWidget()));
+    ptr_smwMenueWidget->setPtr_runningGame(new Game(pathToLoadFile, ptr_smwMenueWidget->getPtr_mwGameWidget()));
     connect(ptr_smwMenueWidget->getPtr_runningGame(), SIGNAL(gameOver()), this, SLOT(gameEnded()));
 
     ptr_smwMenueWidget->resize( 1200,750 );
@@ -51,8 +71,6 @@ void StartMenueWidget::startGame( Options *options_initOptions )
     //Wechsel zu Widget 3
     emit SIGNAL_smwChangeIndexFromStack( 3 );
     //Das Signal wird im Konstruktor von MenueWidget verbunden
-
-
 }
 
 void StartMenueWidget::switchToOptions()
@@ -92,12 +110,17 @@ void StartMenueWidget::smwUpdateSettings()
 
 void StartMenueWidget::on_qbutton_startGame_clicked()
 {
-    startGame( ptr_smwOptions );
+    startGame( );
 }
 
 void StartMenueWidget::on_qbutton_loadGame_clicked()
 {
-    switchToLoadGame();
+    //switchToLoadGame();
+    QString pathToLoadFile = QFileDialog::getOpenFileName(this);
+    if(pathToLoadFile != "")
+    {
+        loadGame(pathToLoadFile);
+    }
 }
 
 void StartMenueWidget::on_qbutton_options_clicked()
@@ -110,7 +133,8 @@ void StartMenueWidget::gameEnded()
     ptr_smwMenueWidget->deleteGame();
     ptr_smwMenueWidget->resize(400, 500);
     ptr_smwMenueWidget->ui->stack->resize(380, 440);
+    emit SIGNAL_smwChangeIndexFromStack(0);
     ptr_smwMenueWidget->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
     ptr_smwMenueWidget->repaint();
-    emit SIGNAL_smwChangeIndexFromStack(0);
+    qDebug() << "\t Change Index Emit";
 }

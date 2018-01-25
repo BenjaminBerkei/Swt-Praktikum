@@ -36,7 +36,6 @@ protected:
 public:
     StaticUnit(QString, Player* = nullptr);
     void serialize(QTextStream &);
-
 	int getEnergieStorage() const;	
 	int moveTo(HexagonMatchfield*);
 };
@@ -61,7 +60,7 @@ protected:
 
 public:
     FactoryUnit(QString, bool ,Player* = nullptr);
-	~FactoryUnit();
+    ~FactoryUnit();
 
 	QString getUnitToBuild() const;
 	void setUnitToBuild(const QString);
@@ -79,7 +78,6 @@ class HeadquaterUnit : public FactoryUnit
 {
 public:
     HeadquaterUnit(QString, Player* = nullptr);
-    ~HeadquaterUnit();
 
     virtual bool checkUnitDestroyed();
     Unit* createUnit();
