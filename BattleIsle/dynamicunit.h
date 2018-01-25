@@ -64,14 +64,14 @@ class TransporterUnit : public DynamicUnit
 protected:
 	int int_transporterUnitCapacity;
 	int int_transporterUnitCurrentCapacity;
-    Unit* unitToUnload;
+    Unit* ptr_unitToUnload;
 public:
 	TransporterUnit(QString, Player*);
 
-    virtual bool action(HexagonMatchfield *hex_target);
-    void unload(HexagonMatchfield *hex_target);
-    void farmBoltanium(HexagonMatchfield *hex_target);
-    void addUnitToStorage(Unit* unit);
+    virtual bool action(HexagonMatchfield *);
+    void unload(HexagonMatchfield *);
+    void farmBoltanium(HexagonMatchfield *);
+    void addUnitToStorage(Unit* );
     void serialize(QTextStream &);
 
     void resetBuildUnloadParameter();
@@ -79,8 +79,9 @@ public:
     int getTransporterUnitCapacity() const;
     int getTransporterUnitCurrentCapacity() const;
     void setTransporterUnitCurrentCapacity(const int);
+
 public slots:
-    void SLOT_setUnitToUnload(Unit* unit);
+    void SLOT_setUnitToUnload(Unit*);
 };
 
 //TransporterAir
@@ -88,7 +89,7 @@ public slots:
 class TransporterAirUnit : public TransporterUnit
 {
 public:
-    TransporterAirUnit(QString, Player*  = nullptr);
+    TransporterAirUnit(QString, Player*);
 
   int moveTo(HexagonMatchfield* hex_target);
   virtual TransporterAirUnit* createUnit();
@@ -99,7 +100,7 @@ public:
 class TransporterGroundUnit : public TransporterUnit
 {
 public:
-    TransporterGroundUnit(QString, Player*  = nullptr);
+    TransporterGroundUnit(QString, Player*);
 
   int moveTo(HexagonMatchfield* );
   virtual TransporterGroundUnit* createUnit();
@@ -110,7 +111,7 @@ public:
 class TransporterWaterUnit : public TransporterUnit
 {
 public:
-    TransporterWaterUnit(QString, Player*  = nullptr);
+    TransporterWaterUnit(QString, Player*);
 
   int moveTo(HexagonMatchfield* );
   virtual TransporterWaterUnit* createUnit();
@@ -142,7 +143,7 @@ public:
 class BuildLightUnit : public LightUnit
 {
     Q_OBJECT
-    QString unitToBuild;
+    QString qstring_unitToBuild;
     std::map<QString, Unit*> production;
 public:
     BuildLightUnit(QString,bool, Player*  = nullptr);

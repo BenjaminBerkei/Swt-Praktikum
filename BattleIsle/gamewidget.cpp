@@ -43,22 +43,18 @@ void GameWidget::gameWidCreateMenueScene()
 
     qbuttonSaveGame = new QPushButton();
     qbuttonEndGame = new QPushButton();
-    qbuttonLoadGame = new QPushButton();
     qbuttonResume = new QPushButton();
 
     qbuttonSaveGame->setText("SaveGame");
     qbuttonEndGame->setText("EndGame");
-    qbuttonLoadGame->setText("LoadGame");
     qbuttonResume->setText("Resume");
 
     qbuttonSaveGame->setGeometry(0,0,200,30);
     qbuttonEndGame->setGeometry(0,0,200,30);
-    qbuttonLoadGame->setGeometry(0,0,200,30);
     qbuttonResume->setGeometry(0,0,200,30);
 
     QGraphicsProxyWidget * proxy_saveGame = gameWidMenueScene->addWidget(qbuttonSaveGame);
     QGraphicsProxyWidget * proxy_endGame = gameWidMenueScene->addWidget(qbuttonEndGame);
-    QGraphicsProxyWidget * proxy_laodGame = gameWidMenueScene->addWidget(qbuttonLoadGame);
     QGraphicsProxyWidget * proxy_resume = gameWidMenueScene->addWidget(qbuttonResume);
 
     qreal x = ui->graphicsView_gameView->rect().center().x();
@@ -66,14 +62,12 @@ void GameWidget::gameWidCreateMenueScene()
     qreal xVersch = 0;
     qreal yVersch = 50;
 
-    proxy_laodGame->setPos(x,y);
     proxy_saveGame->setPos(x + xVersch,y + yVersch);
     proxy_endGame->setPos(x + 2 * xVersch,y + 2 * yVersch);
     proxy_resume->setPos(x + 3 * xVersch,y + 3 * yVersch);
 
     connect(qbuttonSaveGame,SIGNAL(clicked()), this, SLOT(SLOT_qbuttonSaveGame_clicked()));
     connect(qbuttonEndGame,SIGNAL(clicked()), this, SLOT(SLOT_qbuttonEndGame_clicked()));
-    connect(qbuttonLoadGame,SIGNAL(clicked()), this, SLOT(SLOT_qbuttonLoadGame_clicked()));
     connect(qbuttonResume,SIGNAL(clicked()), this, SLOT(SLOT_qbuttonResume_clicked()));
 }
 
@@ -81,17 +75,13 @@ void GameWidget::SLOT_qbuttonSaveGame_clicked()
 {
     emit SIGNAL_MenueButtonPushed(0);
 }
-void GameWidget::SLOT_qbuttonLoadGame_clicked()
+void GameWidget::SLOT_qbuttonEndGame_clicked()
 {
     emit SIGNAL_MenueButtonPushed(1);
 }
-void GameWidget::SLOT_qbuttonEndGame_clicked()
-{
-    emit SIGNAL_MenueButtonPushed(2);
-}
 void GameWidget::SLOT_qbuttonResume_clicked()
 {
-    emit SIGNAL_MenueButtonPushed(3);
+    emit SIGNAL_MenueButtonPushed(2);
 }
 
 QGraphicsScene *GameWidget::getGameWidMenueScene() const
