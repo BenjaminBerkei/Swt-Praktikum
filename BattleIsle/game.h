@@ -62,6 +62,7 @@
 #include <QTextStream>
 #include <QFile>
 #include <QTextCodec>
+#include <unordered_set>
 
 class GameWidget; //Vorwärtsdeklaration
 class HexagonMatchfield;
@@ -75,7 +76,7 @@ class Game : public QObject
     Q_OBJECT
 private:
     HexagonMatchfield* ptr_hexSelectionCache;
-    std::vector<HexagonMatchfield*> vec_hexTargetCache;
+    std::unordered_set<HexagonMatchfield*> set_hexTargetCache;
 
     std::vector<std::vector<HexagonMatchfield*>> vec_hexGameGrid;
     std::vector<std::vector<Unit*>> vec_unitGrid;
@@ -125,11 +126,18 @@ public:
     void countUnits();
     int offset_distance(QPoint, QPoint);
     void serialize(QTextStream&);
+    void changeButtonPixmap();
 
 	//fuer ki
+<<<<<<< HEAD
 	std::vector<HexagonMatchfield*> getTargetCache() const;
 	HexagonMatchfield* getCamefrom_Hex(HexagonMatchfield*);
 	int getCurrentCost_Int(HexagonMatchfield*);
+=======
+    std::unordered_set<HexagonMatchfield*> getTargetCache() const;
+	std::map<HexagonMatchfield*, HexagonMatchfield*> getCamefrom() const;
+	std::map<HexagonMatchfield*, int> getCurrentCost() const;
+>>>>>>> master
 private:
     QVector3D oddqToCube(QPoint);   //Für Referenzen betrachte https://www.redblobgames.com/grids/hexagons/#distances , Kapitel: Distance
     QPoint cubeToOddq(QVector3D);

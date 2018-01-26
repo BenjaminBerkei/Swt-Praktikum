@@ -74,17 +74,24 @@
         <file>HexagonBilder/Street_nordwest300d.png</file>
     </qresource>
     <qresource prefix="/buttonRess">
-        <file>Buttons/RepairOhne.png</file>
         <file>Buttons/RepairMit.png</file>
-        <file>Buttons/PhasenwechselOhne.png</file>
         <file>Buttons/PhasenwechselMit.png</file>
-        <file>Buttons/MoveOhne.png</file>
         <file>Buttons/MoveMit.png</file>
-        <file>Buttons/EntladenOhne.png</file>
         <file>Buttons/EntladenMit.png</file>
-        <file>Buttons/BeladenOhne.png</file>
         <file>Buttons/BeladenMit.png</file>
-        <file>Buttons/AttackeOhne.png</file>
         <file>Buttons/AttackeMit.png</file>
+        <file>Buttons/Weltkarte.png</file>
+        <file>Buttons/RepairMit_rot.png</file>
+        <file>Buttons/RepairMit_blau.png</file>
+        <file>Buttons/PhasenwechselMit_rot.png</file>
+        <file>Buttons/PhasenwechselMit_blau.png</file>
+        <file>Buttons/MoveMit_rot.png</file>
+        <file>Buttons/MoveMit_blau.png</file>
+        <file>Buttons/EntladenMit_rot.png</file>
+        <file>Buttons/EntladenMit_blau.png</file>
+        <file>Buttons/BeladenMit_rot.png</file>
+        <file>Buttons/BeladenMit_blau.png</file>
+        <file>Buttons/AttackeMit_rot.png</file>
+        <file>Buttons/AttackeMit_blau.png</file>
     </qresource>
 </RCC>

@@ -48,6 +48,7 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
 
     //Buttons Einfuegen
     createButtons();
+    changeButtonPixmap();
 
     ptr_gameWidget->setPlayerLabel(ptr_playerActive->getPlayerName());
     ptr_gameWidget->setPhaseLabel("Move");
@@ -72,7 +73,7 @@ Game::Game(QString filepath, GameWidget *gameWidegt)
 
     //Buttons Einfuegen
     createButtons();
-
+    changeButtonPixmap();
     ptr_gameWidget->setPlayerLabel(ptr_playerActive->getPlayerName());
     if(ptr_roundCurrent->getCurrentPhase() == MOVE)
     {
@@ -198,7 +199,7 @@ void Game::processSelection(HexagonMatchfield *selection)
     case TARGET:
         if(ptr_roundCurrent->getCurrentPhase() == MOVE)     //Move Phase
         {
-            for(auto &it : vec_hexTargetCache)        //Ziele auf zustand TARGET zurücksetzen
+            for(auto &it : set_hexTargetCache)        //Ziele auf zustand TARGET zurücksetzen
             {
                 it->setState(TARGET);
             }
@@ -241,6 +242,7 @@ void Game::processSelection(HexagonMatchfield *selection)
         setFogOfWar();
         break;
     }
+    qDebug() << "TargetCache Size: " << set_hexTargetCache.size();
     checkUnitGrid();
     countUnits();
     ptr_gameWidget->updateInfoOptScenes();
@@ -302,13 +304,13 @@ void Game::Dijkstra(HexagonMatchfield* start, int factor)
                         int new_cost = map_hexCurrentCost[current] + target->getUnitStationed()->moveTo(neighbour);
 
                         /*Wenn diese Kosten geringer als die Reichweite der Einheit und besser als die bisherigen Kosten sind, dann..*/
-                        if(new_cost <= target->getUnitStationed()->getUnitCurrentMoveRange()*factor && new_cost < map_hexCurrentCost[neighbour])
+                        if(new_cost <= target->getUnitStationed()->getUnitCurrentMoveRange() * factor && new_cost < map_hexCurrentCost[neighbour])
                         {
                             map_hexCurrentCost[neighbour] = new_cost; //Kosten aktualisieren
                             map_hexCameFrom[neighbour] = current;     //Vorgänger auf das Aktuelle Feld setzem
                             frontier.push(std::pair<HexagonMatchfield*, int> (neighbour, map_hexCurrentCost[neighbour])); //Den Nachbarn der Queue hinzufügen
 
-                            vec_hexTargetCache.push_back(neighbour);   //und in den Target Cache Stecken
+                            set_hexTargetCache.insert(neighbour);   //und in den Target Cache Stecken
                             neighbour->setState(TARGET);
                         }
 
@@ -535,8 +537,9 @@ void Game::buttonPressedChangePhase()
     if(ptr_roundCurrent->getCurrentPhase() == MOVE)
     {
         ptr_playerActive = ptr_playerActive == ptr_playerOne ? ptr_playerTwo : ptr_playerOne;
+        changeButtonPixmap();
         resetHexMatchfield();
-        setFogOfWar();        
+        setFogOfWar();
     }
     SLOT_checkStateOfButtons();
     resetTargetCache();
@@ -602,11 +605,11 @@ void Game::resetHexMatchfield()
 
 void Game::resetTargetCache()
 {
-    for(auto &it : vec_hexTargetCache)
+    for(auto &it : set_hexTargetCache)
     {
         it->setState(INACTIVE);
     }
-    vec_hexTargetCache.clear();
+    set_hexTargetCache.clear();
     map_hexCameFrom.clear();
     map_hexCurrentCost.clear();
 }
@@ -653,7 +656,7 @@ void Game::showNeighbors(HexagonMatchfield * center)
             if(x >= 0 && x < ptr_gameWidget->getSizeX() && y >= 0 && ptr_gameWidget->getSizeY())
             {
                 vec_hexGameGrid[x][y]->setState(TARGET);
-                vec_hexTargetCache.push_back(vec_hexGameGrid[x][y]);
+                set_hexTargetCache.insert(vec_hexGameGrid[x][y]);
             }
         }
     }else{
@@ -663,7 +666,7 @@ void Game::showNeighbors(HexagonMatchfield * center)
             int y = center->getQpoint_gridPosition().y() + it.y();
             {
                 vec_hexGameGrid[x][y]->setState(TARGET);
-                vec_hexTargetCache.push_back(vec_hexGameGrid[x][y]);
+                set_hexTargetCache.insert(vec_hexGameGrid[x][y]);
             }
         }
     }
@@ -701,7 +704,7 @@ void Game::calculateTargets(HexagonMatchfield * center, int range)
                 if(offset_distance(center->getQpoint_gridPosition(), neighbour->getQpoint_gridPosition()) <= range)          //Wenn das ziel in der Reichweite der Einheite liegt
                 {
                     neighbour->setState(TARGET);
-                    vec_hexTargetCache.push_back(neighbour);
+                    set_hexTargetCache.insert(neighbour);
                     frontier.push(neighbour);
                 }
             }
@@ -725,7 +728,7 @@ void Game::setFogOfWar()
             if(hex->getUnitStationed() != nullptr && hex->getUnitStationed()->getUnitPlayer() == ptr_playerActive)
             {
                 calculateTargets(hex, hex->getUnitStationed()->getUnitView());
-                for(auto &it : vec_hexTargetCache)
+                for(auto &it : set_hexTargetCache)
                 {
                     it->setHexFogOfWar(false);
                 }
@@ -1254,6 +1257,22 @@ void Game::serialize(QTextStream &out)
     }
 }
 
+void Game::changeButtonPixmap()
+{
+    if(ptr_playerActive == ptr_playerOne)
+    {
+        for(auto &it : vec_buttonMenueBar)
+        {
+            it->changePixmapPlayerOne();
+        }
+    }else{
+        for(auto &it : vec_buttonMenueBar)
+        {
+            it->changePixmapPlayerTwo();
+        }
+    }
+}
+
 
 /*HilfsFunktionen Ende#######################################################################*/
 
@@ -1263,9 +1282,9 @@ bool Compare::operator()(std::pair<HexagonMatchfield*, int> a, std::pair<Hexagon
 }
 
 //fuer ki
-std::vector<HexagonMatchfield*> Game::getTargetCache() const
+std::unordered_set<HexagonMatchfield*> Game::getTargetCache() const
 {
-    return vec_hexTargetCache;
+    return set_hexTargetCache;
 }
 
 HexagonMatchfield* Game::getCamefrom_Hex(HexagonMatchfield* hex)
