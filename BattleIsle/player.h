@@ -44,6 +44,7 @@ public:
     int getPlayerTotalEnergie() const;
     int getCurrentEnergieStorage() const;
     int getPlayerUnitNumber() const;
+    bool getBoolKi() const;
     
     void setPlayerName(QString);
     void setPlayerScore(int);

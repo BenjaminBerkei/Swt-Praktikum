@@ -128,6 +128,11 @@ int Player::getPlayerID() const
     return int_playerID;
 }
 
+bool Player::getBoolKi() const
+{
+    return bool_isKI;
+}
+
 bool Player::getHQDestroyed() const
 {
     return bool_HQDestroyed;

@@ -129,15 +129,10 @@ public:
     void changeButtonPixmap();
 
 	//fuer ki
-<<<<<<< HEAD
-	std::vector<HexagonMatchfield*> getTargetCache() const;
+    std::unordered_set<HexagonMatchfield*> getTargetCache() const;
 	HexagonMatchfield* getCamefrom_Hex(HexagonMatchfield*);
 	int getCurrentCost_Int(HexagonMatchfield*);
-=======
-    std::unordered_set<HexagonMatchfield*> getTargetCache() const;
-	std::map<HexagonMatchfield*, HexagonMatchfield*> getCamefrom() const;
-	std::map<HexagonMatchfield*, int> getCurrentCost() const;
->>>>>>> master
+
 private:
     QVector3D oddqToCube(QPoint);   //Für Referenzen betrachte https://www.redblobgames.com/grids/hexagons/#distances , Kapitel: Distance
     QPoint cubeToOddq(QVector3D);
