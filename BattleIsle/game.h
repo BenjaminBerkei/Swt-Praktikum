@@ -142,6 +142,7 @@ private:
     Unit* createUnitFromType(QString, QString, Player*);
     Unit* readUnitFromStream(QTextStream&);
     void loadInventory(QTextStream&, Unit*);
+    void updateLabels();
 
     /*Hilfsfunktionen Ende*/
 

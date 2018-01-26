@@ -49,6 +49,7 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     //Buttons Einfuegen
     createButtons();
     changeButtonPixmap();
+<<<<<<< HEAD
 
     ptr_gameWidget->setPlayerLabel(ptr_playerActive->getPlayerName());
     ptr_gameWidget->setPhaseLabel("Move");
@@ -57,6 +58,9 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
 
 	//für KI
     ptr_gameKI = new KI(this, ptr_playerTwo, vec_hexGameGrid);
+=======
+    updateLabels();
+>>>>>>> master
 }
 
 Game::Game(QString filepath, GameWidget *gameWidegt)
@@ -74,22 +78,12 @@ Game::Game(QString filepath, GameWidget *gameWidegt)
     //Buttons Einfuegen
     createButtons();
     changeButtonPixmap();
-    ptr_gameWidget->setPlayerLabel(ptr_playerActive->getPlayerName());
-    if(ptr_roundCurrent->getCurrentPhase() == MOVE)
-    {
-        ptr_gameWidget->setPhaseLabel("Move");
-    }
-    else
-    {
-        ptr_gameWidget->setPhaseLabel("Action");
-    }
-    ptr_gameWidget->setUnitsLabel(ptr_playerActive->getPlayerUnitNumber());
-    ptr_gameWidget->setEnergieLabel(ptr_playerActive->getCurrentEnergieStorage(), ptr_playerActive->getPlayerTotalEnergie());
+    updateLabels();
 }
 
 Game::~Game()
 {
-    qDebug() << "Destruktor Game";
+    qDebug() << "Destruktor Game begin";
     resetHexMatchfield();
     for(auto &it : vec_hexGameGrid)
     {
@@ -97,7 +91,9 @@ Game::~Game()
         {
             delete ut;
         }
+        it.clear();
     }
+    vec_hexGameGrid.clear();
     qDebug() << "\t Hexagon Matchfield Grid gelöscht";
     for(auto &it : vec_unitGrid)
     {
@@ -105,16 +101,21 @@ Game::~Game()
         {
             delete ut;
         }
+        it.clear();
     }
+    vec_unitGrid.clear();
     qDebug() << "\t Unit Grid gelöscht";
-    for(auto &it : vec_buttonMenueBar)
+    for(auto &it : ptr_gameWidget->getGameWidButtonScene()->items())
     {
         delete it;
     }
+    vec_buttonMenueBar.clear();
     qDebug() << "\t Button Bar gelöscht";
     delete ptr_playerOne;
     delete ptr_playerTwo;
     qDebug() << "\t Player Gelöscht";
+    qDebug() << "Destruktor Game end";
+
 }
 
 void Game::saveGame()
@@ -148,9 +149,8 @@ void Game::saveGame()
 
 void Game::endGame()
 {
-    emit gameOver();
-
     ptr_gameWidget->resetGameWidget();
+    emit gameOver();
 }
 
 void Game::processSelection(HexagonMatchfield *selection)
@@ -540,19 +540,17 @@ void Game::buttonPressedChangePhase()
         changeButtonPixmap();
         resetHexMatchfield();
         setFogOfWar();
+        checkWinCondition();
     }
     SLOT_checkStateOfButtons();
     resetTargetCache();
 
-    ptr_gameWidget->setPlayerLabel(ptr_playerActive->getPlayerName());
-    ptr_gameWidget->setPhaseLabel(ptr_roundCurrent->getCurrentPhase() == MOVE ? "Move" : "Action");
-    ptr_gameWidget->setUnitsLabel(ptr_playerActive->getPlayerUnitNumber());
-    ptr_gameWidget->setEnergieLabel(ptr_playerActive->getCurrentEnergieStorage(), ptr_playerActive->getPlayerTotalEnergie());
     if(ptr_hexSelectionCache != nullptr && ptr_hexSelectionCache->getUnitStationed() != nullptr)
     {
         ptr_hexSelectionCache->getUnitStationed()->resetBuildUnloadParameter();
     }
     resetUnits();
+    updateLabels();
     ptr_gameWidget->repaintGameView();
     ptr_gameWidget->getGameWidButtonScene()->update();
 	//Wenn activer Spieler KI ist dann autoplay
@@ -714,30 +712,33 @@ void Game::calculateTargets(HexagonMatchfield * center, int range)
 
 void Game::setFogOfWar()
 {
-    for(auto &iterator : vec_hexGameGrid)
+    if(ptr_options->getBool_fogOfWar() == true)
     {
-        for(auto &hex : iterator)
+        for(auto &iterator : vec_hexGameGrid)
         {
-            hex->setHexFogOfWar(true);
-        }
-    }
-    for(auto &iterator : vec_hexGameGrid)
-    {
-        for(auto &hex : iterator)
-        {
-            if(hex->getUnitStationed() != nullptr && hex->getUnitStationed()->getUnitPlayer() == ptr_playerActive)
+            for(auto &hex : iterator)
             {
-                calculateTargets(hex, hex->getUnitStationed()->getUnitView());
-                for(auto &it : set_hexTargetCache)
-                {
-                    it->setHexFogOfWar(false);
-                }
-                hex->setHexFogOfWar(false);
-                resetTargetCache();
+                hex->setHexFogOfWar(true);
             }
         }
+        for(auto &iterator : vec_hexGameGrid)
+        {
+            for(auto &hex : iterator)
+            {
+                if(hex->getUnitStationed() != nullptr && hex->getUnitStationed()->getUnitPlayer() == ptr_playerActive)
+                {
+                    calculateTargets(hex, hex->getUnitStationed()->getUnitView());
+                    for(auto &it : set_hexTargetCache)
+                    {
+                        it->setHexFogOfWar(false);
+                    }
+                    hex->setHexFogOfWar(false);
+                    resetTargetCache();
+                }
+            }
+        }
+        ptr_gameWidget->repaintGameView();
     }
-    ptr_gameWidget->repaintGameView();
 }
 
 void Game::showPath(HexagonMatchfield* target)
@@ -774,6 +775,11 @@ void Game::checkWinCondition()
     }else if(ptr_playerTwo->getPlayerUnitNumber() == 0 || ptr_playerTwo->getHQDestroyed())
     {
         qDebug() << "Spieler Zwei Verloren";
+        endGame();
+    }
+    if(ptr_roundCurrent->getCurrentRoundNumber() == ptr_roundCurrent->getMaxRoundNumber() + 10)
+    {
+        qDebug() << "Maximale Runde erreicht";
         endGame();
     }
 }
@@ -1231,6 +1237,15 @@ void Game::loadInventory(QTextStream & in, Unit * containerUnit)
     {
         containerUnit->addUnitToStorage(readUnitFromStream(in));
     }
+}
+
+void Game::updateLabels()
+{
+    ptr_gameWidget->setPlayerLabel(ptr_playerActive->getPlayerName());
+    ptr_gameWidget->setPhaseLabel(ptr_roundCurrent->getCurrentPhase() == MOVE ? "Move" : "Action");
+    ptr_gameWidget->setUnitsLabel(ptr_playerActive->getPlayerUnitNumber());
+    ptr_gameWidget->setEnergieLabel(ptr_playerActive->getCurrentEnergieStorage(), ptr_playerActive->getPlayerTotalEnergie());
+    ptr_gameWidget->setRoundLabel(ptr_roundCurrent->getCurrentRoundNumber() / 10, ptr_roundCurrent->getMaxRoundNumber() / 10);
 }
 
 int Game::offset_distance(QPoint a, QPoint b)

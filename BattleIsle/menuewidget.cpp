@@ -54,7 +54,20 @@ MenueWidget::MenueWidget(QWidget *parent) :
 
 MenueWidget::~MenueWidget()
 {
+    qDebug() << "Destruktor MenueWidget begin";
     delete ui;
+    qDebug() << "\t Delete ui done";
+    delete ptr_runningGame;
+    qDebug() << "\t Delete ptr_runningGame done";
+    delete ptr_mwStartMenueWidget;
+    qDebug() << "\t Delete ptr_mwStartMenueWidget done";
+    delete ptr_mwOptionsWidget;
+    qDebug() << "\t Delete ptr_mwOptionsWidget done";
+    delete ptr_mwLoadGameWidget;
+    qDebug() << "\t Delete ptr_mwLoadGameWidget done";
+    delete ptr_mwGameWidget;
+    qDebug() << "\t Delete ptr_mwGameWidget done";
+    qDebug() << "Destruktor MenueWidget end";
 }
 
 void MenueWidget::resizeEvent(QResizeEvent *event)

@@ -131,6 +131,14 @@ void StartMenueWidget::on_qbutton_options_clicked()
 void StartMenueWidget::gameEnded()
 {
     ptr_smwMenueWidget->deleteGame();
+
+    qDebug() << "Elemente in getGameWidButtonScene" <<ptr_smwMenueWidget->getPtr_mwGameWidget()->getGameWidButtonScene()->items().size();
+    qDebug() << "Elemente in getGameWidGameScene" <<ptr_smwMenueWidget->getPtr_mwGameWidget()->getGameWidGameScene()->items().size();
+    qDebug() << "Elemente in getGameWidInfoScene" <<ptr_smwMenueWidget->getPtr_mwGameWidget()->getGameWidInfoScene()->items().size();
+    qDebug() << "Elemente in getGameWidMapScene" <<ptr_smwMenueWidget->getPtr_mwGameWidget()->getGameWidMapScene()->items().size();
+    qDebug() << "Elemente in getGameWidOptionsScene" <<ptr_smwMenueWidget->getPtr_mwGameWidget()->getGameWidOptionsScene()->items().size();
+    qDebug() << "Elemente in getGameWidMenueScene" <<ptr_smwMenueWidget->getPtr_mwGameWidget()->getGameWidMenueScene()->items().size();
+
     ptr_smwMenueWidget->resize(400, 500);
     ptr_smwMenueWidget->ui->stack->resize(380, 440);
     emit SIGNAL_smwChangeIndexFromStack(0);
