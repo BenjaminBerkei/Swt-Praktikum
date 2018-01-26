@@ -117,6 +117,18 @@ GameWidget::GameWidget(QWidget *parent) :
     gameWidMenueScene(new QGraphicsScene(this)), gameWidMapScene(new QGraphicsScene(this)), sizeX(0), sizeY(0)
 {
     ui->setupUi(this);
+
+    textItem_currentPlayer = nullptr;
+    textItem_currentEnergie = nullptr;
+    textItem_currentUnits = nullptr;
+    textItem_currentPhase = nullptr;
+    textItem_currentRound = nullptr;
+
+    qbuttonSaveGame = nullptr;
+    qbuttonEndGame = nullptr;
+    qbuttonLoadGame = nullptr;
+    qbuttonResume = nullptr;
+
     ui->graphicsView_buttonView->setScene(gameWidButtonScene);
     ui->graphicsView_gameView->setScene(gameWidGameScene);
     ui->graphicsView_informationsView->setScene(gameWidInfoScene);
@@ -133,7 +145,22 @@ GameWidget::GameWidget(QWidget *parent) :
 
 GameWidget::~GameWidget()
 {
+    qDebug() << "Destruktor GameWidget begin";
     delete ui;
+    qDebug() << "\tDelete ui done";
+    delete gameWidGameScene;
+    qDebug() << "\tDelete gameWidGameScene done";
+    delete gameWidInfoScene;
+    qDebug() << "\tDelete gameWidInfoScene done";
+    delete gameWidOptionsScene;
+    qDebug() << "\tDelete gameWidOptionsScene done";
+    delete gameWidButtonScene;
+    qDebug() << "\tDelete gameWidButtonScene done";
+    delete gameWidMenueScene;
+    qDebug() << "\tDelete gameWidMenueScene done";
+    delete gameWidMapScene;
+    qDebug() << "\tDelete gameWidMapScene done";
+    qDebug() << "Destruktor GameWidget end";
 }
 
 void GameWidget::resizeEvent(QResizeEvent *,int mainHeight, int mainWidth)
@@ -286,13 +313,10 @@ void GameWidget::clearAllScenes()
 
 void GameWidget::resetGameWidget()
 {
-    gameWidGameScene->clear();
-    gameWidButtonScene->clear();
-    gameWidInfoScene->clear();
-    gameWidOptionsScene->clear();
-    gameWidMapScene->clear();
+    qDebug() << "game Widget reset start";
     sizeX = 0;
     sizeY = 0;
+    qDebug() << "game Widget reset done";
 }
 
 void GameWidget::setEnableButtonScene(bool state)

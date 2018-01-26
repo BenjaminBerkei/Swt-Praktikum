@@ -72,7 +72,7 @@ Game::Game(QString filepath, GameWidget *gameWidegt)
 
 Game::~Game()
 {
-    qDebug() << "Destruktor Game";
+    qDebug() << "Destruktor Game begin";
     resetHexMatchfield();
     for(auto &it : vec_hexGameGrid)
     {
@@ -80,7 +80,9 @@ Game::~Game()
         {
             delete ut;
         }
+        it.clear();
     }
+    vec_hexGameGrid.clear();
     qDebug() << "\t Hexagon Matchfield Grid gelöscht";
     for(auto &it : vec_unitGrid)
     {
@@ -88,16 +90,21 @@ Game::~Game()
         {
             delete ut;
         }
+        it.clear();
     }
+    vec_unitGrid.clear();
     qDebug() << "\t Unit Grid gelöscht";
-    for(auto &it : vec_buttonMenueBar)
+    for(auto &it : ptr_gameWidget->getGameWidButtonScene()->items())
     {
         delete it;
     }
+    vec_buttonMenueBar.clear();
     qDebug() << "\t Button Bar gelöscht";
     delete ptr_playerOne;
     delete ptr_playerTwo;
     qDebug() << "\t Player Gelöscht";
+    qDebug() << "Destruktor Game end";
+
 }
 
 void Game::saveGame()
@@ -131,9 +138,8 @@ void Game::saveGame()
 
 void Game::endGame()
 {
-    emit gameOver();
-
     ptr_gameWidget->resetGameWidget();
+    emit gameOver();
 }
 
 void Game::processSelection(HexagonMatchfield *selection)
