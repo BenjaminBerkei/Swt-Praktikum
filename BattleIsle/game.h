@@ -61,6 +61,7 @@
 #include <QTextStream>
 #include <QFile>
 #include <QTextCodec>
+#include <unordered_set>
 
 class GameWidget; //Vorwärtsdeklaration
 class HexagonMatchfield;
@@ -73,7 +74,7 @@ class Game : public QObject
     Q_OBJECT
 private:
     HexagonMatchfield* ptr_hexSelectionCache;
-    std::vector<HexagonMatchfield*> vec_hexTargetCache;
+    std::unordered_set<HexagonMatchfield*> set_hexTargetCache;
 
     std::vector<std::vector<HexagonMatchfield*>> vec_hexGameGrid;
     std::vector<std::vector<Unit*>> vec_unitGrid;
@@ -123,7 +124,7 @@ public:
     void changeButtonPixmap();
 
 	//fuer ki
-	std::vector<HexagonMatchfield*> getTargetCache() const;
+    std::unordered_set<HexagonMatchfield*> getTargetCache() const;
 	std::map<HexagonMatchfield*, HexagonMatchfield*> getCamefrom() const;
 	std::map<HexagonMatchfield*, int> getCurrentCost() const;
 private:
