@@ -29,7 +29,7 @@ std::vector<QPoint> Game::vec_qpointOddNeighbors = {QPoint(1,1),QPoint(1,0),QPoi
 
 Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     ptr_hexSelectionCache(nullptr), ptr_options(init_options), ptr_gameWidget(ptr_gameWid),
-    ptr_playerOne(new Player("Eins", 1)), ptr_playerTwo(new Player("Zwei", 2)),
+    ptr_playerOne(new Player("Eins", 1)), ptr_playerTwo(new Player("Zwei", 2, true)),
     ptr_playerActive(ptr_playerOne), bool_menueView(false)
 {
 /*Starten eines Spiels mit den Optionen definiert in init_Options*/
@@ -53,6 +53,9 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     ptr_gameWidget->setPhaseLabel("Move");
     ptr_gameWidget->setUnitsLabel(ptr_playerActive->getPlayerUnitNumber());
     ptr_gameWidget->setEnergieLabel(ptr_playerActive->getCurrentEnergieStorage(), ptr_playerActive->getPlayerTotalEnergie());
+
+	//für KI
+    ptr_gameKI = new KI(this, ptr_playerTwo, vec_hexGameGrid);
 }
 
 Game::Game(QString filepath, GameWidget *gameWidegt)
@@ -247,6 +250,7 @@ void Game::processSelection(HexagonMatchfield *selection)
 
 void Game::Dijkstra(HexagonMatchfield* start, int factor)
 {
+    resetTargetCache();
     /*
      * Berechnung aller kürzesten Wege vom SelectionCache aus innerhalb der Reichweite
      * Setzt den TargetChache mit den berechneten Zielen und setzt deren state auf TARGET
@@ -548,6 +552,9 @@ void Game::buttonPressedChangePhase()
     resetUnits();
     ptr_gameWidget->repaintGameView();
     ptr_gameWidget->getGameWidButtonScene()->update();
+	//Wenn activer Spieler KI ist dann autoplay
+    if (ptr_playerActive->getBoolKi())
+		ptr_gameKI->autoPlay();
 }
 
 void Game::SLOT_MenueButtonSelected(int menue)
@@ -622,12 +629,13 @@ void Game::moveUnitTo(HexagonMatchfield * target)
         vec_unitGrid[target->getQpoint_gridPosition().x()][target->getQpoint_gridPosition().y()] = unitToMove; //Einheit im Grid verlegt
 
         /*Animation*/
-        vector<QPointF> path;
+       /* vector<QPointF> path;
         for(auto& iterator = target; iterator != ptr_hexSelectionCache; iterator = map_hexCameFrom[iterator])
         {
             path.push_back(iterator->pos());
         }
-        ptr_gameWidget->animateUnit(unitToMove, path);
+        ptr_gameWidget->animateUnit(unitToMove, path);*/
+        target->getUnitStationed()->setPos(target->pos());
     }
     vec_unitGrid[ptr_hexSelectionCache->getQpoint_gridPosition().x()][ptr_hexSelectionCache->getQpoint_gridPosition().y()] = nullptr; //Einheit aus dem UnitGrid löschen
     ptr_hexSelectionCache->setUnitStationed(nullptr);     //Einheit vom alten feld entfernen
@@ -663,6 +671,7 @@ void Game::showNeighbors(HexagonMatchfield * center)
 
 void Game::calculateTargets(HexagonMatchfield * center, int range)
 {
+    resetTargetCache();
     std::queue<HexagonMatchfield*> frontier;
     frontier.push(center);
 
@@ -1020,7 +1029,7 @@ void Game::createRandomMap()
         for(int j = 0; j < sizeY; j++)
         {
                 int randomInt = qrand() % 100;
-                if(randomInt < 5)
+                if(randomInt < 2)
                 {
                     Unit* randomUnit = nullptr;
                     QString hexType = vec_hexGameGrid[i][j]->getHexMatchfieldType();
@@ -1259,11 +1268,11 @@ std::vector<HexagonMatchfield*> Game::getTargetCache() const
     return vec_hexTargetCache;
 }
 
-std::map<HexagonMatchfield*, HexagonMatchfield*> Game::getCamefrom() const
+HexagonMatchfield* Game::getCamefrom_Hex(HexagonMatchfield* hex)
 {
-    return map_hexCameFrom;
+    return map_hexCameFrom[hex];
 }
-std::map<HexagonMatchfield*, int> Game::getCurrentCost() const
+int Game::getCurrentCost_Int(HexagonMatchfield* hex)
 {
-    return map_hexCurrentCost;
+    return map_hexCurrentCost[hex];
 }
