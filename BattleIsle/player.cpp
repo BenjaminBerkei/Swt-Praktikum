@@ -128,6 +128,16 @@ int Player::getPlayerID() const
     return int_playerID;
 }
 
+bool Player::getBoolKi() const
+{
+    return bool_isKI;
+}
+
+void Player::setBoolKi(bool ki)
+{
+    bool_isKI = ki;
+}
+
 bool Player::getHQDestroyed() const
 {
     return bool_HQDestroyed;

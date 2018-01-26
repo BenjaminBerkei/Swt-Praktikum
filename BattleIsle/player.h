@@ -44,12 +44,14 @@ public:
     int getPlayerTotalEnergie() const;
     int getCurrentEnergieStorage() const;
     int getPlayerUnitNumber() const;
+    bool getBoolKi() const;
     
     void setPlayerName(QString);
     void setPlayerScore(int);
     void setPlayerTotalEnergie(int);
 	void setCurrentEnergieStorage(int);
     void setPlayerUnitNumber(int);
+    void setBoolKi(bool);
 	
     int getPlayerID() const;
     bool getHQDestroyed() const;

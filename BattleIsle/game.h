@@ -50,6 +50,7 @@
 #include "staticunit.h"
 #include "dynamicunit.h"
 #include "round.h"
+#include "ki.h"
 
 #include <vector>
 #include <QTime>
@@ -67,6 +68,7 @@ class GameWidget; //Vorwärtsdeklaration
 class HexagonMatchfield;
 class Unit;
 class Button;
+class KI;
 
 
 class Game : public QObject
@@ -95,6 +97,9 @@ private:
     static std::vector<QPoint> vec_qpointEvenNeighbors;
 
     bool bool_menueView;
+
+	//für ki
+    KI* ptr_gameKI;
 public:
     Game(Options* init_options, GameWidget* ptr_gameWid);
     Game(QString, GameWidget*);
@@ -125,8 +130,10 @@ public:
 
 	//fuer ki
     std::unordered_set<HexagonMatchfield*> getTargetCache() const;
-	std::map<HexagonMatchfield*, HexagonMatchfield*> getCamefrom() const;
-	std::map<HexagonMatchfield*, int> getCurrentCost() const;
+	HexagonMatchfield* getCamefrom_Hex(HexagonMatchfield*);
+	int getCurrentCost_Int(HexagonMatchfield*);
+    void autoplayKi();
+
 private:
     QVector3D oddqToCube(QPoint);   //Für Referenzen betrachte https://www.redblobgames.com/grids/hexagons/#distances , Kapitel: Distance
     QPoint cubeToOddq(QVector3D);

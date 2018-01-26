@@ -18,6 +18,11 @@
  * Datum: 23.01.2018
  * Kommentar: getter und setter für targetCache, camefrom und costs. Dijkstra muss jetzt ein HexagonMatchfield* uebergeben bekommen
  * 		Grund für die Aenderung ist die KI.
+ *
+* Author: Miguel
+ * Version: 0.6
+ * Datum: 26.01.2018
+ * Kommentar: ki kann sich bewegen, ki kann im menue eingestellt werden
  * */
 #include "game.h"
 #include <typeinfo>
@@ -49,7 +54,18 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     //Buttons Einfuegen
     createButtons();
     changeButtonPixmap();
+
+
+	//für KI
+    if(init_options->getBool_ki())
+    {
+       ptr_playerTwo->setBoolKi(true);
+       ptr_playerTwo->setPlayerName("Johann der Sucher"); // wehe jemand ändern denn npc namen
+       ptr_gameKI = new KI(this, ptr_playerTwo, vec_hexGameGrid);
+    }
+
     updateLabels();
+
 }
 
 Game::Game(QString filepath, GameWidget *gameWidegt)
@@ -241,6 +257,7 @@ void Game::processSelection(HexagonMatchfield *selection)
 
 void Game::Dijkstra(HexagonMatchfield* start, int factor)
 {
+    resetTargetCache();
     /*
      * Berechnung aller kürzesten Wege vom SelectionCache aus innerhalb der Reichweite
      * Setzt den TargetChache mit den berechneten Zielen und setzt deren state auf TARGET
@@ -541,6 +558,9 @@ void Game::buttonPressedChangePhase()
     updateLabels();
     ptr_gameWidget->repaintGameView();
     ptr_gameWidget->getGameWidButtonScene()->update();
+	//Wenn activer Spieler KI ist dann autoplay
+    if (ptr_playerActive->getBoolKi())
+        autoplayKi();
 }
 
 void Game::SLOT_MenueButtonSelected(int menue)
@@ -615,12 +635,17 @@ void Game::moveUnitTo(HexagonMatchfield * target)
         vec_unitGrid[target->getQpoint_gridPosition().x()][target->getQpoint_gridPosition().y()] = unitToMove; //Einheit im Grid verlegt
 
         /*Animation*/
-        vector<QPointF> path;
-        for(auto& iterator = target; iterator != ptr_hexSelectionCache; iterator = map_hexCameFrom[iterator])
-        {
-            path.push_back(iterator->pos());
-        }
-        ptr_gameWidget->animateUnit(unitToMove, path);
+       if(!ptr_playerActive->getBoolKi())
+       {
+            vector<QPointF> path;
+            for(auto& iterator = target; iterator != ptr_hexSelectionCache; iterator = map_hexCameFrom[iterator])
+            {
+                path.push_back(iterator->pos());
+            }
+            ptr_gameWidget->animateUnit(unitToMove, path);
+       }
+       else
+            target->getUnitStationed()->setPos(target->pos());
     }
     vec_unitGrid[ptr_hexSelectionCache->getQpoint_gridPosition().x()][ptr_hexSelectionCache->getQpoint_gridPosition().y()] = nullptr; //Einheit aus dem UnitGrid löschen
     ptr_hexSelectionCache->setUnitStationed(nullptr);     //Einheit vom alten feld entfernen
@@ -656,6 +681,7 @@ void Game::showNeighbors(HexagonMatchfield * center)
 
 void Game::calculateTargets(HexagonMatchfield * center, int range)
 {
+    resetTargetCache();
     std::queue<HexagonMatchfield*> frontier;
     frontier.push(center);
 
@@ -1021,7 +1047,7 @@ void Game::createRandomMap()
         for(int j = 0; j < sizeY; j++)
         {
                 int randomInt = qrand() % 100;
-                if(randomInt < 5)
+                if(randomInt < 2)
                 {
                     Unit* randomUnit = nullptr;
                     QString hexType = vec_hexGameGrid[i][j]->getHexMatchfieldType();
@@ -1285,11 +1311,21 @@ std::unordered_set<HexagonMatchfield*> Game::getTargetCache() const
     return set_hexTargetCache;
 }
 
-std::map<HexagonMatchfield*, HexagonMatchfield*> Game::getCamefrom() const
+HexagonMatchfield* Game::getCamefrom_Hex(HexagonMatchfield* hex)
 {
-    return map_hexCameFrom;
+    return map_hexCameFrom[hex];
 }
-std::map<HexagonMatchfield*, int> Game::getCurrentCost() const
+
+int Game::getCurrentCost_Int(HexagonMatchfield* hex)
 {
-    return map_hexCurrentCost;
+    return map_hexCurrentCost[hex];
+}
+
+void Game::autoplayKi()
+{
+    if(ptr_roundCurrent->getCurrentPhase() == MOVE)
+        ptr_gameKI->autoPlayMove();
+    else
+        ptr_gameKI->autoPlayAction();
+
 }
