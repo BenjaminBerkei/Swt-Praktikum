@@ -49,11 +49,7 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     //Buttons Einfuegen
     createButtons();
     changeButtonPixmap();
-
-    ptr_gameWidget->setPlayerLabel(ptr_playerActive->getPlayerName());
-    ptr_gameWidget->setPhaseLabel("Move");
-    ptr_gameWidget->setUnitsLabel(ptr_playerActive->getPlayerUnitNumber());
-    ptr_gameWidget->setEnergieLabel(ptr_playerActive->getCurrentEnergieStorage(), ptr_playerActive->getPlayerTotalEnergie());
+    updateLabels();
 }
 
 Game::Game(QString filepath, GameWidget *gameWidegt)
@@ -71,17 +67,7 @@ Game::Game(QString filepath, GameWidget *gameWidegt)
     //Buttons Einfuegen
     createButtons();
     changeButtonPixmap();
-    ptr_gameWidget->setPlayerLabel(ptr_playerActive->getPlayerName());
-    if(ptr_roundCurrent->getCurrentPhase() == MOVE)
-    {
-        ptr_gameWidget->setPhaseLabel("Move");
-    }
-    else
-    {
-        ptr_gameWidget->setPhaseLabel("Action");
-    }
-    ptr_gameWidget->setUnitsLabel(ptr_playerActive->getPlayerUnitNumber());
-    ptr_gameWidget->setEnergieLabel(ptr_playerActive->getCurrentEnergieStorage(), ptr_playerActive->getPlayerTotalEnergie());
+    updateLabels();
 }
 
 Game::~Game()
@@ -536,19 +522,17 @@ void Game::buttonPressedChangePhase()
         changeButtonPixmap();
         resetHexMatchfield();
         setFogOfWar();
+        checkWinCondition();
     }
     SLOT_checkStateOfButtons();
     resetTargetCache();
 
-    ptr_gameWidget->setPlayerLabel(ptr_playerActive->getPlayerName());
-    ptr_gameWidget->setPhaseLabel(ptr_roundCurrent->getCurrentPhase() == MOVE ? "Move" : "Action");
-    ptr_gameWidget->setUnitsLabel(ptr_playerActive->getPlayerUnitNumber());
-    ptr_gameWidget->setEnergieLabel(ptr_playerActive->getCurrentEnergieStorage(), ptr_playerActive->getPlayerTotalEnergie());
     if(ptr_hexSelectionCache != nullptr && ptr_hexSelectionCache->getUnitStationed() != nullptr)
     {
         ptr_hexSelectionCache->getUnitStationed()->resetBuildUnloadParameter();
     }
     resetUnits();
+    updateLabels();
     ptr_gameWidget->repaintGameView();
     ptr_gameWidget->getGameWidButtonScene()->update();
 }
@@ -602,11 +586,9 @@ void Game::resetTargetCache()
     {
         it->setState(INACTIVE);
     }
-    qDebug() << "\t resetTargetCache -> Inactive";
     set_hexTargetCache.clear();
     map_hexCameFrom.clear();
     map_hexCurrentCost.clear();
-    qDebug() << "\t resetTargetCache -> clear()";
 }
 void Game::moveUnitTo(HexagonMatchfield * target)
 {
@@ -770,6 +752,11 @@ void Game::checkWinCondition()
     }else if(ptr_playerTwo->getPlayerUnitNumber() == 0 || ptr_playerTwo->getHQDestroyed())
     {
         qDebug() << "Spieler Zwei Verloren";
+        endGame();
+    }
+    if(ptr_roundCurrent->getCurrentRoundNumber() == ptr_roundCurrent->getMaxRoundNumber() + 10)
+    {
+        qDebug() << "Maximale Runde erreicht";
         endGame();
     }
 }
@@ -1227,6 +1214,15 @@ void Game::loadInventory(QTextStream & in, Unit * containerUnit)
     {
         containerUnit->addUnitToStorage(readUnitFromStream(in));
     }
+}
+
+void Game::updateLabels()
+{
+    ptr_gameWidget->setPlayerLabel(ptr_playerActive->getPlayerName());
+    ptr_gameWidget->setPhaseLabel(ptr_roundCurrent->getCurrentPhase() == MOVE ? "Move" : "Action");
+    ptr_gameWidget->setUnitsLabel(ptr_playerActive->getPlayerUnitNumber());
+    ptr_gameWidget->setEnergieLabel(ptr_playerActive->getCurrentEnergieStorage(), ptr_playerActive->getPlayerTotalEnergie());
+    ptr_gameWidget->setRoundLabel(ptr_roundCurrent->getCurrentRoundNumber() / 10, ptr_roundCurrent->getMaxRoundNumber() / 10);
 }
 
 int Game::offset_distance(QPoint a, QPoint b)

@@ -66,6 +66,7 @@ private:
     QGraphicsTextItem *textItem_currentEnergie;
     QGraphicsTextItem *textItem_currentUnits;
     QGraphicsTextItem *textItem_currentPhase;
+    QGraphicsTextItem *textItem_currentRound;
 
     QPushButton* qbuttonSaveGame;
     QPushButton* qbuttonEndGame;
@@ -104,6 +105,7 @@ public:
     void setPhaseLabel(QString);
     void setUnitsLabel(int value);
     void setEnergieLabel(int current, int max);
+    void setRoundLabel(int current, int max);
     void setSizeX(int value);
     void setSizeY(int value);
 

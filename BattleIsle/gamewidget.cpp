@@ -190,38 +190,44 @@ void GameWidget::gameWidCreateMatchfield(std::vector<std::vector<HexagonMatchfie
 void GameWidget::gameWidCreateButtonBar(std::vector<Button*> buttonVector)
 {
     textItem_currentPlayer = new QGraphicsTextItem("");
-    textItem_currentEnergie= new QGraphicsTextItem("");
-    textItem_currentUnits= new QGraphicsTextItem("");
-    textItem_currentPhase= new QGraphicsTextItem("");
+    textItem_currentEnergie = new QGraphicsTextItem("");
+    textItem_currentUnits = new QGraphicsTextItem("");
+    textItem_currentPhase = new QGraphicsTextItem("");
+    textItem_currentRound = new QGraphicsTextItem("");
 
     QGraphicsTextItem* playerTag = new QGraphicsTextItem("Player: ");
     QGraphicsTextItem* energieTag = new QGraphicsTextItem("Energie: ");
     QGraphicsTextItem* unitsTag = new QGraphicsTextItem("Units: ");
     QGraphicsTextItem* phaseTag = new QGraphicsTextItem("Phase: ");
+    QGraphicsTextItem* roundTag = new QGraphicsTextItem("Round: ");
 
     int x = 0;
-    int y = 10;
+    int y = 8;
     int xChange = 70;
 
     playerTag->setPos(x, y);
     phaseTag->setPos(x, 3 * y);
     unitsTag->setPos(x, 5 * y);
     energieTag->setPos(x, 7 * y);
+    roundTag->setPos(x, 9 * y);
 
     textItem_currentPlayer->setPos(x + xChange, y);
     textItem_currentPhase->setPos(x + xChange, 3 * y);
     textItem_currentUnits->setPos(x + xChange, 5 * y);
     textItem_currentEnergie->setPos(x + xChange, 7 * y);
+    textItem_currentRound->setPos(x + xChange, 9 * y);
 
     gameWidButtonScene->addItem(playerTag);
     gameWidButtonScene->addItem(energieTag);
     gameWidButtonScene->addItem(unitsTag);
     gameWidButtonScene->addItem(phaseTag);
+    gameWidButtonScene->addItem(roundTag);
 
     gameWidButtonScene->addItem(textItem_currentPlayer);
     gameWidButtonScene->addItem(textItem_currentPhase);
     gameWidButtonScene->addItem(textItem_currentEnergie);
     gameWidButtonScene->addItem(textItem_currentUnits);
+    gameWidButtonScene->addItem(textItem_currentRound);
 
     double startPos = gameWidButtonScene->width() / double(buttonVector.size());
     for(unsigned int i = 0; i < buttonVector.size(); i++)
@@ -463,7 +469,12 @@ void GameWidget::setUnitsLabel(int value)
 
 void GameWidget::setEnergieLabel(int current, int max)
 {
-  textItem_currentEnergie->setPlainText(QString::number(current) + "/" + QString::number(max));
+    textItem_currentEnergie->setPlainText(QString::number(current) + "/" + QString::number(max));
+}
+
+void GameWidget::setRoundLabel(int current, int max)
+{
+    textItem_currentRound->setPlainText(QString::number(current) + "/" + QString::number(max));
 }
 
 QGraphicsScene *GameWidget::getGameWidInfoScene() const
