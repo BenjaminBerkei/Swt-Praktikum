@@ -19,15 +19,20 @@
 #include "hexagonbase.h"
 #include "enumerations.h"
 #include <QDebug>
-
+#include <QPixmap>
 class Game;
 
 class Button : public HexagonBase
 {
     Q_OBJECT
+protected:
+    QPixmap qpix_playerOne;
+    QPixmap qpix_playerTwo;
 public:
     Button();
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) = 0;
+    void changePixmapPlayerOne();
+    void changePixmapPlayerTwo();
 };
 
 

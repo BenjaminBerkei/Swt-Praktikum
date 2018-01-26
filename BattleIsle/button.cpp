@@ -17,15 +17,28 @@
 #include "button.h"
 /*Base Class: Button*/
 Button::Button()
-    : HexagonBase( QPoint(0,0) )
+    : HexagonBase( QPoint(0,0) ), qpix_playerOne(QPixmap()), qpix_playerTwo(QPixmap())
 {
+}
+
+void Button::changePixmapPlayerOne()
+{
+    setPixmap(qpix_playerOne.scaled(64,64));
+}
+
+void Button::changePixmapPlayerTwo()
+{
+    setPixmap(qpix_playerTwo.scaled(64,64));
+
 }
 
 /*ButtonMove*/
 ButtonMove::ButtonMove(int sizeX, int sizeY)
-{
-    QPixmap pix(":/buttonRess/Buttons/MoveMit.png");
-    setPixmap(pix.scaled(sizeX,sizeY));
+    :Button()
+{    
+    qpix_playerOne = QPixmap(":/buttonRess/Buttons/MoveMit_blau.png");
+    qpix_playerTwo = QPixmap(":/buttonRess/Buttons/MoveMit_rot.png");
+    setPixmap(qpix_playerOne.scaled(sizeX,sizeY));
 }
 
 void ButtonMove::mousePressEvent(QGraphicsSceneMouseEvent *)
@@ -57,10 +70,11 @@ void ButtonMove::printType()
 
 /*ButtonAction*/
 ButtonAction::ButtonAction(int sizeX, int sizeY)
+    : Button()
 {
-    setEnabled(false);
-    QPixmap pix(":/buttonRess/Buttons/AttackeMit.png");
-    setPixmap(pix.scaled(sizeX,sizeY));
+    qpix_playerOne = QPixmap(":/buttonRess/Buttons/AttackeMit_blau.png");
+    qpix_playerTwo = QPixmap(":/buttonRess/Buttons/AttackeMit_rot.png");
+    setPixmap(qpix_playerOne.scaled(sizeX,sizeY));
 }
 
 void ButtonAction::mousePressEvent(QGraphicsSceneMouseEvent *)
@@ -91,10 +105,11 @@ void ButtonAction::printType()
 
 /*ButtonMap*/
 ButtonMap::ButtonMap(int sizeX, int sizeY)
+    : Button()
 {
-    //Noch implementieren
-    QPixmap pix(":/buttonRess/Buttons/BeladenMit.png"); //Eventuell noch aendern
-    setPixmap(pix.scaled(sizeX,sizeY));
+    qpix_playerOne = QPixmap(":/buttonRess/Buttons/Weltkarte.png");
+    qpix_playerTwo = QPixmap(":/buttonRess/Buttons/Weltkarte.png");
+    setPixmap(qpix_playerOne.scaled(sizeX,sizeY));
 }
 
 void ButtonMap::mousePressEvent(QGraphicsSceneMouseEvent *)
@@ -159,9 +174,11 @@ void ButtonInformation::printType()
 
 /*ButtonChangePhase*/
 ButtonChangePhase::ButtonChangePhase(int sizeX, int sizeY)
+    : Button()
 {
-    QPixmap pix(":/buttonRess/Buttons/PhasenwechselMit.png");
-    setPixmap(pix.scaled(sizeX,sizeY));
+    qpix_playerOne = QPixmap(":/buttonRess/Buttons/PhasenwechselMit_blau.png");
+    qpix_playerTwo = QPixmap(":/buttonRess/Buttons/PhasenwechselMit_rot.png");
+    setPixmap(qpix_playerOne.scaled(sizeX,sizeY));
 }
 
 void ButtonChangePhase::mousePressEvent(QGraphicsSceneMouseEvent *)
@@ -192,9 +209,11 @@ void ButtonChangePhase::printType()
 
 /*ButtonMenue*/
 ButtonMenue::ButtonMenue(int sizeX, int sizeY)
+    : Button()
 {
-    QPixmap pix(":/buttonRess/Buttons/RepairMit.png");
-    setPixmap(pix.scaled(sizeX,sizeY));
+    qpix_playerOne = QPixmap(":/buttonRess/Buttons/RepairMit_blau.png");
+    qpix_playerTwo = QPixmap(":/buttonRess/Buttons/RepairMit_rot.png");
+    setPixmap(qpix_playerOne.scaled(sizeX,sizeY));
 }
 
 void ButtonMenue::mousePressEvent(QGraphicsSceneMouseEvent *)

@@ -48,6 +48,7 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
 
     //Buttons Einfuegen
     createButtons();
+    changeButtonPixmap();
 
     ptr_gameWidget->setPlayerLabel(ptr_playerActive->getPlayerName());
     ptr_gameWidget->setPhaseLabel("Move");
@@ -69,7 +70,7 @@ Game::Game(QString filepath, GameWidget *gameWidegt)
 
     //Buttons Einfuegen
     createButtons();
-
+    changeButtonPixmap();
     ptr_gameWidget->setPlayerLabel(ptr_playerActive->getPlayerName());
     if(ptr_roundCurrent->getCurrentPhase() == MOVE)
     {
@@ -531,8 +532,9 @@ void Game::buttonPressedChangePhase()
     if(ptr_roundCurrent->getCurrentPhase() == MOVE)
     {
         ptr_playerActive = ptr_playerActive == ptr_playerOne ? ptr_playerTwo : ptr_playerOne;
+        changeButtonPixmap();
         resetHexMatchfield();
-        setFogOfWar();        
+        setFogOfWar();
     }
     SLOT_checkStateOfButtons();
     resetTargetCache();
@@ -1241,6 +1243,22 @@ void Game::serialize(QTextStream &out)
         for(auto &hex : iteratorX)
         {
             hex->serialize(out);
+        }
+    }
+}
+
+void Game::changeButtonPixmap()
+{
+    if(ptr_playerActive == ptr_playerOne)
+    {
+        for(auto &it : vec_buttonMenueBar)
+        {
+            it->changePixmapPlayerOne();
+        }
+    }else{
+        for(auto &it : vec_buttonMenueBar)
+        {
+            it->changePixmapPlayerTwo();
         }
     }
 }

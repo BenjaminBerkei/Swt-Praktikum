@@ -120,6 +120,7 @@ public:
     void countUnits();
     int offset_distance(QPoint, QPoint);
     void serialize(QTextStream&);
+    void changeButtonPixmap();
 
 	//fuer ki
 	std::vector<HexagonMatchfield*> getTargetCache() const;
