@@ -27,7 +27,8 @@ SOURCES += main.cpp\
     player.cpp \
     unit.cpp \
     staticunit.cpp \
-    dynamicunit.cpp
+    dynamicunit.cpp \
+    ki.cpp
 
 HEADERS  += \
     hexagonbase.h \
@@ -45,7 +46,8 @@ HEADERS  += \
     round.h \
     player.h \
     staticunit.h \
-    dynamicunit.h
+    dynamicunit.h \
+    ki.h
 
 FORMS    += startmenuewidget.ui \
     matchfield.ui \

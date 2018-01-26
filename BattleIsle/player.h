@@ -51,6 +51,7 @@ public:
     void setPlayerTotalEnergie(int);
 	void setCurrentEnergieStorage(int);
     void setPlayerUnitNumber(int);
+    void setBoolKi(bool);
 	
     int getPlayerID() const;
     bool getHQDestroyed() const;

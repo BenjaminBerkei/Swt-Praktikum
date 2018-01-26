@@ -18,6 +18,11 @@
  * Datum: 23.01.2018
  * Kommentar: getter und setter für targetCache, camefrom und costs. Dijkstra muss jetzt ein HexagonMatchfield* uebergeben bekommen
  * 		Grund für die Aenderung ist die KI.
+ *
+* Author: Miguel
+ * Version: 0.6
+ * Datum: 26.01.2018
+ * Kommentar: ki kann sich bewegen, ki kann im menue eingestellt werden
  * */
 #include "game.h"
 #include <typeinfo>
@@ -29,7 +34,7 @@ std::vector<QPoint> Game::vec_qpointOddNeighbors = {QPoint(1,1),QPoint(1,0),QPoi
 
 Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     ptr_hexSelectionCache(nullptr), ptr_options(init_options), ptr_gameWidget(ptr_gameWid),
-    ptr_playerOne(new Player("Eins", 1)), ptr_playerTwo(new Player("Zwei", 2, true)),
+    ptr_playerOne(new Player("Eins", 1)), ptr_playerTwo(new Player("Zwei", 2)),
     ptr_playerActive(ptr_playerOne), bool_menueView(false)
 {
 /*Starten eines Spiels mit den Optionen definiert in init_Options*/
@@ -49,18 +54,18 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     //Buttons Einfuegen
     createButtons();
     changeButtonPixmap();
-<<<<<<< HEAD
 
-    ptr_gameWidget->setPlayerLabel(ptr_playerActive->getPlayerName());
-    ptr_gameWidget->setPhaseLabel("Move");
-    ptr_gameWidget->setUnitsLabel(ptr_playerActive->getPlayerUnitNumber());
-    ptr_gameWidget->setEnergieLabel(ptr_playerActive->getCurrentEnergieStorage(), ptr_playerActive->getPlayerTotalEnergie());
 
 	//für KI
-    ptr_gameKI = new KI(this, ptr_playerTwo, vec_hexGameGrid);
-=======
+    if(init_options->getBool_ki())
+    {
+       ptr_playerTwo->setBoolKi(true);
+       ptr_playerTwo->setPlayerName("Johann der Sucher"); // wehe jemand ändern denn npc namen
+       ptr_gameKI = new KI(this, ptr_playerTwo, vec_hexGameGrid);
+    }
+
     updateLabels();
->>>>>>> master
+
 }
 
 Game::Game(QString filepath, GameWidget *gameWidegt)
@@ -555,7 +560,7 @@ void Game::buttonPressedChangePhase()
     ptr_gameWidget->getGameWidButtonScene()->update();
 	//Wenn activer Spieler KI ist dann autoplay
     if (ptr_playerActive->getBoolKi())
-		ptr_gameKI->autoPlay();
+        autoplayKi();
 }
 
 void Game::SLOT_MenueButtonSelected(int menue)
@@ -630,13 +635,17 @@ void Game::moveUnitTo(HexagonMatchfield * target)
         vec_unitGrid[target->getQpoint_gridPosition().x()][target->getQpoint_gridPosition().y()] = unitToMove; //Einheit im Grid verlegt
 
         /*Animation*/
-       /* vector<QPointF> path;
-        for(auto& iterator = target; iterator != ptr_hexSelectionCache; iterator = map_hexCameFrom[iterator])
-        {
-            path.push_back(iterator->pos());
-        }
-        ptr_gameWidget->animateUnit(unitToMove, path);*/
-        target->getUnitStationed()->setPos(target->pos());
+       if(!ptr_playerActive->getBoolKi())
+       {
+            vector<QPointF> path;
+            for(auto& iterator = target; iterator != ptr_hexSelectionCache; iterator = map_hexCameFrom[iterator])
+            {
+                path.push_back(iterator->pos());
+            }
+            ptr_gameWidget->animateUnit(unitToMove, path);
+       }
+       else
+            target->getUnitStationed()->setPos(target->pos());
     }
     vec_unitGrid[ptr_hexSelectionCache->getQpoint_gridPosition().x()][ptr_hexSelectionCache->getQpoint_gridPosition().y()] = nullptr; //Einheit aus dem UnitGrid löschen
     ptr_hexSelectionCache->setUnitStationed(nullptr);     //Einheit vom alten feld entfernen
@@ -1306,7 +1315,17 @@ HexagonMatchfield* Game::getCamefrom_Hex(HexagonMatchfield* hex)
 {
     return map_hexCameFrom[hex];
 }
+
 int Game::getCurrentCost_Int(HexagonMatchfield* hex)
 {
     return map_hexCurrentCost[hex];
+}
+
+void Game::autoplayKi()
+{
+    if(ptr_roundCurrent->getCurrentPhase() == MOVE)
+        ptr_gameKI->autoPlayMove();
+    else
+        ptr_gameKI->autoPlayAction();
+
 }

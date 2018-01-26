@@ -132,6 +132,7 @@ public:
     std::unordered_set<HexagonMatchfield*> getTargetCache() const;
 	HexagonMatchfield* getCamefrom_Hex(HexagonMatchfield*);
 	int getCurrentCost_Int(HexagonMatchfield*);
+    void autoplayKi();
 
 private:
     QVector3D oddqToCube(QPoint);   //Für Referenzen betrachte https://www.redblobgames.com/grids/hexagons/#distances , Kapitel: Distance
