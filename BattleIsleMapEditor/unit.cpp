@@ -58,6 +58,7 @@ Unit::Unit(QPoint qpoint, QString name, int i)
         case 1: setPixmap(QPixmap(":/img/GroundOhneRand/AD-5_Blitz_blau.png")); break;
         case 2: setPixmap(QPixmap(":/img/GroundOhneRand/AD-5_Blitz_rot.png")); break;
         }
+        unitType = "LIGHTUNIT";
     }
     if(name == "ad9sphinx")
     {
@@ -67,6 +68,7 @@ Unit::Unit(QPoint qpoint, QString name, int i)
         case 1: setPixmap(QPixmap(":/img/GroundOhneRand/AD-9_Sphinx_blau.png")); break;
         case 2: setPixmap(QPixmap(":/img/GroundOhneRand/AD-9_Sphinx_rot.png")); break;
         }
+        unitType = "HEAVYUNIT";
     }
     if(name == "favbuster")
     {
@@ -76,6 +78,7 @@ Unit::Unit(QPoint qpoint, QString name, int i)
         case 1: setPixmap(QPixmap(":/img/GroundOhneRand/FAV_Buster_blau.png")); break;
         case 2: setPixmap(QPixmap(":/img/GroundOhneRand/FAV_Buster_rot.png")); break;
         }
+        unitType = "LIGHTUNIT";
     }
     if(name == "lucas")
     {
@@ -85,6 +88,7 @@ Unit::Unit(QPoint qpoint, QString name, int i)
         case 1: setPixmap(QPixmap(":/img/GroundOhneRand/HG-12_Angel_blau.png")); break;
         case 2: setPixmap(QPixmap(":/img/GroundOhneRand/HG-12_Angel_rot.png")); break;
         }
+        unitType = "MEDIUMUNIT";
     }
     if(name == "r1demon")
     {
@@ -94,6 +98,7 @@ Unit::Unit(QPoint qpoint, QString name, int i)
         case 1: setPixmap(QPixmap(":/img/GroundOhneRand/R-1_Demon_blau.png")); break;
         case 2: setPixmap(QPixmap(":/img/GroundOhneRand/R-1_Demon_rot.png")); break;
         }
+        unitType = "LIGHTUNIT";
     }
     if(name == "scpmerlin")
     {
@@ -103,6 +108,7 @@ Unit::Unit(QPoint qpoint, QString name, int i)
         case 1: setPixmap(QPixmap(":/img/GroundOhneRand/SC-P_Merlin_blau.png")); break;
         case 2: setPixmap(QPixmap(":/img/GroundOhneRand/SC-P_Merlin_rot.png")); break;
         }
+        unitType = "BUILDERUNIT";
     }
     if(name == "kevarn")
     {
@@ -112,6 +118,7 @@ Unit::Unit(QPoint qpoint, QString name, int i)
         case 1: setPixmap(QPixmap(":/img/GroundOhneRand/SC-T_Provider_blau.png")); break;
         case 2: setPixmap(QPixmap(":/img/GroundOhneRand/SC-T_Provider_rot.png")); break;
         }
+        unitType = "TRANSPORTERGROUNDUNIT";
     }
     if(name == "t3scorpion")
     {
@@ -121,6 +128,7 @@ Unit::Unit(QPoint qpoint, QString name, int i)
         case 1: setPixmap(QPixmap(":/img/GroundOhneRand/T-3_Scorpion_blau.png")); break;
         case 2: setPixmap(QPixmap(":/img/GroundOhneRand/T-3_Scorpion_rot.png")); break;
         }
+        unitType = "MEDIUMUNIT";
     }
     if(name == "t4gladiator")
     {
@@ -130,6 +138,7 @@ Unit::Unit(QPoint qpoint, QString name, int i)
         case 1: setPixmap(QPixmap(":/img/GroundOhneRand/T-4_Gladiator_blau.png")); break;
         case 2: setPixmap(QPixmap(":/img/GroundOhneRand/T-4_Gladiator_rot.png")); break;
         }
+        unitType = "MEDIUMUNIT";
     }
     if(name == "mannuel")
     {
@@ -139,6 +148,7 @@ Unit::Unit(QPoint qpoint, QString name, int i)
         case 1: setPixmap(QPixmap(":/img/GroundOhneRand/T-7_Crusader_blau.png")); break;
         case 2: setPixmap(QPixmap(":/img/GroundOhneRand/T-7_Crusader_rot.png")); break;
         }
+        unitType = "HEAVYUNIT";
     }
     if(name == "tlavinvader")
     {
@@ -148,6 +158,7 @@ Unit::Unit(QPoint qpoint, QString name, int i)
         case 1: setPixmap(QPixmap(":/img/GroundOhneRand/TLAV_Invader_blau.png")); break;
         case 2: setPixmap(QPixmap(":/img/GroundOhneRand/TLAV_Invader_rot.png")); break;
         }
+        unitType = "HEAVYUNIT";
     }
     //airunit
     if(name == "derbolten")
@@ -169,7 +180,7 @@ Unit::Unit(QPoint qpoint, QString name, int i)
         case 1: setPixmap(QPixmap(":/img/AirOhneRand/G-2_Giant_blau.png")); break;
         case 2: setPixmap(QPixmap(":/img/AirOhneRand/G-2_Giant_rot.png")); break;
         }
-        unitType = "AIRUNIT";
+        unitType = "TRANSPORTERAIRUNIT";
 
     }
     if(name == "xa7raven")
@@ -192,6 +203,7 @@ Unit::Unit(QPoint qpoint, QString name, int i)
         case 2: setPixmap(QPixmap(":/img/AirOhneRand/XF-7_Mosquito_rot.png")); break;
         }
         return;
+        unitType = "AIRUNIT";
     }
     //waterunit
     if(name == "cvamazon")
@@ -202,6 +214,7 @@ Unit::Unit(QPoint qpoint, QString name, int i)
         case 1: setPixmap(QPixmap(":/img/WaterOhneRand/CV_Amazon_blau.png")); break;
         case 2: setPixmap(QPixmap(":/img/WaterOhneRand/CV_Amazon_rot.png")); break;
         }
+        unitType = "WATERUNIT";
     }
     if(name == "mbabuccaneer")
     {
@@ -211,6 +224,7 @@ Unit::Unit(QPoint qpoint, QString name, int i)
         case 1: setPixmap(QPixmap(":/img/WaterOhneRand/MB-A_Buccaneer_blau.png")); break;
         case 2: setPixmap(QPixmap(":/img/WaterOhneRand/MB-A_Buccaneer_rot.png")); break;
         }
+        unitType = "WATERUNIT";
     }
     if(name == "tbxmarauder")
     {
@@ -220,6 +234,7 @@ Unit::Unit(QPoint qpoint, QString name, int i)
         case 1: setPixmap(QPixmap(":/img/WaterOhneRand/TB-X_Marauder_blau.png")); break;
         case 2: setPixmap(QPixmap(":/img/WaterOhneRand/TB-X_Marauder_rot.png")); break;
         }
+        unitType = "WATERUNIT";
     }
     if(name == "msmiguel")
     {
@@ -229,6 +244,7 @@ Unit::Unit(QPoint qpoint, QString name, int i)
         case 1: setPixmap(QPixmap(":/img/WaterOhneRand/U-7C_Barracuda_blau.png")); break;
         case 2: setPixmap(QPixmap(":/img/WaterOhneRand/U-7C_Barracuda_rot.png")); break;
         }
+        unitType = "WATERUNIT";
     }
     if(name == "w1fortress")
     {
@@ -238,6 +254,7 @@ Unit::Unit(QPoint qpoint, QString name, int i)
         case 1: setPixmap(QPixmap(":/img/WaterOhneRand/W-1_Fortress_blau.png")); break;
         case 2: setPixmap(QPixmap(":/img/WaterOhneRand/W-1_Fortress_rot.png")); break;
         }
+        unitType = "WATERUNIT";
     }
     if(name == "z1pegasus")
     {
@@ -247,6 +264,7 @@ Unit::Unit(QPoint qpoint, QString name, int i)
         case 1: setPixmap(QPixmap(":/img/WaterOhneRand/Z-1_Pegasus_blau.png")); break;
         case 2: setPixmap(QPixmap(":/img/WaterOhneRand/Z-1_Pegasus_rot.png")); break;
         }
+        unitType = "TRANSPORTERWATERUNIT";
     }
 
     setPixmap(pixmap().scaled(64,64));

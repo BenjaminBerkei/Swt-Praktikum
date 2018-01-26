@@ -33,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionSpeichern, SIGNAL(triggered(bool)),this, SLOT(speichern_triggerd()));
     connect(ui->actionSpeichernForBIC, SIGNAL(triggered(bool)),this, SLOT(speichernForGame_triggerd()));
     connect(ui->actionLoad_Map, SIGNAL(triggered(bool)),this, SLOT(ladenMap_triggered()));
+    connect(ui->actionNeue_Map, SIGNAL(triggered(bool)),this, SLOT(newMap_triggerd()));
 
     ui->spinBoxX->setValue(sizeX);
     ui->spinBoxY->setValue(sizeY);
@@ -863,4 +864,27 @@ void MainWindow::ladenMap_triggered()
                 return;
              }
     }
+}
+
+void MainWindow::newMap_triggerd()
+{
+    for(auto & it : hexfield->items())
+    {
+        hexfield->removeItem(it);
+    }
+    sizeX= 15;
+    sizeY= 10;
+    std::vector<std::vector<Hexagon*>> hexagonGameGrid;
+    for( int i = 0; i < sizeX; i++ )
+    {
+        std::vector<Hexagon*> vectorHex;
+        for( int j = 0; j < sizeY; j++ )
+        {
+            vectorHex.push_back(new Hexagon(QPoint(i,j), "waterDeep"));
+        }
+        hexagonGameGrid.push_back(vectorHex);
+    }
+    setMyField(hexagonGameGrid);
+    createHexfield(hexagonGameGrid);
+    updateLCD();
 }

@@ -10,7 +10,7 @@
 
 Hexagon::Hexagon(QPoint qpoint, QString type, Unit *stationedUnit) :
     qpoint_gridPosition(qpoint), unit_stationed(stationedUnit), deg(0),
-    HexMatchfieldType(type),int_boltaniumCurrent(), qcolor_HexColor(Qt::black)
+    HexMatchfieldType(type),int_boltaniumCurrent(0), qcolor_HexColor(Qt::black)
 {
     if(HexMatchfieldType == "waterDeep")
         setPixmap(QPixmap(":/img/HexagonBilder/Meer.png"));

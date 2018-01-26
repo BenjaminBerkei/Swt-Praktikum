@@ -107,6 +107,7 @@ private slots:
     void speichern_triggerd();
     void speichernForGame_triggerd();
     void ladenMap_triggered();
+    void newMap_triggerd();
 };
 
 
