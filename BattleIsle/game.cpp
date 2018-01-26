@@ -602,9 +602,11 @@ void Game::resetTargetCache()
     {
         it->setState(INACTIVE);
     }
+    qDebug() << "\t resetTargetCache -> Inactive";
     set_hexTargetCache.clear();
     map_hexCameFrom.clear();
     map_hexCurrentCost.clear();
+    qDebug() << "\t resetTargetCache -> clear()";
 }
 void Game::moveUnitTo(HexagonMatchfield * target)
 {
@@ -705,30 +707,33 @@ void Game::calculateTargets(HexagonMatchfield * center, int range)
 
 void Game::setFogOfWar()
 {
-    for(auto &iterator : vec_hexGameGrid)
+    if(ptr_options->getBool_fogOfWar() == true)
     {
-        for(auto &hex : iterator)
+        for(auto &iterator : vec_hexGameGrid)
         {
-            hex->setHexFogOfWar(true);
-        }
-    }
-    for(auto &iterator : vec_hexGameGrid)
-    {
-        for(auto &hex : iterator)
-        {
-            if(hex->getUnitStationed() != nullptr && hex->getUnitStationed()->getUnitPlayer() == ptr_playerActive)
+            for(auto &hex : iterator)
             {
-                calculateTargets(hex, hex->getUnitStationed()->getUnitView());
-                for(auto &it : set_hexTargetCache)
-                {
-                    it->setHexFogOfWar(false);
-                }
-                hex->setHexFogOfWar(false);
-                resetTargetCache();
+                hex->setHexFogOfWar(true);
             }
         }
+        for(auto &iterator : vec_hexGameGrid)
+        {
+            for(auto &hex : iterator)
+            {
+                if(hex->getUnitStationed() != nullptr && hex->getUnitStationed()->getUnitPlayer() == ptr_playerActive)
+                {
+                    calculateTargets(hex, hex->getUnitStationed()->getUnitView());
+                    for(auto &it : set_hexTargetCache)
+                    {
+                        it->setHexFogOfWar(false);
+                    }
+                    hex->setHexFogOfWar(false);
+                    resetTargetCache();
+                }
+            }
+        }
+        ptr_gameWidget->repaintGameView();
     }
-    ptr_gameWidget->repaintGameView();
 }
 
 void Game::showPath(HexagonMatchfield* target)
