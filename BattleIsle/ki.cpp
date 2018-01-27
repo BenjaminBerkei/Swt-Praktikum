@@ -39,6 +39,10 @@ KI::~KI(){}
 
 void KI::autoPlayMove()
 {	
+    QMessageBox msgBox;
+    msgBox.setText("Ki Move Phase!\nBitte bestätigen.");
+    msgBox.setDefaultButton(QMessageBox::NoButton);
+    msgBox.exec();
     fillKiMyUnits_Cache();
     if(!prioCache.empty())
         prioCache.clear();
@@ -59,6 +63,10 @@ void KI::autoPlayMove()
 
 void KI::autoPlayAction()
 {
+    QMessageBox msgBox;
+    msgBox.setText("Ki Action Phase!\nBitte bestätigen.");
+    msgBox.setDefaultButton(QMessageBox::NoButton);
+    msgBox.exec();
     /*fillKiMyUnits_Cache();
 	for (auto it : kiMyUnits)
 	{
@@ -68,8 +76,6 @@ void KI::autoPlayAction()
     */
 	// changePhase
 	kiGame->buttonPressedChangePhase();
-
-
 }
 
 void KI::autoMovePhase(HexagonMatchfield* hex)
@@ -310,7 +316,7 @@ void KI::unitMoveRandom(HexagonMatchfield * hex)
     QTime time = QTime::currentTime();
     qsrand((uint)time.msec());
 
-    if(tmp.size())
+    if(tmp.size() == 0)
         return;
     int moveRand = qrand() % tmp.size();
     int i = 0;
@@ -320,7 +326,10 @@ void KI::unitMoveRandom(HexagonMatchfield * hex)
             if(it->getUnitStationed()!= nullptr)
                 unitMoveRandom(hex);
             else
+            {
                 kiGame->moveUnitTo(it);
+                return;
+            }
         }
         i++;
     }

@@ -29,6 +29,7 @@
 #include <QDebug>
 #include <chrono>
 #include <thread>
+#include <QMessageBox>
 
 class GameWidget; //Vorwärtsdeklaration
 class HexagonMatchfield;
