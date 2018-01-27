@@ -2,7 +2,7 @@
 //ki.h
 //version 0.2
 //autor: Miguel
-//letzte Änderung: 23.01.2018 (Miguel)
+//letzte Änderung: 26.01.2018 (Miguel)
 //Kommentar:
 ///////////////////////////////////////
 

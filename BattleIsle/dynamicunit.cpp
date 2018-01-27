@@ -629,6 +629,7 @@ bool BuildLightUnit::action(HexagonMatchfield* hexTarget){
 void BuildLightUnit::produceUnit(HexagonMatchfield* hexTarget)
 {
     hexTarget->setUnitStationed(production[qstring_unitToBuild]->createUnit());
+    hexTarget->getUnitStationed()->setUnitUsed(true);
     unitPlayer->setCurrentEnergieStorage(unitPlayer->getCurrentEnergieStorage() - hexTarget->getUnitStationed()->getUnitCost());
 }
 

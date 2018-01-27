@@ -1327,5 +1327,4 @@ void Game::autoplayKi()
         ptr_gameKI->autoPlayMove();
     else
         ptr_gameKI->autoPlayAction();
-
 }
