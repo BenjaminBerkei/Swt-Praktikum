@@ -39,6 +39,7 @@ OptionsWidget::OptionsWidget( QWidget *parent, MenueWidget *parentMenueWidget, O
     new QListWidgetItem(tr("Random"), ui->listWidget_maps);
     new QListWidgetItem(tr(":/test/map.txt"), ui->listWidget_maps);
     new QListWidgetItem(tr(":/test/map2.txt"), ui->listWidget_maps);
+    new QListWidgetItem(tr(":/test/OriginalMap1.txt"), ui->listWidget_maps);
 }
 
 OptionsWidget::~OptionsWidget()

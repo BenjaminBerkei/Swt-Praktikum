@@ -19,10 +19,16 @@
  * Kommentar: getter und setter für targetCache, camefrom und costs. Dijkstra muss jetzt ein HexagonMatchfield* uebergeben bekommen
  * 		Grund für die Aenderung ist die KI.
  *
-* Author: Miguel
+ * Author: Miguel
  * Version: 0.6
  * Datum: 26.01.2018
  * Kommentar: ki kann sich bewegen, ki kann im menue eingestellt werden
+ *
+ * Author: Miguel
+ * Version: 0.7
+ * Datum: 27.01.2018
+ * Kommentar: original map eingefügt und alle unit typen ergänzt beim laden.
+ * Fehler entfernt der zum spiel absturzt führt wenn targetCache noch gesetzt ist und die ki am zug ist.
  * */
 #include "game.h"
 #include <typeinfo>
@@ -392,7 +398,38 @@ bool Game::loadMapForNewGame(QString filepath)
                 {
                     vecUnit.push_back(new AirUnit(unitPath, ptr_playerTemp));
                 }
-                //Hier spaeter noch weiter ausbauen (andere Unittypen hinzufuegen)
+                else if(unitType == "WATERUNIT")
+                {
+                    vecUnit.push_back(new WaterUnit(unitPath, ptr_playerTemp));
+                }
+                else if(unitType == "HEAVYUNIT")
+                {
+                    vecUnit.push_back(new HeavyUnit(unitPath, ptr_playerTemp));
+                }
+                else if(unitType == "MEDIUMUNIT")
+                {
+                    vecUnit.push_back(new MediumUnit(unitPath, ptr_playerTemp));
+                }
+                else if(unitType == "LIGHTUNIT")
+                {
+                    vecUnit.push_back(new LightUnit(unitPath, ptr_playerTemp));
+                }
+                else if(unitType == "BUILDUNIT")
+                {
+                    vecUnit.push_back(new BuildLightUnit(unitPath, ptr_playerTemp));
+                }
+                else if(unitType == "TRANSPORTERAIRUNIT")
+                {
+                    vecUnit.push_back(new TransporterAirUnit(unitPath, ptr_playerTemp));
+                }
+                else if(unitType == "TRANSPORTERWATERUNIT")
+                {
+                    vecUnit.push_back(new TransporterWaterUnit(unitPath, ptr_playerTemp));
+                }
+                else if(unitType == "TRANSPORTERGROUNDUNIT")
+                {
+                    vecUnit.push_back(new TransporterGroundUnit(unitPath, ptr_playerTemp));
+                }
                 else
                 {
                     vecUnit.push_back(nullptr);
@@ -1323,6 +1360,7 @@ int Game::getCurrentCost_Int(HexagonMatchfield* hex)
 
 void Game::autoplayKi()
 {
+    resetTargetCache();
     if(ptr_roundCurrent->getCurrentPhase() == MOVE)
         ptr_gameKI->autoPlayMove();
     else
