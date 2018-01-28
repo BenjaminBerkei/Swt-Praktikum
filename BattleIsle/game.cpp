@@ -29,7 +29,13 @@
  * Datum: 27.01.2018
  * Kommentar: original map eingefügt und alle unit typen ergänzt beim laden.
  * Fehler entfernt der zum spiel absturzt führt wenn targetCache noch gesetzt ist und die ki am zug ist.
+ * 
+ * Author: Benny, Kevin
+ * Version: 0.8
+ * Datum: 28.01.2018
+ * Kommentar: In process selection bei action einen Parameter hinzugefügt
  * */
+
 #include "game.h"
 #include <typeinfo>
 using namespace std;
@@ -218,7 +224,7 @@ void Game::processSelection(HexagonMatchfield *selection)
 
         }else if(ptr_roundCurrent->getCurrentPhase() == ACTION )    //Action Phase
         {
-            if(ptr_hexSelectionCache->getUnitStationed()->action(selection))  //Wenn die Action geglückt ist
+            if(ptr_hexSelectionCache->getUnitStationed()->action(selection, offset_distance(ptr_hexSelectionCache->getQpoint_gridPosition, selection->getQpoint_gridPosition)))  //Wenn die Action geglückt ist
             {
                 /*Prüfen ob eine neue Einheit auf dem Grid ist*/
                 if(selection->getUnitStationed() != nullptr
