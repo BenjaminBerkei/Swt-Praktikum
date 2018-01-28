@@ -53,7 +53,7 @@ public:
     AirUnit(QString, Player*  = nullptr);
 
 	int moveTo(HexagonMatchfield* );
-	bool action(HexagonMatchfield* );
+	bool action(HexagonMatchfield*, const int = 0 );
     virtual AirUnit* createUnit();
 };
 
@@ -69,7 +69,7 @@ protected:
 public:
 	TransporterUnit(QString, Player*);
 
-    virtual bool action(HexagonMatchfield *);
+    virtual bool action(HexagonMatchfield *, const int = 0);
     void unload(HexagonMatchfield *);
     void farmBoltanium(HexagonMatchfield *);
     void addUnitToStorage(Unit* );
@@ -125,7 +125,7 @@ class GroundUnit : public DynamicUnit
 public:
     GroundUnit(QString, Player*  = nullptr);
 
-	 bool action(HexagonMatchfield* );     
+	 bool action(HexagonMatchfield* , const int = 0 );     
 };
 
 // Light
@@ -150,7 +150,7 @@ public:
     BuildLightUnit(QString,bool, Player*  = nullptr);
     ~BuildLightUnit();
 
-    bool action(HexagonMatchfield* );
+    bool action(HexagonMatchfield* , const int = 0 );
     void produceUnit(HexagonMatchfield *hex_target);
     virtual BuildLightUnit* createUnit();
     void resetBuildUnloadParameter();
@@ -190,7 +190,7 @@ public:
     WaterUnit(QString, Player*  = nullptr);
 
 	int moveTo(HexagonMatchfield* );
-    bool action(HexagonMatchfield* );
+    bool action(HexagonMatchfield* , const int = 0 );
     virtual WaterUnit* createUnit();
 };
 
