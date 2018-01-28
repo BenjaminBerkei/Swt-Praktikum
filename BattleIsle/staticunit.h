@@ -46,7 +46,7 @@ public:
     DepotUnit(QString, Player* = nullptr);
     ~DepotUnit();
 
-	bool action(HexagonMatchfield*);
+	bool action(HexagonMatchfield*, const int = 0);
 	void repairUnit(Unit*);
 	Unit* createUnit();
 };
@@ -65,7 +65,7 @@ public:
 	QString getUnitToBuild() const;
 	void setUnitToBuild(const QString);
 
-	bool action(HexagonMatchfield*);
+	bool action(HexagonMatchfield*, const int = 0);
 	void produceUnit(HexagonMatchfield*);
 	Unit* createUnit();
 
