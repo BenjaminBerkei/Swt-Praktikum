@@ -19,6 +19,9 @@
 
 //DynamicUnit
 
+/*
+Konstruktor zum initalisieren einer dynamischen Einheit
+*/
 DynamicUnit::DynamicUnit(QString filepath, Player* player)
     : Unit(), int_unitLevel(0)
 {
@@ -75,6 +78,9 @@ DynamicUnit::DynamicUnit(QString filepath, Player* player)
     }
 }
 
+/*
+Diese Funktion dient zur grafischen Alternierung benutzter Einheiten
+*/
 void DynamicUnit::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     if(bool_unitUsed == true || int_unitCurrentMoveRange == 0)
@@ -84,6 +90,9 @@ void DynamicUnit::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     QGraphicsPixmapItem::paint(painter,option,widget);
 }
 
+/*
+Serialize ist eine Hilfsfunktion zur Speicherung von Einheitenzuständen
+*/
 void DynamicUnit::serialize(QTextStream & out)
 {
     out << str_unitType << " " << unitFile << " " << unitPlayer->getPlayerID() << " "
@@ -91,7 +100,9 @@ void DynamicUnit::serialize(QTextStream & out)
         << int_unitCurrentMoveRange << "\n";
 }
 
-
+/*
+Funktion zum reparieren von Einheiten am Ende einer Runde
+*/
 void DynamicUnit::autoRepair() {
 	if (int_unitCurrentHP + int_unitAutoRep > int_unitHP) {
 		int_unitCurrentHP = int_unitHP;
@@ -101,6 +112,10 @@ void DynamicUnit::autoRepair() {
 		int_unitCurrentHP = int_unitCurrentHP + int_unitAutoRep;
 	}
 }
+
+/*
+Diese Funktion levelt eine Einheit alle 3 Kills. Dabei erhält die Einheit eine Verstärkung aller Angriffswerte
+*/
 void DynamicUnit::levelUpBonus()
 {
     //setze Level alle 3 Kills eins höher
@@ -116,6 +131,9 @@ void DynamicUnit::levelUpBonus()
     }
 }
 
+/*
+In dieser Funktion werden nach Ende einer Runde die Einheiten wieder auf ungenutzt zurückgesetzt
+*/
 void DynamicUnit::resetUnit()
 {
     int_unitCurrentMoveRange = int_unitMoveRange;
@@ -149,10 +167,15 @@ void DynamicUnit::setUnitLevel(const int value)
 
 // AirUnit
 
+/*
+Konstruktor für die Airunits
+*/
 AirUnit::AirUnit(QString filepath, Player* player)
     : DynamicUnit(filepath, player){}
 
-
+/*
+Diese Funktion legt die Bewegungsfreiheit von den AirUnits fest
+*/
 int AirUnit::moveTo(HexagonMatchfield *hex_target)
 {
     //Flugzeug hat selbe Kosten für alles.
@@ -166,6 +189,9 @@ int AirUnit::moveTo(HexagonMatchfield *hex_target)
     return -1;
 }
 
+/*
+In dieser Funktion wird eine ausgewählte Einheit (wenn vorhanden), welche auf einem Hexagon liegt, von einer AirUnit angegriffen
+*/
 bool AirUnit::action(HexagonMatchfield *hex_target, const int range) {
 
     Unit *target = hex_target->getUnitStationed();
@@ -196,7 +222,7 @@ bool AirUnit::action(HexagonMatchfield *hex_target, const int range) {
     //Angriff
     target->setUnitCurrentHP(target->getUnitCurrentHP() - int_unitSpecificAtt);
 
-    if(target->getUnitCurrentHP() > 0)
+    if(target->getUnitCurrentHP() > 0 && range <= target->getActionRange())
     {
         //zurück angreifen mit 50 - 75% unseres Attk. Wertes
         double randomPercentage = (qrand() % 26 + 50) / 100.0;
@@ -217,12 +243,18 @@ bool AirUnit::action(HexagonMatchfield *hex_target, const int range) {
     return true;
 }
 
+/*
+Erstellung einer AirUnit in StaticUnits
+*/
 AirUnit *AirUnit::createUnit()
 {
     return new AirUnit(unitFile, unitPlayer);
 }
 // TransporterUnit
 
+/*
+Konstruktor für alle TransporterUnits
+*/
 TransporterUnit::TransporterUnit(QString filepath, Player* player)
     : DynamicUnit(filepath, player), ptr_unitToUnload(nullptr){}
 
@@ -238,7 +270,9 @@ void TransporterUnit::setTransporterUnitCurrentCapacity(const int newCurrentCapa
 	return;
 }
 
-
+/*
+Diese Funktion fungiert als Entscheidungsfunktion, welche bestimmte Aktion der Transporter durchführen wird
+*/
 bool TransporterUnit::action(HexagonMatchfield* hex_target, const int = 0){
     qDebug() << "Transporter Action";
     qDebug() << "\t " << hex_target->getQpoint_gridPosition();
@@ -262,6 +296,9 @@ bool TransporterUnit::action(HexagonMatchfield* hex_target, const int = 0){
 	return false;
 }
 
+/*
+Diese Funktion fungiert als Ausladefunktion der in den TransporterUnits befindlichen DynamicUnits
+*/
 void TransporterUnit::unload(HexagonMatchfield* hex_target){
     hex_target->setUnitStationed(ptr_unitToUnload);
     disconnect(ptr_unitToUnload->getUnitDisplay(), SIGNAL(unitDispl_clicked(Unit*)), this, SLOT(SLOT_setUnitToUnload(Unit*)));
@@ -276,6 +313,9 @@ void TransporterUnit::unload(HexagonMatchfield* hex_target){
 	}
 }
 
+/*
+Diese Funktion nimmt mithilfe von TransporterUnits die Energieressource Boltanium auf und schreibt es dem Spielerenergieressourcenkonto zu  
+*/
 void TransporterUnit::farmBoltanium(HexagonMatchfield* hex_target){
     if(hex_target->getBoltaniumCurrent() >= 10){
         qDebug() << "\t >= 10 : " << hex_target->getBoltaniumCurrent();
@@ -290,12 +330,18 @@ void TransporterUnit::farmBoltanium(HexagonMatchfield* hex_target){
     }
 }
 
+/*
+Diese Funktion fungiert als Einladefunktion der TransporterUnits, welche DynamicUnits transportieren kann
+*/
 void TransporterUnit::addUnitToStorage(Unit *unit)
 {
     vector_unitStorage.push_back(unit);
     connect(unit->getUnitDisplay(),SIGNAL(unitDispl_clicked(Unit*)),this, SLOT(SLOT_setUnitToUnload(Unit*)));
 }
 
+/*
+Hilfsfunktion zum Speichern des aktuellen Spielstandes
+*/
 void TransporterUnit::serialize(QTextStream &out)
 {
     DynamicUnit::serialize(out);
@@ -306,6 +352,9 @@ void TransporterUnit::serialize(QTextStream &out)
     }
 }
 
+/*
+Diese Funktion dient zur grafischen Alternierung benutzter BuilderEinheiten
+*/
 void TransporterUnit::resetBuildUnloadParameter()
 {
     if(ptr_unitToUnload != nullptr)
@@ -319,6 +368,9 @@ void TransporterUnit::resetBuildUnloadParameter()
     }
 }
 
+/*
+SLOT für Qt Mechaniken
+*/
 void TransporterUnit::SLOT_setUnitToUnload(Unit *unit)
 {
     resetBuildUnloadParameter();
@@ -328,10 +380,15 @@ void TransporterUnit::SLOT_setUnitToUnload(Unit *unit)
 
 // TransporterAirUnit
 
+/*
+spezifischer Konstruktor für AirTransporter
+*/
 TransporterAirUnit::TransporterAirUnit(QString filepath, Player* player)
     : TransporterUnit(filepath, player){}
 
-
+/*
+Diese Funktion legt die Bewegungsfreiheit von den TransporterAirUnits fest
+*/
 int TransporterAirUnit::moveTo(HexagonMatchfield *hex_target){
 	//Flugzeug hat selbe Kosten für alles.
     if(hex_target->getUnitStationed() == nullptr)
@@ -344,6 +401,9 @@ int TransporterAirUnit::moveTo(HexagonMatchfield *hex_target){
     return -1;
 }
 
+/*
+Erstellfunktion einer TransporterAirUnit
+*/
 TransporterAirUnit *TransporterAirUnit::createUnit()
 {
     return new TransporterAirUnit(unitFile, unitPlayer);
@@ -355,10 +415,15 @@ TransporterAirUnit *TransporterAirUnit::createUnit()
 
 // TransporterGroundUnit
 
+/*
+Konstruktor der TransporterGroundUnits
+*/
 TransporterGroundUnit::TransporterGroundUnit(QString filepath, Player* player)
     : TransporterUnit(filepath, player){}
 
-
+/*
+Diese Funktion legt die Bewegungsfreiheit von den TransporterGroundUnits fest
+*/
 int TransporterGroundUnit::moveTo(HexagonMatchfield *hex_target){
 
     QString hex_type = hex_target->getHexMatchfieldType();
@@ -390,6 +455,9 @@ int TransporterGroundUnit::moveTo(HexagonMatchfield *hex_target){
     return -1;
 }
 
+/*
+Erstellfunktion der TransporterGroundUnits
+*/
 TransporterGroundUnit *TransporterGroundUnit::createUnit()
 {
     return new TransporterGroundUnit(unitFile, unitPlayer);
@@ -400,10 +468,15 @@ TransporterGroundUnit *TransporterGroundUnit::createUnit()
 
 // TransporterWaterUnit
 
+/*
+Konstruktor der TransporterWaterUnits
+*/
 TransporterWaterUnit::TransporterWaterUnit(QString filepath, Player* player)
     : TransporterUnit(filepath, player){}
 
-
+/*
+Diese Funktion legt die Bewegungsfreiheit von den TransporterWaterUnits fest
+*/
 int TransporterWaterUnit::moveTo(HexagonMatchfield *hex_target){
 
     QString hex_type = hex_target->getHexMatchfieldType();
@@ -423,6 +496,9 @@ int TransporterWaterUnit::moveTo(HexagonMatchfield *hex_target){
     return -1;
 }
 
+/*
+Erstellfunktion der TransporterWaterUnits
+*/
 TransporterWaterUnit *TransporterWaterUnit::createUnit()
 {
     return new TransporterWaterUnit(unitFile, unitPlayer);
@@ -432,10 +508,15 @@ TransporterWaterUnit *TransporterWaterUnit::createUnit()
 
 // GroundUnit
 
+/*
+Konstruktor der GroundUnits
+*/
 GroundUnit::GroundUnit(QString filepath, Player* player)
 	: DynamicUnit(filepath, player){}
 
-
+/*
+In dieser Funktion wird eine ausgewählte Einheit (wenn vorhanden), welche auf einem Hexagon liegt, von einer GroundUnit angegriffen
+*/
 bool GroundUnit::action(HexagonMatchfield *hex_target, const int range) {
     if(bool_unitUsed)
     {
@@ -474,7 +555,7 @@ bool GroundUnit::action(HexagonMatchfield *hex_target, const int range) {
 		int_unitSpecificAtt = int_unitAirAtt; bool_fights_back = true;
 	}
 
-	if(bool_fights_back){
+	if(bool_fights_back && range <= target->getActionRange()){
 
 		if (int_target_current_hp - int_unitSpecificAtt <= 0) {
 			target->setUnitCurrentHP(0);
@@ -547,10 +628,15 @@ bool GroundUnit::action(HexagonMatchfield *hex_target, const int range) {
 
 // LightUnit
 
+/*
+Konstruktor der LightUnits
+*/
 LightUnit::LightUnit(QString filepath, Player* player)
 	: GroundUnit(filepath, player){}
 
-
+/*
+Diese Funktion legt die Bewegungsfreiheit von den LightUnits fest
+*/
 int LightUnit::moveTo(HexagonMatchfield *hex_target){
 
     QString hex_type = hex_target->getHexMatchfieldType();
@@ -579,6 +665,9 @@ int LightUnit::moveTo(HexagonMatchfield *hex_target){
     return -1;
 }
 
+/*
+Erstellfunktion der LightUnits
+*/
 LightUnit *LightUnit::createUnit()
 {
     return new LightUnit(unitFile, unitPlayer);
@@ -586,6 +675,9 @@ LightUnit *LightUnit::createUnit()
 
 // BuildLightUnit
 
+/*
+Konstruktor der BuildLightUnit
+*/
 BuildLightUnit::BuildLightUnit(QString filepath, bool bool_loadInventory, Player* player)
     : LightUnit(filepath, player), qstring_unitToBuild("")
 {
@@ -602,11 +694,17 @@ BuildLightUnit::BuildLightUnit(QString filepath, bool bool_loadInventory, Player
     }
 }
 
+/*
+Destruktor einer BuildLightUnit
+*/
 BuildLightUnit::~BuildLightUnit()
 {
     production.clear();
 }
 
+/*
+Diese Funktion entscheidet, ob die BuildLightUnit etwas baut oder nicht 
+*/
 bool BuildLightUnit::action(HexagonMatchfield* hexTarget, const int = 0){
 	
     if(bool_unitUsed == true)
@@ -625,7 +723,9 @@ bool BuildLightUnit::action(HexagonMatchfield* hexTarget, const int = 0){
     return false;
 }
 
-
+/*
+Diese Funktion setzt auf das ausgewählte Hexagon eine StaticUnit
+*/
 void BuildLightUnit::produceUnit(HexagonMatchfield* hexTarget)
 {
     hexTarget->setUnitStationed(production[qstring_unitToBuild]->createUnit());
@@ -633,11 +733,17 @@ void BuildLightUnit::produceUnit(HexagonMatchfield* hexTarget)
     unitPlayer->setCurrentEnergieStorage(unitPlayer->getCurrentEnergieStorage() - hexTarget->getUnitStationed()->getUnitCost());
 }
 
+/*
+Hilfsfunktion zur Erstellung einer BuildLightUnit
+*/
 BuildLightUnit *BuildLightUnit::createUnit()
 {
     return new BuildLightUnit(unitFile, true, unitPlayer);
 }
 
+/*
+Zu bauende Einheit zurücksetzen
+*/
 void BuildLightUnit::resetBuildUnloadParameter()
 {
     if(qstring_unitToBuild != "")
@@ -648,6 +754,9 @@ void BuildLightUnit::resetBuildUnloadParameter()
     }
 }
 
+/*
+Hilfsfunktion für QWt Mechaniken
+*/
 void BuildLightUnit::SLOT_setUnitToBuild(Unit *unit)
 {
     resetBuildUnloadParameter();
@@ -657,10 +766,15 @@ void BuildLightUnit::SLOT_setUnitToBuild(Unit *unit)
 
 // MediumUnit
 
+/*
+Konstruktor für MediumUnits
+*/
 MediumUnit::MediumUnit(QString filepath, Player* player)
 	: GroundUnit(filepath, player){}
 
-
+/*
+Diese Funktion legt die Bewegungsfreiheit von den MediumUnits fest
+*/
 int MediumUnit::moveTo(HexagonMatchfield *hex_target){
 
     QString hex_type = hex_target->getHexMatchfieldType();
@@ -689,17 +803,24 @@ int MediumUnit::moveTo(HexagonMatchfield *hex_target){
     return -1;
 
 }
-
+/*
+Hilfsfunktion zum Erstellen einer MediumUnit
+*/
 MediumUnit *MediumUnit::createUnit()
 {
     return new MediumUnit(unitFile, unitPlayer);
 }
 // HeavyUnit
 
+/*
+Konstruktor der HeavyUnits
+*/
 HeavyUnit::HeavyUnit(QString filepath, Player* player)
 	: GroundUnit(filepath, player){}
 
-
+/*
+Diese Funktion legt die Bewegungsfreiheit von den HeavyUnits fest
+*/
 int HeavyUnit::moveTo(HexagonMatchfield *hex_target){
 
     QString hex_type = hex_target->getHexMatchfieldType();
@@ -727,6 +848,9 @@ int HeavyUnit::moveTo(HexagonMatchfield *hex_target){
     return -1;
 }
 
+/*
+Hilfsfunktion zum Erstellen einer HeavyUnit
+*/
 HeavyUnit *HeavyUnit::createUnit()
 {
     return new HeavyUnit(unitFile, unitPlayer);
@@ -735,10 +859,15 @@ HeavyUnit *HeavyUnit::createUnit()
 
 // WaterUnit
 
+/*
+Konstruktor der WaterUnits
+*/
 WaterUnit::WaterUnit(QString filepath, Player* player)
 	: DynamicUnit(filepath, player){}
 
-
+/*
+Diese Funktion legt die Bewegungsfreiheit von den WaterUnits fest
+*/
 int WaterUnit::moveTo(HexagonMatchfield *hex_target){
 
     QString hex_type = hex_target->getHexMatchfieldType();
@@ -759,6 +888,10 @@ int WaterUnit::moveTo(HexagonMatchfield *hex_target){
 
 }
 
+
+/*
+In dieser Funktion wird eine ausgewählte Einheit (wenn vorhanden), welche auf einem Hexagon liegt, von einer WaterUnit angegriffen
+*/
 bool WaterUnit::action(HexagonMatchfield *hex_target, const int range) {
     if(bool_unitUsed)
     {
@@ -797,7 +930,7 @@ bool WaterUnit::action(HexagonMatchfield *hex_target, const int range) {
 		int_unitSpecificAtt = int_unitAirAtt; bool_fights_back = true;
 	}
 
-	if(bool_fights_back){
+	if(bool_fights_back &&  range <= target->getActionRange()){
 
 		if (int_target_current_hp - int_unitSpecificAtt <= 0) {
 			target->setUnitCurrentHP(0);
@@ -868,6 +1001,9 @@ bool WaterUnit::action(HexagonMatchfield *hex_target, const int range) {
 
 }
 
+/*
+Hilfsfunktion zur Erstellung einer WaterUnit
+*/
 WaterUnit *WaterUnit::createUnit()
 {
     return new WaterUnit(unitFile, unitPlayer);
