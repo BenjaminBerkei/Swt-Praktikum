@@ -224,7 +224,7 @@ void Game::processSelection(HexagonMatchfield *selection)
 
         }else if(ptr_roundCurrent->getCurrentPhase() == ACTION )    //Action Phase
         {
-            if(ptr_hexSelectionCache->getUnitStationed()->action(selection, offset_distance(ptr_hexSelectionCache->getQpoint_gridPosition, selection->getQpoint_gridPosition)))  //Wenn die Action geglückt ist
+            if(ptr_hexSelectionCache->getUnitStationed()->action(selection, offset_distance(ptr_hexSelectionCache->getQpoint_gridPosition(), selection->getQpoint_gridPosition())))  //Wenn die Action geglückt ist
             {
                 /*Prüfen ob eine neue Einheit auf dem Grid ist*/
                 if(selection->getUnitStationed() != nullptr

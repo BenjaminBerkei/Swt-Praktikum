@@ -273,7 +273,7 @@ void TransporterUnit::setTransporterUnitCurrentCapacity(const int newCurrentCapa
 /*
 Diese Funktion fungiert als Entscheidungsfunktion, welche bestimmte Aktion der Transporter durchführen wird
 */
-bool TransporterUnit::action(HexagonMatchfield* hex_target, const int = 0){
+bool TransporterUnit::action(HexagonMatchfield* hex_target, const int ){
     qDebug() << "Transporter Action";
     qDebug() << "\t " << hex_target->getQpoint_gridPosition();
     if(hex_target->getUnitStationed() == nullptr)
@@ -705,7 +705,7 @@ BuildLightUnit::~BuildLightUnit()
 /*
 Diese Funktion entscheidet, ob die BuildLightUnit etwas baut oder nicht 
 */
-bool BuildLightUnit::action(HexagonMatchfield* hexTarget, const int = 0){
+bool BuildLightUnit::action(HexagonMatchfield* hexTarget, const int){
 	
     if(bool_unitUsed == true)
     {
