@@ -239,7 +239,7 @@ void TransporterUnit::setTransporterUnitCurrentCapacity(const int newCurrentCapa
 }
 
 
-bool TransporterUnit::action(HexagonMatchfield* hex_target, const int){
+bool TransporterUnit::action(HexagonMatchfield* hex_target, const int = 0){
     qDebug() << "Transporter Action";
     qDebug() << "\t " << hex_target->getQpoint_gridPosition();
     if(hex_target->getUnitStationed() == nullptr)
@@ -607,7 +607,7 @@ BuildLightUnit::~BuildLightUnit()
     production.clear();
 }
 
-bool BuildLightUnit::action(HexagonMatchfield* hexTarget, const int){
+bool BuildLightUnit::action(HexagonMatchfield* hexTarget, const int = 0){
 	
     if(bool_unitUsed == true)
     {
