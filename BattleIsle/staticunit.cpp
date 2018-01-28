@@ -121,7 +121,7 @@ DepotUnit::~DepotUnit()
         unitPlayer->setPlayerTotalEnergie(unitPlayer->getPlayerTotalEnergie() - int_EnergieStorage);
 }
 
-bool DepotUnit::action(HexagonMatchfield* hexTarget, const int)
+bool DepotUnit::action(HexagonMatchfield* hexTarget, const int = 0)
 {
     if(bool_unitUsed == true)
     {
@@ -206,7 +206,7 @@ void FactoryUnit::setUnitToBuild(const QString unitTarget)
 	return;
 }
 
-bool FactoryUnit::action(HexagonMatchfield* hexTarget, const int)
+bool FactoryUnit::action(HexagonMatchfield* hexTarget, const int = 0)
 {
     if(bool_unitUsed == true)
     {
