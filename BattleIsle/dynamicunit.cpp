@@ -166,7 +166,7 @@ int AirUnit::moveTo(HexagonMatchfield *hex_target)
     return -1;
 }
 
-bool AirUnit::action(HexagonMatchfield *hex_target) {
+bool AirUnit::action(HexagonMatchfield *hex_target, const int range) {
 
     Unit *target = hex_target->getUnitStationed();
 
@@ -239,7 +239,7 @@ void TransporterUnit::setTransporterUnitCurrentCapacity(const int newCurrentCapa
 }
 
 
-bool TransporterUnit::action(HexagonMatchfield* hex_target){
+bool TransporterUnit::action(HexagonMatchfield* hex_target, const int){
     qDebug() << "Transporter Action";
     qDebug() << "\t " << hex_target->getQpoint_gridPosition();
     if(hex_target->getUnitStationed() == nullptr)
@@ -436,7 +436,7 @@ GroundUnit::GroundUnit(QString filepath, Player* player)
 	: DynamicUnit(filepath, player){}
 
 
-bool GroundUnit::action(HexagonMatchfield *hex_target) {
+bool GroundUnit::action(HexagonMatchfield *hex_target, const int range) {
     if(bool_unitUsed)
     {
         return false;
@@ -607,7 +607,7 @@ BuildLightUnit::~BuildLightUnit()
     production.clear();
 }
 
-bool BuildLightUnit::action(HexagonMatchfield* hexTarget){
+bool BuildLightUnit::action(HexagonMatchfield* hexTarget, const int){
 	
     if(bool_unitUsed == true)
     {
@@ -759,7 +759,7 @@ int WaterUnit::moveTo(HexagonMatchfield *hex_target){
 
 }
 
-bool WaterUnit::action(HexagonMatchfield *hex_target) {
+bool WaterUnit::action(HexagonMatchfield *hex_target, const int range) {
     if(bool_unitUsed)
     {
         return false;
