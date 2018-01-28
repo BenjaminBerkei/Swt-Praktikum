@@ -664,10 +664,7 @@ void Game::moveUnitTo(HexagonMatchfield * target)
     Unit* unitToMove = ptr_hexSelectionCache->getUnitStationed();
     unitToMove->setUnitCurrentMoveRange(unitToMove->getUnitCurrentMoveRange() - map_hexCurrentCost[target]);
 
-    if(target->getUnitStationed() != nullptr &&
-            (target->getUnitStationed()->getUnitType() == "TRANSPORTERAIR"
-            || target->getUnitStationed()->getUnitType() == "TRANSPORTERGROUND"
-            || target->getUnitStationed()->getUnitType() == "TRANSPORTERWATER"))
+    if(target->getUnitStationed() != nullptr && target->getUnitStationed()->getUnitType().contains("TRANSPORTER"))
     {
         target->getUnitStationed()->addUnitToStorage(unitToMove); // Einheit in den Vektor der Transportereinheit verlegt
         ptr_gameWidget->getGameWidGameScene()->removeItem(unitToMove); // Einheit aus der Scene gelöscht
