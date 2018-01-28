@@ -133,6 +133,7 @@ public:
 	HexagonMatchfield* getCamefrom_Hex(HexagonMatchfield*);
 	int getCurrentCost_Int(HexagonMatchfield*);
     void autoplayKi();
+    GameWidget *getPtr_gameWidget() const;
 
 private:
     QVector3D oddqToCube(QPoint);   //Für Referenzen betrachte https://www.redblobgames.com/grids/hexagons/#distances , Kapitel: Distance
@@ -155,6 +156,8 @@ public slots:
     void buttonPressedMap();
     void buttonPressedMenue();
     void buttonPressedChangePhase();
+    void buttonPressedZoomIn();
+    void buttonPressedZoomOut();
     void SLOT_MenueButtonSelected(int);
     void SLOT_checkStateOfButtons();
 signals:

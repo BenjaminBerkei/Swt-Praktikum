@@ -231,3 +231,8 @@ void Unit::setUnitUsed(bool used)
 	bool_unitUsed = used;
 	return;
 }
+
+void Unit::setUnitToBuild(QString)
+{
+    return;
+}

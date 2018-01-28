@@ -648,6 +648,12 @@ void BuildLightUnit::resetBuildUnloadParameter()
     }
 }
 
+//für die KI
+void BuildLightUnit::setUnitToBuild(QString name)
+{
+    qstring_unitToBuild = name;
+}
+
 void BuildLightUnit::SLOT_setUnitToBuild(Unit *unit)
 {
     resetBuildUnloadParameter();

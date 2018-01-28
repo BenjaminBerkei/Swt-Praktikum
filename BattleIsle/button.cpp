@@ -241,3 +241,73 @@ void ButtonMenue::printType()
 {
     qDebug() << "ButtonMenue";
 }
+
+/*ButtonZoomIn*/
+ButtonZoomIn::ButtonZoomIn(int sizeX, int sizeY)
+    : Button()
+{
+    qpix_playerOne = QPixmap(":/buttonRess/Buttons/ZoomIN_blau.png");
+    qpix_playerTwo = QPixmap(":/buttonRess/Buttons/ZoomIN_rot.png");
+    setPixmap(qpix_playerOne.scaled(sizeX,sizeY));
+}
+
+void ButtonZoomIn::mousePressEvent(QGraphicsSceneMouseEvent *)
+{
+    emit clicked();
+}
+
+void ButtonZoomIn::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    QGraphicsPixmapItem::paint(painter, option, widget);
+    if(!isEnabled())
+    {
+        QBrush brush;
+        brush.setStyle(Qt::SolidPattern);
+        brush.setColor(Qt::black);
+
+        painter->setOpacity(.5);
+        painter->setBrush(brush);
+
+        painter->drawPath(shape());
+    }
+}
+
+void ButtonZoomIn::printType()
+{
+    qDebug() << "ButtonMenue";
+}
+
+/*ButtonZoomOut*/
+ButtonZoomOut::ButtonZoomOut(int sizeX, int sizeY)
+    : Button()
+{
+    qpix_playerOne = QPixmap(":/buttonRess/Buttons/ZoomOUT_blau.png");
+    qpix_playerTwo = QPixmap(":/buttonRess/Buttons/ZoomOUT_rot.png");
+    setPixmap(qpix_playerOne.scaled(sizeX,sizeY));
+}
+
+void ButtonZoomOut::mousePressEvent(QGraphicsSceneMouseEvent *)
+{
+    emit clicked();
+}
+
+void ButtonZoomOut::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    QGraphicsPixmapItem::paint(painter, option, widget);
+    if(!isEnabled())
+    {
+        QBrush brush;
+        brush.setStyle(Qt::SolidPattern);
+        brush.setColor(Qt::black);
+
+        painter->setOpacity(.5);
+        painter->setBrush(brush);
+
+        painter->drawPath(shape());
+    }
+}
+
+void ButtonZoomOut::printType()
+{
+    qDebug() << "ButtonMenue";
+}

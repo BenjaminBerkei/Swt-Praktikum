@@ -109,12 +109,22 @@ void GameWidget::setSizeY(int value)
     sizeY = value;
 }
 
+double GameWidget::getDouble_scaleFak() const
+{
+    return double_scaleFak;
+}
+
+void GameWidget::setDouble_scaleFak(double value)
+{
+    double_scaleFak = value;
+}
+
 GameWidget::GameWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::GameWidget),
     gameWidGameScene(new QGraphicsScene(this)), gameWidInfoScene(new QGraphicsScene(this)),
     gameWidOptionsScene(new QGraphicsScene(this)), gameWidButtonScene(new QGraphicsScene(this)),
-    gameWidMenueScene(new QGraphicsScene(this)), gameWidMapScene(new QGraphicsScene(this)), sizeX(0), sizeY(0)
+    gameWidMenueScene(new QGraphicsScene(this)), gameWidMapScene(new QGraphicsScene(this)), sizeX(0), sizeY(0), double_scaleFak(1.0)
 {
     ui->setupUi(this);
 
@@ -203,11 +213,12 @@ void GameWidget::gameWidCreateMatchfield(std::vector<std::vector<HexagonMatchfie
             if(hex->getUnitStationed() != nullptr)
             {
                 gameWidGameScene->addItem(hex->getUnitStationed());
-                hex->getUnitStationed()->setPos(PicCoordX,PicCoordY);
+                hex->getUnitStationed()->setPos(double_scaleFak*PicCoordX,double_scaleFak*PicCoordY);
             }
 
-            hex->setPos(PicCoordX, PicCoordY);
+            hex->setPos(double_scaleFak*PicCoordX, double_scaleFak*PicCoordY);
             gameWidGameScene->addItem(hex);
+            hex->setScale(double_scaleFak);
         }
     }
     gameWidGameScene->setSceneRect(gameWidGameScene->itemsBoundingRect());

@@ -103,6 +103,8 @@ Unit* HeadquaterUnit::createUnit()
     return new HeadquaterUnit(unitFile, unitPlayer);
 }
 
+
+
 // Depot
 
 DepotUnit::DepotUnit(QString filepath, Player* player)
@@ -245,6 +247,8 @@ void FactoryUnit::resetBuildUnloadParameter()
         qstring_unitToBuild = "";
     }
 }
+
+//für die KI
 
 void FactoryUnit::SLOT_setUnitToBuild(Unit *unit)
 {

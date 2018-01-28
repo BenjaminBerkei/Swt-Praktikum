@@ -70,6 +70,8 @@ public:
 	Unit* createUnit();
 
     void resetBuildUnloadParameter();
+    //für die KI
+
 private slots:
     void SLOT_setUnitToBuild(Unit* unit);
 };
