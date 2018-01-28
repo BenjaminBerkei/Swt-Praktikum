@@ -1116,7 +1116,7 @@ void Game::createRandomMap()
                                 anzHQ++;
                             }
                             break;
-                        case 8 : randomUnit = new BuildLightUnit(":/dynamic/dynamicUnit/scpmerlin", true, randPlayer); break;
+                        case 8 : randomUnit = new BuildLightUnit(":/dynamic/dynamicUnit/scpmerlin.txt", true, randPlayer); break;
                         }
                     }else{
                         randomUnit = new WaterUnit(":/dynamic/dynamicUnit/msmiguel.txt", randPlayer);

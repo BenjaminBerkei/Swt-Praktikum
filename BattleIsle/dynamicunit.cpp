@@ -28,7 +28,7 @@ DynamicUnit::DynamicUnit(QString filepath, Player* player)
     QFile file(filepath);
     if(!file.open(QFile::ReadOnly | QFile::Text))
     {
-        qDebug() << "Warnung: File nicht gefunden";
+        qDebug() << "Warnung: File nicht gefunden \n\t Pfad: " << filepath;
         return;
     }
     QTextStream in(&file);

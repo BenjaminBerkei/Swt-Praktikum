@@ -1,4 +1,4 @@
-r1demon
+R-1 Demon
 4 2 25 0 15 4 0 0 15 5 LIGHTUNIT
 Dirt cheap and you like it.
 :/img/GroundOhneRand/R-1_Demon_blau.png

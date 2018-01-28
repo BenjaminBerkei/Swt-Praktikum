@@ -161,27 +161,31 @@ FactoryUnit::FactoryUnit(QString filepath, bool bool_loadInventory, Player* play
     if(bool_loadInventory == true)
     {
         map_production["B.E.N"] = new LightUnit(":/dynamic/dynamicUnit/ben.txt", unitPlayer);
-        map_production["R-1 Demon"] = new LightUnit(":/dynamic/dynamicUnit/r1demon", unitPlayer);
-        map_production["SC-P Merlin"] = new BuildLightUnit(":/dynamic/dynamicUnit/scpmerlin", false, unitPlayer);
+        map_production["FAV-Buster"] = new LightUnit(":/dynamic/dynamicUnit/favbuster.txt", unitPlayer);
+        map_production["R-1 Demon"] = new LightUnit(":/dynamic/dynamicUnit/r1demon.txt", unitPlayer);
 
-        //map_production["AD-5 Blitz"] = new MediumUnit(":/dynamic/dynamicUnit/ad5blitz", unitPlayer);
-        map_production["T-3 Scorpion"] = new MediumUnit(":/dynamic/dynamicUnit/t3scorpion", unitPlayer);
         map_production["Lucas"] = new MediumUnit(":/dynamic/dynamicUnit/lucas.txt", unitPlayer);
+        map_production["T-3 Scorpion"] = new MediumUnit(":/dynamic/dynamicUnit/t3scorpion.txt", unitPlayer);
+        map_production["T-4 Gladiator"] = new MediumUnit(":/dynamic/dynamicUnit/t4gladiator.txt", unitPlayer);
 
         map_production["Mann u. El"] = new HeavyUnit(":/dynamic/dynamicUnit/mannuel.txt", unitPlayer);
-        map_production["T-4 Gladiator"] = new HeavyUnit(":/dynamic/dynamicUnit/t4gladiator", unitPlayer);
-        //map_production["T-7 Crusader"] = new HeavyUnit(":/dynamic/dynamicUnit/t7crusader", unitPlayer);
+        map_production["AD9-Sphinx"] = new HeavyUnit(":/dynamic/dynamicUnit/ad9sphinx.txt", unitPlayer);
+        map_production["TLAV Invader"] = new HeavyUnit(":/dynamic/dynamicUnit/tlavinvader.txt", unitPlayer);
 
         map_production["Kevarn"] = new TransporterGroundUnit(":/dynamic/dynamicUnit/kevarn.txt", unitPlayer);
+        map_production["G-2 Giant"] = new TransporterAirUnit(":/dynamic/dynamicUnit/g2giant.txt", unitPlayer);
+        map_production["SC-P Merlin"] = new BuildLightUnit(":/dynamic/dynamicUnit/scpmerlin.txt", false, unitPlayer);
 
         map_production["Der Bolten"] = new AirUnit(":/dynamic/dynamicUnit/derbolten.txt", unitPlayer);
-        //map_production["CAS Firebird"] = new AirUnit(":/dynamic/dynamicUnit/casfirebird", unitPlayer);
-        map_production["XA-7 Raven"] = new AirUnit(":/dynamic/dynamicUnit/xa7raven", unitPlayer);
-        map_production["XF-7 Mosquito"] = new AirUnit(":/dynamic/dynamicUnit/xf7mosquito", unitPlayer);
+        map_production["XA-7 Raven"] = new AirUnit(":/dynamic/dynamicUnit/xa7raven.txt", unitPlayer);
+        map_production["XF-7 Mosquito"] = new AirUnit(":/dynamic/dynamicUnit/xf7mosquito.txt", unitPlayer);
 
         map_production["M.S Miguel"] = new WaterUnit(":/dynamic/dynamicUnit/msmiguel.txt", unitPlayer);
-        map_production["MB-A Buccaneer"] = new WaterUnit(":/dynamic/dynamicUnit/mbabuccaneer", unitPlayer);
-        map_production["W-1 Fortress"] = new WaterUnit(":/dynamic/dynamicUnit/w1fortress", unitPlayer);
+        map_production["Z-1 Pegasus"] = new WaterUnit(":/dynamic/dynamicUnit/z1pegasus.txt", unitPlayer);
+        map_production["CV-Amazon"] = new WaterUnit(":/dynamic/dynamicUnit/cvamazon.txt", unitPlayer);
+        map_production["MB-A Buccaneer"] = new WaterUnit(":/dynamic/dynamicUnit/mbabuccaneer.txt", unitPlayer);
+        map_production["TB-X Marauder"] = new WaterUnit(":/dynamic/dynamicUnit/tbxmarauder.txt", unitPlayer);
+        map_production["W-1 Fortress"] = new WaterUnit(":/dynamic/dynamicUnit/w1fortress.txt", unitPlayer);
 
         for(auto &it : map_production)
         {
