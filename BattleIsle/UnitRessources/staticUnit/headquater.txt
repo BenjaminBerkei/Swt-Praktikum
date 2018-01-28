@@ -1,5 +1,5 @@
 Headquater
-4 1 1 5 1000 HEADQUATERUNIT
+4 1 350 5 1000 HEADQUATERUNIT
 Deine Zentrale.\n Verliere es nicht!
 :/img/StaticOhneRand/HQ_grau.png
 :/img/StaticOhneRand/HQ_blau.png

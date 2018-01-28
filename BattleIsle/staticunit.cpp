@@ -183,7 +183,7 @@ FactoryUnit::FactoryUnit(QString filepath, bool bool_loadInventory, Player* play
         map_production["XF-7 Mosquito"] = new AirUnit(":/dynamic/dynamicUnit/xf7mosquito.txt", unitPlayer);
 
         map_production["M.S Miguel"] = new WaterUnit(":/dynamic/dynamicUnit/msmiguel.txt", unitPlayer);
-        map_production["Z-1 Pegasus"] = new WaterUnit(":/dynamic/dynamicUnit/z1pegasus.txt", unitPlayer);
+        map_production["Z-1 Pegasus"] = new TransporterWaterUnit(":/dynamic/dynamicUnit/z1pegasus.txt", unitPlayer);
         map_production["CV-Amazon"] = new WaterUnit(":/dynamic/dynamicUnit/cvamazon.txt", unitPlayer);
         map_production["MB-A Buccaneer"] = new WaterUnit(":/dynamic/dynamicUnit/mbabuccaneer.txt", unitPlayer);
         map_production["TB-X Marauder"] = new WaterUnit(":/dynamic/dynamicUnit/tbxmarauder.txt", unitPlayer);

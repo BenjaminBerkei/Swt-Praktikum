@@ -754,18 +754,15 @@ void BuildLightUnit::resetBuildUnloadParameter()
     }
 }
 
-<<<<<<< HEAD
 //für die KI
 void BuildLightUnit::setUnitToBuild(QString name)
 {
     qstring_unitToBuild = name;
 }
 
-=======
 /*
 Hilfsfunktion für QWt Mechaniken
 */
->>>>>>> 0940bf380ab2bd55129c093ea8281b58cfc83b62
 void BuildLightUnit::SLOT_setUnitToBuild(Unit *unit)
 {
     resetBuildUnloadParameter();
