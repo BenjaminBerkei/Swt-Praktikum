@@ -829,14 +829,18 @@ void MainWindow::ladenMap_triggered()
                           if(tmp_UnitBool ==1 )
                           {
                               in >> tmp_ply >> tmp_UnitTyp;
+                              tmp_Unit = new Unit(QPoint(i,j), tmp_UnitTyp, tmp_ply);
                           }
-                          else if(tmp_UnitBool != 0)
+                          else if(tmp_UnitBool == 0)
+                          {
+                              tmp_Unit = nullptr;
+                          }
+                          else
                           {
                               QMessageBox::information(this, tr("Unable to open file"),
                                   file.errorString());
                               return;
                           }
-                          tmp_Unit = new Unit(QPoint(i,j), tmp_UnitTyp, tmp_ply);
                           tmp_Hex = new Hexagon(QPoint(i,j), tmp_Typ, tmp_Unit);
                           tmp_Hex->setBoltaniumCurrent(tmp_Bolt);
                           vectorHex.push_back(tmp_Hex);
