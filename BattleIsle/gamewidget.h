@@ -37,6 +37,7 @@
 #include <QPushButton>
 #include <QGraphicsProxyWidget>
 #include <vector>
+#include <QPointer>
 
 class Unit;
 class Player;
@@ -62,18 +63,18 @@ private:
     QGraphicsScene *gameWidMenueScene;
     QGraphicsScene *gameWidMapScene;
 
-    QGraphicsTextItem *textItem_currentPlayer;
-    QGraphicsTextItem *textItem_currentEnergie;
-    QGraphicsTextItem *textItem_currentUnits;
-    QGraphicsTextItem *textItem_currentPhase;
-    QGraphicsTextItem *textItem_currentRound;
+    QPointer<QGraphicsTextItem> textItem_currentPlayer;
+    QPointer<QGraphicsTextItem> textItem_currentEnergie;
+    QPointer<QGraphicsTextItem> textItem_currentUnits;
+    QPointer<QGraphicsTextItem> textItem_currentPhase;
+    QPointer<QGraphicsTextItem> textItem_currentRound;
 
     QPushButton* qbuttonSaveGame;
     QPushButton* qbuttonEndGame;
     QPushButton* qbuttonLoadGame;
     QPushButton* qbuttonResume;
 
-    std::vector<std::vector<MapPixel*>> vectorVector_gameWidMiniMap;
+    std::vector<std::vector< QPointer<MapPixel> >> vectorVector_gameWidMiniMap;
 
     int sizeX;
     int sizeY;
@@ -98,7 +99,6 @@ public:
     void updateMatchfieldScene();
     void repaintGameView();
     void animateUnit(Unit*, std::vector<QPointF>);
-
 
     //get und set Methoden
     void setInfoScene(HexagonDisplayInfo *info);

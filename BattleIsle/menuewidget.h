@@ -13,9 +13,11 @@
 #include "startmenuewidget.h"
 #include "loadgamewidget.h"
 #include "gamewidget.h"
+#include "debugbrowser.h"
 
 #include <QDesktopWidget>
 #include <QDebug>
+#include <QPointer>
 
 class OptionsWidget;
 
@@ -32,14 +34,14 @@ private:
     LoadGameWidget *ptr_mwLoadGameWidget;
     GameWidget *ptr_mwGameWidget;
     Game* ptr_runningGame;
+    QPointer<DebugBrowser> ptr_debugBrowser;
 
 public:
     Ui::MenueWidget *ui;
 
-    explicit MenueWidget( QWidget *parent = 0 );
+    explicit MenueWidget(QPointer<DebugBrowser> browser, QWidget *parent = 0 );
     ~MenueWidget();
     void resizeEvent(QResizeEvent*);
-    void deleteGame();
 
     //get und set Methoden
     StartMenueWidget* getPtr_mwStartMenueWidget() { return ptr_mwStartMenueWidget; }
