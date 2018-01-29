@@ -62,6 +62,7 @@ protected:
     //"grassland"           (Wiese)
     //"streetStraight"      (Straße Gerade)
     //"streetCurve"         (Straße mit Kurve)
+    //"streetCrossing"      (Kreuzung von Straßen)
     //"mountainTop"         (Bergspitze)
     //"mountainSide"        (Bergseite)
     int int_boltaniumCurrent;

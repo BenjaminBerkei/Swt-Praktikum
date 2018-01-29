@@ -99,7 +99,7 @@ void DynamicUnit::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
     painter->setPen(pen);
     painter->setBrush(brush);
-    painter->drawRect(QRect(5,0,50,5));
+    painter->drawRect(QRect(19,5,25,3));
 
     brush.setColor(Qt::green);
     pen.setWidth(1);
@@ -107,7 +107,7 @@ void DynamicUnit::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
     painter->setPen(pen);
     painter->setBrush(brush);
-    painter->drawRect(QRect(5,0,(double)int_unitCurrentHP / (double)int_unitHP * 50,5));
+    painter->drawRect(QRect(19,5,(double)int_unitCurrentHP / (double)int_unitHP * 25,3));
 }
 
 /*

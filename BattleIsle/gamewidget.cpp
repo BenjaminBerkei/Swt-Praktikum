@@ -703,6 +703,10 @@ void MapPixel::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidge
                 colorBrush = Qt::green;
             if(ptr_mapPixHexaon->getHexMatchfieldType() == "mountainTop")
                 colorBrush = Qt::gray;
+            if(ptr_mapPixHexaon->getHexMatchfieldType().contains("streetStraight")
+                    || ptr_mapPixHexaon->getHexMatchfieldType().contains("streetCurve")
+                    || ptr_mapPixHexaon->getHexMatchfieldType().contains("streetCrossing"))
+                colorBrush = Qt::white;
             if(ptr_mapPixHexaon->getBoltaniumCurrent() > 0) // Fuer Boltanium
                 colorBrush = Qt::darkMagenta;
         }
