@@ -50,8 +50,11 @@ MenueWidget::MenueWidget(QPointer<DebugBrowser> browser, QWidget *parent) :
     connect(ptr_mwLoadGameWidget, SIGNAL(SIGNAL_loadGChangeIndexFromStack(int)), ui->stack, SLOT(setCurrentIndex(int)));
     connect(ptr_mwGameWidget, SIGNAL(SIGNAL_gameWidChangeIndexFromStack(int)), ui->stack, SLOT(setCurrentIndex(int)));
 
-    ptr_debugBrowser->move(QApplication::desktop()->screen()->rect().center().x() - this->rect().center().x() + ptr_debugBrowser->width(),
-                           QApplication::desktop()->screen()->rect().center().y() - this->rect().center().y());
+    if(ptr_debugBrowser != nullptr)
+    {
+        ptr_debugBrowser->move(QApplication::desktop()->screen()->rect().center().x() - this->rect().center().x() + ptr_debugBrowser->width(),
+                               QApplication::desktop()->screen()->rect().center().y() - this->rect().center().y());
+    }
 }
 
 MenueWidget::~MenueWidget()

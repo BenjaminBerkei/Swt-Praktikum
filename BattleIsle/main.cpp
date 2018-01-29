@@ -17,13 +17,15 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    Browser = new DebugBrowser;
+    //Browser = new DebugBrowser
+    Browser = nullptr;
     Menue = new MenueWidget(Browser);
 
-    qInstallMessageHandler(myMessageOutput);
+    //qInstallMessageHandler(myMessageOutput);
 
     Menue->show();
-    Browser->show();
+    if(Browser != nullptr)
+    {Browser->show();}
 
     return a.exec();
 }
