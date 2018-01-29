@@ -1,11 +1,29 @@
 #include "menuewidget.h"
+#include "debugbrowser.h"
 #include <QApplication>
+#include <QPointer>
+
+QPointer<MenueWidget> Menue;
+QPointer<DebugBrowser> Browser;
+void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+        if(Browser)
+        {
+            Browser->outputMessage(type, context, msg);
+        }
+}
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MenueWidget w;
-    w.show();
+
+    Browser = new DebugBrowser;
+    Menue = new MenueWidget(Browser);
+
+    qInstallMessageHandler(myMessageOutput);
+
+    Menue->show();
+    Browser->show();
 
     return a.exec();
 }

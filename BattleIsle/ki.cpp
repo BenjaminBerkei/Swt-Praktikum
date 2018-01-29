@@ -9,7 +9,7 @@
 #include "ki.h"
 
 KI::KI(Game* game, Player* player, std::vector<std::vector<HexagonMatchfield*>> matchfield)
-	: kiGame(game), kiPlayer(player), kiMyMatchfield(matchfield), kiHq_danger(false)
+    : kiPlayer(player), kiGame(game), kiMyMatchfield(matchfield), kiHq_danger(false)
 {
     updateKiMyBolt();
     for (unsigned int i = 0; i < kiMyMatchfield.size(); i++)

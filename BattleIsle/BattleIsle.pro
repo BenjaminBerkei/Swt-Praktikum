@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     unit.cpp \
     staticunit.cpp \
     dynamicunit.cpp \
-    ki.cpp
+    ki.cpp \
+    debugbrowser.cpp
 
 HEADERS  += \
     hexagonbase.h \
@@ -47,7 +48,8 @@ HEADERS  += \
     player.h \
     staticunit.h \
     dynamicunit.h \
-    ki.h
+    ki.h \
+    debugbrowser.h
 
 FORMS    += startmenuewidget.ui \
     matchfield.ui \
@@ -55,7 +57,8 @@ FORMS    += startmenuewidget.ui \
     menuewidget.ui \
     startmenuewidget.ui \
     loadgamewidget.ui \
-    gamewidget.ui
+    gamewidget.ui \
+    debugbrowser.ui
 
 RESOURCES += \
     img/rsc.qrc \
