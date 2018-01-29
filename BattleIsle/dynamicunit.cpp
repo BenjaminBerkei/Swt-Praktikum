@@ -88,6 +88,26 @@ void DynamicUnit::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
         painter->setOpacity(.7);
     }
     QGraphicsPixmapItem::paint(painter,option,widget);
+
+    QPen pen;
+    QBrush brush;
+
+    brush.setStyle(Qt::SolidPattern);
+    brush.setColor(Qt::red);
+    pen.setWidth(1);
+    pen.setColor(Qt::red);
+
+    painter->setPen(pen);
+    painter->setBrush(brush);
+    painter->drawRect(QRect(5,0,50,5));
+
+    brush.setColor(Qt::green);
+    pen.setWidth(1);
+    pen.setColor(Qt::green);
+
+    painter->setPen(pen);
+    painter->setBrush(brush);
+    painter->drawRect(QRect(5,0,(double)int_unitCurrentHP / (double)int_unitHP * 50,5));
 }
 
 /*
