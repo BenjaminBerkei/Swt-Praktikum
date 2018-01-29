@@ -11,6 +11,7 @@
 KI::KI(Game* game, Player* player, std::vector<std::vector<HexagonMatchfield*>> matchfield)
 	: kiGame(game), kiPlayer(player), kiMyMatchfield(matchfield), kiHq_danger(false)
 {
+    updateKiMyBolt();
     for (unsigned int i = 0; i < kiMyMatchfield.size(); i++)
 	{
         for (unsigned int j = 0; j < kiMyMatchfield[i].size(); j++)
@@ -37,6 +38,11 @@ KI::KI(Game* game, Player* player, std::vector<std::vector<HexagonMatchfield*>> 
 
 KI::~KI(){}
 
+void KI::updateKiMyBolt()
+{
+    kiMyBoltanium = kiPlayer->getCurrentEnergieStorage();
+}
+
 void KI::autoPlayMove()
 {	
     QMessageBox msgBox;
@@ -53,7 +59,7 @@ void KI::autoPlayMove()
 		autoMovePhase(it);
         qDebug() << "auto fertig" << i;
         i++;
-        std::this_thread::sleep_for (std::chrono::milliseconds(500));
+        std::this_thread::sleep_for (std::chrono::milliseconds(10*kiMyUnits.size()));
 	}
     qDebug() << "t moved all moveable units";
 	delKiMyUnits_Cache();
@@ -67,13 +73,14 @@ void KI::autoPlayAction()
     msgBox.setText("Ki Action Phase!\nBitte bestätigen.");
     msgBox.setDefaultButton(QMessageBox::NoButton);
     msgBox.exec();
-    /*fillKiMyUnits_Cache();
+    fillKiMyUnits_Cache();
 	for (auto it : kiMyUnits)
 	{
 		autoActionPhase(it);
+        std::this_thread::sleep_for (std::chrono::milliseconds(10*kiMyUnits.size()));
 	}
 	delKiMyUnits_Cache();
-    */
+
 	// changePhase
 	kiGame->buttonPressedChangePhase();
 }
@@ -88,6 +95,8 @@ void KI::autoMovePhase(HexagonMatchfield* hex)
     {
         kiGame->Dijkstra(hex, i);
         tmpCache = kiGame->getTargetCache();
+        if(tmpCache.size() == 0)
+            return;
         if(hex->getUnitStationed()->getUnitType().contains("TRANSPORTER"))
         {
             if (hex->getUnitStationed()->getUnitCurrentHP() <= hex->getUnitStationed()->getUnitHP() / 2)
@@ -116,7 +125,7 @@ void KI::autoMovePhase(HexagonMatchfield* hex)
 
             for (auto itCache : tmpCache)
             {
-                if (itCache->getUnitStationed() == nullptr);
+                if(itCache->getUnitStationed() == nullptr)
                 {
                     moveUnit(itCache, hex, i);
                     return;
@@ -222,56 +231,350 @@ void KI::autoMovePhase(HexagonMatchfield* hex)
 }
 
 
-/*void KI::autoActionPhase(Unit* unit)
+void KI::autoActionPhase(HexagonMatchfield* hex)
 {
-	if(unit->getUnitType() == ("TRANSPORTERAIRUNIT" || "TRANSPORTERWATERUNIT" || "TRANSPORTERGROUNDUNIT") )
+    kiGame->processSelection(hex);
+    kiGame->calculateTargets(hex, hex->getUnitStationed()->getActionRange());
+    std::unordered_set<HexagonMatchfield*> tmpCache = kiGame->getTargetCache();
+    qDebug() << hex->getUnitStationed()->getUnitType();
+    if(hex->getUnitStationed()->getUnitType().contains("TRANSPORTER"))
 	{
-		if (unit->getTransporterUnitCurrentCapacity() == unit->getTransporterUnitCapacity())
-		{
-			// wenn nahe hauptgebäude -> ausladen
-		}
-		else {
-			// Bolantium in der Nähe? dann einsammeln
-		}
+        for(auto it : tmpCache)
+        {
+            if(it->getBoltaniumCurrent() > 0)
+            {
+                hex->getUnitStationed()->action(it);
+                return;
+            }
+        }
 	}
-	else if(unit->getUnitType() == "BUILDERLIGTHUNIT")
-	{
-		//wenn einheit drumherum die verwundet, repariere
+    else if(hex->getUnitStationed()->getUnitType() == "BUILDERUNIT")
+    {
+        if(kiTargetFactorys > kiMyFactorys && kiTargetCache.size() >= kiMyUnits.size())
+        {
+            QTime time = QTime::currentTime();
+            qsrand((uint)time.msec());
+            if(tmpCache.size() == 0)
+                return;
+            int moveRand = qrand() % tmpCache.size();
+            int i = 0;
+            for(auto it : tmpCache)
+            {
+                if(i >= moveRand)
+                {
+                    if(it->getUnitStationed()!= nullptr || it->getHexMatchfieldType().contains("street") || it->getHexMatchfieldType().contains("forrest"))
+                        return;
+                    else
+                    {
+                        hex->getUnitStationed()->setUnitToBuild("Fabrik");
+                        if(kiPlayer->getCurrentEnergieStorage() >= 500)
+                        {
+                            kiProduceUnit(hex, it);
+                            return;
+                        }
+                        else
+                            return;
+                    }
+                }
+                i++;
+            }
+        }
+        else if(kiMapBoltanium > 1000 + 200* kiMyFactorys + 500* kiMyDepots)
+        {
+            QTime time = QTime::currentTime();
+            qsrand((uint)time.msec());
+            if(tmpCache.size() == 0)
+                return;
+            int moveRand = qrand() % tmpCache.size();
+            int i = 0;
+            for(auto it : tmpCache)
+            {
+                if(i >= moveRand)
+                {
+                    if(it->getUnitStationed()!= nullptr || it->getHexMatchfieldType().contains("street" || "forrest"))
+                        return;
+                    else
+                    {
+                        hex->getUnitStationed()->setUnitToBuild("Depot");
+                        if(kiPlayer->getCurrentEnergieStorage() >= 500)
+                        {
+                            kiProduceUnit(hex, it);
+                            return;
+                        }
+                        else
+                            return;
+                    }
+                }
+                i++;
+            }
+        }
 	}
-	else if(unit->getUnitType() == ("WATERUNIT" || "AIRUNIT" || "LIGHTUNIT" || "MEDIUMUNIT" || "HEAVYUNIT"))
-	{
-		//suche gegner den er besiegen kann
-	}
-	else if(unit->getUnitType() == "DEPOTUNIT")
-	{
-		//wenn einheit drinnen, repariere
-	}
-	else if(unit->getUnitType() == "FACTORYUNIT")
-	{
-		// guck wv boltanimu da ist, dann produziere teuerste einheit else return;
-	}
-	else
-	{
-		return;
-	}
+    else if( hex->getUnitStationed()->getUnitType().contains("FACTORY") || hex->getUnitStationed()->getUnitType().contains("HEADQUATER"))
+    {
+        if(kiMyBoltanium < 100)
+        {
+            QTime time = QTime::currentTime();
+            qsrand((uint)time.msec());
+            if(tmpCache.size() == 0)
+                return;
+            int moveRand = qrand() % tmpCache.size();
+            int i = 0;
+            for(auto it : tmpCache)
+            {
+                if(i >= moveRand)
+                {
+                    if(it->getUnitStationed()!= nullptr)
+                        return;
+                    else
+                    {
+                        hex->getUnitStationed()->setUnitToBuild("Kevarn");
+                        kiProduceUnit(hex, it);
+                        return;
+                    }
+                }
+                i++;
+            }
+        }
+        else if(kiTargetAir > kiTargetGround && kiTargetAir > kiTargetWater)
+        {
+            QTime time = QTime::currentTime();
+            qsrand((uint)time.msec());
+            if(tmpCache.size() == 0)
+                return;
+            int moveRand = qrand() % tmpCache.size();
+            int i = 0;
+            for(auto it : tmpCache)
+            {
+                if(i >= moveRand)
+                {
+                    if(it->getUnitStationed()!= nullptr)
+                        return;
+                    else
+                    {
+                        if(kiPlayer->getCurrentEnergieStorage() >= 200)
+                        {
+                            hex->getUnitStationed()->setUnitToBuild("Der Bolten");
+                            kiProduceUnit(hex, it);
+                            return;
+                        }
+                        else
+                            return;
+                    }
+                }
+                i++;
+            }
+        }
+        else if(kiTargetGround > kiTargetAir && kiTargetGround > kiTargetWater)
+        {
+            QTime time = QTime::currentTime();
+            qsrand((uint)time.msec());
+            if(tmpCache.size() == 0)
+                return;
+            int moveRand = qrand() % tmpCache.size();
+            int i = 0;
+            for(auto it : tmpCache)
+            {
+                if(i >= moveRand)
+                {
+                    if(it->getUnitStationed()!= nullptr)
+                        return;
+                    else
+                    {
+                        hex->getUnitStationed()->setUnitToBuild("Lucas");
+                        kiProduceUnit(hex, it);
+                        return;
+                    }
+                }
+                i++;
+            }
+        }
+        else
+        {
+            QTime time = QTime::currentTime();
+            qsrand((uint)time.msec());
+            if(tmpCache.size() == 0)
+                return;
+            int randUnit = qrand() % 21;
+            int moveRand = qrand() % tmpCache.size();
+            switch(randUnit)
+            {
+                //ligthUnits
+            case 0: hex->getUnitStationed()->setUnitToBuild("B.E.N"); break;
+            case 1: hex->getUnitStationed()->setUnitToBuild("FAV-Buster"); break;
+            case 2: hex->getUnitStationed()->setUnitToBuild("R-1 Demon"); break;
+                //mediumUnit
+            case 3: hex->getUnitStationed()->setUnitToBuild("Lucas"); break;
+            case 4: hex->getUnitStationed()->setUnitToBuild("T-3 Scorpion"); break;
+            case 5: hex->getUnitStationed()->setUnitToBuild("T-4 Gladiator"); break;
+                //heavyUnit
+            case 6: hex->getUnitStationed()->setUnitToBuild("Mann u. El"); break;
+            case 7: hex->getUnitStationed()->setUnitToBuild("AD9-Sphinx"); break;
+            case 8: hex->getUnitStationed()->setUnitToBuild("TLAV Invader"); break;
+                //transporter and build
+            case 9: hex->getUnitStationed()->setUnitToBuild("Kevarn"); break;
+            case 10: hex->getUnitStationed()->setUnitToBuild("G-2 Giant"); break;
+            case 11: hex->getUnitStationed()->setUnitToBuild("SC-P Merlin"); break;
+                //airUnits
+            case 12: hex->getUnitStationed()->setUnitToBuild("Der Bolten"); break;
+            case 13: hex->getUnitStationed()->setUnitToBuild("XA-7 Raven"); break;
+            case 14: hex->getUnitStationed()->setUnitToBuild("XF-7 Mosquito"); break;
+                //waterUnits
+            case 15: hex->getUnitStationed()->setUnitToBuild("M.S Miguel"); break;
+            case 16: hex->getUnitStationed()->setUnitToBuild("Z-1 Pegasus"); break; // transporterWater
+            case 17: hex->getUnitStationed()->setUnitToBuild("CV-Amazon"); break;
+            case 18: hex->getUnitStationed()->setUnitToBuild("MB-A Buccaneer"); break;
+            case 19: hex->getUnitStationed()->setUnitToBuild("TB-X Marauder"); break;
+            case 20: hex->getUnitStationed()->setUnitToBuild("W-1 Fortress"); break;
+            }
+            int i = 0;
+            for(auto it : tmpCache)
+            {
+                if(i >= moveRand)
+                {
+                    if(it->getUnitStationed()!= nullptr)
+                        return;
+                    else
+                    {
+                        int transUnit = 0;
+                        int bauerUnit = 0;
+                        for(auto x : kiMyUnits)
+                        {
+                            if(x->getUnitStationed()->getUnitType() == "TRANSPORTERGROUNDUNIT")
+                                transUnit++;
+                            if(x->getUnitStationed()->getUnitType() == "BUILDERUNIT")
+                                bauerUnit++;
+                        }
+                        if(transUnit < 2)
+                        {
+                            hex->getUnitStationed()->setUnitToBuild("Kevarn");
+                            if(it->getHexMatchfieldType()!= "waterSeashore" || it->getHexMatchfieldType()!= "waterDeep")
+                                kiProduceUnit(hex, it);
+                            return;
+                        }
+                        else if(bauerUnit < 1)
+                        {
+                            hex->getUnitStationed()->setUnitToBuild("SC-P Merlin");
+                            if(it->getHexMatchfieldType()!= "waterSeashore" || it->getHexMatchfieldType()!= "waterDeep")
+                                kiProduceUnit(hex, it);
+                            return;
+                        }
+                        else if(kiPlayer->getCurrentEnergieStorage() >= 130)
+                        {
+                            if(randUnit >= 15 && randUnit <= 20 && (it->getHexMatchfieldType()!= "waterSeashore" || it->getHexMatchfieldType()!= "waterDeep"))
+                                return;
+                            if(randUnit >= 6 && randUnit <=8 && it->getHexMatchfieldType()!= "forrest")
+                            kiProduceUnit(hex, it);
+                            return;
+                        }
+                        else
+                        {
+                            if(it->getHexMatchfieldType()!= "waterSeashore" || it->getHexMatchfieldType()!= "waterDeep")
+                            {
+                                if(moveRand % 2 == 0)
+                                    hex->getUnitStationed()->setUnitToBuild("Kevarn");
+                                else
+                                    hex->getUnitStationed()->setUnitToBuild("SC-P Merlin");
+                                kiProduceUnit(hex, it);
+                            }
+                            return;
+                        }
+                    }
+                }
+                i++;
+            }
+        }
+
+    }
+    else if(hex->getUnitStationed()->getUnitType() == "DEPOTUNIT")
+    {
+        for( auto it : tmpCache)
+        {
+            if(it->getUnitStationed()!=nullptr)
+            {
+                if(it->getUnitStationed()->getUnitCurrentHP() < it->getUnitStationed()->getUnitHP())
+                {
+                    qDebug() << "ich heile!";
+                    hex->getUnitStationed()->action(it);
+                    return;
+                }
+            }
+        }
+    }
+    else if(hex->getUnitStationed()->getUnitType() == "WATERUNIT" || hex->getUnitStationed()->getUnitType() == "AIRUNIT" || hex->getUnitStationed()->getUnitType() == "WATERUNIT" ||hex->getUnitStationed()->getUnitType() == "LIGHTUNIT" ||hex->getUnitStationed()->getUnitType() == "MEDIUMUNIT" || hex->getUnitStationed()->getUnitType() == "HEAVYUNIT")
+    {
+        if(prioCache.size()!=0)
+        {
+            for( auto it : tmpCache)
+            {
+                for ( auto danger : prioCache)
+                {
+                    if(it->getQpoint_gridPosition() == danger->getQpoint_gridPosition())
+                    {
+                        hex->getUnitStationed()->action(it);
+                        return;
+                    }
+                }
+            }
+        }
+
+        for( auto it : tmpCache)
+        {
+            if(it->getQpoint_gridPosition() == kiEnemyHq->getQpoint_gridPosition())
+            {
+                hex->getUnitStationed()->action(it);
+                return;
+            }
+        }
+
+        for( auto it : tmpCache)
+        {
+            for(auto target : kiTargetCache)
+            {
+                if(it->getQpoint_gridPosition() == target->getQpoint_gridPosition())
+                {
+                    hex->getUnitStationed()->action(it);
+                    return;
+                }
+            }
+        }
+    }
 }
-*/
+
 void KI::fillKiMyUnits_Cache()
 {
+    kiMapBoltanium = 0;
+    kiMyFactorys = 0;
+    kiMyDepots = 0;
+    kiTargetFactorys = 0;
+    kiTargetAir = 0;
+    kiTargetGround = 0;
+    kiTargetWater = 0;
     for (unsigned int i = 0; i < kiMyMatchfield.size(); i++)
 	{
         for (unsigned int j = 0; j < kiMyMatchfield[i].size(); j++)
 		{
+            kiMapBoltanium += kiMyMatchfield[i][j]->getBoltaniumCurrent();
 			if (kiMyMatchfield[i][j]->getUnitStationed() != nullptr)
 			{
 				if (kiMyMatchfield[i][j]->getUnitStationed()->getUnitPlayer()->getPlayerID() == kiPlayer->getPlayerID())
 				{
                     kiMyUnits.insert(kiMyMatchfield[i][j]);
-                    qDebug() << kiMyUnits.size() << "my unit";
+                    if (kiMyMatchfield[i][j]->getUnitStationed()->getUnitType().contains("DEPOT"))
+                        kiMyDepots++;
+                    else if(kiMyMatchfield[i][j]->getUnitStationed()->getUnitType().contains("FACTORY"))
+                        kiMyFactorys++;
 				}
 				else
 				{
                     kiTargetCache.insert(kiMyMatchfield[i][j]);
+                    if (kiMyMatchfield[i][j]->getUnitStationed()->getUnitType().contains("FACTORY"))
+                        kiTargetFactorys++;
+                    else if(kiMyMatchfield[i][j]->getUnitStationed()->getUnitType().contains("WATER"))
+                        kiTargetWater++;
+                    else if(kiMyMatchfield[i][j]->getUnitStationed()->getUnitType().contains("AIR"))
+                        kiTargetAir++;
+                    else if(kiMyMatchfield[i][j]->getUnitStationed()->getUnitType().contains("GROUND" || "HEAVY" || "MEDIUM" || "LIGHT"))
+                        kiTargetGround++;
 				}
 			}
 		}
@@ -281,7 +584,14 @@ void KI::fillKiMyUnits_Cache()
 void KI::delKiMyUnits_Cache()
 {
 	kiTargetCache.clear();
-	kiMyUnits.clear();
+    kiMyUnits.clear();
+}
+
+void KI::kiProduceUnit(HexagonMatchfield * hex, HexagonMatchfield * targetHex)
+{
+    hex->getUnitStationed()->action(targetHex);
+    targetHex->getUnitStationed()->setPos(targetHex->pos());   //Position in der Scene setzen
+    kiGame->getPtr_gameWidget()->getGameWidGameScene()->addItem(targetHex->getUnitStationed());
 }
 
 /*bool KI::isHexInCache(HexagonMatchfield* hex, std::vector<HexagonMatchfield*> cache)
@@ -305,6 +615,8 @@ void KI::moveUnit(HexagonMatchfield* it, HexagonMatchfield* hex, int size)
     {
         tmpCameFrom = kiGame->getCamefrom_Hex(tmpCameFrom);
         tmpCurrenCost = kiGame->getCurrentCost_Int(tmpCameFrom);
+        if(tmpCurrenCost == 0)
+            return;
     }
     kiGame->moveUnitTo(tmpCameFrom);
 }

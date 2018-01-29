@@ -93,5 +93,9 @@
         <file>Buttons/BeladenMit_blau.png</file>
         <file>Buttons/AttackeMit_rot.png</file>
         <file>Buttons/AttackeMit_blau.png</file>
+        <file>Buttons/ZoomIN_blau.png</file>
+        <file>Buttons/ZoomIN_rot.png</file>
+        <file>Buttons/ZoomOUT_blau.png</file>
+        <file>Buttons/ZoomOUT_rot.png</file>
     </qresource>
 </RCC>

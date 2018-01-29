@@ -44,6 +44,11 @@ std::vector<QPoint> Game::vec_qpointEvenNeighbors = {QPoint(1,0),QPoint(1,-1),QP
 std::vector<QPoint> Game::vec_qpointOddNeighbors = {QPoint(1,1),QPoint(1,0),QPoint(0,-1),QPoint(-1,0),QPoint(-1,1),QPoint(0,1)};
 
 
+GameWidget *Game::getPtr_gameWidget() const
+{
+    return ptr_gameWidget;
+}
+
 Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     ptr_hexSelectionCache(nullptr), ptr_options(init_options), ptr_gameWidget(ptr_gameWid),
     ptr_playerOne(new Player("Eins", 1)), ptr_playerTwo(new Player("Zwei", 2)),
@@ -606,6 +611,37 @@ void Game::buttonPressedChangePhase()
         autoplayKi();
 }
 
+void Game::buttonPressedZoomIn()
+{
+    if(ptr_gameWidget->getDouble_scaleFak() <= 3)
+    {
+        ptr_gameWidget->setDouble_scaleFak(ptr_gameWidget->getDouble_scaleFak() + 0.5);
+        for(auto & it : ptr_gameWidget->getGameWidGameScene()->items())
+        {
+            it->setScale(ptr_gameWidget->getDouble_scaleFak());
+            ptr_gameWidget->getGameWidGameScene()->removeItem(it);
+        }
+        ptr_gameWidget->gameWidCreateMatchfield(vec_hexGameGrid);
+    }
+}
+
+void Game::buttonPressedZoomOut()
+{
+    if(ptr_gameWidget->getDouble_scaleFak() >= 0.5)
+    {
+        if(ptr_gameWidget->getDouble_scaleFak() >1)
+            ptr_gameWidget->setDouble_scaleFak(ptr_gameWidget->getDouble_scaleFak() - 0.5);
+        else
+            ptr_gameWidget->setDouble_scaleFak(ptr_gameWidget->getDouble_scaleFak() - 0.1);
+        for(auto & it : ptr_gameWidget->getGameWidGameScene()->items())
+        {
+            it->setScale(ptr_gameWidget->getDouble_scaleFak());
+            ptr_gameWidget->getGameWidGameScene()->removeItem(it);
+        }
+        ptr_gameWidget->gameWidCreateMatchfield(vec_hexGameGrid);
+    }
+}
+
 void Game::SLOT_MenueButtonSelected(int menue)
 {
     QString pathToLoadFile = "";
@@ -1137,17 +1173,23 @@ void Game::createButtons()
     ButtonChangePhase* changephasebutton = new ButtonChangePhase(64,64);
     ButtonMap* mapbutton = new ButtonMap(64,64);
     ButtonMenue* menuebutton = new ButtonMenue(64,64);
+    ButtonZoomIn* zoomInbutton = new ButtonZoomIn(64,64);
+    ButtonZoomOut* zoomOutbutton = new ButtonZoomOut(64,64);
 
     vec_buttonMenueBar.push_back(movebutton);
     vec_buttonMenueBar.push_back(actionbutton);
     vec_buttonMenueBar.push_back(changephasebutton);
     vec_buttonMenueBar.push_back(mapbutton);
     vec_buttonMenueBar.push_back(menuebutton);
+    vec_buttonMenueBar.push_back(zoomInbutton);
+    vec_buttonMenueBar.push_back(zoomOutbutton);
     connect(movebutton,SIGNAL(clicked()),this,SLOT(buttonPressedMove()));
     connect(actionbutton,SIGNAL(clicked()),this,SLOT(buttonPressedAction()));
     connect(changephasebutton,SIGNAL(clicked()),this,SLOT(buttonPressedChangePhase()));
     connect(mapbutton, SIGNAL(clicked()), this, SLOT(buttonPressedMap()));
     connect(menuebutton,SIGNAL(clicked()),this,SLOT(buttonPressedMenue()));
+    connect(zoomInbutton, SIGNAL(clicked()), this, SLOT(buttonPressedZoomIn()));
+    connect(zoomOutbutton,SIGNAL(clicked()),this,SLOT(buttonPressedZoomOut()));
 
     connect(ptr_gameWidget, SIGNAL(SIGNAL_MenueButtonPushed(int)), this, SLOT(SLOT_MenueButtonSelected(int)));
     connect(ptr_gameWidget, SIGNAL(SIGNAL_changeStateOfButtons()), this, SLOT(SLOT_checkStateOfButtons()));

@@ -774,6 +774,12 @@ void BuildLightUnit::resetBuildUnloadParameter()
     }
 }
 
+//für die KI
+void BuildLightUnit::setUnitToBuild(QString name)
+{
+    qstring_unitToBuild = name;
+}
+
 /*
 Hilfsfunktion für QWt Mechaniken
 */

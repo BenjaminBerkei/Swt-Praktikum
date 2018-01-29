@@ -154,6 +154,8 @@ public:
     void produceUnit(HexagonMatchfield *hex_target);
     virtual BuildLightUnit* createUnit();
     void resetBuildUnloadParameter();
+    //für die KI
+    virtual void setUnitToBuild(QString);
 
 private slots:
     void SLOT_setUnitToBuild(Unit* unit);

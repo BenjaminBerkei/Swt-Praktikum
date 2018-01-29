@@ -78,6 +78,8 @@ private:
     int sizeX;
     int sizeY;
 
+    double double_scaleFak;
+
 public:
     explicit GameWidget(QWidget *parent = 0);
     ~GameWidget();
@@ -108,6 +110,7 @@ public:
     void setRoundLabel(int current, int max);
     void setSizeX(int value);
     void setSizeY(int value);
+    void setDouble_scaleFak(double value);
 
     int getSizeX() const;
     int getSizeY() const;
@@ -118,6 +121,7 @@ public:
     QGraphicsScene *getGameWidMenueScene() const;
     QGraphicsView* getGameWidGameView() const;
     QGraphicsScene *getGameWidMapScene() const;
+    double getDouble_scaleFak() const;
 
 
 private:

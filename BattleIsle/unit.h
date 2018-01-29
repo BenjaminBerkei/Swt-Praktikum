@@ -75,6 +75,8 @@ public:
     virtual void addUnitToStorage(Unit* unit);
     virtual void resetBuildUnloadParameter();
     /*Hilfsfunktionen Ende*/
+    // Hilfsfunktion für KI
+    virtual void setUnitToBuild(QString);
 
 	QString getUnitName() const;
 	Player* getUnitPlayer() const;

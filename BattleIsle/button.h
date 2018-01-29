@@ -129,4 +129,34 @@ signals:
     void clicked();
 
 };
+
+//New Class
+class ButtonZoomIn: public Button
+{
+    Q_OBJECT
+public:
+    ButtonZoomIn(int sizeX = 64, int sizeY = 64);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+    void printType();
+signals:
+    void clicked();
+
+};
+
+//New Class
+class ButtonZoomOut: public Button
+{
+    Q_OBJECT
+public:
+    ButtonZoomOut(int sizeX = 64, int sizeY = 64);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+    void printType();
+signals:
+    void clicked();
+
+};
 #endif // BUTTON_H

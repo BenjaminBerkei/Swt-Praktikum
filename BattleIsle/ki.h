@@ -42,6 +42,14 @@ class KI
 {
 private:
 	Player* kiPlayer;
+    int kiMyBoltanium;
+    int kiMapBoltanium;
+    int kiMyFactorys;
+    int kiMyDepots;
+    int kiTargetFactorys;
+    int kiTargetAir;
+    int kiTargetGround;
+    int kiTargetWater;
 	Game* kiGame;
     std::unordered_set<HexagonMatchfield*> kiMyUnits;
     std::unordered_set<HexagonMatchfield*> kiTargetCache;
@@ -55,12 +63,15 @@ public:
 	KI(Game*, Player*, std::vector<std::vector<HexagonMatchfield*>>);
     ~KI();
 
+    void updateKiMyBolt();
+
     void autoPlayMove();
 	void autoMovePhase(HexagonMatchfield*);
     void autoPlayAction();
-    //void autoActionPhase(HexagonMatchfield*);
+    void autoActionPhase(HexagonMatchfield*);
 	void fillKiMyUnits_Cache();
 	void delKiMyUnits_Cache();
+    void kiProduceUnit(HexagonMatchfield*,HexagonMatchfield*);
     //bool isHexInCache(HexagonMatchfield*,std::vector<HexagonMatchfield*>);
 
     void moveUnit(HexagonMatchfield*, HexagonMatchfield*, int);
