@@ -46,7 +46,7 @@ void StartMenueWidget::startGame()
         ptr_smwMenueWidget->setPtr_runningGame(new Game(ptr_smwOptions, ptr_smwMenueWidget->getPtr_mwGameWidget()));
         connect(ptr_smwMenueWidget->getPtr_runningGame(), SIGNAL(gameOver()), this, SLOT(gameEnded()));
 
-        ptr_smwMenueWidget->resize( 1200,750 );
+        ptr_smwMenueWidget->resize( 1200,780 );
         ptr_smwMenueWidget->ui->stack->resize( 1190, 740 );
         ptr_smwMenueWidget->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
 

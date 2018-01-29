@@ -186,11 +186,15 @@ void GameWidget::resizeEvent(QResizeEvent *,int mainHeight, int mainWidth)
     ui->graphicsView_informationsView->setGeometry(xLeftTop + ui->graphicsView_gameView->width() + 5, yLeftTop, 240, 160);
 
     ui->graphicsView_optionsView->setGeometry(xLeftTop + ui->graphicsView_gameView->width() + 5, yLeftTop + ui->graphicsView_informationsView->height() + 5,
-                                              ui->graphicsView_informationsView->width(), mainHeight - ui->graphicsView_informationsView->height() - 70);
+                                              ui->graphicsView_informationsView->width(), mainHeight - ui->graphicsView_informationsView->height() - ui->graphicsView_buttonView->height() - 90);
 
-    ui->graphicsView_buttonView->setGeometry(xLeftTop, yLeftTop + ui->graphicsView_gameView->height() + 10, ui->graphicsView_gameView->width(), 110);
+    ui->graphicsView_buttonView->setGeometry(xLeftTop, yLeftTop + ui->graphicsView_gameView->height() + 10, ui->graphicsView_gameView->width(), 90);
+
+    ui->ptr_textBrowserLog->setGeometry(ui->graphicsView_informationsView->x(), ui->graphicsView_buttonView->y(), ui->graphicsView_informationsView->width(),
+                                        ui->graphicsView_buttonView->height());
 
     gameWidOptionsScene->setSceneRect(gameWidOptionsScene->itemsBoundingRect());
+    gameWidButtonScene->setSceneRect(gameWidOptionsScene->itemsBoundingRect());
 }
 
 void GameWidget::gameWidCreateMatchfield(std::vector<std::vector<HexagonMatchfield*>> &hexagonGrid)
@@ -280,6 +284,8 @@ void GameWidget::gameWidCreateButtonBar(std::vector<Button*> buttonVector)
         buttonVector[i]->setPos( startPos + (i+1) * buttonVector[i]->pixmap().size().width() ,25);
         gameWidButtonScene->addItem(buttonVector[i]);
     }
+    gameWidButtonScene->setSceneRect(gameWidOptionsScene->itemsBoundingRect());
+
     gameWidButtonScene->update();
 }
 
@@ -334,6 +340,7 @@ void GameWidget::resetGameWidget()
     qDebug() << "game Widget reset start";
     sizeX = 0;
     sizeY = 0;
+    ui->ptr_textBrowserLog->clear();
     qDebug() << "game Widget reset done";
 }
 
@@ -375,6 +382,17 @@ void GameWidget::animateUnit(Unit * unitToAnimate, std::vector<QPointF> points)
         animation->setPosAt(i/(double)points.size(), points[points.size() - i]);
     }
     timer->start();
+}
+
+void GameWidget::newLog(QString msg)
+{
+    ui->ptr_textBrowserLog->append(tr("-> %1").arg(msg));
+}
+
+void GameWidget::newLog(HexagonMatchfield * selection)
+{
+    this->newLog("Hex: (" + QString::number(selection->getQpoint_gridPosition().x()) + ", " +
+                           QString::number(selection->getQpoint_gridPosition().y()) + ")" );
 }
 
 void GameWidget::gameWidCreateMap(std::vector<std::vector<HexagonMatchfield *> > &hexagonGrid)

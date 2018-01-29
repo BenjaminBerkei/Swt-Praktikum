@@ -99,6 +99,8 @@ public:
     void updateMatchfieldScene();
     void repaintGameView();
     void animateUnit(Unit*, std::vector<QPointF>);
+    void newLog(QString);
+    void newLog(HexagonMatchfield*);
 
     //get und set Methoden
     void setInfoScene(HexagonDisplayInfo *info);

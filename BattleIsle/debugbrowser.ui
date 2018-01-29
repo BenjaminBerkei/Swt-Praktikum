@@ -17,13 +17,6 @@
    <item>
     <widget class="QTextBrowser" name="qtext_debugBrowser"/>
    </item>
-   <item>
-    <widget class="QPushButton" name="pushbutton_clear">
-     <property name="text">
-      <string>Clear</string>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <resources/>

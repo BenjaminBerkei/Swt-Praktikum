@@ -62,6 +62,7 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
 
     {
         createRandomMap();
+        ptr_gameWidget->newLog("Random Map Created");
     }
 
     ptr_gameWidget->gameWidCreateMatchfield(vec_hexGameGrid);
@@ -70,6 +71,7 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
 
     //Buttons Einfuegen
     createButtons();
+    ptr_gameWidget->newLog("Buttons erstellt");
     changeButtonPixmap();
 
 
@@ -79,6 +81,7 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
        ptr_playerTwo->setBoolKi(true);
        ptr_playerTwo->setPlayerName("Johann der Sucher"); // wehe jemand ändern denn npc namen
        ptr_gameKI = new KI(this, ptr_playerTwo, vec_hexGameGrid);
+       ptr_gameWidget->newLog("KI: " + ptr_playerTwo->getPlayerName() + " wurde erstellt");
     }
 
     updateLabels();
@@ -211,6 +214,7 @@ void Game::processSelection(HexagonMatchfield *selection)
         }
         //Angeklicktes auf AKTIVE setzten
         ptr_hexSelectionCache->setState(ACTIVE);
+        ptr_gameWidget->newLog(selection);
         break;
 
     case ACTIVE:
@@ -701,6 +705,10 @@ void Game::resetTargetCache()
 }
 void Game::moveUnitTo(HexagonMatchfield * target)
 {
+    ptr_gameWidget->newLog("(" + QString::number(ptr_hexSelectionCache->getQpoint_gridPosition().x()) + ", " +
+                           QString::number(ptr_hexSelectionCache->getQpoint_gridPosition().y()) + ") -> " +
+                           "(" + QString::number(target->getQpoint_gridPosition().x()) + ", " +
+                                                      QString::number(target->getQpoint_gridPosition().y()) + ")");
     Unit* unitToMove = ptr_hexSelectionCache->getUnitStationed();
     unitToMove->setUnitCurrentMoveRange(unitToMove->getUnitCurrentMoveRange() - map_hexCurrentCost[target]);
 
@@ -727,6 +735,7 @@ void Game::moveUnitTo(HexagonMatchfield * target)
        else
             target->getUnitStationed()->setPos(target->pos());
     }
+
     vec_unitGrid[ptr_hexSelectionCache->getQpoint_gridPosition().x()][ptr_hexSelectionCache->getQpoint_gridPosition().y()] = nullptr; //Einheit aus dem UnitGrid löschen
     ptr_hexSelectionCache->setUnitStationed(nullptr);     //Einheit vom alten feld entfernen
     ptr_hexSelectionCache->setState(INACTIVE);     //Auswahl auf inactiv setzen
