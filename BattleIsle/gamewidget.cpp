@@ -151,6 +151,9 @@ GameWidget::GameWidget(QWidget *parent) :
 
     ui->graphicsView_optionsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->graphicsView_optionsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    ui->graphicsView_buttonView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->graphicsView_buttonView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
 GameWidget::~GameWidget()
@@ -179,8 +182,12 @@ void GameWidget::resizeEvent(QResizeEvent *,int mainHeight, int mainWidth)
     int yLeftTop = ui->graphicsView_gameView->y();
 
     ui->graphicsView_gameView->setGeometry(xLeftTop, yLeftTop, mainWidth - xLeftTop - 265, mainHeight - yLeftTop - 165);
+
     ui->graphicsView_informationsView->setGeometry(xLeftTop + ui->graphicsView_gameView->width() + 5, yLeftTop, 240, 160);
-    ui->graphicsView_optionsView->setGeometry(xLeftTop + ui->graphicsView_gameView->width() + 5, yLeftTop + ui->graphicsView_informationsView->height() + 5, ui->graphicsView_informationsView->width(), this->height() - 100);
+
+    ui->graphicsView_optionsView->setGeometry(xLeftTop + ui->graphicsView_gameView->width() + 5, yLeftTop + ui->graphicsView_informationsView->height() + 5,
+                                              ui->graphicsView_informationsView->width(), mainHeight - ui->graphicsView_informationsView->height() - 70);
+
     ui->graphicsView_buttonView->setGeometry(xLeftTop, yLeftTop + ui->graphicsView_gameView->height() + 10, ui->graphicsView_gameView->width(), 110);
 
     gameWidOptionsScene->setSceneRect(gameWidOptionsScene->itemsBoundingRect());
@@ -397,7 +404,7 @@ void GameWidget::gameWidCreateMap(std::vector<std::vector<HexagonMatchfield *> >
 
     for(unsigned int i=0; i<hexagonGrid.size(); i++)
     {
-        std::vector<MapPixel*> vecMapPixel;
+        std::vector< QPointer<MapPixel> > vecMapPixel;
         for(unsigned int j=0; j<hexagonGrid[i].size(); j++)
         {
 
@@ -703,6 +710,10 @@ void MapPixel::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidge
                 colorBrush = Qt::green;
             if(ptr_mapPixHexaon->getHexMatchfieldType() == "mountainTop")
                 colorBrush = Qt::gray;
+            if(ptr_mapPixHexaon->getHexMatchfieldType().contains("streetStraight")
+                    || ptr_mapPixHexaon->getHexMatchfieldType().contains("streetCurve")
+                    || ptr_mapPixHexaon->getHexMatchfieldType().contains("streetCrossing"))
+                colorBrush = Qt::white;
             if(ptr_mapPixHexaon->getBoltaniumCurrent() > 0) // Fuer Boltanium
                 colorBrush = Qt::darkMagenta;
         }

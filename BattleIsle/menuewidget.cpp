@@ -17,7 +17,6 @@ void MenueWidget::setPtr_runningGame(Game *value)
     if(ptr_runningGame != nullptr)
     {
         delete ptr_runningGame;
-        ptr_runningGame = nullptr;
     }
     ptr_runningGame = value;
 }
@@ -27,9 +26,9 @@ Game *MenueWidget::getPtr_runningGame() const
     return ptr_runningGame;
 }
 
-MenueWidget::MenueWidget(QWidget *parent) :
+MenueWidget::MenueWidget(QPointer<DebugBrowser> browser, QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MenueWidget)
+    ptr_debugBrowser(browser), ui(new Ui::MenueWidget)
 {
     ui->setupUi(this);
     this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
@@ -50,6 +49,9 @@ MenueWidget::MenueWidget(QWidget *parent) :
     connect(ptr_mwOptionsWidget, SIGNAL(SIGNAL_optChangeIndexFromStack(int)), ui->stack, SLOT(setCurrentIndex(int)));
     connect(ptr_mwLoadGameWidget, SIGNAL(SIGNAL_loadGChangeIndexFromStack(int)), ui->stack, SLOT(setCurrentIndex(int)));
     connect(ptr_mwGameWidget, SIGNAL(SIGNAL_gameWidChangeIndexFromStack(int)), ui->stack, SLOT(setCurrentIndex(int)));
+
+    ptr_debugBrowser->move(QApplication::desktop()->screen()->rect().center().x() - this->rect().center().x() + ptr_debugBrowser->width(),
+                           QApplication::desktop()->screen()->rect().center().y() - this->rect().center().y());
 }
 
 MenueWidget::~MenueWidget()
@@ -67,6 +69,8 @@ MenueWidget::~MenueWidget()
     qDebug() << "\t Delete ptr_mwLoadGameWidget done";
     delete ptr_mwGameWidget;
     qDebug() << "\t Delete ptr_mwGameWidget done";
+    delete ptr_debugBrowser;
+    qDebug() << "\t Delete ptr_debugBrowser done";
     qDebug() << "Destruktor MenueWidget end";
 }
 
@@ -77,11 +81,4 @@ void MenueWidget::resizeEvent(QResizeEvent *event)
         ptr_mwGameWidget->resizeEvent(event, this->height(), this->width());
     }
     qDebug() << "Resize event";
-}
-
-void MenueWidget::deleteGame()
-{
-    delete ptr_runningGame;
-    qDebug() << "Game delete fertig";
-    ptr_runningGame = nullptr;
 }

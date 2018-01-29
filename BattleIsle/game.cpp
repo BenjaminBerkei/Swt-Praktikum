@@ -112,6 +112,7 @@ Game::~Game()
         for(auto &ut : it)
         {
             delete ut;
+            ut = nullptr;
         }
         it.clear();
     }
@@ -122,6 +123,7 @@ Game::~Game()
         for(auto &ut : it)
         {
             delete ut;
+            ut = nullptr;
         }
         it.clear();
     }
@@ -130,11 +132,14 @@ Game::~Game()
     for(auto &it : ptr_gameWidget->getGameWidButtonScene()->items())
     {
         delete it;
+        it = nullptr;
     }
     vec_buttonMenueBar.clear();
     qDebug() << "\t Button Bar gelöscht";
     delete ptr_playerOne;
+    ptr_playerOne = nullptr;
     delete ptr_playerTwo;
+    ptr_playerTwo = nullptr;
     qDebug() << "\t Player Gelöscht";
     qDebug() << "Destruktor Game end";
 
@@ -644,7 +649,6 @@ void Game::buttonPressedZoomOut()
 
 void Game::SLOT_MenueButtonSelected(int menue)
 {
-    QString pathToLoadFile = "";
     switch(menue)
     {
     case 0 : saveGame(); return;
