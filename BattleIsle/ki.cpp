@@ -99,13 +99,14 @@ void KI::autoMovePhase(HexagonMatchfield* hex)
             return;
         if(hex->getUnitStationed()->getUnitType().contains("TRANSPORTER"))
         {
+            std::unordered_set<HexagonMatchfield*> tmpGood = tmpCache;
             if (hex->getUnitStationed()->getUnitCurrentHP() <= hex->getUnitStationed()->getUnitHP() / 2)
             {
-                std::unordered_set<HexagonMatchfield*> tmpGood = goodHexCache(tmpCache);
-                tmpCache.clear();
-                tmpCache = tmpGood;
+                tmpGood = goodHexCache(tmpCache);
+                if(tmpGood.size()==0)
+                    unitMoveRandom(hex);
             }
-            for (auto itCache : tmpCache)
+            for (auto itCache : tmpGood)
             {
                 if (itCache->getBoltaniumCurrent() > 0)
                 {
@@ -116,14 +117,15 @@ void KI::autoMovePhase(HexagonMatchfield* hex)
         }
         else if(hex->getUnitStationed()->getUnitType() == "BUILDERUNIT")
         {
+            std::unordered_set<HexagonMatchfield*> tmpGood = tmpCache;
             if (hex->getUnitStationed()->getUnitCurrentHP() <= hex->getUnitStationed()->getUnitHP() / 2)
             {
-                std::unordered_set<HexagonMatchfield*> tmpGood = goodHexCache(tmpCache);
-                tmpCache.clear();
-                tmpCache = tmpGood;
+                tmpGood = goodHexCache(tmpCache);
+                if(tmpGood.size()==0)
+                    unitMoveRandom(hex);
             }
 
-            for (auto itCache : tmpCache)
+            for (auto itCache : tmpGood)
             {
                 if(itCache->getUnitStationed() == nullptr)
                 {
@@ -427,6 +429,7 @@ void KI::autoActionPhase(HexagonMatchfield* hex)
             case 20: hex->getUnitStationed()->setUnitToBuild("W-1 Fortress"); break;
             }
             int i = 0;
+            qDebug() << "case: " << randUnit;
             for(auto it : tmpCache)
             {
                 if(i >= moveRand)
@@ -444,7 +447,7 @@ void KI::autoActionPhase(HexagonMatchfield* hex)
                             if(x->getUnitStationed()->getUnitType() == "BUILDERUNIT")
                                 bauerUnit++;
                         }
-                        if(transUnit < 2)
+                        if(transUnit < 1)
                         {
                             hex->getUnitStationed()->setUnitToBuild("Kevarn");
                             if(it->getHexMatchfieldType()!= "waterSeashore" || it->getHexMatchfieldType()!= "waterDeep")
