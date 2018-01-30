@@ -441,7 +441,7 @@ void KI::autoActionPhase(HexagonMatchfield* hex)
                             kiProduceUnit(hex, it);
                             return;
                         }
-                        if((randUnit >= 6 && randUnit <=8 && (it->getHexMatchfieldType()!= "forrest") || it->getHexMatchfieldType()!= "mountain") || (randUnit >=3 && randUnit <=5 && it->getHexMatchfieldType()!= "mountain"))
+                        if((randUnit >= 6 && randUnit <=8 && (it->getHexMatchfieldType()!= "forrest" || it->getHexMatchfieldType()!= "mountain" || it->getHexMatchfieldType()!= "waterSeashore" || it->getHexMatchfieldType()!= "waterDeep")) || (randUnit >=3 && randUnit <=5 && (it->getHexMatchfieldType()!= "mountain" || it->getHexMatchfieldType()!= "waterSeashore" || it->getHexMatchfieldType()!= "waterDeep")))
                         {
                             kiProduceUnit(hex, it);
                             return;
@@ -562,6 +562,7 @@ void KI::kiProduceUnit(HexagonMatchfield * hex, HexagonMatchfield * targetHex)
     if(hex->getUnitStationed()->action(targetHex))
     {
         targetHex->getUnitStationed()->setPos(targetHex->pos());   //Position in der Scene setzen
+        targetHex->getUnitStationed()->setScale(kiGame->getPtr_gameWidget()->getDouble_scaleFak()); // skalieren
         kiGame->getPtr_gameWidget()->getGameWidGameScene()->addItem(targetHex->getUnitStationed());
     }
 
@@ -597,10 +598,10 @@ void KI::moveUnit(HexagonMatchfield* it, HexagonMatchfield* hex, int size)
     int tmpCurrenCost = kiGame->getCurrentCost_Int(tmpCameFrom);
     while (tmpCurrenCost > hex->getUnitStationed()->getUnitCurrentMoveRange() || tmpCameFrom->getUnitStationed()!=nullptr)
     {
-        tmpCameFrom = kiGame->getCamefrom_Hex(tmpCameFrom);
-        tmpCurrenCost = kiGame->getCurrentCost_Int(tmpCameFrom);
         if(tmpCurrenCost == 0)
             return;
+        tmpCameFrom = kiGame->getCamefrom_Hex(tmpCameFrom);
+        tmpCurrenCost = kiGame->getCurrentCost_Int(tmpCameFrom); 
     }
     kiGame->moveUnitTo(tmpCameFrom);
 }
@@ -634,6 +635,7 @@ void KI::unitMoveRandom(HexagonMatchfield * hex)
 
 HexagonMatchfield *KI::calcActionRange(std::unordered_set<HexagonMatchfield *> cache, HexagonMatchfield* target, int range)
 {
+    qDebug() << "calcActionRange Target :" << target->getUnitStationed()->getUnitType();
     for(auto it: cache)
     {
         kiGame->calculateTargets(it, range);

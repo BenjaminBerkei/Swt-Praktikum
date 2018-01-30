@@ -340,6 +340,7 @@ void GameWidget::resetGameWidget()
     qDebug() << "game Widget reset start";
     sizeX = 0;
     sizeY = 0;
+    double_scaleFak = 1;
     ui->ptr_textBrowserLog->clear();
     qDebug() << "game Widget reset done";
 }

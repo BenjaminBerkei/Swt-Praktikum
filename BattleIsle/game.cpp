@@ -247,6 +247,7 @@ void Game::processSelection(HexagonMatchfield *selection)
                 {
                     vec_unitGrid[selection->getQpoint_gridPosition().x()][selection->getQpoint_gridPosition().y()] = selection->getUnitStationed(); // in das Grid einfügen
                     selection->getUnitStationed()->setPos(selection->pos());   //Position in der Scene setzen
+                    selection->getUnitStationed()->setScale(ptr_gameWidget->getDouble_scaleFak()); // skalieren
                     ptr_gameWidget->getGameWidGameScene()->addItem(selection->getUnitStationed());    //in die Scene einfügen
                 }
                 ptr_gameWidget->setOptScene(ptr_hexSelectionCache->getUnitStationed()->getVector_unitStorage());
@@ -625,7 +626,10 @@ void Game::buttonPressedZoomIn()
 {
     if(ptr_gameWidget->getDouble_scaleFak() <= 3)
     {
-        ptr_gameWidget->setDouble_scaleFak(ptr_gameWidget->getDouble_scaleFak() + 0.5);
+        if(ptr_gameWidget->getDouble_scaleFak() >1)
+            ptr_gameWidget->setDouble_scaleFak(ptr_gameWidget->getDouble_scaleFak() + 0.5);
+        else
+            ptr_gameWidget->setDouble_scaleFak(ptr_gameWidget->getDouble_scaleFak() + 0.1);
         for(auto & it : ptr_gameWidget->getGameWidGameScene()->items())
         {
             it->setScale(ptr_gameWidget->getDouble_scaleFak());
