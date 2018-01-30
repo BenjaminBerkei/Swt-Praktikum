@@ -10,6 +10,11 @@
  * */
 #include "unit.h"
 
+void Unit::setUnitCost(int value)
+{
+    int_unitCost = value;
+}
+
 Unit::Unit()
     : str_unitName(""), unitPlayer(nullptr), int_unitView(0), int_unitHP(0), int_unitCurrentHP(0),
       str_unitDetails(""), str_unitType(""), int_unitCost(0), int_unitStorageMax(0), bool_unitUsed(false),
@@ -73,13 +78,17 @@ void Unit::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     painter->setBrush(brush);
     painter->drawRect(QRect(19,5,25,3));
 
-    brush.setColor(Qt::green);
-    pen.setWidth(1);
-    pen.setColor(Qt::green);
 
-    painter->setPen(pen);
-    painter->setBrush(brush);
-    painter->drawRect(QRect(19,5,(double)int_unitCurrentHP / (double)int_unitHP * 25,3));
+    if(int_unitCurrentHP > 0)
+    {
+        brush.setColor(Qt::green);
+        pen.setWidth(1);
+        pen.setColor(Qt::green);
+
+        painter->setPen(pen);
+        painter->setBrush(brush);
+        painter->drawRect(QRect(19,5,(double)int_unitCurrentHP / (double)int_unitHP * 25,3));
+    }
 }
 
 void Unit::resetMovementRange()

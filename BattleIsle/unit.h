@@ -39,6 +39,7 @@ protected:
 	QString str_unitDetails;
 	QString str_unitType;
 	int int_unitCost;
+
     std::vector<Unit*> vector_unitStorage;
 	int int_unitStorageMax;
 	bool bool_unitUsed;
@@ -109,6 +110,7 @@ public:
     void setUnitAirAtt(int value);
     void setUnitEXP(const int);
     void setVector_unitStorage(const std::vector<Unit *> &value);
+    void setUnitCost(int value);
 };
 
 

@@ -553,7 +553,7 @@ int GameWidget::getSizeY() const
     return sizeY;
 }
 HexagonDisplayInfo::HexagonDisplayInfo(HexagonMatchfield *ptr_hexMfield)
-    :QObject(0), QGraphicsRectItem(QRectF(-50,-50,230,100), 0), hexToDisplay(ptr_hexMfield)
+    :QObject(0), QGraphicsRectItem(QRectF(-50,-50,230,140), 0), hexToDisplay(ptr_hexMfield)
 {
     updateText();
 }
@@ -562,22 +562,32 @@ void HexagonDisplayInfo::paint(QPainter *painter, const QStyleOptionGraphicsItem
 {
     updateText();
     painter->drawPixmap(-50 ,-50, hexToDisplay->pixmap());
-    painter->drawText(QRectF(20,-50,1000,200),qStringHexDispHexType);
-
+    painter->drawText(QRectF(20,-50,260,200),qStringHexDispHexType);
+    int counter = 0;
+    if(qStringHexDisplayHexBoltanium != "NONE")
+    {
+        counter++;
+        painter->drawText(QRectF(20,-50 + counter * 20,260,200),qStringHexDisplayHexBoltanium);
+    }
     if(hexToDisplay->getHexFogOfWar() != true && hexToDisplay->getUnitStationed() != nullptr)
     {
         painter->drawPixmap(-50,-50, hexToDisplay->getUnitStationed()->pixmap());
-        painter->drawText(QRectF(20,-30,200,20),qStringUnitDispUnitName);
-        painter->drawText(QRectF(20,-10, 200,20),qStringUnitDispUnitType);
-        painter->drawText(QRectF(20,10,200,20),qStringUnitDispUnitLife);
+        counter++;
+        painter->drawText(QRectF(20,-50 + counter * 20,200,20),qStringUnitDispUnitName);
+        counter++;
+        painter->drawText(QRectF(20,-50 + counter * 20, 200,20),qStringUnitDispUnitType);
+        counter++;
+        painter->drawText(QRectF(20,-50 + counter * 20,200,20),qStringUnitDispUnitLife);
 
         if(qStringUnitDispMovement != "NONE")
         {
-            painter->drawText(QRectF(20,30,200,20),qStringUnitDispMovement);
+            counter++;
+            painter->drawText(QRectF(20,-50 + counter * 20,200,20),qStringUnitDispMovement);
         }
         if(qStringUnitDispUnitAttack != "NONE")
         {
-            painter->drawText(QRectF(20,50,200,20),qStringUnitDispUnitAttack);
+            counter++;
+            painter->drawText(QRectF(20,-50 + counter * 20,200,20),qStringUnitDispUnitAttack);
         }
     }
 }
@@ -585,7 +595,12 @@ void HexagonDisplayInfo::paint(QPainter *painter, const QStyleOptionGraphicsItem
 void HexagonDisplayInfo::updateText()
 {
     qStringHexDispHexType = "Hex Typ: " + hexToDisplay->getHexMatchfieldType();
-
+    if(hexToDisplay->getBoltaniumCurrent() > 0)
+    {
+        qStringHexDisplayHexBoltanium = "Boltanium: " + QString::number(hexToDisplay->getBoltaniumCurrent());
+    }else{
+        qStringHexDisplayHexBoltanium = "NONE";
+    }
     if(hexToDisplay->getUnitStationed() != nullptr)
     {
         qStringUnitDispUnitName = "Name: " + hexToDisplay->getUnitStationed()->getUnitName();
@@ -639,13 +654,15 @@ void UnitDisplayInfo::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
     painter->drawText(QRectF(20,-10,200,20),qStringUnitDispUnitLife);
     painter->drawText(QRectF(20,10,200,20),qStringUnitDispMovement);
     painter->drawText(QRectF(20,30,200,20),qStringUnitDispUnitAttack);
-
-    if(ptr_UnitToDisplay->getUnitPlayer()->getCurrentEnergieStorage() <  ptr_UnitToDisplay->getUnitCost())
+    if(qStringUnitDispUnitCost != "NONE")
     {
-        painter->setPen(QPen(Qt::red));
-    }
-    painter->drawText(QRectF(20,50,200,20),qStringUnitDispUnitCost);
 
+        if(ptr_UnitToDisplay->getUnitPlayer()->getCurrentEnergieStorage() <  ptr_UnitToDisplay->getUnitCost())
+        {
+            painter->setPen(QPen(Qt::red));
+        }
+        painter->drawText(QRectF(20,50,200,20),qStringUnitDispUnitCost);
+    }
     QPen pen;
     pen.setWidth(3);
     pen.setColor(color);
@@ -666,7 +683,12 @@ void UnitDisplayInfo::updateText()
     qStringUnitDispUnitAttack = "Attack: A" + QString::number(ptr_UnitToDisplay->getUnitAirAtt()) + "/"
             + "G" + QString::number(ptr_UnitToDisplay->getUnitGroundAtt()) + "/"
             + "W" + QString::number(ptr_UnitToDisplay->getUnitWaterAtt());
-    qStringUnitDispUnitCost = "Cost: " + QString::number(ptr_UnitToDisplay->getUnitCost());
+    if(ptr_UnitToDisplay->getUnitCost() > 0)
+    {
+        qStringUnitDispUnitCost = "Cost: " + QString::number(ptr_UnitToDisplay->getUnitCost());
+    }else{
+        qStringUnitDispUnitCost = "NONE";
+    }
 }
 
 void UnitDisplayInfo::mousePressEvent(QGraphicsSceneMouseEvent*)
