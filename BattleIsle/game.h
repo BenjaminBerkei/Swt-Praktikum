@@ -100,6 +100,7 @@ private:
 
 	//für ki
     KI* ptr_gameKI;
+
 public:
     Game(Options* init_options, GameWidget* ptr_gameWid);
     Game(QString, GameWidget*);

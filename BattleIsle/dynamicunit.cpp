@@ -347,14 +347,14 @@ void TransporterUnit::unload(HexagonMatchfield* hex_target){
 Diese Funktion nimmt mithilfe von TransporterUnits die Energieressource Boltanium auf und schreibt es dem Spielerenergieressourcenkonto zu  
 */
 void TransporterUnit::farmBoltanium(HexagonMatchfield* hex_target){
-    if(hex_target->getBoltaniumCurrent() >= 10){
-        qDebug() << "\t >= 10 : " << hex_target->getBoltaniumCurrent();
-		unitPlayer->setCurrentEnergieStorage(unitPlayer->getCurrentEnergieStorage() + 10);
-		hex_target->setBoltaniumCurrent(hex_target->getBoltaniumCurrent() - 10);
+    if(hex_target->getBoltaniumCurrent() >= 30){
+        qDebug() << "\t >= 30 : " << hex_target->getBoltaniumCurrent();
+        unitPlayer->setCurrentEnergieStorage(unitPlayer->getCurrentEnergieStorage() + 30);
+        hex_target->setBoltaniumCurrent(hex_target->getBoltaniumCurrent() - 30);
 	}
 	
 	else{
-        qDebug() << "\t < 10 : " << hex_target->getBoltaniumCurrent();
+        qDebug() << "\t < 30 : " << hex_target->getBoltaniumCurrent();
 		unitPlayer->setCurrentEnergieStorage(unitPlayer->getCurrentEnergieStorage() + hex_target->getBoltaniumCurrent());
 		hex_target->setBoltaniumCurrent(0);
     }

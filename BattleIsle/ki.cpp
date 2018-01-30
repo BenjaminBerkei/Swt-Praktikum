@@ -1,12 +1,17 @@
-///////////////////////////////////////
+﻿///////////////////////////////////////
 //ki.cpp
-//version 0.5
+//version 1.0
 //autor: Miguel
 //letzte Änderung: 26.01.2018 (Miguel)
 //Kommentar: move funktioniert
 ///////////////////////////////////////
 
 #include "ki.h"
+
+double KI::getKiTime() const
+{
+    return kiTime;
+}
 
 KI::KI(Game* game, Player* player, std::vector<std::vector<HexagonMatchfield*>> matchfield)
     : kiPlayer(player), kiGame(game), kiMyMatchfield(matchfield), kiHq_danger(false)
@@ -54,14 +59,19 @@ void KI::autoPlayMove()
         prioCache.clear();
     checkHQinDanger();
     int i =0;
+    kiTime=0;
 	for (auto it : kiMyUnits)
     {
-		autoMovePhase(it);
-        qDebug() << "auto fertig" << i;
-        i++;
-        std::this_thread::sleep_for (std::chrono::milliseconds(5*kiMyUnits.size()));
+        if(it->getUnitStationed()!=nullptr)
+        {
+            autoMovePhase(it);
+            qDebug() << "move fertig" << i;
+            i++;
+            std::this_thread::sleep_for (std::chrono::milliseconds(5*kiMyUnits.size()));
+            kiTime+=(5*kiMyUnits.size());
+        }
 	}
-    qDebug() << "t moved all moveable units";
+    qDebug() << "\t moved all moveable units";
 	delKiMyUnits_Cache();
 	//changePhase
 	kiGame->buttonPressedChangePhase();
@@ -74,14 +84,24 @@ void KI::autoPlayAction()
     msgBox.setDefaultButton(QMessageBox::NoButton);
     msgBox.exec();
     fillKiMyUnits_Cache();
+    kiTime=0;
 	for (auto it : kiMyUnits)
-	{
-		autoActionPhase(it);
-        std::this_thread::sleep_for (std::chrono::milliseconds(5*kiMyUnits.size()));
-        if(kiEnemyHq->getUnitStationed()->checkUnitDestroyed())
-            kiGame->endGame();
+    {
+       if(it->getUnitStationed()!= nullptr)
+       {
+           if(!it->getUnitStationed()->getUnitUsed())
+           {
+               autoActionPhase(it);
+               qDebug() << "action fertig";
+               std::this_thread::sleep_for (std::chrono::milliseconds(5*kiMyUnits.size()));
+               kiTime+=(5*kiMyUnits.size());
+               if(kiEnemyHq->getUnitStationed()->checkUnitDestroyed())
+                   return;
+           }
+       }
 	}
 	delKiMyUnits_Cache();
+    qDebug() << "\t action all fertig";
 
 	// changePhase
 	kiGame->buttonPressedChangePhase();
@@ -89,8 +109,9 @@ void KI::autoPlayAction()
 
 void KI::autoMovePhase(HexagonMatchfield* hex)
 {	
-    qDebug() << hex->getUnitStationed()->getUnitType();
+    kiGame->resetHexMatchfield();
     kiGame->processSelection(hex);
+    qDebug() << hex->getUnitStationed()->getUnitType();
     std::unordered_set<HexagonMatchfield*> tmpCache;
     qDebug() << tmpCache.size();
     for (int i = 1; i <= 4; i++)
@@ -145,31 +166,7 @@ void KI::autoMovePhase(HexagonMatchfield* hex)
             {
                 for(auto danger : prioCache)
                 {
-                    HexagonMatchfield* tmpTarget = calcActionRange(tmpCache, danger, tmpRange);
-                    if(tmpTarget != nullptr)
-                    {
-                        moveUnit(tmpTarget, hex, i);
-                        return;
-                    }
-                }
-            }
-            if (hex->getUnitStationed()->getUnitCurrentHP() <= hex->getUnitStationed()->getUnitHP() / 2)
-            {
-                for (auto itCache : tmpCache)
-                {
-                    if (kiMyUnits.find(itCache) != kiMyUnits.end() && itCache->getUnitStationed()->getUnitType() == "DEPOTUNIT")
-                    {
-                        moveUnit(itCache, hex, i);
-                        return;
-                    }
-                }
-            }
-            else
-            {
-                //Hauptziel gegnerisches HQ zerstören
-                for(auto danger : kiTargetCache)
-                {
-                    if(danger->getQpoint_gridPosition() == kiEnemyHq->getQpoint_gridPosition())
+                    if(danger->getUnitStationed()!=nullptr)
                     {
                         HexagonMatchfield* tmpTarget = calcActionRange(tmpCache, danger, tmpRange);
                         if(tmpTarget != nullptr)
@@ -179,49 +176,85 @@ void KI::autoMovePhase(HexagonMatchfield* hex)
                         }
                     }
                 }
+            }
+            if (hex->getUnitStationed()->getUnitCurrentHP() <= hex->getUnitStationed()->getUnitHP() / 2)
+            {
+                for (auto itCache : tmpCache)
+                {
+                    if(itCache->getUnitStationed()!=nullptr)
+                    {
+                        if (kiMyUnits.find(itCache) != kiMyUnits.end() && itCache->getUnitStationed()->getUnitType() == "DEPOTUNIT")
+                        {
+                            moveUnit(itCache, hex, i);
+                            return;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                //Hauptziel gegnerisches HQ zerstören
+                for(auto danger : kiTargetCache)
+                {
+                    if(danger->getUnitStationed()!=nullptr)
+                    {
+                        if(danger->getQpoint_gridPosition() == kiEnemyHq->getQpoint_gridPosition())
+                        {
+                            HexagonMatchfield* tmpTarget = calcActionRange(tmpCache, danger, tmpRange);
+                            if(tmpTarget != nullptr)
+                            {
+                                moveUnit(tmpTarget, hex, i);
+                                return;
+                            }
+                        }
+                    }
+                }
                 //sonst andere ziele zerstören
                 for(auto danger : kiTargetCache)
                 {
-                    QString enemyType = danger->getUnitStationed()->getUnitType();
-                    QString myType = hex->getUnitStationed()->getUnitType();
-                    HexagonMatchfield* tmpTarget = calcActionRange(tmpCache, danger, tmpRange);
-                    if(tmpTarget != nullptr)
+                    if(danger->getUnitStationed()!=nullptr)
                     {
-                        //wenn die gegnerische unit 1hit ist dann gehe zu ihr
-                        if (enemyType == "WATERUNIT" && hex->getUnitStationed()->getUnitWaterAtt() >= danger->getUnitStationed()->getUnitCurrentHP())
+                        QString enemyType = danger->getUnitStationed()->getUnitType();
+                        QString myType = hex->getUnitStationed()->getUnitType();
+                        HexagonMatchfield* tmpTarget = calcActionRange(tmpCache, danger, tmpRange);
+                        if(tmpTarget != nullptr)
                         {
-                            moveUnit(tmpTarget, hex, i);
-                            return;
-                        }
-                        //wenn die gegnerische unit 1hit ist dann gehe zu ihr
-                        else if (enemyType == "AIRUNIT" && hex->getUnitStationed()->getUnitAirAtt() >= danger->getUnitStationed()->getUnitCurrentHP())
-                        {
-                            moveUnit(tmpTarget, hex, i);
-                            return;
-                        }
-                        //wenn die gegnerische unit 1hit ist dann gehe zu ihr
-                        else if ((enemyType == "LIGHTUNIT" || enemyType == "MEDIUMUNIT" || enemyType == "HEAVYUNIT") && hex->getUnitStationed()->getUnitGroundAtt() >= danger->getUnitStationed()->getUnitCurrentHP())
-                        {
-                            moveUnit(tmpTarget, hex, i);
-                            return;
-                        }
-                        //wenn ich nicht onehit bin, gehe dahin
-                        else if (myType == "WATERUNIT" && hex->getUnitStationed()->getUnitCurrentHP() >= danger->getUnitStationed()->getUnitWaterAtt())
-                        {
-                            moveUnit(tmpTarget, hex, i);
-                            return;
-                        }
-                        //wenn ich nicht onehit bin, gehe dahin
-                        else if (myType == "AIRUNIT" && hex->getUnitStationed()->getUnitCurrentHP() >= danger->getUnitStationed()->getUnitAirAtt())
-                        {
-                            moveUnit(tmpTarget, hex, i);
-                            return;
-                        }
-                        //wenn ich nicht onehit bin, gehe dahin
-                        else if ((myType == "LIGHTUNIT" ||  myType =="MEDIUMUNIT" || myType =="HEAVYUNIT") && hex->getUnitStationed()->getUnitCurrentHP() >= danger->getUnitStationed()->getUnitAirAtt())
-                        {
-                            moveUnit(tmpTarget, hex, i);
-                            return;
+                            //wenn die gegnerische unit 1hit ist dann gehe zu ihr
+                            if (enemyType == "WATERUNIT" && hex->getUnitStationed()->getUnitWaterAtt() >= danger->getUnitStationed()->getUnitCurrentHP())
+                            {
+                                moveUnit(tmpTarget, hex, i);
+                                return;
+                            }
+                            //wenn die gegnerische unit 1hit ist dann gehe zu ihr
+                            else if (enemyType == "AIRUNIT" && hex->getUnitStationed()->getUnitAirAtt() >= danger->getUnitStationed()->getUnitCurrentHP())
+                            {
+                                moveUnit(tmpTarget, hex, i);
+                                return;
+                            }
+                            //wenn die gegnerische unit 1hit ist dann gehe zu ihr
+                            else if ((enemyType == "LIGHTUNIT" || enemyType == "MEDIUMUNIT" || enemyType == "HEAVYUNIT") && hex->getUnitStationed()->getUnitGroundAtt() >= danger->getUnitStationed()->getUnitCurrentHP())
+                            {
+                                moveUnit(tmpTarget, hex, i);
+                                return;
+                            }
+                            //wenn ich nicht onehit bin, gehe dahin
+                            else if (myType == "WATERUNIT" && hex->getUnitStationed()->getUnitCurrentHP() >= danger->getUnitStationed()->getUnitWaterAtt())
+                            {
+                                moveUnit(tmpTarget, hex, i);
+                                return;
+                            }
+                            //wenn ich nicht onehit bin, gehe dahin
+                            else if (myType == "AIRUNIT" && hex->getUnitStationed()->getUnitCurrentHP() >= danger->getUnitStationed()->getUnitAirAtt())
+                            {
+                                moveUnit(tmpTarget, hex, i);
+                                return;
+                            }
+                            //wenn ich nicht onehit bin, gehe dahin
+                            else if ((myType == "LIGHTUNIT" ||  myType =="MEDIUMUNIT" || myType =="HEAVYUNIT") && hex->getUnitStationed()->getUnitCurrentHP() >= danger->getUnitStationed()->getUnitAirAtt())
+                            {
+                                moveUnit(tmpTarget, hex, i);
+                                return;
+                            }
                         }
                     }
                 }
@@ -239,6 +272,7 @@ void KI::autoMovePhase(HexagonMatchfield* hex)
 
 void KI::autoActionPhase(HexagonMatchfield* hex)
 {
+    kiGame->resetHexMatchfield();
     kiGame->processSelection(hex);
     kiGame->calculateTargets(hex, hex->getUnitStationed()->getActionRange());
     std::unordered_set<HexagonMatchfield*> tmpCache = kiGame->getTargetCache();
@@ -273,7 +307,7 @@ void KI::autoActionPhase(HexagonMatchfield* hex)
                     else
                     {
                         hex->getUnitStationed()->setUnitToBuild("Fabrik");
-                        if(kiPlayer->getCurrentEnergieStorage() >= 500)
+                        if(kiPlayer->getCurrentEnergieStorage() >= 200)
                         {
                             kiProduceUnit(hex, it);
                             return;
@@ -302,7 +336,7 @@ void KI::autoActionPhase(HexagonMatchfield* hex)
                     else
                     {
                         hex->getUnitStationed()->setUnitToBuild("Depot");
-                        if(kiPlayer->getCurrentEnergieStorage() >= 500)
+                        if(kiPlayer->getCurrentEnergieStorage() >= 150)
                         {
                             kiProduceUnit(hex, it);
                             return;
@@ -379,19 +413,22 @@ void KI::autoActionPhase(HexagonMatchfield* hex)
             case 20: hex->getUnitStationed()->setUnitToBuild("W-1 Fortress"); break;
             }
             qDebug() << "case: " << randUnit;
+            int transUnit = 0;
+            int bauerUnit = 0;
+            for(auto x : kiMyUnits)
+            {
+                if(x->getUnitStationed()!=nullptr)
+                {
+                    if(x->getUnitStationed()->getUnitType().contains("TRANSPORTER"))
+                        transUnit++;
+                    if(x->getUnitStationed()->getUnitType().contains("BUILDER"))
+                        bauerUnit++;
+                }
+            }
             for(auto it : tmpCache)
             {
                 if(it->getUnitStationed()== nullptr)
                 {
-                    int transUnit = 0;
-                    int bauerUnit = 0;
-                    for(auto x : kiMyUnits)
-                    {
-                        if(x->getUnitStationed()->getUnitType().contains("TRANSPORTER"))
-                            transUnit++;
-                        if(x->getUnitStationed()->getUnitType().contains("BUILDER"))
-                            bauerUnit++;
-                    }
                     if(transUnit < 1)
                     {
                         hex->getUnitStationed()->setUnitToBuild("Kevarn");
@@ -478,7 +515,7 @@ void KI::autoActionPhase(HexagonMatchfield* hex)
                     if(it->getQpoint_gridPosition() == danger->getQpoint_gridPosition())
                     {
                         hex->getUnitStationed()->action(it);
-                        removeHexfromCache(it);
+                        removeHexfromCache(hex, it);
                         return;
                     }
                 }
@@ -490,7 +527,7 @@ void KI::autoActionPhase(HexagonMatchfield* hex)
             if(it->getQpoint_gridPosition() == kiEnemyHq->getQpoint_gridPosition())
             {
                 hex->getUnitStationed()->action(it);
-                removeHexfromCache(it);
+                removeHexfromCache(hex, it);
                 return;
             }
         }
@@ -502,7 +539,7 @@ void KI::autoActionPhase(HexagonMatchfield* hex)
                 if(it->getQpoint_gridPosition() == target->getQpoint_gridPosition())
                 {
                     hex->getUnitStationed()->action(it);
-                    removeHexfromCache(it);
+                    removeHexfromCache(hex, it);
                     return;
                 }
             }
@@ -568,7 +605,7 @@ void KI::kiProduceUnit(HexagonMatchfield * hex, HexagonMatchfield * targetHex)
 
 }
 
-void KI::removeHexfromCache(HexagonMatchfield * target)
+void KI::removeHexfromCache(HexagonMatchfield * hex,HexagonMatchfield * target)
 {
     if(target->getUnitStationed()->checkUnitDestroyed())
     {
@@ -591,6 +628,8 @@ void KI::removeHexfromCache(HexagonMatchfield * target)
 
 void KI::moveUnit(HexagonMatchfield* it, HexagonMatchfield* hex, int size)
 {
+    kiGame->resetHexMatchfield();
+    kiGame->processSelection(hex);
     kiGame->Dijkstra(hex, size);
     if(kiGame->getTargetCache().size() == 0)
         return;
@@ -608,6 +647,8 @@ void KI::moveUnit(HexagonMatchfield* it, HexagonMatchfield* hex, int size)
 
 void KI::unitMoveRandom(HexagonMatchfield * hex)
 {
+    kiGame->resetHexMatchfield();
+    kiGame->processSelection(hex);
     kiGame->Dijkstra(hex);
     std::unordered_set<HexagonMatchfield*>tmp= kiGame->getTargetCache();
     QTime time = QTime::currentTime();

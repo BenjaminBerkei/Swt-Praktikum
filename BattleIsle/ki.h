@@ -1,6 +1,6 @@
 ///////////////////////////////////////
 //ki.h
-//version 0.2
+//version 1.0
 //autor: Miguel
 //letzte Änderung: 26.01.2018 (Miguel)
 //Kommentar:
@@ -50,6 +50,7 @@ private:
     int kiTargetAir;
     int kiTargetGround;
     int kiTargetWater;
+    int kiTime;
 	Game* kiGame;
     std::unordered_set<HexagonMatchfield*> kiMyUnits;
     std::unordered_set<HexagonMatchfield*> kiTargetCache;
@@ -73,7 +74,7 @@ public:
 	void delKiMyUnits_Cache();
     void kiProduceUnit(HexagonMatchfield*,HexagonMatchfield*);
     //bool isHexInCache(HexagonMatchfield*,std::vector<HexagonMatchfield*>);
-    void removeHexfromCache(HexagonMatchfield*);
+    void removeHexfromCache(HexagonMatchfield*, HexagonMatchfield*);
 
     void moveUnit(HexagonMatchfield*, HexagonMatchfield*, int);
     void unitMoveRandom(HexagonMatchfield*);
@@ -81,6 +82,7 @@ public:
     std::unordered_set<HexagonMatchfield*> goodHexCache(std::unordered_set<HexagonMatchfield*>);
 	void checkHQinDanger();
 
+    double getKiTime() const;
 };
 
 #endif // !KI_H

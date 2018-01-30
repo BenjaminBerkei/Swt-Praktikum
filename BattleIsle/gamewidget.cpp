@@ -658,7 +658,7 @@ void UnitDisplayInfo::setColor(const QColor &value)
 }
 
 UnitDisplayInfo::UnitDisplayInfo(Unit *ptr_Unit)
-    : QGraphicsRectItem(QRectF(-50,-50,230,120), 0), ptr_UnitToDisplay(ptr_Unit), color(Qt::black)
+    : QGraphicsRectItem(QRectF(-50,-50,230,140), 0), ptr_UnitToDisplay(ptr_Unit), color(Qt::black)
 {
     updateText();
 }

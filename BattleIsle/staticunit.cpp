@@ -110,7 +110,7 @@ Unit* HeadquaterUnit::createUnit()
 DepotUnit::DepotUnit(QString filepath, Player* player)
     : StaticUnit(filepath, player)
 {
-    int_unitCost = 300;
+    int_unitCost = 150;
     if(player != nullptr)
     {
         player->setPlayerTotalEnergie(player->getPlayerTotalEnergie() + int_EnergieStorage);
@@ -159,7 +159,7 @@ Unit* DepotUnit::createUnit()
 FactoryUnit::FactoryUnit(QString filepath, bool bool_loadInventory, Player* player)
     : StaticUnit(filepath, player), qstring_unitToBuild("")
 {
-    int_unitCost = 500;
+    int_unitCost = 200;
     if(bool_loadInventory == true)
     {
         map_production["B.E.N"] = new LightUnit(":/dynamic/dynamicUnit/ben.txt", unitPlayer);
