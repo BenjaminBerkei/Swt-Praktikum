@@ -110,7 +110,7 @@ void StartMenueWidget::smwUpdateSettings()
 
 void StartMenueWidget::on_qbutton_startGame_clicked()
 {
-    startGame( );
+    startGame();
 }
 
 void StartMenueWidget::on_qbutton_loadGame_clicked()
@@ -144,7 +144,7 @@ void StartMenueWidget::gameEnded()
     emit SIGNAL_smwChangeIndexFromStack(0);
     qDebug() << "\t Change Index Emit";
     ptr_smwMenueWidget->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
-    ptr_smwMenueWidget->repaint();
+    //ptr_smwMenueWidget->repaint();
     qDebug() << "\t resize";
 
 }

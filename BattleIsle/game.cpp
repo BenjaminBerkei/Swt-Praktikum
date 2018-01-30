@@ -855,6 +855,7 @@ void Game::checkUnitGrid()
         {
             if(vec_unitGrid[x][y] != nullptr && vec_unitGrid[x][y]->checkUnitDestroyed())
             {
+                qDebug() << "\t" << "Einheit: " << vec_unitGrid[x][y]->getUnitType() << " Destroyed";
                 vec_hexGameGrid[x][y]->setUnitStationed(nullptr);
                 delete vec_unitGrid[x][y];
                 vec_unitGrid[x][y] = nullptr;
@@ -874,8 +875,7 @@ void Game::checkWinCondition()
     {
         qDebug() << "Spieler Zwei Verloren";
         endGame();
-    }
-    if(ptr_roundCurrent->getCurrentRoundNumber() == ptr_roundCurrent->getMaxRoundNumber() + 10)
+    }else if(ptr_roundCurrent->getCurrentRoundNumber() == ptr_roundCurrent->getMaxRoundNumber() + 10)
     {
         qDebug() << "Maximale Runde erreicht";
         endGame();

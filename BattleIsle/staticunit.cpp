@@ -233,6 +233,7 @@ bool FactoryUnit::action(HexagonMatchfield* hexTarget, const int )
 void FactoryUnit::produceUnit(HexagonMatchfield* hexTarget)
 {
     hexTarget->setUnitStationed(map_production[qstring_unitToBuild]->createUnit());
+    hexTarget->getUnitStationed()->setUnitCost(0);
     hexTarget->getUnitStationed()->setUnitUsed(true);
     unitPlayer->setCurrentEnergieStorage(unitPlayer->getCurrentEnergieStorage() - hexTarget->getUnitStationed()->getUnitCost());
 }

@@ -101,13 +101,16 @@ void DynamicUnit::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     painter->setBrush(brush);
     painter->drawRect(QRect(19,5,25,3));
 
-    brush.setColor(Qt::green);
-    pen.setWidth(1);
-    pen.setColor(Qt::green);
+    if(int_unitCurrentHP > 0)
+    {
+        brush.setColor(Qt::green);
+        pen.setWidth(1);
+        pen.setColor(Qt::green);
 
-    painter->setPen(pen);
-    painter->setBrush(brush);
-    painter->drawRect(QRect(19,5,(double)int_unitCurrentHP / (double)int_unitHP * 25,3));
+        painter->setPen(pen);
+        painter->setBrush(brush);
+        painter->drawRect(QRect(19,5,(double)int_unitCurrentHP / (double)int_unitHP * 25,3));
+    }
 }
 
 /*
@@ -293,7 +296,12 @@ void TransporterUnit::setTransporterUnitCurrentCapacity(const int newCurrentCapa
 /*
 Diese Funktion fungiert als Entscheidungsfunktion, welche bestimmte Aktion der Transporter durchführen wird
 */
-bool TransporterUnit::action(HexagonMatchfield* hex_target, const int ){
+bool TransporterUnit::action(HexagonMatchfield* hex_target, const int )
+{
+    if(bool_unitUsed == true)
+    {
+        return false;
+    }
     qDebug() << "Transporter Action";
     qDebug() << "\t " << hex_target->getQpoint_gridPosition();
     if(hex_target->getUnitStationed() == nullptr)
@@ -304,11 +312,13 @@ bool TransporterUnit::action(HexagonMatchfield* hex_target, const int ){
             qDebug() << "ptr_unitToUnload != null";
             unload(hex_target);
             resetBuildUnloadParameter();
+            bool_unitUsed = true;
             return true;
         }
         else if(hex_target->getBoltaniumCurrent() > 0 ){
             qDebug() << "\t Boltanium > 0";
 			farmBoltanium(hex_target);
+            bool_unitUsed = true;
 			return true;
 		}
     }
@@ -749,6 +759,7 @@ Diese Funktion setzt auf das ausgewählte Hexagon eine StaticUnit
 void BuildLightUnit::produceUnit(HexagonMatchfield* hexTarget)
 {
     hexTarget->setUnitStationed(production[qstring_unitToBuild]->createUnit());
+    hexTarget->getUnitStationed()->setUnitCost(0);
     hexTarget->getUnitStationed()->setUnitUsed(true);
     unitPlayer->setCurrentEnergieStorage(unitPlayer->getCurrentEnergieStorage() - hexTarget->getUnitStationed()->getUnitCost());
 }
@@ -857,7 +868,7 @@ int HeavyUnit::moveTo(HexagonMatchfield *hex_target){
         }
 
         else if(hex_type.contains("street")){
-            return 2;
+            return 1;
         }
 
         else if(hex_type == "forrest" ){

@@ -150,6 +150,7 @@ class HexagonDisplayInfo : public QObject, public QGraphicsRectItem
 private:
     HexagonMatchfield* hexToDisplay;
     QString qStringHexDispHexType;
+    QString qStringHexDisplayHexBoltanium;
     QString qStringUnitDispUnitName;
     QString qStringUnitDispUnitType;
     QString qStringUnitDispUnitLife;
