@@ -1,6 +1,6 @@
 ///////////////////////////////////////
 //ki.h
-//version 0.2
+//version 1.0
 //autor: Miguel
 //letzte Änderung: 26.01.2018 (Miguel)
 //Kommentar:
@@ -74,7 +74,7 @@ public:
 	void delKiMyUnits_Cache();
     void kiProduceUnit(HexagonMatchfield*,HexagonMatchfield*);
     //bool isHexInCache(HexagonMatchfield*,std::vector<HexagonMatchfield*>);
-    void removeHexfromCache(HexagonMatchfield*);
+    void removeHexfromCache(HexagonMatchfield*, HexagonMatchfield*);
 
     void moveUnit(HexagonMatchfield*, HexagonMatchfield*, int);
     void unitMoveRandom(HexagonMatchfield*);

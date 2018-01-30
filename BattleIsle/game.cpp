@@ -52,7 +52,7 @@ GameWidget *Game::getPtr_gameWidget() const
 Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     ptr_hexSelectionCache(nullptr), ptr_options(init_options), ptr_gameWidget(ptr_gameWid),
     ptr_playerOne(new Player("Eins", 1)), ptr_playerTwo(new Player("Zwei", 2)),
-    ptr_playerActive(ptr_playerOne), bool_menueView(false)
+    ptr_playerActive(ptr_playerOne), bool_menueView(false), ptr_gameKI(nullptr)
 {
 /*Starten eines Spiels mit den Optionen definiert in init_Options*/
 
@@ -81,7 +81,7 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     if(init_options->getBool_ki())
     {
        ptr_playerTwo->setBoolKi(true);
-       ptr_playerTwo->setPlayerName("Karl der Kleine"); // wehe jemand ändern denn npc namen
+       ptr_playerTwo->setPlayerName("Karl der Kleine"); // wehe jemand ändert den npc namen
        ptr_gameKI = new KI(this, ptr_playerTwo, vec_hexGameGrid);
        ptr_gameWidget->newLog("KI: " + ptr_playerTwo->getPlayerName() + " wurde erstellt");
     }
@@ -92,7 +92,7 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
 }
 
 Game::Game(QString filepath, GameWidget *gameWidegt)
-    : ptr_hexSelectionCache(nullptr), ptr_gameWidget(gameWidegt)
+    : ptr_hexSelectionCache(nullptr), ptr_gameWidget(gameWidegt), ptr_gameKI(nullptr)
 {
     if(!readSaveGame(filepath))
     {
@@ -153,6 +153,9 @@ Game::~Game()
     ptr_playerOne = nullptr;
     delete ptr_playerTwo;
     ptr_playerTwo = nullptr;
+    delete ptr_gameKI;
+    ptr_gameKI = nullptr;
+
     qDebug() << "\t Player Gelöscht";
     qDebug() << "Destruktor Game end";
 
@@ -189,7 +192,6 @@ void Game::saveGame()
 
 void Game::endGame()
 {
-    delete ptr_gameKI;
     ptr_gameWidget->resetGameWidget();
     emit gameOver();
 }
@@ -1062,8 +1064,8 @@ void Game::createRandomMap()
     qsrand((uint)time.msec());
 
     //Größe
-    int sizeX = qrand() % 100 + 20;
-    int sizeY = qrand() % 100 + 20;
+    int sizeX = qrand() % 50 + 20;
+    int sizeY = qrand() % 50 + 20;
 
     ptr_gameWidget->setSizeX(sizeX);
     ptr_gameWidget->setSizeY(sizeY);
