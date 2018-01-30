@@ -145,7 +145,6 @@ Game::~Game()
     ptr_playerTwo = nullptr;
     qDebug() << "\t Player Gelöscht";
     qDebug() << "Destruktor Game end";
-
 }
 
 void Game::saveGame()
@@ -861,7 +860,6 @@ void Game::checkUnitGrid()
             }
         }
     }
-    ptr_gameWidget->setUnitsLabel(ptr_playerActive->getPlayerUnitNumber());
 }
 
 void Game::checkWinCondition()
