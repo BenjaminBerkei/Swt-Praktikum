@@ -79,7 +79,7 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     if(init_options->getBool_ki())
     {
        ptr_playerTwo->setBoolKi(true);
-       ptr_playerTwo->setPlayerName("Johann der Sucher"); // wehe jemand ändern denn npc namen
+       ptr_playerTwo->setPlayerName("Karl der Kleine"); // wehe jemand ändern denn npc namen
        ptr_gameKI = new KI(this, ptr_playerTwo, vec_hexGameGrid);
        ptr_gameWidget->newLog("KI: " + ptr_playerTwo->getPlayerName() + " wurde erstellt");
     }
@@ -179,6 +179,7 @@ void Game::saveGame()
 
 void Game::endGame()
 {
+    delete ptr_gameKI;
     ptr_gameWidget->resetGameWidget();
     emit gameOver();
 }
@@ -406,7 +407,7 @@ bool Game::loadMapForNewGame(QString filepath)
                 {
                    vecUnit.push_back(new FactoryUnit(unitPath, true, ptr_playerTemp));
                 }
-                if(unitType == "DEPOTUNIT")
+                else if(unitType == "DEPOTUNIT")
                 {
                    vecUnit.push_back(new DepotUnit(unitPath, ptr_playerTemp));
                 }
