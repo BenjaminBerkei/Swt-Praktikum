@@ -101,6 +101,8 @@ public:
     void animateUnit(Unit*, std::vector<QPointF>);
     void newLog(QString);
     void newLog(HexagonMatchfield*);
+    void newLog(HexagonMatchfield*,HexagonMatchfield *);
+    void newLog(int, QString, int, int, QString, int);
 
     //get und set Methoden
     void setInfoScene(HexagonDisplayInfo *info);
@@ -155,6 +157,7 @@ private:
     QString qStringUnitDispUnitType;
     QString qStringUnitDispUnitLife;
     QString qStringUnitDispMovement;
+    QString qStringUnitDispActionRange;
     QString qStringUnitDispUnitAttack;
 public:
     HexagonDisplayInfo(HexagonMatchfield* ptr_hexMfield);
@@ -173,6 +176,7 @@ private:
     QString qStringUnitDispUnitType;
     QString qStringUnitDispUnitLife;
     QString qStringUnitDispMovement;
+    QString qStringUnitDispActionRange;
     QString qStringUnitDispUnitAttack;
     QString qStringUnitDispUnitCost;
     QColor color;
