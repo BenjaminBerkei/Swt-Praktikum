@@ -50,6 +50,7 @@ private:
     int kiTargetAir;
     int kiTargetGround;
     int kiTargetWater;
+    int kiTime;
 	Game* kiGame;
     std::unordered_set<HexagonMatchfield*> kiMyUnits;
     std::unordered_set<HexagonMatchfield*> kiTargetCache;
@@ -81,6 +82,7 @@ public:
     std::unordered_set<HexagonMatchfield*> goodHexCache(std::unordered_set<HexagonMatchfield*>);
 	void checkHQinDanger();
 
+    double getKiTime() const;
 };
 
 #endif // !KI_H

@@ -8,6 +8,11 @@
 
 #include "ki.h"
 
+double KI::getKiTime() const
+{
+    return kiTime;
+}
+
 KI::KI(Game* game, Player* player, std::vector<std::vector<HexagonMatchfield*>> matchfield)
     : kiPlayer(player), kiGame(game), kiMyMatchfield(matchfield), kiHq_danger(false)
 {
@@ -54,12 +59,14 @@ void KI::autoPlayMove()
         prioCache.clear();
     checkHQinDanger();
     int i =0;
+    kiTime=0;
 	for (auto it : kiMyUnits)
     {
 		autoMovePhase(it);
         qDebug() << "auto fertig" << i;
         i++;
         std::this_thread::sleep_for (std::chrono::milliseconds(5*kiMyUnits.size()));
+        kiTime+=(5*kiMyUnits.size());
 	}
     qDebug() << "t moved all moveable units";
 	delKiMyUnits_Cache();
@@ -74,10 +81,12 @@ void KI::autoPlayAction()
     msgBox.setDefaultButton(QMessageBox::NoButton);
     msgBox.exec();
     fillKiMyUnits_Cache();
+    kiTime=0;
 	for (auto it : kiMyUnits)
 	{
 		autoActionPhase(it);
         std::this_thread::sleep_for (std::chrono::milliseconds(5*kiMyUnits.size()));
+        kiTime+=(5*kiMyUnits.size());
         if(kiEnemyHq->getUnitStationed()->checkUnitDestroyed())
             kiGame->endGame();
 	}
