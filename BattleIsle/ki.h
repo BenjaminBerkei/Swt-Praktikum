@@ -73,12 +73,14 @@ public:
 	void delKiMyUnits_Cache();
     void kiProduceUnit(HexagonMatchfield*,HexagonMatchfield*);
     //bool isHexInCache(HexagonMatchfield*,std::vector<HexagonMatchfield*>);
+    void removeHexfromCache(HexagonMatchfield*);
 
     void moveUnit(HexagonMatchfield*, HexagonMatchfield*, int);
     void unitMoveRandom(HexagonMatchfield*);
     HexagonMatchfield* calcActionRange(std::unordered_set<HexagonMatchfield*>, HexagonMatchfield*, int);
     std::unordered_set<HexagonMatchfield*> goodHexCache(std::unordered_set<HexagonMatchfield*>);
 	void checkHQinDanger();
+
 };
 
 #endif // !KI_H

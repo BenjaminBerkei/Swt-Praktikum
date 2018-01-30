@@ -79,7 +79,7 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     if(init_options->getBool_ki())
     {
        ptr_playerTwo->setBoolKi(true);
-       ptr_playerTwo->setPlayerName("Johann der Sucher"); // wehe jemand ändern denn npc namen
+       ptr_playerTwo->setPlayerName("Karl der Kleine"); // wehe jemand ändern denn npc namen
        ptr_gameKI = new KI(this, ptr_playerTwo, vec_hexGameGrid);
        ptr_gameWidget->newLog("KI: " + ptr_playerTwo->getPlayerName() + " wurde erstellt");
     }
@@ -178,6 +178,7 @@ void Game::saveGame()
 
 void Game::endGame()
 {
+    delete ptr_gameKI;
     ptr_gameWidget->resetGameWidget();
     emit gameOver();
 }
@@ -245,6 +246,7 @@ void Game::processSelection(HexagonMatchfield *selection)
                 {
                     vec_unitGrid[selection->getQpoint_gridPosition().x()][selection->getQpoint_gridPosition().y()] = selection->getUnitStationed(); // in das Grid einfügen
                     selection->getUnitStationed()->setPos(selection->pos());   //Position in der Scene setzen
+                    selection->getUnitStationed()->setScale(ptr_gameWidget->getDouble_scaleFak()); // skalieren
                     ptr_gameWidget->getGameWidGameScene()->addItem(selection->getUnitStationed());    //in die Scene einfügen
                 }
                 ptr_gameWidget->setOptScene(ptr_hexSelectionCache->getUnitStationed()->getVector_unitStorage());
@@ -405,7 +407,7 @@ bool Game::loadMapForNewGame(QString filepath)
                 {
                    vecUnit.push_back(new FactoryUnit(unitPath, true, ptr_playerTemp));
                 }
-                if(unitType == "DEPOTUNIT")
+                else if(unitType == "DEPOTUNIT")
                 {
                    vecUnit.push_back(new DepotUnit(unitPath, ptr_playerTemp));
                 }
@@ -623,7 +625,10 @@ void Game::buttonPressedZoomIn()
 {
     if(ptr_gameWidget->getDouble_scaleFak() <= 3)
     {
-        ptr_gameWidget->setDouble_scaleFak(ptr_gameWidget->getDouble_scaleFak() + 0.5);
+        if(ptr_gameWidget->getDouble_scaleFak() >1)
+            ptr_gameWidget->setDouble_scaleFak(ptr_gameWidget->getDouble_scaleFak() + 0.5);
+        else
+            ptr_gameWidget->setDouble_scaleFak(ptr_gameWidget->getDouble_scaleFak() + 0.1);
         for(auto & it : ptr_gameWidget->getGameWidGameScene()->items())
         {
             it->setScale(ptr_gameWidget->getDouble_scaleFak());
@@ -854,6 +859,7 @@ void Game::checkUnitGrid()
         {
             if(vec_unitGrid[x][y] != nullptr && vec_unitGrid[x][y]->checkUnitDestroyed())
             {
+                qDebug() << "\t" << "Einheit: " << vec_unitGrid[x][y]->getUnitType() << " Destroyed";
                 vec_hexGameGrid[x][y]->setUnitStationed(nullptr);
                 delete vec_unitGrid[x][y];
                 vec_unitGrid[x][y] = nullptr;
@@ -872,8 +878,7 @@ void Game::checkWinCondition()
     {
         qDebug() << "Spieler Zwei Verloren";
         endGame();
-    }
-    if(ptr_roundCurrent->getCurrentRoundNumber() == ptr_roundCurrent->getMaxRoundNumber() + 10)
+    }else if(ptr_roundCurrent->getCurrentRoundNumber() == ptr_roundCurrent->getMaxRoundNumber() + 10)
     {
         qDebug() << "Maximale Runde erreicht";
         endGame();

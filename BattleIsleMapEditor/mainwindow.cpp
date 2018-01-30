@@ -627,7 +627,10 @@ void MainWindow::on_zoomINBut_clicked()
 {
     if(scaleFak <= 3)
     {
-        scaleFak += 0.5;
+        if(scaleFak > 1)
+            scaleFak += 0.5;
+        else
+            scaleFak += 0.1;
         for(auto & it : hexfield->items())
         {
             it->setScale(scaleFak);
