@@ -387,13 +387,27 @@ void GameWidget::animateUnit(Unit * unitToAnimate, std::vector<QPointF> points)
 
 void GameWidget::newLog(QString msg)
 {
-    ui->ptr_textBrowserLog->append(tr("-> %1").arg(msg));
+    ui->ptr_textBrowserLog->append(tr("- %1").arg(msg));
 }
 
 void GameWidget::newLog(HexagonMatchfield * selection)
 {
     this->newLog("Hex: (" + QString::number(selection->getQpoint_gridPosition().x()) + ", " +
-                           QString::number(selection->getQpoint_gridPosition().y()) + ")" );
+                  QString::number(selection->getQpoint_gridPosition().y()) + ")" );
+}
+
+void GameWidget::newLog(HexagonMatchfield * start, HexagonMatchfield * end)
+{
+    this->newLog("Move: (" + QString::number(start->getQpoint_gridPosition().x()) + ", " +
+                 QString::number(start->getQpoint_gridPosition().y()) + ")" + "->" +
+                 "(" + QString::number(end->getQpoint_gridPosition().x()) + ", " +
+                 QString::number(end->getQpoint_gridPosition().y()) + ")");
+}
+
+void GameWidget::newLog(int idAttacker, QString typeAttacker, int dmgAttacker, int idDefender, QString typeDefender, int dmgDefender)
+{
+    this->newLog("Player " + QString::number(idAttacker) + ": \n\t Type: " + typeAttacker + "\n\t Damage: " + QString::number(dmgAttacker));
+    this->newLog("Player " + QString::number(idDefender) + ": \n\t Type: " + typeDefender + "\n\t Damage: " + QString::number(dmgDefender));
 }
 
 void GameWidget::gameWidCreateMap(std::vector<std::vector<HexagonMatchfield *> > &hexagonGrid)
@@ -553,7 +567,7 @@ int GameWidget::getSizeY() const
     return sizeY;
 }
 HexagonDisplayInfo::HexagonDisplayInfo(HexagonMatchfield *ptr_hexMfield)
-    :QObject(0), QGraphicsRectItem(QRectF(-50,-50,230,140), 0), hexToDisplay(ptr_hexMfield)
+    :QObject(0), QGraphicsRectItem(QRectF(-50,-50,230,150), 0), hexToDisplay(ptr_hexMfield)
 {
     updateText();
 }
@@ -584,6 +598,8 @@ void HexagonDisplayInfo::paint(QPainter *painter, const QStyleOptionGraphicsItem
             counter++;
             painter->drawText(QRectF(20,-50 + counter * 20,200,20),qStringUnitDispMovement);
         }
+        counter++;
+        painter->drawText(QRectF(20,-50 + counter * 20,200,20), qStringUnitDispActionRange);
         if(qStringUnitDispUnitAttack != "NONE")
         {
             counter++;
@@ -609,11 +625,12 @@ void HexagonDisplayInfo::updateText()
                                             + QString::number(hexToDisplay->getUnitStationed()->getUnitHP());
         if(hexToDisplay->getUnitStationed()->getUnitMoveRange() > 0)
         {
-            qStringUnitDispMovement = "MoveRange: " + QString::number(hexToDisplay->getUnitStationed()->getUnitMoveRange()) + "/"
-                    + QString::number(hexToDisplay->getUnitStationed()->getUnitCurrentMoveRange());
+            qStringUnitDispMovement = "MoveRange: " + QString::number(hexToDisplay->getUnitStationed()->getUnitCurrentMoveRange()) + "/"
+                    + QString::number(hexToDisplay->getUnitStationed()->getUnitMoveRange());
         }else{
             qStringUnitDispMovement = "NONE";
         }
+        qStringUnitDispActionRange = "Action Range: " + QString::number(hexToDisplay->getUnitStationed()->getActionRange());
         if(hexToDisplay->getUnitStationed()->getUnitAirAtt() == 0
                 && hexToDisplay->getUnitStationed()->getUnitGroundAtt() == 0
                 && hexToDisplay->getUnitStationed()->getUnitWaterAtt() == 0)
@@ -631,6 +648,7 @@ void HexagonDisplayInfo::updateText()
         qStringUnitDispUnitLife = "";
         qStringUnitDispMovement = "";
         qStringUnitDispUnitAttack = "";
+        qStringUnitDispActionRange = "";
     }
 }
 
@@ -653,15 +671,15 @@ void UnitDisplayInfo::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
     painter->drawText(QRectF(20,-30, 200,20),qStringUnitDispUnitType);
     painter->drawText(QRectF(20,-10,200,20),qStringUnitDispUnitLife);
     painter->drawText(QRectF(20,10,200,20),qStringUnitDispMovement);
-    painter->drawText(QRectF(20,30,200,20),qStringUnitDispUnitAttack);
+    painter->drawText(QRectF(20,30,200,20),qStringUnitDispActionRange);
+    painter->drawText(QRectF(20,50,200,20),qStringUnitDispUnitAttack);
     if(qStringUnitDispUnitCost != "NONE")
     {
-
         if(ptr_UnitToDisplay->getUnitPlayer()->getCurrentEnergieStorage() <  ptr_UnitToDisplay->getUnitCost())
         {
             painter->setPen(QPen(Qt::red));
         }
-        painter->drawText(QRectF(20,50,200,20),qStringUnitDispUnitCost);
+        painter->drawText(QRectF(20,70,200,20),qStringUnitDispUnitCost);
     }
     QPen pen;
     pen.setWidth(3);
@@ -680,6 +698,7 @@ void UnitDisplayInfo::updateText()
                                         + QString::number(ptr_UnitToDisplay->getUnitHP());
     qStringUnitDispMovement = "MoveRange: " + QString::number(ptr_UnitToDisplay->getUnitMoveRange()) + "/"
             + QString::number(ptr_UnitToDisplay->getUnitCurrentMoveRange());
+    qStringUnitDispActionRange = "Action Range: " + QString::number(ptr_UnitToDisplay->getActionRange());
     qStringUnitDispUnitAttack = "Attack: A" + QString::number(ptr_UnitToDisplay->getUnitAirAtt()) + "/"
             + "G" + QString::number(ptr_UnitToDisplay->getUnitGroundAtt()) + "/"
             + "W" + QString::number(ptr_UnitToDisplay->getUnitWaterAtt());

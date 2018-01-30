@@ -67,13 +67,15 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
 
     ptr_gameWidget->gameWidCreateMatchfield(vec_hexGameGrid);
     countUnits();
+    ptr_gameWidget->newLog("Einheiten gezählt");
     setFogOfWar();
+    if(ptr_options->getBool_fogOfWar())
+        ptr_gameWidget->newLog("Nebelmaschine angeschmissen");
 
     //Buttons Einfuegen
     createButtons();
-    ptr_gameWidget->newLog("Buttons erstellt");
     changeButtonPixmap();
-
+    ptr_gameWidget->newLog("Buttons aufgenäht");
 
 	//für KI
     if(init_options->getBool_ki())
@@ -85,6 +87,7 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     }
 
     updateLabels();
+    ptr_gameWidget->newLog("Label beschriftet");
 
 }
 
@@ -94,16 +97,23 @@ Game::Game(QString filepath, GameWidget *gameWidegt)
     if(!readSaveGame(filepath))
     {
         createRandomMap();
+    }else{
+        ptr_gameWidget->newLog("Map geladen");
     }
 
     ptr_gameWidget->gameWidCreateMatchfield(vec_hexGameGrid);
     countUnits();
+    ptr_gameWidget->newLog("Einheiten gezählt");
     setFogOfWar();
+    if(ptr_options->getBool_fogOfWar())
+        ptr_gameWidget->newLog("Nebelmaschine angeschmissen");
 
     //Buttons Einfuegen
     createButtons();
+    ptr_gameWidget->newLog("Buttons aufgenäht");
     changeButtonPixmap();
     updateLabels();
+    ptr_gameWidget->newLog("Label beschriftet");
 }
 
 Game::~Game()
@@ -199,6 +209,7 @@ void Game::processSelection(HexagonMatchfield *selection)
     if(selection == nullptr)
     {
         qDebug() << "Fehler: selection ist ein Nullptr! In processSelection(HexagonMatchfield*)";
+        return;
     }
 
     switch(selection->getState())
@@ -709,10 +720,7 @@ void Game::resetTargetCache()
 }
 void Game::moveUnitTo(HexagonMatchfield * target)
 {
-    ptr_gameWidget->newLog("(" + QString::number(ptr_hexSelectionCache->getQpoint_gridPosition().x()) + ", " +
-                           QString::number(ptr_hexSelectionCache->getQpoint_gridPosition().y()) + ") -> " +
-                           "(" + QString::number(target->getQpoint_gridPosition().x()) + ", " +
-                                                      QString::number(target->getQpoint_gridPosition().y()) + ")");
+    ptr_gameWidget->newLog(ptr_hexSelectionCache, target);
     Unit* unitToMove = ptr_hexSelectionCache->getUnitStationed();
     unitToMove->setUnitCurrentMoveRange(unitToMove->getUnitCurrentMoveRange() - map_hexCurrentCost[target]);
 
