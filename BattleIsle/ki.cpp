@@ -59,7 +59,7 @@ void KI::autoPlayMove()
 		autoMovePhase(it);
         qDebug() << "auto fertig" << i;
         i++;
-        std::this_thread::sleep_for (std::chrono::milliseconds(5*kiMyUnits.size()));
+        //std::this_thread::sleep_for (std::chrono::milliseconds(5*kiMyUnits.size()));
 	}
     qDebug() << "t moved all moveable units";
 	delKiMyUnits_Cache();
