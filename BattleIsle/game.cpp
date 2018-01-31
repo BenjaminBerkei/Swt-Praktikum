@@ -95,7 +95,7 @@ Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
     if(init_options->getBool_ki())
     {
        ptr_playerTwo->setBoolKi(true);
-       ptr_playerTwo->setPlayerName("Karl der Kleine"); // wehe jemand ändert den npc namen
+       ptr_playerTwo->setPlayerName("KarlderKleine"); // wehe jemand ändert den npc namen
        ptr_gameKI = new KI(this, ptr_playerTwo, vec_hexGameGrid);
        ptr_gameWidget->newLog("KI: " + ptr_playerTwo->getPlayerName() + " wurde erstellt");
     }
@@ -964,18 +964,12 @@ bool Game::readSaveGame(QString filepath)
 
     ptr_options = Options::unserialize(in);
 
-    if( ptr_options->getBool_ki() == true)
+    ptr_playerOne = Player::unserialize(in);
+    ptr_playerTwo = Player::unserialize(in);
 
-    {
-        ptr_playerOne = Player::unserialize(in);
-        //später
-    }
-    else
-    {
-        ptr_playerOne = Player::unserialize(in);
-        ptr_playerTwo = Player::unserialize(in);
-    }
-
+    qDebug() << "Player One: " << ptr_playerOne->getPlayerName();
+    qDebug() << "Player Two: " << ptr_playerTwo->getPlayerName();
+    qDebug() << "KI: " << (ptr_options->getBool_ki() == true ? "1" : "2");
     int playerActive;
     in >> playerActive;
 
@@ -987,11 +981,12 @@ bool Game::readSaveGame(QString filepath)
     {
         ptr_playerActive = ptr_playerTwo;
     }
+    qDebug() << "Player Active : " << playerActive;
 
     ptr_roundCurrent = Round::unserialize(in);
 
     loadMapFromSaveGame(ptr_options->getStr_map());
-
+    qDebug() << "Load from save game done";
     int posX, posY, boltanium, unitStationed;
 
     in >> tmp;
@@ -1001,7 +996,7 @@ bool Game::readSaveGame(QString filepath)
        in >> posY;
        in >> boltanium;
        in >> unitStationed;
-
+        qDebug() << posX << " " << posY << " " << boltanium << " " << unitStationed;
        vec_hexGameGrid[posX][posY]->setBoltaniumCurrent(boltanium);
 
        if(unitStationed == 1)
@@ -1017,6 +1012,12 @@ bool Game::readSaveGame(QString filepath)
        }
        in >> tmp;
     }
+    qDebug() << "Feld Eingelesen";
+    if( ptr_options->getBool_ki() == true)
+    {
+        ptr_gameKI = new KI(this, ptr_playerTwo, vec_hexGameGrid);
+    }
+    qDebug() << "Ki erstellt";
     return true;
 }
 
@@ -1232,17 +1233,17 @@ Unit *Game::createUnitFromType(QString unitType, QString unitPath, Player * ptr_
         return new WaterUnit(unitPath, ptr_playerTemp);
     }
 
-    if(unitType == "TRANSPORTERGROUNDUNIT")
+    if(unitType.contains("TRANSPORTERGROUND"))
     {
         return new TransporterGroundUnit(unitPath, ptr_playerTemp);
     }
 
-    if(unitType == "TRANSPORTERWATERUNIT")
+    if(unitType.contains("TRANSPORTERWATER"))
     {
         return new TransporterWaterUnit(unitPath, ptr_playerTemp);
     }
 
-    if(unitType == "TRANSPORTERAIRUNIT")
+    if(unitType.contains("TRANSPORTERAIR"))
     {
         return new TransporterAirUnit(unitPath, ptr_playerTemp);
     }
@@ -1277,15 +1278,17 @@ Unit *Game::readUnitFromStream(QTextStream &in)
     }else{
         ptr_playerTemp = ptr_playerTwo;
     }
-
+    qDebug() << unitType << " " << unitPath;
     unitFromStream = createUnitFromType(unitType, unitPath, ptr_playerTemp);
     if(unitFromStream != nullptr)
     {
+        qDebug() << unitType;
         unitFromStream->setUnitCurrentHP(unitHP);
         unitFromStream->setUnitUsed(unitUsed);
 
         if(unitType == "DEPOTUNIT" || unitType == "HEADQUATERUNIT" || unitType == "FACTORYUNIT")
         {
+            qDebug() << "isDynamicUnit = false";
             isDynamicUnit = false;
         }else if(unitType.contains("TRANSPORTER"))
         {
@@ -1296,6 +1299,7 @@ Unit *Game::readUnitFromStream(QTextStream &in)
         {
             in >> unitLevel;
             in >> unitMoveRange;
+            qDebug() << unitLevel << " " << unitMoveRange;
             unitFromStream->setUnitCurrentMoveRange(unitMoveRange);
             //unitFromStream->setUnitLevel(unitLevel);
         }
@@ -1413,13 +1417,13 @@ void Game::autoplayKi()
         QElapsedTimer timer;
         timer.start();
         ptr_gameKI->autoPlayMove();
-        ptr_gameWidget->newLog("KI Move: " + QString::number(timer.elapsed() / 1000.0));
+        ptr_gameWidget->newLog("KI Move: " + QString::number(timer.elapsed() / 1000.0) + "sec");
     }
     else
     {
         QElapsedTimer timer;
         timer.start();
         ptr_gameKI->autoPlayAction();
-        ptr_gameWidget->newLog("KI Action: " + QString::number(timer.elapsed() / 1000.0));
+        ptr_gameWidget->newLog("KI Action: " + QString::number(timer.elapsed() / 1000.0) + "sec");
     }
 }
