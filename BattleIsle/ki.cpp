@@ -441,7 +441,7 @@ void KI::autoActionPhase(HexagonMatchfield* hex)
                             return;
                         }
                     }
-                    if(kiTargetAir > kiTargetGround && kiTargetAir > kiTargetWater)
+                    if(kiTargetAir*2 > kiTargetGround && kiTargetAir*2 > kiTargetWater)
                     {
 
                         if(kiPlayer->getCurrentEnergieStorage() >= 200)
@@ -451,7 +451,7 @@ void KI::autoActionPhase(HexagonMatchfield* hex)
                             return;
                         }
                     }
-                    if(kiTargetGround > kiTargetAir && kiTargetGround > kiTargetWater)
+                    if(kiTargetGround*2 > kiTargetAir && kiTargetGround*2 > kiTargetWater)
                     {
                         if(kiPlayer->getCurrentEnergieStorage() >= 200)
                         {

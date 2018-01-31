@@ -841,7 +841,7 @@ void Game::checkWinCondition()
         qDebug() << "Spieler Zwei Verloren";
         ptr_gameWidget->showWinner(ptr_playerOne);
         ptr_gameWidget->setEnableButtonScene(false);
-    }else if(ptr_roundCurrent->getCurrentRoundNumber() == ptr_roundCurrent->getMaxRoundNumber() + 10)
+    }else if(ptr_roundCurrent->getCurrentRoundNumber() == ptr_roundCurrent->getMaxRoundNumber() + 10 && ptr_roundCurrent->getCurrentRoundNumber() != 10)
     {
         qDebug() << "Maximale Runde erreicht";
         if(ptr_playerOne->getPlayerUnitNumber() > ptr_playerTwo->getPlayerUnitNumber())

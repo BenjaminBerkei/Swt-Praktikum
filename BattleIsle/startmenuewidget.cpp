@@ -19,6 +19,7 @@ StartMenueWidget::StartMenueWidget(QWidget *parent , MenueWidget *ptr_menueWidge
     ui( new Ui::StartMenueWidget ),
     ptr_smwMenueWidget(ptr_menueWidget)
 {
+    this->setWindowTitle("Battle Isle Clone");
     ui->setupUi( this );
     ptr_smwOptions = new Options();
 
