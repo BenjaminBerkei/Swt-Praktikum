@@ -18,10 +18,7 @@
 
 #include <map>
 #include <vector>
-#include <QFile>
-#include <QTextStream>
 #include <QString> 
-#include <QPoint>
 #include <QTextStream>
 
 class HexagonMatchfield;

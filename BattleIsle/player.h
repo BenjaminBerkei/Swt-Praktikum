@@ -15,7 +15,6 @@
 
 #include <QString> 
 #include <QTextStream>
-#include <QDebug>
 
 class Game;
 

@@ -38,6 +38,14 @@
 
 #include "game.h"
 #include <typeinfo>
+#include <QFileDialog>
+#include <QTextStream>
+#include <QFile>
+#include <QTextCodec>
+#include <QTime>
+#include <queue>
+#include <QElapsedTimer>
+
 using namespace std;
 
 std::vector<QPoint> Game::vec_qpointEvenNeighbors = {QPoint(1,0),QPoint(1,-1),QPoint(0,-1),QPoint(-1,-1),QPoint(-1,0),QPoint(0,1)};
@@ -47,6 +55,12 @@ std::vector<QPoint> Game::vec_qpointOddNeighbors = {QPoint(1,1),QPoint(1,0),QPoi
 GameWidget *Game::getPtr_gameWidget() const
 {
     return ptr_gameWidget;
+}
+
+void Game::addUnitToGrid(Unit * newUnit, int posX, int posY)
+{
+    if(posX > 0 && posX < ptr_gameWidget->getSizeX() && posY > 0 && posY < ptr_gameWidget->getSizeY())
+        vec_unitGrid[posX][posY] = newUnit;
 }
 
 Game::Game(Options *init_options, GameWidget *ptr_gameWid) :
@@ -118,7 +132,6 @@ Game::Game(QString filepath, GameWidget *gameWidegt)
 
 Game::~Game()
 {
-    qDebug() << "Destruktor Game begin";
     resetHexMatchfield();
     for(auto &it : vec_hexGameGrid)
     {
@@ -130,7 +143,6 @@ Game::~Game()
         it.clear();
     }
     vec_hexGameGrid.clear();
-    qDebug() << "\t Hexagon Matchfield Grid gelöscht";
     for(auto &it : vec_unitGrid)
     {
         for(auto &ut : it)
@@ -141,23 +153,18 @@ Game::~Game()
         it.clear();
     }
     vec_unitGrid.clear();
-    qDebug() << "\t Unit Grid gelöscht";
     for(auto &it : ptr_gameWidget->getGameWidButtonScene()->items())
     {
         delete it;
         it = nullptr;
     }
     vec_buttonMenueBar.clear();
-    qDebug() << "\t Button Bar gelöscht";
     delete ptr_playerOne;
     ptr_playerOne = nullptr;
     delete ptr_playerTwo;
     ptr_playerTwo = nullptr;
     delete ptr_gameKI;
     ptr_gameKI = nullptr;
-
-    qDebug() << "\t Player Gelöscht";
-    qDebug() << "Destruktor Game end";
 }
 
 void Game::saveGame()
@@ -228,7 +235,6 @@ void Game::processSelection(HexagonMatchfield *selection)
         }
         //Angeklicktes auf AKTIVE setzten
         ptr_hexSelectionCache->setState(ACTIVE);
-        ptr_gameWidget->newLog(selection);
         break;
 
     case ACTIVE:
@@ -288,7 +294,6 @@ void Game::processSelection(HexagonMatchfield *selection)
         setFogOfWar();
         break;
     }
-    qDebug() << "TargetCache Size: " << set_hexTargetCache.size();
     checkUnitGrid();
     countUnits();
     ptr_gameWidget->updateInfoOptScenes();
@@ -399,76 +404,20 @@ bool Game::loadMapForNewGame(QString filepath)
             in >> typeHex;
             in >> boltanium;
             in >> int_isUnitSet;
-            qDebug() << "Eingelesen: " << "\n\t" << typeHex << "\n\t" << boltanium << "\n\t" << int_isUnitSet;
             if(int_isUnitSet != 0)
             {
                 in >> int_playerID;
                 in >> unitType;
                 in >> unitPath;
-                qDebug() << "Player einlesen: " << "\n\t" << int_playerID;
-                qDebug() << "Unit Einlesen:" << "\n\t" << unitType << "\n\t" << unitPath;
                 Player* ptr_playerTemp = nullptr;
                 if(int_playerID == 1)
                 {
                     ptr_playerTemp = ptr_playerOne;
                 }
-                else
-                {
+                else{
                     ptr_playerTemp = ptr_playerTwo;
                 }
-
-                if(unitType == "FACTORYUNIT")
-                {
-                   vecUnit.push_back(new FactoryUnit(unitPath, true, ptr_playerTemp));
-                }
-                else if(unitType == "DEPOTUNIT")
-                {
-                   vecUnit.push_back(new DepotUnit(unitPath, ptr_playerTemp));
-                }
-                else if( unitType == "HEADQUATERUNIT")
-                {
-                    vecUnit.push_back(new HeadquaterUnit(unitPath,ptr_playerTemp));
-                }
-                else if(unitType == "AIRUNIT")
-                {
-                    vecUnit.push_back(new AirUnit(unitPath, ptr_playerTemp));
-                }
-                else if(unitType == "WATERUNIT")
-                {
-                    vecUnit.push_back(new WaterUnit(unitPath, ptr_playerTemp));
-                }
-                else if(unitType == "HEAVYUNIT")
-                {
-                    vecUnit.push_back(new HeavyUnit(unitPath, ptr_playerTemp));
-                }
-                else if(unitType == "MEDIUMUNIT")
-                {
-                    vecUnit.push_back(new MediumUnit(unitPath, ptr_playerTemp));
-                }
-                else if(unitType == "LIGHTUNIT")
-                {
-                    vecUnit.push_back(new LightUnit(unitPath, ptr_playerTemp));
-                }
-                else if(unitType == "BUILDUNIT")
-                {
-                    vecUnit.push_back(new BuildLightUnit(unitPath, ptr_playerTemp));
-                }
-                else if(unitType == "TRANSPORTERAIRUNIT")
-                {
-                    vecUnit.push_back(new TransporterAirUnit(unitPath, ptr_playerTemp));
-                }
-                else if(unitType == "TRANSPORTERWATERUNIT")
-                {
-                    vecUnit.push_back(new TransporterWaterUnit(unitPath, ptr_playerTemp));
-                }
-                else if(unitType == "TRANSPORTERGROUNDUNIT")
-                {
-                    vecUnit.push_back(new TransporterGroundUnit(unitPath, ptr_playerTemp));
-                }
-                else
-                {
-                    vecUnit.push_back(nullptr);
-                }
+                vecUnit.push_back(createUnitFromType(unitType, unitPath, ptr_playerTemp));
             }else{
                 vecUnit.push_back(nullptr);
             }
@@ -617,6 +566,7 @@ void Game::buttonPressedChangePhase()
         changeButtonPixmap();
         resetHexMatchfield();
         setFogOfWar();
+        autoRepairUnits();
         checkWinCondition();
     }
     SLOT_checkStateOfButtons();
@@ -629,10 +579,12 @@ void Game::buttonPressedChangePhase()
     resetUnits();
     updateLabels();
     ptr_gameWidget->repaintGameView();
-    ptr_gameWidget->getGameWidButtonScene()->update();
+
 	//Wenn activer Spieler KI ist dann autoplay
     if (ptr_playerActive->getBoolKi())
+    {
         autoplayKi();
+    }
 }
 
 void Game::buttonPressedZoomIn()
@@ -723,7 +675,6 @@ void Game::resetTargetCache()
 }
 void Game::moveUnitTo(HexagonMatchfield * target)
 {
-    ptr_gameWidget->newLog(ptr_hexSelectionCache, target);
     Unit* unitToMove = ptr_hexSelectionCache->getUnitStationed();
     unitToMove->setUnitCurrentMoveRange(unitToMove->getUnitCurrentMoveRange() - map_hexCurrentCost[target]);
 
@@ -870,7 +821,6 @@ void Game::checkUnitGrid()
         {
             if(vec_unitGrid[x][y] != nullptr && vec_unitGrid[x][y]->checkUnitDestroyed())
             {
-                qDebug() << "\t" << "Einheit: " << vec_unitGrid[x][y]->getUnitType() << " Destroyed";
                 vec_hexGameGrid[x][y]->setUnitStationed(nullptr);
                 delete vec_unitGrid[x][y];
                 vec_unitGrid[x][y] = nullptr;
@@ -940,8 +890,7 @@ void Game::countUnits()
             {
                 unit->getUnitPlayer()->increaseUnitNumber();
 
-                if(unit->getUnitType() == "TRANSPORTERAIR" || unit->getUnitType() == "TRANSPORTERGROUND"
-                        || unit->getUnitType() == "TRANSPORTERWATER")
+                if(unit->getUnitType().contains("TRANSPORTER"))
                 {
                     for(auto &iteratorUnitStorage : unit->getVector_unitStorage())
                     {
@@ -1283,17 +1232,17 @@ Unit *Game::createUnitFromType(QString unitType, QString unitPath, Player * ptr_
         return new WaterUnit(unitPath, ptr_playerTemp);
     }
 
-    if(unitType == "TRANSPORTERGROUND")
+    if(unitType == "TRANSPORTERGROUNDUNIT")
     {
         return new TransporterGroundUnit(unitPath, ptr_playerTemp);
     }
 
-    if(unitType == "TRANSPORTERWATER")
+    if(unitType == "TRANSPORTERWATERUNIT")
     {
         return new TransporterWaterUnit(unitPath, ptr_playerTemp);
     }
 
-    if(unitType == "TRANSPORTERAIR")
+    if(unitType == "TRANSPORTERAIRUNIT")
     {
         return new TransporterAirUnit(unitPath, ptr_playerTemp);
     }
@@ -1320,8 +1269,6 @@ Unit *Game::readUnitFromStream(QTextStream &in)
     in >> unitPlayer;
     in >> unitHP;
     in >> unitUsed;
-    qDebug() << "Eingelesene Einheit: " << "\n\t" << unitType << "\n\t" << unitPath
-             << "\n\t" << unitPlayer << "\n\t" << unitHP;
     Player* ptr_playerTemp = nullptr;
 
     if(unitPlayer == 1)
@@ -1345,14 +1292,12 @@ Unit *Game::readUnitFromStream(QTextStream &in)
             isTransporterUnit = true;
         }
 
-        qDebug() << "\t" << isDynamicUnit << "\n\t" << isTransporterUnit;
         if(isDynamicUnit == true)
         {
             in >> unitLevel;
             in >> unitMoveRange;
             unitFromStream->setUnitCurrentMoveRange(unitMoveRange);
             //unitFromStream->setUnitLevel(unitLevel);
-            qDebug() << "\t" << unitMoveRange << "\n\t" << unitLevel;
         }
 
         if(isTransporterUnit == true)
@@ -1380,6 +1325,20 @@ void Game::updateLabels()
     ptr_gameWidget->setUnitsLabel(ptr_playerActive->getPlayerUnitNumber());
     ptr_gameWidget->setEnergieLabel(ptr_playerActive->getCurrentEnergieStorage(), ptr_playerActive->getPlayerTotalEnergie());
     ptr_gameWidget->setRoundLabel(ptr_roundCurrent->getCurrentRoundNumber() / 10, ptr_roundCurrent->getMaxRoundNumber() / 10);
+}
+
+void Game::autoRepairUnits()
+{
+    for(auto &it : vec_unitGrid)
+    {
+        for(auto &ut: it)
+        {
+            if(ut != nullptr && ut->getUnitPlayer() == ptr_playerActive)
+            {
+                ut->autoRepair();
+            }
+        }
+    }
 }
 
 int Game::offset_distance(QPoint a, QPoint b)
@@ -1450,7 +1409,17 @@ void Game::autoplayKi()
 {
     resetTargetCache();
     if(ptr_roundCurrent->getCurrentPhase() == MOVE)
+    {
+        QElapsedTimer timer;
+        timer.start();
         ptr_gameKI->autoPlayMove();
+        ptr_gameWidget->newLog("KI Move: " + QString::number(timer.elapsed() / 1000.0));
+    }
     else
+    {
+        QElapsedTimer timer;
+        timer.start();
         ptr_gameKI->autoPlayAction();
+        ptr_gameWidget->newLog("KI Action: " + QString::number(timer.elapsed() / 1000.0));
+    }
 }

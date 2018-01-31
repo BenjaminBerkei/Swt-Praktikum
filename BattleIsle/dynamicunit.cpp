@@ -14,9 +14,12 @@
  */
 #include "dynamicunit.h"
 #include "staticunit.h"
-#include <stdlib.h>     // srand 
-#include <time.h>       // time 
 
+#include <QDebug>
+#include <QTime>
+#include <QFile>
+#include <QTextStream>
+#include <QPainter>
 //DynamicUnit
 
 /*
@@ -259,7 +262,6 @@ bool AirUnit::action(HexagonMatchfield *hex_target, const int range) {
         }
     }else{
         int_unitEXP += 10;
-        qDebug() << "Unit EXP\t " << int_unitEXP;
         levelUpBonus();
     }
     bool_unitUsed = true;
@@ -302,21 +304,16 @@ bool TransporterUnit::action(HexagonMatchfield* hex_target, const int )
     {
         return false;
     }
-    qDebug() << "Transporter Action";
-    qDebug() << "\t " << hex_target->getQpoint_gridPosition();
     if(hex_target->getUnitStationed() == nullptr)
     {
-        qDebug() << "\t Unit = null";
         if(ptr_unitToUnload != nullptr && ptr_unitToUnload->moveTo(hex_target) != -1)
         {
-            qDebug() << "ptr_unitToUnload != null";
             unload(hex_target);
             resetBuildUnloadParameter();
             bool_unitUsed = true;
             return true;
         }
         else if(hex_target->getBoltaniumCurrent() > 0 ){
-            qDebug() << "\t Boltanium > 0";
 			farmBoltanium(hex_target);
             bool_unitUsed = true;
 			return true;
@@ -348,13 +345,11 @@ Diese Funktion nimmt mithilfe von TransporterUnits die Energieressource Boltaniu
 */
 void TransporterUnit::farmBoltanium(HexagonMatchfield* hex_target){
     if(hex_target->getBoltaniumCurrent() >= 30){
-        qDebug() << "\t >= 30 : " << hex_target->getBoltaniumCurrent();
         unitPlayer->setCurrentEnergieStorage(unitPlayer->getCurrentEnergieStorage() + 30);
         hex_target->setBoltaniumCurrent(hex_target->getBoltaniumCurrent() - 30);
 	}
 	
 	else{
-        qDebug() << "\t < 30 : " << hex_target->getBoltaniumCurrent();
 		unitPlayer->setCurrentEnergieStorage(unitPlayer->getCurrentEnergieStorage() + hex_target->getBoltaniumCurrent());
 		hex_target->setBoltaniumCurrent(0);
     }

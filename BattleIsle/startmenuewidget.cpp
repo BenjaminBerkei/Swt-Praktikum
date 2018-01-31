@@ -11,7 +11,8 @@
 
 #include "startmenuewidget.h"
 #include "ui_startmenuewidget.h"
-
+//#include <QDebug>
+#include <QFileDialog>
 
 StartMenueWidget::StartMenueWidget(QWidget *parent , MenueWidget *ptr_menueWidget) :
     QWidget( parent ),
@@ -51,7 +52,7 @@ void StartMenueWidget::startGame()
         ptr_smwMenueWidget->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
 
         //Wechsel zu Widget 3
-        emit SIGNAL_smwChangeIndexFromStack( 3 );
+        emit SIGNAL_smwChangeIndexFromStack(2);
         //Das Signal wird im Konstruktor von MenueWidget verbunden
     }
 
@@ -69,24 +70,16 @@ void StartMenueWidget::loadGame(QString pathToLoadFile)
     ptr_smwMenueWidget->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
 
     //Wechsel zu Widget 3
-    emit SIGNAL_smwChangeIndexFromStack( 3 );
+    emit SIGNAL_smwChangeIndexFromStack(2);
     //Das Signal wird im Konstruktor von MenueWidget verbunden
 }
 
 void StartMenueWidget::switchToOptions()
 {
     //Wechsel zu Widget 2
-    emit SIGNAL_smwChangeIndexFromStack( 2 );
+    emit SIGNAL_smwChangeIndexFromStack(1);
     //Das Signal wird im Konstruktor von MenueWidget verbunden
 }
-
-void StartMenueWidget::switchToLoadGame()
-{
-    //Wechsel zu Widget 1
-    emit SIGNAL_smwChangeIndexFromStack( 1 );
-    //Das Signal wird im Konstruktor von MenueWidget verbunden
-}
-
 void StartMenueWidget::smwUpdateSettings()
 {
     //Die eingestellten Optionen updaten
@@ -131,20 +124,20 @@ void StartMenueWidget::on_qbutton_options_clicked()
 void StartMenueWidget::gameEnded()
 {
     ptr_smwMenueWidget->setPtr_runningGame(nullptr);
-
+/*
     qDebug() << "Elemente in getGameWidButtonScene" <<ptr_smwMenueWidget->getPtr_mwGameWidget()->getGameWidButtonScene()->items().size();
     qDebug() << "Elemente in getGameWidGameScene" <<ptr_smwMenueWidget->getPtr_mwGameWidget()->getGameWidGameScene()->items().size();
     qDebug() << "Elemente in getGameWidInfoScene" <<ptr_smwMenueWidget->getPtr_mwGameWidget()->getGameWidInfoScene()->items().size();
     qDebug() << "Elemente in getGameWidMapScene" <<ptr_smwMenueWidget->getPtr_mwGameWidget()->getGameWidMapScene()->items().size();
     qDebug() << "Elemente in getGameWidOptionsScene" <<ptr_smwMenueWidget->getPtr_mwGameWidget()->getGameWidOptionsScene()->items().size();
     qDebug() << "Elemente in getGameWidMenueScene" <<ptr_smwMenueWidget->getPtr_mwGameWidget()->getGameWidMenueScene()->items().size();
-
+*/
     ptr_smwMenueWidget->resize(400, 500);
     ptr_smwMenueWidget->ui->stack->resize(380, 440);
     emit SIGNAL_smwChangeIndexFromStack(0);
-    qDebug() << "\t Change Index Emit";
+//    qDebug() << "\t Change Index Emit";
     ptr_smwMenueWidget->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
     //ptr_smwMenueWidget->repaint();
-    qDebug() << "\t resize";
+//    qDebug() << "\t resize";
 
 }

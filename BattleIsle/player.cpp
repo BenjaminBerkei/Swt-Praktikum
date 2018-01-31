@@ -10,7 +10,6 @@
  * */
 #include "player.h"
 
-
 Player::Player(QString playerName,int id, bool ki, int currentEnergie, int playerScore, int totalEnergie)
     :str_playerName(playerName), int_playerID(id), int_playerScore(playerScore), int_playerTotalEnergie(totalEnergie),
       int_currentEnergieStorage(currentEnergie), int_playerUnitNumber(0), bool_HQDestroyed(false), bool_isKI(ki) {}
@@ -62,8 +61,8 @@ Player *Player::unserialize(QTextStream &in)
     in >> int_ki;
     ki = (bool)int_ki;
 
-    qDebug() << "unserialize von Player ausfuehren mit \n\t" << playerID  << "\n\t" << playerName
-                  << "\n\t" << score  << "\n\t" << boltaniumCurrent  << "\n\t" << int_ki;
+    //qDebug() << "unserialize von Player ausfuehren mit \n\t" << playerID  << "\n\t" << playerName
+    //          << "\n\t" << score  << "\n\t" << boltaniumCurrent  << "\n\t" << int_ki;
 
     return new Player(playerName,playerID,ki,boltaniumCurrent,score);
 }

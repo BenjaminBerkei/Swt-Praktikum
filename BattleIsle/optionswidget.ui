@@ -39,7 +39,7 @@
         <item>
          <widget class="QRadioButton" name="radioButton_computer">
           <property name="text">
-           <string>Computer</string>
+           <string>&amp;Computer</string>
           </property>
          </widget>
         </item>
@@ -59,14 +59,14 @@
         <item>
          <widget class="QRadioButton" name="radioButton_fogOfWarOn">
           <property name="text">
-           <string>Ein</string>
+           <string>&amp;Ein</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QRadioButton" name="radioButton_fogOfWarOff">
           <property name="text">
-           <string>Aus</string>
+           <string>A&amp;us</string>
           </property>
          </widget>
         </item>
@@ -123,6 +123,13 @@
     </widget>
    </item>
    <item>
+    <widget class="QPushButton" name="qbutton_loadCustomMap">
+     <property name="text">
+      <string>LoadCustomMap</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
       <widget class="QPushButton" name="qbutton_apply">
@@ -141,15 +148,11 @@
     </layout>
    </item>
   </layout>
-  <zorder>qbutton_apply</zorder>
-  <zorder>qbutton_cancel</zorder>
   <zorder>label</zorder>
-  <zorder>groupBox_Opponent</zorder>
   <zorder>groupBox_fogOfWar</zorder>
-  <zorder>comboBox_rounds</zorder>
-  <zorder>label_rounds</zorder>
   <zorder>groupBox_maps</zorder>
   <zorder>groupBox_Opponent</zorder>
+  <zorder>qbutton_loadCustomMap</zorder>
  </widget>
  <resources/>
  <connections/>

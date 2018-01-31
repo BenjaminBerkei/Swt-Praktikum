@@ -28,12 +28,10 @@ KI::KI(Game* game, Player* player, std::vector<std::vector<HexagonMatchfield*>> 
 					if (kiMyMatchfield[i][j]->getUnitStationed()->getUnitPlayer()->getPlayerID() != kiPlayer->getPlayerID())
                     {
                         kiEnemyHq = kiMyMatchfield[i][j];
-                        qDebug() << "enemy hq set" << kiMyMatchfield[i][j]->getQpoint_gridPosition().x() << kiMyMatchfield[i][j]->getQpoint_gridPosition().y();
                     }
 					else
                     {
 						kiMyHq = kiMyMatchfield[i][j];
-                        qDebug() << "my hq set" << kiMyMatchfield[i][j]->getQpoint_gridPosition().x() << kiMyMatchfield[i][j]->getQpoint_gridPosition().y();
                     }
 				}
 			}
@@ -65,7 +63,6 @@ void KI::autoPlayMove()
         if(it->getUnitStationed()!=nullptr)
         {
             autoMovePhase(it);
-            qDebug() << "move fertig" << i;
             i++;
             std::this_thread::sleep_for (std::chrono::milliseconds(5*kiMyUnits.size()));
             kiTime+=(5*kiMyUnits.size());
@@ -92,7 +89,6 @@ void KI::autoPlayAction()
            if(!it->getUnitStationed()->getUnitUsed())
            {
                autoActionPhase(it);
-               qDebug() << "action fertig";
                std::this_thread::sleep_for (std::chrono::milliseconds(5*kiMyUnits.size()));
                kiTime+=(5*kiMyUnits.size());
                if(kiEnemyHq->getUnitStationed()->checkUnitDestroyed())
@@ -111,9 +107,7 @@ void KI::autoMovePhase(HexagonMatchfield* hex)
 {	
     kiGame->resetHexMatchfield();
     kiGame->processSelection(hex);
-    qDebug() << hex->getUnitStationed()->getUnitType();
     std::unordered_set<HexagonMatchfield*> tmpCache;
-    qDebug() << tmpCache.size();
     for (int i = 1; i <= 4; i++)
     {
         kiGame->Dijkstra(hex, i);
@@ -276,7 +270,6 @@ void KI::autoActionPhase(HexagonMatchfield* hex)
     kiGame->processSelection(hex);
     kiGame->calculateTargets(hex, hex->getUnitStationed()->getActionRange());
     std::unordered_set<HexagonMatchfield*> tmpCache = kiGame->getTargetCache();
-    qDebug() << hex->getUnitStationed()->getUnitType();
     if(hex->getUnitStationed()->getUnitType().contains("TRANSPORTER"))
 	{
         for(auto it : tmpCache)
@@ -412,7 +405,6 @@ void KI::autoActionPhase(HexagonMatchfield* hex)
             case 19: hex->getUnitStationed()->setUnitToBuild("TB-X Marauder"); break;
             case 20: hex->getUnitStationed()->setUnitToBuild("W-1 Fortress"); break;
             }
-            qDebug() << "case: " << randUnit;
             int transUnit = 0;
             int bauerUnit = 0;
             for(auto x : kiMyUnits)
@@ -497,7 +489,6 @@ void KI::autoActionPhase(HexagonMatchfield* hex)
             {
                 if(it->getUnitStationed()->getUnitCurrentHP() < it->getUnitStationed()->getUnitHP())
                 {
-                    qDebug() << "ich heile!";
                     hex->getUnitStationed()->action(it);
                     return;
                 }
@@ -601,11 +592,12 @@ void KI::kiProduceUnit(HexagonMatchfield * hex, HexagonMatchfield * targetHex)
         targetHex->getUnitStationed()->setPos(targetHex->pos());   //Position in der Scene setzen
         targetHex->getUnitStationed()->setScale(kiGame->getPtr_gameWidget()->getDouble_scaleFak()); // skalieren
         kiGame->getPtr_gameWidget()->getGameWidGameScene()->addItem(targetHex->getUnitStationed());
+        kiGame->addUnitToGrid(targetHex->getUnitStationed(), targetHex->getQpoint_gridPosition().x(), targetHex->getQpoint_gridPosition().y());
     }
 
 }
 
-void KI::removeHexfromCache(HexagonMatchfield * hex,HexagonMatchfield * target)
+void KI::removeHexfromCache(HexagonMatchfield * ,HexagonMatchfield * target)
 {
     if(target->getUnitStationed()->checkUnitDestroyed())
     {
@@ -676,7 +668,6 @@ void KI::unitMoveRandom(HexagonMatchfield * hex)
 
 HexagonMatchfield *KI::calcActionRange(std::unordered_set<HexagonMatchfield *> cache, HexagonMatchfield* target, int range)
 {
-    qDebug() << "calcActionRange Target :" << target->getUnitStationed()->getUnitType();
     for(auto it: cache)
     {
         kiGame->calculateTargets(it, range);
@@ -735,7 +726,6 @@ void KI::checkHQinDanger()
     if (!prioCache.empty())
 	{
 		kiHq_danger = true;
-        qDebug() << prioCache.size();
 	}
 	else
 	{

@@ -23,6 +23,9 @@
  * */
 #include "gamewidget.h"
 #include "ui_gamewidget.h"
+#include <QTimeLine>
+#include <QGraphicsItemAnimation>
+#include <QGraphicsProxyWidget>
 
 QGraphicsScene *GameWidget::getGameWidOptionsScene() const
 {
@@ -158,21 +161,13 @@ GameWidget::GameWidget(QWidget *parent) :
 
 GameWidget::~GameWidget()
 {
-    qDebug() << "Destruktor GameWidget begin";
     delete ui;
-    qDebug() << "\tDelete ui done";
     delete gameWidGameScene;
-    qDebug() << "\tDelete gameWidGameScene done";
     delete gameWidInfoScene;
-    qDebug() << "\tDelete gameWidInfoScene done";
     delete gameWidOptionsScene;
-    qDebug() << "\tDelete gameWidOptionsScene done";
     delete gameWidButtonScene;
-    qDebug() << "\tDelete gameWidButtonScene done";
     delete gameWidMenueScene;
-    qDebug() << "\tDelete gameWidMenueScene done";
     delete gameWidMapScene;
-    qDebug() << "\tDelete gameWidMapScene done";
     qDebug() << "Destruktor GameWidget end";
 }
 
@@ -337,12 +332,10 @@ void GameWidget::clearAllScenes()
 
 void GameWidget::resetGameWidget()
 {
-    qDebug() << "game Widget reset start";
     sizeX = 0;
     sizeY = 0;
     double_scaleFak = 1;
     ui->ptr_textBrowserLog->clear();
-    qDebug() << "game Widget reset done";
 }
 
 void GameWidget::setEnableButtonScene(bool state)
@@ -438,26 +431,6 @@ void GameWidget::newLog(QString msg)
     ui->ptr_textBrowserLog->append(tr("- %1").arg(msg));
 }
 
-void GameWidget::newLog(HexagonMatchfield * selection)
-{
-    this->newLog("Hex: (" + QString::number(selection->getQpoint_gridPosition().x()) + ", " +
-                  QString::number(selection->getQpoint_gridPosition().y()) + ")" );
-}
-
-void GameWidget::newLog(HexagonMatchfield * start, HexagonMatchfield * end)
-{
-    this->newLog("Move: (" + QString::number(start->getQpoint_gridPosition().x()) + ", " +
-                 QString::number(start->getQpoint_gridPosition().y()) + ")" + "->" +
-                 "(" + QString::number(end->getQpoint_gridPosition().x()) + ", " +
-                 QString::number(end->getQpoint_gridPosition().y()) + ")");
-}
-
-void GameWidget::newLog(int idAttacker, QString typeAttacker, int dmgAttacker, int idDefender, QString typeDefender, int dmgDefender)
-{
-    this->newLog("Player " + QString::number(idAttacker) + ": \n\t Type: " + typeAttacker + "\n\t Damage: " + QString::number(dmgAttacker));
-    this->newLog("Player " + QString::number(idDefender) + ": \n\t Type: " + typeDefender + "\n\t Damage: " + QString::number(dmgDefender));
-}
-
 void GameWidget::gameWidCreateMap(std::vector<std::vector<HexagonMatchfield *> > &hexagonGrid)
 {
     //Mögliche Typen:
@@ -525,7 +498,6 @@ void GameWidget::gameWidCreateMap(std::vector<std::vector<HexagonMatchfield *> >
 
 void GameWidget::SLOT_gameWidCenterHex(HexagonMatchfield *hex)
 {
-    qDebug() << "SLOT_gameWidCenterHex ausgefuehrt.";
     setEnableButtonScene(true);
     ui->graphicsView_gameView->setScene(gameWidGameScene);
     ui->graphicsView_gameView->centerOn(hex);
@@ -533,7 +505,6 @@ void GameWidget::SLOT_gameWidCenterHex(HexagonMatchfield *hex)
 
 void GameWidget::SLOT_gameWidDestroyMap()
 {
-    qDebug() << "SLOT_gameWidDestroyMap ausgefuehrt.";
     for(int i = vectorVector_gameWidMiniMap.size() - 1; i >= 0; i--)
     {
         for(int j = vectorVector_gameWidMiniMap[i].size() - 1; j >= 0; j--)

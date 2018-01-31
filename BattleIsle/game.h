@@ -53,15 +53,9 @@
 #include "ki.h"
 
 #include <vector>
-#include <QTime>
 #include <QObject>
-#include <queue>
 #include <QVector3D>
 #include <QGraphicsView>
-#include <QFileDialog>
-#include <QTextStream>
-#include <QFile>
-#include <QTextCodec>
 #include <unordered_set>
 
 class GameWidget; //Vorwärtsdeklaration
@@ -135,6 +129,7 @@ public:
 	int getCurrentCost_Int(HexagonMatchfield*);
     void autoplayKi();
     GameWidget *getPtr_gameWidget() const;
+    void addUnitToGrid(Unit*, int, int);
 
 private:
     QVector3D oddqToCube(QPoint);   //Für Referenzen betrachte https://www.redblobgames.com/grids/hexagons/#distances , Kapitel: Distance
@@ -146,6 +141,7 @@ private:
     Unit* readUnitFromStream(QTextStream&);
     void loadInventory(QTextStream&, Unit*);
     void updateLabels();
+    void autoRepairUnits();
 
     /*Hilfsfunktionen Ende*/
 

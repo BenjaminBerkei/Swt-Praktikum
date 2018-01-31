@@ -15,6 +15,7 @@
  * */
 
 #include "button.h"
+#include <QPainter>
 /*Base Class: Button*/
 Button::Button()
     : HexagonBase( QPoint(0,0) ), qpix_playerOne(QPixmap()), qpix_playerTwo(QPixmap())

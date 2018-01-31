@@ -11,7 +11,8 @@
  */
 
 #include "staticunit.h"
-
+#include <QFile>
+#include <QPainter>
 //StaticUnit
 
 StaticUnit::StaticUnit(QString filepath, Player* player)
@@ -142,8 +143,8 @@ void DepotUnit::repairUnit(Unit* unitTarget)
 {	
     if(unitTarget->getUnitCurrentHP() < unitTarget->getUnitHP() && unitPlayer->getCurrentEnergieStorage() - (unitTarget->getUnitHP() - unitTarget->getUnitCurrentHP()) > 0)
 	{
-		unitTarget->setUnitCurrentHP(unitTarget->getUnitHP());
         unitPlayer->setCurrentEnergieStorage(unitPlayer->getCurrentEnergieStorage() - (unitTarget->getUnitHP() - unitTarget->getUnitCurrentHP()));
+		unitTarget->setUnitCurrentHP(unitTarget->getUnitHP());
 		bool_unitUsed = true;
 	}
 	return;
@@ -233,9 +234,9 @@ bool FactoryUnit::action(HexagonMatchfield* hexTarget, const int )
 void FactoryUnit::produceUnit(HexagonMatchfield* hexTarget)
 {
     hexTarget->setUnitStationed(map_production[qstring_unitToBuild]->createUnit());
-    hexTarget->getUnitStationed()->setUnitCost(0);
     hexTarget->getUnitStationed()->setUnitUsed(true);
     unitPlayer->setCurrentEnergieStorage(unitPlayer->getCurrentEnergieStorage() - hexTarget->getUnitStationed()->getUnitCost());
+    hexTarget->getUnitStationed()->setUnitCost(0);
 }
 
 Unit* FactoryUnit::createUnit()

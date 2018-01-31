@@ -12,7 +12,6 @@
 #include "menuewidget.h"
 #include "startmenuewidget.h"
 #include "options.h"
-#include <QDebug>
 
 class MenueWidget;
 class StartMenueWidget;
@@ -39,6 +38,8 @@ public:
 private slots:
     void on_qbutton_apply_clicked();
     void on_qbutton_cancel_clicked();
+
+    void on_qbutton_loadCustomMap_clicked();
 
 signals:
     void SIGNAL_optChangeIndexFromStack(int);

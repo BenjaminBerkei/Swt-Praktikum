@@ -24,19 +24,17 @@
 #ifndef GAMEWIDGET_H
 #define GAMEWIDGET_H
 
-#include <QWidget>
-#include <QGraphicsScene>
-#include <QGraphicsRectItem>
-#include <vector>
+
 #include "hexagonmatchfield.h"
 #include "unit.h"
 #include "button.h"
 #include "player.h"
-#include <QTimeLine>
-#include <QGraphicsItemAnimation>
-#include <QPushButton>
-#include <QGraphicsProxyWidget>
+
+#include <QWidget>
+#include <QGraphicsScene>
+#include <QGraphicsRectItem>
 #include <vector>
+#include <QPushButton>
 #include <QPointer>
 
 class Unit;
@@ -101,9 +99,6 @@ public:
     void showWinner(Player* winner = 0);
     void animateUnit(Unit*, std::vector<QPointF>);
     void newLog(QString);
-    void newLog(HexagonMatchfield*);
-    void newLog(HexagonMatchfield*,HexagonMatchfield *);
-    void newLog(int, QString, int, int, QString, int);
 
     //get und set Methoden
     void setInfoScene(HexagonDisplayInfo *info);

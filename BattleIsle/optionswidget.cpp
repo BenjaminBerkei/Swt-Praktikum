@@ -7,7 +7,7 @@
 
 #include "optionswidget.h"
 #include "ui_optionswidget.h"
-
+#include <QFileDialog>
 OptionsWidget::OptionsWidget( QWidget *parent, MenueWidget *parentMenueWidget, Options *ptr_Options ) :
     QWidget( parent ),
     ui( new Ui::OptionsWidget ),
@@ -37,11 +37,11 @@ OptionsWidget::OptionsWidget( QWidget *parent, MenueWidget *parentMenueWidget, O
         ui->comboBox_rounds->setCurrentIndex(0);
 
     new QListWidgetItem(tr("Random"), ui->listWidget_maps);
-    new QListWidgetItem(tr(":/test/map.txt"), ui->listWidget_maps);
-    new QListWidgetItem(tr(":/test/map2.txt"), ui->listWidget_maps);
+    //new QListWidgetItem(tr(":/test/map.txt"), ui->listWidget_maps);
+    new QListWidgetItem(tr(":/test/CustomMap.txt"), ui->listWidget_maps);
     new QListWidgetItem(tr(":/test/OriginalMap1.txt"), ui->listWidget_maps);
-    new QListWidgetItem(tr(":/test/HQTestMap.txt"), ui->listWidget_maps);
-    new QListWidgetItem(tr(":/test/TransporterTextMap.txt"), ui->listWidget_maps);
+    //new QListWidgetItem(tr(":/test/HQTestMap.txt"), ui->listWidget_maps);
+    //new QListWidgetItem(tr(":/test/TransporterTextMap.txt"), ui->listWidget_maps);
 }
 
 OptionsWidget::~OptionsWidget()
@@ -110,4 +110,13 @@ void OptionsWidget::on_qbutton_cancel_clicked()
         ui->comboBox_rounds->setCurrentIndex(0);
 
     returnToStartMenue();
+}
+
+void OptionsWidget::on_qbutton_loadCustomMap_clicked()
+{
+    QString pathToLoadFile = QFileDialog::getOpenFileName(this);
+    if(pathToLoadFile != "")
+    {
+        new QListWidgetItem(pathToLoadFile, ui->listWidget_maps);
+    }
 }

@@ -30,8 +30,6 @@
 #include "gamewidget.h"
 
 #include <QString>
-#include <QDebug>
-#include <QTextStream>
 
 class Unit;
 class Game;

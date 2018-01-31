@@ -24,6 +24,8 @@
  * */
 
 #include "hexagonmatchfield.h"
+#include <QPainter>
+#include <QTextStream>
 
 MATCHFIELDSTATE HexagonMatchfield::getState() const
 {
@@ -161,11 +163,9 @@ void HexagonMatchfield::mousePressEvent( QGraphicsSceneMouseEvent *)
 {
     if(isActive())
     {
-        qDebug() << "Hexagon Aktiv.";
     }
     else
     {
-        qDebug() << "Hexagon ist nicht Aktiv. Sende Signal SIGNAL_centerThis";
         emit SIGNAL_centerThis(this);
     }
     if(ptr_unitStationed != nullptr)

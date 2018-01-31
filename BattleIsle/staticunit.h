@@ -20,10 +20,8 @@
 #include "dynamicunit.h"
 
 #include <map>
-#include <QFile>
 #include <QTextStream>
 #include <QString> 
-#include <QPoint>
 
 class Player;
 class HexagonMatchfield;

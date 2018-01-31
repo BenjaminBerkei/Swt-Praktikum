@@ -20,7 +20,6 @@ SOURCES += main.cpp\
     optionswidget.cpp \
     menuewidget.cpp \
     startmenuewidget.cpp \
-    loadgamewidget.cpp \
     gamewidget.cpp \
     game.cpp \
     round.cpp \
@@ -40,7 +39,6 @@ HEADERS  += \
     optionswidget.h \
     menuewidget.h \
     startmenuewidget.h \
-    loadgamewidget.h \
     gamewidget.h \
     game.h \
     unit.h \
@@ -56,7 +54,6 @@ FORMS    += startmenuewidget.ui \
     optionswidget.ui \
     menuewidget.ui \
     startmenuewidget.ui \
-    loadgamewidget.ui \
     gamewidget.ui \
     debugbrowser.ui
 

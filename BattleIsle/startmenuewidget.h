@@ -19,7 +19,6 @@
 #include "ui_menuewidget.h"
 #include "gamewidget.h"
 #include "game.h"
-#include <QDebug>
 
 namespace Ui {
 class StartMenueWidget;
@@ -44,7 +43,6 @@ public:
     void startGame();
     void loadGame(QString);
     void switchToOptions();
-    void switchToLoadGame();
     void smwUpdateSettings(); //Updatet die Anzeige der eingestellten Optionen
 
     //get und set Methoden

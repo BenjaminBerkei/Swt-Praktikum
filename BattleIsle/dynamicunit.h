@@ -18,8 +18,6 @@
 #include "hexagonmatchfield.h"
 #include "enumerations.h"
 #include "unit.h"
-#include <QDebug>
-#include <QTime>
 
 class DynamicUnit : public Unit
 {

@@ -11,12 +11,10 @@
 #include <QStackedLayout>
 #include "optionswidget.h"
 #include "startmenuewidget.h"
-#include "loadgamewidget.h"
 #include "gamewidget.h"
 #include "debugbrowser.h"
 
 #include <QDesktopWidget>
-#include <QDebug>
 #include <QPointer>
 
 class OptionsWidget;
@@ -31,7 +29,6 @@ class MenueWidget : public QMainWindow
 private:
     StartMenueWidget *ptr_mwStartMenueWidget;
     OptionsWidget *ptr_mwOptionsWidget;
-    LoadGameWidget *ptr_mwLoadGameWidget;
     GameWidget *ptr_mwGameWidget;
     Game* ptr_runningGame;
     QPointer<DebugBrowser> ptr_debugBrowser;

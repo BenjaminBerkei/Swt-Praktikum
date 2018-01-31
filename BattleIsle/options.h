@@ -8,7 +8,6 @@
 #define OPTIONS_H
 #include <QObject>
 #include <string>
-#include <QDebug>
 #include <QTextStream>
 
 class Options : public QObject

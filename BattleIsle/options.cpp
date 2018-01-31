@@ -3,9 +3,8 @@
  * Version: 0.2
  * Datum 07.12.2017
  * */
-
-
 #include "options.h"
+#include <QDebug>
 
 /*StandardKonstruktor, kann noch angepasst werden*/
 Options::Options()
@@ -46,7 +45,7 @@ Options *Options::unserialize(QTextStream &in)
     ki = (bool)str_ki.toInt();
     roundLimit = str_roundLimit.toInt();
 
-    qDebug() << "unserialize von options ausführen mit \n\t" << map << "\n\t" << fogOfWar << "\n\t" << roundLimit << "\n\t" << ki;
+    //qDebug() << "unserialize von options ausführen mit \n\t" << map << "\n\t" << fogOfWar << "\n\t" << roundLimit << "\n\t" << ki;
 
     return new Options(ki,fogOfWar,map,roundLimit);
 }

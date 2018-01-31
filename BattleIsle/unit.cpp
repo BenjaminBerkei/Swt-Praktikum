@@ -9,7 +9,8 @@
  * Kommentar: Unit destruktor geschrieben, setUnitPlayer() bearbeitet -> erhöht den Unit Count bei dem Spieler der gesetzt wird
  * */
 #include "unit.h"
-
+#include <QFile>
+#include <QPainter>
 void Unit::setUnitCost(int value)
 {
     int_unitCost = value;

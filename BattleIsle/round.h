@@ -16,7 +16,6 @@
 
 #include "enumerations.h"
 #include <QTextStream>
-#include <QDebug>
 
 class Phase;
 
