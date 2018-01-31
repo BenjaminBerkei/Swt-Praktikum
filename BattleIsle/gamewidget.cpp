@@ -45,8 +45,8 @@ void GameWidget::gameWidCreateMenueScene()
     qbuttonEndGame = new QPushButton();
     qbuttonResume = new QPushButton();
 
-    qbuttonSaveGame->setText("SaveGame");
-    qbuttonEndGame->setText("EndGame");
+    qbuttonSaveGame->setText("Save Game");
+    qbuttonEndGame->setText("End Game");
     qbuttonResume->setText("Resume");
 
     qbuttonSaveGame->setGeometry(0,0,200,30);
@@ -369,6 +369,54 @@ void GameWidget::updateMatchfieldScene()
 void GameWidget::repaintGameView()
 {
     ui->graphicsView_gameView->viewport()->repaint();
+}
+
+void GameWidget::showWinner(Player *winner)
+{
+    clearGameScene();
+    clearInfoScene();
+    clearOptionsScene();
+
+    gameWidGameScene->setSceneRect(0,0,400,400);
+    //qreal viewCenterX = ui->graphicsView_gameView->rect().center().x();
+    //qreal viewCenterY = ui->graphicsView_gameView->rect().center().y();
+    qreal xShift = 100;
+    qreal yShift = 50;
+
+    QString qstring_topline;
+    QString qstring_secondline;
+    if(winner != nullptr)
+    {
+        qstring_topline = "<h1><font color=\"red\">GAME OVER!</font></h1>";
+        qstring_secondline = "<h3>Spieler " + winner->getPlayerName() + " hat gewonnen!</h3>";
+    }
+    else
+    {
+        qstring_topline = "<h1><font color=\"red\">GAME OVER!</font></h1>";
+        qstring_secondline = "<h3>Unentschieden!</h3>";
+    }
+
+    QGraphicsTextItem* topline = new QGraphicsTextItem();
+    QGraphicsTextItem* secondline = new QGraphicsTextItem();
+    //QGraphicsTextItem* winnerDetails = new QGraphicsTextItem();
+
+    topline->setHtml(qstring_topline);
+    secondline->setHtml(qstring_secondline);
+    //winnerDetails->setHtml(qstring_winnerDetails);
+
+    topline->setPos(xShift,yShift);
+    secondline->setPos(xShift,40 + yShift);
+    //winnerDetails->setPos(-50,80);
+
+    QPushButton* qbutton_endGame = new QPushButton();
+    qbutton_endGame->setText("End Game");
+    qbutton_endGame->setGeometry(xShift,200 + yShift,200,30);
+    connect(qbutton_endGame,SIGNAL(clicked()), this, SLOT(SLOT_qbuttonEndGame_clicked()));
+
+    gameWidGameScene->addItem(topline);
+    gameWidGameScene->addItem(secondline);
+    //gameWidGameScene->addItem(winnerDetails);
+    gameWidGameScene->addWidget(qbutton_endGame);
 }
 
 void GameWidget::animateUnit(Unit * unitToAnimate, std::vector<QPointF> points)

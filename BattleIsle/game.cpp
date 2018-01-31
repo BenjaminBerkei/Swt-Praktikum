@@ -192,6 +192,7 @@ void Game::saveGame()
 void Game::endGame()
 {
     ptr_gameWidget->resetGameWidget();
+    ptr_gameWidget->clearAllScenes();
     emit gameOver();
 }
 
@@ -883,15 +884,31 @@ void Game::checkWinCondition()
     if(ptr_playerOne->getPlayerUnitNumber() == 0 || ptr_playerOne->getHQDestroyed())
     {
         qDebug() << "Spieler Eins Verloren";
-        endGame();
+        ptr_gameWidget->showWinner(ptr_playerTwo);
+        ptr_gameWidget->setEnableButtonScene(false);
     }else if(ptr_playerTwo->getPlayerUnitNumber() == 0 || ptr_playerTwo->getHQDestroyed())
     {
         qDebug() << "Spieler Zwei Verloren";
-        endGame();
+        ptr_gameWidget->showWinner(ptr_playerOne);
+        ptr_gameWidget->setEnableButtonScene(false);
     }else if(ptr_roundCurrent->getCurrentRoundNumber() == ptr_roundCurrent->getMaxRoundNumber() + 10)
     {
         qDebug() << "Maximale Runde erreicht";
-        endGame();
+        if(ptr_playerOne->getPlayerUnitNumber() > ptr_playerTwo->getPlayerUnitNumber())
+        {
+            ptr_gameWidget->showWinner(ptr_playerOne);
+            ptr_gameWidget->setEnableButtonScene(false);
+        }
+        else if(ptr_playerOne->getPlayerUnitNumber() > ptr_playerTwo->getPlayerUnitNumber())
+        {
+            ptr_gameWidget->showWinner(ptr_playerTwo);
+            ptr_gameWidget->setEnableButtonScene(false);
+        }
+        else
+        {
+            ptr_gameWidget->showWinner();
+            ptr_gameWidget->setEnableButtonScene(false);
+        }
     }
 }
 

@@ -98,6 +98,7 @@ public:
     void updateInfoOptScenes();
     void updateMatchfieldScene();
     void repaintGameView();
+    void showWinner(Player* winner = 0);
     void animateUnit(Unit*, std::vector<QPointF>);
     void newLog(QString);
     void newLog(HexagonMatchfield*);
