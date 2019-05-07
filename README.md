@@ -1,7 +1,7 @@
 # Swt-Praktikum
 
 ## Bemerkung zur Stilfibel
-Wir verwenden die ungerische Notation. Dazu einige Details:
+Wir verwenden die ungarische Notation. Dazu einige Details:
 
 #### Klassennamen
 Bspw:   `Hexagon`, `WasserHex` (Wasser hat von Hexagon geerbt)
